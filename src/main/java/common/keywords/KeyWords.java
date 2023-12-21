@@ -2,11 +2,15 @@ package common.keywords;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
+import io.restassured.specification.RequestSpecification;
+import io.restassured.response.Response;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import sun.net.www.http.HttpClient;
+import org.openqa.selenium.remote.http.HttpClient;
 
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
+
+import static io.restassured.RestAssured.given;
 
 public class KeyWords {
     public static AppiumDriver driver;
@@ -32,5 +36,17 @@ public class KeyWords {
         driver = new AndroidDriver(url,caps);
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         return driver;
+    }
+    public static void connectUnity(){
+        String baseUri = "http://localhost:8342/q/scene";
+        RequestSpecification request = given();
+        request.baseUri(baseUri);
+        request.basePath("//Chat//Question(Clone)/Image[activeInHierarchy=true].Button.onClick()");
+        Response response = request.get();
+        response.prettyPrint();
+    }
+
+    public static void main(String[] args) {
+        connectUnity();
     }
 }

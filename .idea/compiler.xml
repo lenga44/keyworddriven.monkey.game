@@ -9,8 +9,5 @@
         <module name="keyworddriven.monkey.game" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="keyworddriven.monkey.game" target="1.5" />
-    </bytecodeTargetLevel>
   </component>
 </project>
