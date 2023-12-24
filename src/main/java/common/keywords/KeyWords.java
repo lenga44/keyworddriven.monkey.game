@@ -41,7 +41,7 @@ public class KeyWords {
         String baseUri = "http://localhost:8342/q/scene";
         RequestSpecification request = given();
         request.baseUri(baseUri);
-        request.basePath("//Chat//Question(Clone)/Image[activeInHierarchy=true].Button.onClick()");
+        //request.basePath("//Chat//Question(Clone)/Image[activeInHierarchy=true].Button.onClick()");
         Response response = request.get();
         //Response response = request.get("/1");
         response.prettyPrint();
