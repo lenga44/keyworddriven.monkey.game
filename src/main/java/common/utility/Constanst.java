@@ -24,6 +24,12 @@ public class Constanst {
     public static final int ACTION_KEYWORD = 4;
     public static final int PROCEED_ON_FAIL = 6;
     public static final int PARAM = 5;
+    public static final int VERIFY_STEP = 8;
+    public static final int VERIFY_PARAM = 9;
+    public static final int EXPECTED = 10;
+    public static final int RESULT = 11;
+    public static final int ERROR = 12;
+    public static final int IMAGE = 13;
 
     //Excel sheet
     public static final String SCOPE_SHEET = "Scope";
