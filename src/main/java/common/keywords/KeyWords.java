@@ -16,7 +16,10 @@ public class KeyWords {
     public static AppiumDriver driver;
     public static HttpClient client;
     public static AppiumDriver openApp(){
-        DesiredCapabilities caps = new DesiredCapabilities();
+        System.out.println("=======================");
+        System.out.println("App đã mở rồi nhé!!!");
+        System.out.println("=======================");
+        /*DesiredCapabilities caps = new DesiredCapabilities();
         caps.setCapability("appium:udid","7cbc1b6a");
         caps.setCapability("platformName","android");
         caps.setCapability("appium:automationName","uiautomator2");
@@ -34,8 +37,29 @@ public class KeyWords {
         if(url == null)
             throw new RuntimeException("Can't conect to server url @http://127.0.0.1:4723");
         driver = new AndroidDriver(url,caps);
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);*/
         return driver;
+    }
+    public static void waitingForCourseListDisplay(){
+        System.out.println("=======================");
+        System.out.println("Bạn đang đứng ở Course List");
+        System.out.println("=======================");
+    }
+    public static void u_click(){
+        System.out.println("=======================");
+        System.out.println("Click click click");
+        System.out.println("=======================");
+    }
+    public static void u_click(String locator){
+        System.out.println("=======================");
+        System.out.println("Click click click " +locator);
+        System.out.println("=======================");
+    }
+    public static void u_click(String locator, String index){
+        System.out.println("=======================");
+        System.out.println("Click click click " +locator);
+        System.out.println("Click click click " +index);
+        System.out.println("=======================");
     }
     public static void connectUnity(){
         String baseUri = "http://localhost:8342/q/scene";
@@ -45,9 +69,5 @@ public class KeyWords {
         Response response = request.get();
         //Response response = request.get("/1");
         response.prettyPrint();
-    }
-
-    public static void main(String[] args) {
-        connectUnity();
     }
 }

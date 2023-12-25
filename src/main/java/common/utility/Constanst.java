@@ -21,6 +21,9 @@ public class Constanst {
     public static final int TESTCASE_DESCRIPTION = 1;
     public static final int TESTCASE_STATUS = 3;
     public static final int RUN_MODE = 2;
+    public static final int ACTION_KEYWORD = 4;
+    public static final int PROCEED_ON_FAIL = 6;
+    public static final int PARAM = 5;
 
     //Excel sheet
     public static final String SCOPE_SHEET = "Scope";
