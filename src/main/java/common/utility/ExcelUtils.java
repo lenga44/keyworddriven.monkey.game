@@ -1,11 +1,13 @@
 package common.utility;
 
-import org.apache.poi.ss.usermodel.Cell;
+import execute.RunTestScript;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 
 public class ExcelUtils {
     private static XSSFSheet ExcelSheet;
@@ -18,19 +20,21 @@ public class ExcelUtils {
             FileInputStream ExcelFile = new FileInputStream(path);
             ExcelBook = new XSSFWorkbook(ExcelFile);
         }catch (Exception e){
-            System.out.println("Class Utils | Method setExcelFile | Exception desc : " + e.getMessage());
+            onTestCaseFail("Method setExcelFile | Exception desc : " + e.getMessage());
         }
     }
+
     public static int getRowCount(String sheetName){
         int iMumber = 0;
         try{
             ExcelSheet = ExcelBook.getSheet(sheetName);
             iMumber = ExcelSheet.getLastRowNum() +1;
         }catch (Exception e){
-
+            onTestCaseFail("Method getRowCount | Exception desc : " + e.getMessage());
         }
         return iMumber;
     }
+
     public static String getCellData(int rowNumber, int columnNumber, String sheetName){
         try {
             ExcelSheet = ExcelBook.getSheet(sheetName);
@@ -38,9 +42,11 @@ public class ExcelUtils {
             String cellData = Cell.getStringCellValue();
             return cellData;
         } catch (Exception e) {
+            onTestCaseFail("Method getCellData | Exception desc : " + e.getMessage());
             return "";
         }
     }
+
     public static int getRowContains(String sTestCaseName, int colNum, String sheeetName) throws Exception {
         int iRowNum = 0;
         try {
@@ -51,7 +57,7 @@ public class ExcelUtils {
                 }
             }
         } catch (Exception e) {
-            System.out.println("Class Utils | Method getRowContains | Exception desc : " + e.getMessage());
+            onTestCaseFail("Method getRowContains | Exception desc : " + e.getMessage());
         }
         return iRowNum;
     }
@@ -68,7 +74,32 @@ public class ExcelUtils {
             int number = ExcelSheet.getLastRowNum() + 1;
             return number;
         }catch (Exception e){
+            onTestCaseFail("Method getTestStepCount | Exception desc : " + e.getMessage());
             return 0;
         }
+    }
+
+    @SuppressWarnings("static-access")
+    public static void setCellData(String result, int rowNumber, int columnNumber, String sheetName,String path) throws Exception{
+        try{
+            ExcelSheet = ExcelBook.getSheet(sheetName);
+            Row = ExcelSheet.getRow(rowNumber);
+            Cell = Row.getCell(columnNumber, org.apache.poi.ss.usermodel.Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
+            if(Cell == null){
+                Cell = Row.createCell(columnNumber);
+            }
+            Cell.setCellValue(result);
+            FileOutputStream fileOut = new FileOutputStream(path);
+            ExcelBook.write(fileOut);
+            fileOut.close();
+            ExcelBook = new XSSFWorkbook(new FileInputStream(path));
+        }catch (Exception e){
+            RunTestScript.result = Constanst.FAIL;
+        }
+    }
+
+    private static void onTestCaseFail(String message){
+        RunTestScript.result = Constanst.SKIP;
+        RunTestScript.error = message;
     }
 }

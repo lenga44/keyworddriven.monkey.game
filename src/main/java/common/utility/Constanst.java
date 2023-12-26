@@ -4,9 +4,9 @@ public class Constanst {
     public static final String PROJECT_PATH = System.getProperty("user.dir");
 
     // System Variables
-    public static final String KEYWORD_FAIL = "FAIL";
-    public static final String KEYWORD_PASS = "PASS";
-    public static final String KEYWORD_SKIP = "SKIP";
+    public static final String FAIL = "FAIL";
+    public static final String PASS = "PASS";
+    public static final String SKIP = "SKIP";
     public static final String YES = "Y";
     public static final String NO = "N";
 
@@ -18,18 +18,20 @@ public class Constanst {
 
     //TC sheet in report file
     public static final int TESTCASE_ID = 0;
-    public static final int TESTCASE_DESCRIPTION = 1;
     public static final int TESTCASE_STATUS = 3;
     public static final int RUN_MODE = 2;
-    public static final int ACTION_KEYWORD = 4;
-    public static final int PROCEED_ON_FAIL = 6;
-    public static final int PARAM = 5;
-    public static final int VERIFY_STEP = 8;
-    public static final int VERIFY_PARAM = 9;
-    public static final int EXPECTED = 10;
-    public static final int RESULT = 11;
-    public static final int ERROR = 12;
-    public static final int IMAGE = 13;
+    public static final int TESTCASE_ERROR = 4;
+    //TS sheet
+    public static final int KEYWORD = 3;
+    public static final int PROCEED_ON_FAIL = 5;
+    public static final int DATA_SET = 6;
+    public static final int PARAMS = 4;
+    public static final int VERIFY_STEP = 7;
+    public static final int PARAM_VERIFY_STEP = 8;
+    public static final int EXPECTED = 9;
+    public static final int RESULT = 10;
+    public static final int ERROR = 11;
+    public static final int IMAGE = 12;
 
     //Excel sheet
     public static final String SCOPE_SHEET = "Scope";

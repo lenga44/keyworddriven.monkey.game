@@ -1,11 +1,15 @@
 package common.keywords;
 
+import common.utility.Constanst;
+import execute.RunTestScript;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
+import io.restassured.internal.common.assertion.Assertion;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.response.Response;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.http.HttpClient;
+import org.testng.Assert;
 
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
@@ -60,6 +64,31 @@ public class KeyWords {
         System.out.println("Click click click " +locator);
         System.out.println("Click click click " +index);
         System.out.println("=======================");
+    }
+    public static String u_elementDisplay(String locator){
+        String output = "OK";
+        System.out.println("=======================");
+        System.out.println("Element display " +output);
+        System.out.println("=======================");
+        return output;
+    }
+    public static String u_elementDisplay(String locator, String index){
+        String output = "OK";
+        System.out.println("=======================");
+        System.out.println("Element display " +output);
+        System.out.println("Element display " +index);
+        System.out.println("=======================");
+        return output;
+    }
+    public static void check(String actual,String expect){
+        try{
+            Assert.assertEquals(actual,expect);
+            RunTestScript.result = Constanst.PASS;
+            RunTestScript.error = "";
+        }catch (Exception e){
+            RunTestScript.result = Constanst.FAIL;
+            RunTestScript.error = "| Verify | " +e.getMessage();
+        }
     }
     public static void connectUnity(){
         String baseUri = "http://localhost:8342/q/scene";
