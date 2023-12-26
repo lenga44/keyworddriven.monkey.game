@@ -89,8 +89,7 @@ public class RunTestScript {
             dataSet = ExcelUtils.getCellData(iTestStep,Constanst.DATA_SET,Constanst.TEST_STEP_SHEET);
 
             if(result !=Constanst.SKIP) {
-                result = Constanst.PASS;
-                execute_action(iTestStep,params,dataSet);
+                execute_action(iTestStep,dataSet);
                 verifyStep(iTestStep);
             }else {
                 onResultStep(Constanst.SKIP,error,iTestStep);
@@ -99,9 +98,10 @@ public class RunTestScript {
         }
     }
 
-    private void execute_action(int numberStep, String valueCell,String data)throws Exception{
+    private void execute_action(int numberStep,String data)throws Exception{
         try {
-            param = getParam(valueCell,data);
+            result = Constanst.PASS;
+            param = getParam(params,data);
             paramCount = (param == null) ? 0: param.length;
 
             for (int i = 0; i < method.length; i++) {
@@ -128,16 +128,18 @@ public class RunTestScript {
     private void verifyStep(int numberStep)throws Exception{
         try{
             sActionKeyword = ExcelUtils.getCellData(iTestStep, Constanst.VERIFY_STEP, Constanst.TEST_STEP_SHEET);
-            if(result != Constanst.FAIL){
-                execute_action(numberStep,sActionKeyword,"");
-                onResultStep(result,error,numberStep);
+            params = ExcelUtils.getCellData(iTestStep, Constanst.PARAM_VERIFY_STEP, Constanst.TEST_STEP_SHEET);
+
+            if(!sActionKeyword.equals("")){
+                if(result == Constanst.PASS) {
+                    error = "";
+                    execute_action(numberStep, "");
+                }
             }
-            else
-                onResultStep(Constanst.PASS,"",numberStep);
         }catch (Exception e){
             onFail( "Method verify | Exception desc : " + e.getMessage());
-            onResultStep(Constanst.FAIL,error,numberStep);
         }
+        onResultStep(Constanst.FAIL,error,numberStep);
     }
     // endregion verify result after each step
 
