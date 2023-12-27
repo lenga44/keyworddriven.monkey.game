@@ -81,11 +81,11 @@ public class KeyWords {
         return String.valueOf(output);
     }
     public static void check(String actual,String expect){
+        RunTestScript.result = Constanst.PASS;
+        RunTestScript.error = "";
         try{
             Assert.assertEquals(actual,expect);
-            RunTestScript.result = Constanst.PASS;
-            RunTestScript.error = "";
-        }catch (Exception e){
+        }catch (Throwable e){
             RunTestScript.result = Constanst.FAIL;
             RunTestScript.error = "| Verify | " +e.getMessage();
         }

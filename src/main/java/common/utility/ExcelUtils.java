@@ -1,7 +1,6 @@
 package common.utility;
 
 import execute.RunTestScript;
-import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -19,7 +18,7 @@ public class ExcelUtils {
         try{
             FileInputStream ExcelFile = new FileInputStream(path);
             ExcelBook = new XSSFWorkbook(ExcelFile);
-        }catch (Exception e){
+        }catch (Throwable e){
             onTestCaseFail("Method setExcelFile | Exception desc : " + e.getMessage());
         }
     }
@@ -29,7 +28,7 @@ public class ExcelUtils {
         try{
             ExcelSheet = ExcelBook.getSheet(sheetName);
             iMumber = ExcelSheet.getLastRowNum() +1;
-        }catch (Exception e){
+        }catch (Throwable e){
             onTestCaseFail("Method getRowCount | Exception desc : " + e.getMessage());
         }
         return iMumber;
@@ -41,9 +40,8 @@ public class ExcelUtils {
             Cell = ExcelSheet.getRow(rowNumber).getCell(columnNumber);
             String cellData = Cell.getStringCellValue();
             return cellData;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             onTestCaseFail("Method getCellData | Exception desc : " + e.getMessage());
-            e.printStackTrace();
             return "";
         }
     }
@@ -57,7 +55,7 @@ public class ExcelUtils {
                     break;
                 }
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
             onTestCaseFail("Method getRowContains | Exception desc : " + e.getMessage());
         }
         return iRowNum;
@@ -74,7 +72,7 @@ public class ExcelUtils {
             ExcelSheet = ExcelBook.getSheet(sheetName);
             int number = ExcelSheet.getLastRowNum() + 1;
             return number;
-        }catch (Exception e){
+        }catch (Throwable e){
             onTestCaseFail("Method getTestStepCount | Exception desc : " + e.getMessage());
             return 0;
         }

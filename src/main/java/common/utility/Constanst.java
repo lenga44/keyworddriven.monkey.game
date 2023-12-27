@@ -12,7 +12,7 @@ public class Constanst {
 
     //Scope file
     public static final int TESTCASE_FILE_NAME = 1;
-    public static final int STATUS_GAME = 2;
+    public static final int STATUS_GAME = 3;
     public static final String SCOPE_FILE_PATH = "\\src\\main\\java\\testcases\\Scope.xlsx";
     public static final String TESTCASE_FILE_PATH = "\\src\\main\\java\\testcases\\";
 

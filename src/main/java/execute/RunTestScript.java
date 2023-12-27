@@ -13,7 +13,8 @@ public class RunTestScript {
         method = keyWord.getClass().getMethods();
     }
     public static void main(String[] args){
-        ExcelUtils.setExcelFile(Constanst.PROJECT_PATH +Constanst.SCOPE_FILE_PATH);
+        scopePath = Constanst.PROJECT_PATH +Constanst.SCOPE_FILE_PATH;
+        ExcelUtils.setExcelFile(scopePath);
         RunTestScript runTestScript = new RunTestScript();
         runTestScript.execute();
     }
@@ -26,6 +27,8 @@ public class RunTestScript {
                 tcPath = Constanst.PROJECT_PATH +Constanst.TESTCASE_FILE_PATH + ExcelUtils.getCellData(i,Constanst.TESTCASE_FILE_NAME,Constanst.SCOPE_SHEET)+".xlsx";
                 ExcelUtils.setExcelFile(tcPath);
                 execute_testcases();
+                ExcelUtils.setExcelFile(scopePath);
+                ExcelUtils.setCellData(tcResult, i, Constanst.STATUS_GAME, Constanst.SCOPE_SHEET, scopePath);
             }
         }
     }
@@ -37,8 +40,11 @@ public class RunTestScript {
             sTestCaseID = ExcelUtils.getCellData(i, Constanst.TESTCASE_ID, Constanst.TEST_STEP_SHEET);
             if (!sTestCaseID.equals("TCID")) {
                 rangeStepByTestCase();
-                if (result != Constanst.SKIP)
+                if (result != Constanst.SKIP) {
+                    tcResult = Constanst.PASS;
                     execute_steps();
+                    onResultTestcase(tcResult,"",i);
+                }
                 else
                     onResultTestcase(Constanst.SKIP, error, i);
             }
@@ -88,10 +94,11 @@ public class RunTestScript {
             if(result !=Constanst.SKIP) {
                 execute_action(iTestStep,dataSet);
                 verifyStep(iTestStep);
-            }else {
-                onResultStep(Constanst.SKIP,error,iTestStep);
             }
-
+            onResultStep(result,error,iTestStep);
+            error = "";
+            if (result==Constanst.FAIL)
+                tcResult = Constanst.FAIL;
         }
     }
 
@@ -106,16 +113,18 @@ public class RunTestScript {
                 if (method[i].getName().equals(sActionKeyword) && method[i].getParameterCount() == paramCount) {
 
                     if (paramCount > 0) {
-                        if (!method[i].getReturnType().equals("void")) {
+                        String type = String.valueOf(method[i].getReturnType());
+                        if (!type.equals("void")) {
                             RunTestScript.actual = (String) method[i].invoke(keyWord, param);
                             keyWord.check(actual, expected);
                         } else
                             method[i].invoke(keyWord, param);
                     } else
                         method[i].invoke(keyWord, null);
+                    break;
                 }
             }
-        }catch (Exception e) {
+        }catch (Throwable e) {
             onFail( "Method execute_action | Exception desc : " + e.getMessage());
             onResultStep(Constanst.FAIL,error,numberStep);
         }
@@ -129,12 +138,11 @@ public class RunTestScript {
 
             if(!sActionKeyword.equals("")){
                 if(result == Constanst.PASS) {
-                    error = "";
                     expected = ExcelUtils.getCellData(numberStep,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET);
                     execute_action(numberStep, "");
                 }
             }
-        }catch (Exception e){
+        }catch (Throwable e){
             onFail( "Method verify | Exception desc : " + e.getMessage());
             onResultStep(result,error,numberStep);
         }
@@ -157,22 +165,29 @@ public class RunTestScript {
     //endregion TEST STEP
 
 
-
-    public static String sRunMode;
+    // Test Step
     public static int iTestStep;
     public static int lastTestStep;
-    public static String sTestCaseID;
     public static String sActionKeyword;
     public static int  paramCount;
     public static Object[]  param;
     public static String params;
     public static String result = Constanst.PASS;
     public static String error;
-    public static String tcPath;
     public static String dataSet;
     public static String expected;
     public static String actual;
 
+    //Class
     public static KeyWords keyWord;
     public static Method method[];
+
+    //Scope
+    public static String sRunMode;
+    public static String scopePath;
+    public static String sTestCaseID;
+
+    //Testcase
+    public static String tcResult;
+    public static String tcPath;
 }
