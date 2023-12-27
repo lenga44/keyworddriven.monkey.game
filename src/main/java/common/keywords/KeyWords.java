@@ -21,7 +21,7 @@ public class KeyWords {
     public static HttpClient client;
     public static AppiumDriver openApp(){
         System.out.println("=======================");
-        System.out.println("App đã mở rồi nhé!!!");
+        System.out.println("| openApp |App đã mở rồi nhé!!!");
         System.out.println("=======================");
         /*DesiredCapabilities caps = new DesiredCapabilities();
         caps.setCapability("appium:udid","7cbc1b6a");
@@ -46,39 +46,39 @@ public class KeyWords {
     }
     public static void waitingForCourseListDisplay(){
         System.out.println("=======================");
-        System.out.println("Bạn đang đứng ở Course List");
+        System.out.println("| waitingForCourseListDisplay |Bạn đang đứng ở Course List");
         System.out.println("=======================");
     }
     public static void u_click(){
         System.out.println("=======================");
-        System.out.println("Click click click");
+        System.out.println("| u_click |Click click click");
         System.out.println("=======================");
     }
     public static void u_click(String locator){
         System.out.println("=======================");
-        System.out.println("Click click click " +locator);
+        System.out.println("| u_click |Click click click " +locator);
         System.out.println("=======================");
     }
     public static void u_click(String locator, String index){
         System.out.println("=======================");
-        System.out.println("Click click click " +locator);
-        System.out.println("Click click click " +index);
+        System.out.println("| u_click |Click click click " +locator);
+        System.out.println("| u_click |Click click click " +index);
         System.out.println("=======================");
     }
     public static String u_elementDisplay(String locator){
-        String output = "OK";
+        boolean output = true;
         System.out.println("=======================");
-        System.out.println("Element display " +output);
+        System.out.println("| u_elementDisplay |Element display " +output);
         System.out.println("=======================");
-        return output;
+        return String.valueOf(output);
     }
     public static String u_elementDisplay(String locator, String index){
-        String output = "OK";
+        boolean output = true;
         System.out.println("=======================");
-        System.out.println("Element display " +output);
-        System.out.println("Element display " +index);
+        System.out.println("| u_elementDisplay |Element display " +output);
+        System.out.println("| u_elementDisplay |Element display " +index);
         System.out.println("=======================");
-        return output;
+        return String.valueOf(output);
     }
     public static void check(String actual,String expect){
         try{

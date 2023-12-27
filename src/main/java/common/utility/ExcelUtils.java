@@ -43,6 +43,7 @@ public class ExcelUtils {
             return cellData;
         } catch (Exception e) {
             onTestCaseFail("Method getCellData | Exception desc : " + e.getMessage());
+            e.printStackTrace();
             return "";
         }
     }

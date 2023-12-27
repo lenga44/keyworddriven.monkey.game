@@ -23,28 +23,25 @@ public class RunTestScript {
         for (int i = 0; i<iTotalFeature;i++){
             sRunMode = ExcelUtils.getCellData(i,Constanst.RUN_MODE,Constanst.SCOPE_SHEET);
             if(sRunMode.equals(Constanst.YES)) {
-                execute_testcases(ExcelUtils.getCellData(i,Constanst.TESTCASE_FILE_NAME,Constanst.SCOPE_SHEET));
+                tcPath = Constanst.PROJECT_PATH +Constanst.TESTCASE_FILE_PATH + ExcelUtils.getCellData(i,Constanst.TESTCASE_FILE_NAME,Constanst.SCOPE_SHEET)+".xlsx";
+                ExcelUtils.setExcelFile(tcPath);
+                execute_testcases();
             }
         }
     }
 
     //region TESTCASE
-    private void execute_testcases(String fileName) throws Exception{
-        tcPath = Constanst.PROJECT_PATH +Constanst.TESTCASE_FILE_PATH + fileName +".xlsx";
-        ExcelUtils.setExcelFile(tcPath);
+    private void execute_testcases() throws Exception{
         int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
-        for(int i =0; i<iTotalTestCase;i++){
-
-            sRunMode = ExcelUtils.getCellData(i,Constanst.RUN_MODE,Constanst.TESTCASE_SHEET);
-            sTestCaseID = ExcelUtils.getCellData(i,Constanst.TESTCASE_ID,Constanst.TEST_STEP_SHEET);
-
-            if(sRunMode.equals(Constanst.YES)){
+        for(int i =0; i<iTotalTestCase;i++) {
+            sTestCaseID = ExcelUtils.getCellData(i, Constanst.TESTCASE_ID, Constanst.TEST_STEP_SHEET);
+            if (!sTestCaseID.equals("TCID")) {
                 rangeStepByTestCase();
+                if (result != Constanst.SKIP)
+                    execute_steps();
+                else
+                    onResultTestcase(Constanst.SKIP, error, i);
             }
-            if(result != Constanst.SKIP)
-                execute_steps();
-            else
-                onResultTestcase(Constanst.SKIP,error,i);
         }
     }
 
@@ -127,19 +124,21 @@ public class RunTestScript {
     // region verify result after each step
     private void verifyStep(int numberStep)throws Exception{
         try{
-            sActionKeyword = ExcelUtils.getCellData(iTestStep, Constanst.VERIFY_STEP, Constanst.TEST_STEP_SHEET);
-            params = ExcelUtils.getCellData(iTestStep, Constanst.PARAM_VERIFY_STEP, Constanst.TEST_STEP_SHEET);
+            sActionKeyword = ExcelUtils.getCellData(numberStep, Constanst.VERIFY_STEP, Constanst.TEST_STEP_SHEET);
+            params = ExcelUtils.getCellData(numberStep, Constanst.PARAM_VERIFY_STEP, Constanst.TEST_STEP_SHEET);
 
             if(!sActionKeyword.equals("")){
                 if(result == Constanst.PASS) {
                     error = "";
+                    expected = ExcelUtils.getCellData(numberStep,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET);
                     execute_action(numberStep, "");
                 }
             }
         }catch (Exception e){
             onFail( "Method verify | Exception desc : " + e.getMessage());
+            onResultStep(result,error,numberStep);
         }
-        onResultStep(Constanst.FAIL,error,numberStep);
+        onResultStep(result,error,numberStep);
     }
     // endregion verify result after each step
 
