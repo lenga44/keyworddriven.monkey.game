@@ -15,7 +15,7 @@ public class ExcelUtils {
     private static org.apache.poi.ss.usermodel.Cell Cell;
     private static XSSFRow Row;
 
-    public static void setExcelFile(String path)throws Exception {
+    public static void setExcelFile(String path) {
         try{
             FileInputStream ExcelFile = new FileInputStream(path);
             ExcelBook = new XSSFWorkbook(ExcelFile);
@@ -48,7 +48,7 @@ public class ExcelUtils {
         }
     }
 
-    public static int getRowContains(String sTestCaseName, int colNum, String sheeetName) throws Exception {
+    public static int getRowContains(String sTestCaseName, int colNum, String sheeetName)  {
         int iRowNum = 0;
         try {
             int rowCount = ExcelUtils.getRowCount(sheeetName);
@@ -65,7 +65,7 @@ public class ExcelUtils {
 
     public static int getTestStepCount(String sheetName, String sTestCaseID, int startTestStep) {
         try{
-            for (int i = startTestStep;i<= ExcelUtils.getRowCount(sheetName);i++){
+            for (int i = startTestStep;i< ExcelUtils.getRowCount(sheetName);i++){
                 if(!sTestCaseID.equals(ExcelUtils.getCellData(i,Constanst.TESTCASE_ID,sheetName))){
                     int number = i;
                     return number;
@@ -81,7 +81,7 @@ public class ExcelUtils {
     }
 
     @SuppressWarnings("static-access")
-    public static void setCellData(String result, int rowNumber, int columnNumber, String sheetName,String path) throws Exception{
+    public static void setCellData(String result, int rowNumber, int columnNumber, String sheetName,String path) {
         try{
             ExcelSheet = ExcelBook.getSheet(sheetName);
             Row = ExcelSheet.getRow(rowNumber);

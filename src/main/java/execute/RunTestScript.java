@@ -8,17 +8,17 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 public class RunTestScript {
-    public RunTestScript() throws NoSuchMethodException, SecurityException{
+    public RunTestScript() {
         keyWord = new KeyWords();
         method = keyWord.getClass().getMethods();
     }
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args){
         ExcelUtils.setExcelFile(Constanst.PROJECT_PATH +Constanst.SCOPE_FILE_PATH);
         RunTestScript runTestScript = new RunTestScript();
         runTestScript.execute();
     }
 
-    private void execute() throws Exception{
+    private void execute() {
         int iTotalFeature = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
         for (int i = 0; i<iTotalFeature;i++){
             sRunMode = ExcelUtils.getCellData(i,Constanst.RUN_MODE,Constanst.SCOPE_SHEET);
@@ -31,7 +31,7 @@ public class RunTestScript {
     }
 
     //region TESTCASE
-    private void execute_testcases() throws Exception{
+    private void execute_testcases() {
         int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
         for(int i =0; i<iTotalTestCase;i++) {
             sTestCaseID = ExcelUtils.getCellData(i, Constanst.TESTCASE_ID, Constanst.TEST_STEP_SHEET);
@@ -64,7 +64,7 @@ public class RunTestScript {
         }
     }
 
-    private void onResultTestcase(String status, String message, int rowNumber) throws Exception{
+    private void onResultTestcase(String status, String message, int rowNumber) {
         ExcelUtils.setCellData(status, rowNumber, Constanst.TESTCASE_STATUS, Constanst.TESTCASE_SHEET, tcPath);
         ExcelUtils.setCellData(message,  rowNumber, Constanst.TESTCASE_ERROR, Constanst.TESTCASE_SHEET, tcPath);
     }
@@ -72,12 +72,12 @@ public class RunTestScript {
 
     //region TEST STEP
 
-    private void rangeStepByTestCase()throws Exception{
+    private void rangeStepByTestCase(){
         iTestStep = ExcelUtils.getRowContains(sTestCaseID,Constanst.TESTCASE_ID,Constanst.TEST_STEP_SHEET);
         lastTestStep = ExcelUtils.getTestStepCount(Constanst.TEST_STEP_SHEET,sTestCaseID,iTestStep);
     }
 
-    private void execute_steps()throws Exception{
+    private void execute_steps(){
         result = Constanst.PASS;
         for (; iTestStep < lastTestStep; iTestStep++) {
 
@@ -95,7 +95,7 @@ public class RunTestScript {
         }
     }
 
-    private void execute_action(int numberStep,String data)throws Exception{
+    private void execute_action(int numberStep,String data){
         try {
             result = Constanst.PASS;
             param = getParam(params,data);
@@ -122,7 +122,7 @@ public class RunTestScript {
     }
 
     // region verify result after each step
-    private void verifyStep(int numberStep)throws Exception{
+    private void verifyStep(int numberStep){
         try{
             sActionKeyword = ExcelUtils.getCellData(numberStep, Constanst.VERIFY_STEP, Constanst.TEST_STEP_SHEET);
             params = ExcelUtils.getCellData(numberStep, Constanst.PARAM_VERIFY_STEP, Constanst.TEST_STEP_SHEET);
@@ -143,11 +143,11 @@ public class RunTestScript {
     // endregion verify result after each step
 
     //region RESULT
-    private void onResultStep(String status, String message, int rowNumber ) throws Exception{
+    private void onResultStep(String status, String message, int rowNumber ){
         ExcelUtils.setCellData(status, rowNumber, Constanst.RESULT, Constanst.TEST_STEP_SHEET, tcPath);
         ExcelUtils.setCellData(message,  rowNumber, Constanst.ERROR, Constanst.TEST_STEP_SHEET, tcPath);
     }
-    private void onFail(String message) throws Exception{
+    private void onFail(String message) {
         result = Constanst.FAIL;
         error = message;
     }
