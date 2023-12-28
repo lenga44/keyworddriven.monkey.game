@@ -37,4 +37,9 @@ public class Constanst {
     public static final String SCOPE_SHEET = "Scope";
     public static final String TESTCASE_SHEET = "TestCase";
     public static final String TEST_STEP_SHEET = "TestSteps";
+
+    //KeWords class
+    public static final String SIMULATE_URL = "http://localhost:8342/q/simulate";
+    public static final String SCENE_URL = "http://localhost:8342/q/scene";
+    public static final String DRAG_ACTION = ".drag";
 }
