@@ -52,9 +52,26 @@ public class KeyWords {
         System.out.println("=======================");
     }
 
+    //region ACTION
     public static void click(String locator, String property){
-        Response response = request(Constanst.SCENE_URL,"//"+locator+"."+property);
+        waitForObject(locator);
+        request(Constanst.SCENE_URL,"//"+locator+"."+property);
     }
+    public static void clickDownAndUp(String locator){
+        String absolutePath = getAbsolutePath(locator,"0");
+        request(Constanst.POINTER_URL,".DownToUp("+absolutePath+")");
+    }
+    public static void clickDownAndUp(String locator,String index){
+        waitForObject(locator);
+        String absolutePath = getAbsolutePath(locator,"0");
+        request(Constanst.POINTER_URL,".DownToUp("+absolutePath+","+index+")");
+    }
+    public static void horizontalSwipe(String number){
+        for(int i = 0; i<Integer.valueOf(number);i++){
+            request(Constanst.SIMULATE_URL,Constanst.DRAG_ACTION + "(1000,500,100,500,0.5)");
+        }
+    }
+    //endregion ACTION
 
     public static String elementDisplay(String locator){
         boolean output = true;
@@ -73,24 +90,20 @@ public class KeyWords {
         return String.valueOf(output);
     }
 
-    public static void horizontalSwipe(String number){
-        for(int i = 0; i<Integer.valueOf(number);i++){
-            request(Constanst.SIMULATE_URL,Constanst.DRAG_ACTION + "(1000,500,100,500,0.5)");
-        }
-    }
 
     public static void waitForObject(String locator){
         LocalDateTime time = LocalDateTime.now();
         LocalDateTime time1 = time.plusSeconds(15);
-        JsonPath  json = null;
+        Response response = null;
         do {
-            Response response = request(Constanst.SCENE_URL, "//" + locator);
-            response.prettyPrint();
-            if(json!=null){
+            response = request(Constanst.SCENE_URL, "//" + locator);
+            JsonPath json = response.getBody().jsonPath();
+            if (json != null) {
                 break;
             }
             time = LocalDateTime.now();
-        }while (time.compareTo(time1)<=0);
+        } while (time.compareTo(time1) <= 0);
+        Assert.assertTrue(convert(response,"name").contains(locator));
     }
     public static void waitForObject(String locator,String second){
         Response response = request(Constanst.SCENE_URL,"//"+locator);
@@ -128,5 +141,12 @@ public class KeyWords {
             RunTestScript.result = Constanst.FAIL;
             RunTestScript.error = "| Verify | " +e.getMessage();
         }
+    }
+    private static String getAbsolutePath(String locator, String index){
+        Response response = request(Constanst.SCENE_URL,"//"+locator + "["+Integer.valueOf(index)+"]");
+        return convert(response,"path");
+    }
+    private static String convert(Response response,String key){
+        return String.valueOf(response.getBody().jsonPath().getList(key).get(0));
     }
 }

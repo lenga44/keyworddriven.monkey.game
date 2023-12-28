@@ -41,5 +41,6 @@ public class Constanst {
     //KeWords class
     public static final String SIMULATE_URL = "http://localhost:8342/q/simulate";
     public static final String SCENE_URL = "http://localhost:8342/q/scene";
+    public static final String POINTER_URL = "http://localhost:8342/q/pointer";
     public static final String DRAG_ACTION = ".drag";
 }
