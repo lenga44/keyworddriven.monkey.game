@@ -61,7 +61,8 @@ public class KeyWords {
     }
     public static void clickDownAndUp(String locator){
         String absolutePath = getAbsolutePath(locator,"0");
-        request(Constanst.POINTER_URL,".DownToUp("+absolutePath+")");
+        System.out.println(absolutePath);
+        //request(Constanst.POINTER_URL,".DownToUp("+absolutePath+")");
     }
     public static void clickDownAndUp(String locator,String index){
         waitForObject(locator);
@@ -119,7 +120,11 @@ public class KeyWords {
     }
     //endregion KEYWORD_EXCEL
     public static void main(String[] args) {
-        clickDownAndUp("Item 0: On Unlock Lesson");
+        try {
+            clickDownAndUp("Item 0: On Unlock Lesson");
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
     public static void connectUnity(){
         String baseUri = Constanst.SCENE_URL;
