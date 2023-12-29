@@ -14,6 +14,8 @@ import org.testng.Assert;
 
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static io.restassured.RestAssured.given;
@@ -71,6 +73,13 @@ public class KeyWords {
             request(Constanst.SIMULATE_URL,Constanst.DRAG_ACTION + "(1000,500,100,500,0.5)");
         }
     }
+    public static void simulateClick(String locator){
+        waitForObject(locator);
+        Response response = request(Constanst.SCENE_URL,"//"+locator+".RectTransform");
+        String x = convert(response,"position.x",0,"\\.");
+        String y = convert(response,"position.y",0,"\\.");
+        request(Constanst.SIMULATE_URL,".click("+x+","+y+")");
+    }
     //endregion ACTION
 
     public static String elementDisplay(String locator){
@@ -90,7 +99,6 @@ public class KeyWords {
         return String.valueOf(output);
     }
 
-
     public static void waitForObject(String locator){
         LocalDateTime time = LocalDateTime.now();
         LocalDateTime time1 = time.plusSeconds(15);
@@ -103,14 +111,16 @@ public class KeyWords {
             }
             time = LocalDateTime.now();
         } while (time.compareTo(time1) <= 0);
-        Assert.assertTrue(convert(response,"name").contains(locator));
+        Assert.assertTrue(locator.contains(convert(response,"name")));
     }
     public static void waitForObject(String locator,String second){
         Response response = request(Constanst.SCENE_URL,"//"+locator);
         response.prettyPrint();
     }
     //endregion KEYWORD_EXCEL
-
+    public static void main(String[] args) {
+        clickDownAndUp("Item 0: On Unlock Lesson");
+    }
     public static void connectUnity(){
         String baseUri = Constanst.SCENE_URL;
         RequestSpecification request = given();
@@ -148,5 +158,10 @@ public class KeyWords {
     }
     private static String convert(Response response,String key){
         return String.valueOf(response.getBody().jsonPath().getList(key).get(0));
+    }
+    private static String convert(Response response,String key,int index,String splitStr){
+        String result =  String.valueOf(response.getBody().jsonPath().getList(key).get(0));
+        String[] a = result.split(splitStr);
+        return Arrays.stream(a).toList().get(0);
     }
 }
