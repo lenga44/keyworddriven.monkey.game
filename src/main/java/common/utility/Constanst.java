@@ -23,7 +23,7 @@ public class Constanst {
     public static final int TESTCASE_ERROR = 4;
     //TS sheet
     public static final int KEYWORD = 3;
-    public static final int PROCEED_ON_FAIL = 5;
+    public static final int PROCEED= 5;
     public static final int DATA_SET = 6;
     public static final int PARAMS = 4;
     public static final int VERIFY_STEP = 7;
@@ -32,7 +32,10 @@ public class Constanst {
     public static final int RESULT = 10;
     public static final int ERROR = 11;
     public static final int IMAGE = 12;
-
+    public static final String TC_LABEL = "TCID";
+    public static final String PROCESS_YES = "Y";
+    public static final int DESCRIPTION = 2;
+    public static final int TEST_STEP = 1;
     //Excel sheet
     public static final String SCOPE_SHEET = "Scope";
     public static final String TESTCASE_SHEET = "TestCase";
@@ -42,5 +45,6 @@ public class Constanst {
     public static final String SIMULATE_URL = "http://localhost:8342/q/simulate";
     public static final String SCENE_URL = "http://localhost:8342/q/scene";
     public static final String POINTER_URL = "http://localhost:8342/q/pointer";
+    public static final String STATUS_URL = "http://localhost:8342/about";
     public static final String DRAG_ACTION = ".drag";
 }

@@ -102,20 +102,13 @@ public class KeyWords {
     //endregion ACTION
 
     public static String elementDisplay(String locator){
-        boolean output = true;
-        System.out.println("=======================");
-        System.out.println("| u_elementDisplay |Element display " +output);
-        System.out.println("=======================");
-        return String.valueOf(output);
+        waitForObject(locator);
+        Response response = request(Constanst.SCENE_URL,"//"+locator);
+        return convert(response,"activeInHierarchy");
     }
 
     public static String elementDisplay(String locator, String index){
-        boolean output = true;
-        System.out.println("=======================");
-        System.out.println("| u_elementDisplay |Element display " +output);
-        System.out.println("| u_elementDisplay |Element display " +index);
-        System.out.println("=======================");
-        return String.valueOf(output);
+        return "";
     }
 
     public static void waitForObject(String locator){
@@ -135,6 +128,12 @@ public class KeyWords {
     public static void waitForObject(String locator,String second){
         Response response = request(Constanst.SCENE_URL,"//"+locator);
         response.prettyPrint();
+    }
+    public static String getCurrentScence(){
+        RequestSpecification request = given();
+        request.baseUri(Constanst.STATUS_URL);
+        Response response = request.get();
+        return response.jsonPath().get("Scene");
     }
     //endregion KEYWORD_EXCEL
 

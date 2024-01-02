@@ -37,15 +37,15 @@ public class RunTestScript {
     private void execute_testcases() {
         int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
         for(int i =0; i<iTotalTestCase;i++) {
-            sTestCaseID = ExcelUtils.getCellData(i, Constanst.TESTCASE_ID, Constanst.TEST_STEP_SHEET);
-            if (!sTestCaseID.equals("TCID")) {
+            sTestCaseID = ExcelUtils.getCellData(i, Constanst.TESTCASE_ID, Constanst.TESTCASE_SHEET);
+            System.out.println("TC: "+sTestCaseID);
+            if (!sTestCaseID.equals(Constanst.TC_LABEL)) {
                 rangeStepByTestCase();
                 if (result != Constanst.SKIP) {
                     tcResult = Constanst.PASS;
                     execute_steps();
-                    onResultTestcase(tcResult,"",i);
-                }
-                else
+                    onResultTestcase(tcResult, "", i);
+                } else
                     onResultTestcase(Constanst.SKIP, error, i);
             }
         }
@@ -86,19 +86,22 @@ public class RunTestScript {
     private void execute_steps(){
         result = Constanst.PASS;
         for (; iTestStep < lastTestStep; iTestStep++) {
-
-            sActionKeyword = ExcelUtils.getCellData(iTestStep, Constanst.KEYWORD, Constanst.TEST_STEP_SHEET);
-            params = ExcelUtils.getCellData(iTestStep, Constanst.PARAMS, Constanst.TEST_STEP_SHEET);
-            dataSet = ExcelUtils.getCellData(iTestStep,Constanst.DATA_SET,Constanst.TEST_STEP_SHEET);
-
-            if(result !=Constanst.SKIP) {
-                execute_action(iTestStep,dataSet);
-                verifyStep(iTestStep);
+            process = ExcelUtils.getCellData(iTestStep, Constanst.PROCEED, Constanst.TEST_STEP_SHEET);
+            if(process.equals(Constanst.PROCESS_YES)) {
+                sActionKeyword = ExcelUtils.getCellData(iTestStep, Constanst.KEYWORD, Constanst.TEST_STEP_SHEET);
+                params = ExcelUtils.getCellData(iTestStep, Constanst.PARAMS, Constanst.TEST_STEP_SHEET);
+                dataSet = ExcelUtils.getCellData(iTestStep, Constanst.DATA_SET, Constanst.TEST_STEP_SHEET);
+                description = ExcelUtils.getCellData(iTestStep, Constanst.DESCRIPTION, Constanst.TEST_STEP_SHEET);
+                testStep = ExcelUtils.getCellData(iTestStep, Constanst.TEST_STEP, Constanst.TEST_STEP_SHEET);
+                if (result != Constanst.SKIP) {
+                    execute_action(iTestStep, dataSet);
+                    verifyStep(iTestStep);
+                }
+                onResultStep(result, error, iTestStep);
+                error = "";
+                if (result == Constanst.FAIL)
+                    tcResult = Constanst.FAIL;
             }
-            onResultStep(result,error,iTestStep);
-            error = "";
-            if (result==Constanst.FAIL)
-                tcResult = Constanst.FAIL;
         }
     }
 
@@ -111,16 +114,18 @@ public class RunTestScript {
             for (int i = 0; i < method.length; i++) {
 
                 if (method[i].getName().equals(sActionKeyword) && method[i].getParameterCount() == paramCount) {
-
+                    System.out.println(testStep +":  "+description);
                     if (paramCount > 0) {
                         String type = String.valueOf(method[i].getReturnType());
                         if (!type.equals("void")) {
                             RunTestScript.actual = (String) method[i].invoke(keyWord, param);
                             keyWord.check(actual, expected);
-                        } else
+                        } else {
                             method[i].invoke(keyWord, param);
-                    } else
+                        }
+                    } else {
                         method[i].invoke(keyWord, null);
+                    }
                     break;
                 }
             }
@@ -177,6 +182,9 @@ public class RunTestScript {
     public static String dataSet;
     public static String expected;
     public static String actual;
+    public static String process;
+    public static String description;
+    public static String testStep;
 
     //Class
     public static KeyWords keyWord;
