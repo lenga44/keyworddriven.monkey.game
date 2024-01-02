@@ -88,17 +88,21 @@ public class RunTestScript {
         for (; iTestStep < lastTestStep; iTestStep++) {
             process = ExcelUtils.getCellData(iTestStep, Constanst.PROCEED, Constanst.TEST_STEP_SHEET);
             if(process.equals(Constanst.PROCESS_YES)) {
+
                 sActionKeyword = ExcelUtils.getCellData(iTestStep, Constanst.KEYWORD, Constanst.TEST_STEP_SHEET);
                 params = ExcelUtils.getCellData(iTestStep, Constanst.PARAMS, Constanst.TEST_STEP_SHEET);
                 dataSet = ExcelUtils.getCellData(iTestStep, Constanst.DATA_SET, Constanst.TEST_STEP_SHEET);
                 description = ExcelUtils.getCellData(iTestStep, Constanst.DESCRIPTION, Constanst.TEST_STEP_SHEET);
                 testStep = ExcelUtils.getCellData(iTestStep, Constanst.TEST_STEP, Constanst.TEST_STEP_SHEET);
+
                 if (result != Constanst.SKIP) {
                     execute_action(iTestStep, dataSet);
                     verifyStep(iTestStep);
                 }
+
                 onResultStep(result, error, iTestStep);
                 error = "";
+
                 if (result == Constanst.FAIL)
                     tcResult = Constanst.FAIL;
             }
@@ -144,6 +148,7 @@ public class RunTestScript {
             if(!sActionKeyword.equals("")){
                 if(result == Constanst.PASS) {
                     expected = ExcelUtils.getCellData(numberStep,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET);
+                    description = "Check - " +description;
                     execute_action(numberStep, "");
                 }
             }

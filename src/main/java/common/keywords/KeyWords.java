@@ -22,7 +22,6 @@ import static io.restassured.RestAssured.given;
 
 public class KeyWords {
     public static AppiumDriver driver;
-    public static HttpClient client;
 
     //region KEYWORD_EXCEL
     public static AppiumDriver openApp(){
