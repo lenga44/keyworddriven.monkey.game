@@ -134,7 +134,7 @@ public class RunTestScript {
                 }
             }
         }catch (Throwable e) {
-            onFail( "Method execute_action | Exception desc : " + e.getMessage());
+            System.out.println( "Method execute_action | Exception desc : " + e.getMessage());
             onResultStep(Constanst.FAIL,error,numberStep);
         }
     }
@@ -165,7 +165,7 @@ public class RunTestScript {
         ExcelUtils.setCellData(status, rowNumber, Constanst.RESULT, Constanst.TEST_STEP_SHEET, tcPath);
         ExcelUtils.setCellData(message,  rowNumber, Constanst.ERROR, Constanst.TEST_STEP_SHEET, tcPath);
     }
-    private void onFail(String message) {
+    public static void onFail(String message) {
         result = Constanst.FAIL;
         error = message;
     }

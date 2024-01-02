@@ -146,10 +146,15 @@ public class KeyWords {
         response.prettyPrint();
     }
     private static Response request(String baseUri,String basePath){
-        RequestSpecification request = given();
-        request.baseUri(baseUri);
-        request.basePath(basePath);
-        return request.get();
+        try {
+            RequestSpecification request = given();
+            request.baseUri(baseUri);
+            request.basePath(basePath);
+            return request.get();
+        }catch (Throwable e){
+            RunTestScript.onFail("| request | "+ e.getMessage());
+            return null;
+        }
     }
     private static Response request(String baseUri,String basePath,int number){
         RequestSpecification request = given();
@@ -172,7 +177,12 @@ public class KeyWords {
         return convert(response,"path");
     }
     private static String convert(Response response,String key){
-        return String.valueOf(response.getBody().jsonPath().getList(key).get(0));
+        try {
+            return String.valueOf(response.getBody().jsonPath().getList(key).get(0));
+        }catch (Throwable e){
+            RunTestScript.onFail("| convert | "+ e.getMessage());
+            return null;
+        }
     }
     private static String convert(Response response,String key,int index,String splitStr){
         String result =  String.valueOf(response.getBody().jsonPath().getList(key).get(0));
