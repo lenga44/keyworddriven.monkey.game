@@ -134,7 +134,6 @@ public class RunTestScript {
                 }
             }
         }catch (Throwable e) {
-            System.out.println( "Method execute_action | Exception desc : " + e.getMessage());
             onResultStep(Constanst.FAIL,error,numberStep);
         }
     }

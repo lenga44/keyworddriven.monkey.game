@@ -168,8 +168,7 @@ public class KeyWords {
         try{
             Assert.assertEquals(actual,expect);
         }catch (Throwable e){
-            RunTestScript.result = Constanst.FAIL;
-            RunTestScript.error = "| Verify | " +e.getMessage();
+            RunTestScript.onFail("| Verify | " +e.getMessage());
         }
     }
     private static String getAbsolutePath(String locator, String index){
