@@ -112,7 +112,7 @@ public class KeyWords {
     public static void waitForObject(String locator){
         try {
             LocalDateTime time = LocalDateTime.now();
-            LocalDateTime time1 = time.plusSeconds(30);
+            LocalDateTime time1 = time.plusSeconds(10);
             Response response = null;
             do {
                 response = request(Constanst.SCENE_URL, "//" + locator);

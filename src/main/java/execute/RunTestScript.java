@@ -102,7 +102,9 @@ public class RunTestScript {
                     execute_action(iTestStep, dataSet);
                     verifyStep(iTestStep);
                 }
-
+                if(result == "" && result==null){
+                    result = Constanst.SKIP;
+                }
                 onResultStep(result, error, iTestStep);
                 error = "";
 
@@ -172,7 +174,7 @@ public class RunTestScript {
         ExcelUtils.setCellData(message,  rowNumber, Constanst.ERROR, Constanst.TEST_STEP_SHEET, tcPath);
     }
     public static void onFail(String message) {
-        Log.warn(message);
+        Log.info(message);
         result = Constanst.FAIL;
         error = message;
     }

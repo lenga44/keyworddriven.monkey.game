@@ -19,7 +19,7 @@ public class ExcelUtils {
             FileInputStream ExcelFile = new FileInputStream(path);
             ExcelBook = new XSSFWorkbook(ExcelFile);
         }catch (Throwable e){
-            Log.error("Method setExcelFile: " +path);
+            Log.info("Method setExcelFile: " +path);
             Log.error("Method setExcelFile | Exception desc : " + e.getMessage());
             onTestCaseFail("Method setExcelFile | Exception desc : " + e.getMessage());
         }
@@ -31,7 +31,7 @@ public class ExcelUtils {
             ExcelSheet = ExcelBook.getSheet(sheetName);
             iMumber = ExcelSheet.getLastRowNum() +1;
         }catch (Throwable e){
-            Log.warn("Method getRowCount: " + sheetName);
+            Log.info("Method getRowCount: " + sheetName);
             Log.error("Method getRowCount | Exception desc : " + e.getMessage());
             onTestCaseFail("Method getRowCount | Exception desc : " + e.getMessage());
         }
@@ -45,7 +45,7 @@ public class ExcelUtils {
             String cellData = Cell.getStringCellValue();
             return cellData;
         } catch (Throwable e) {
-            Log.warn("Method getCellData: rowNumber[" + rowNumber+"], columnNumber["+columnNumber+"], sheetName["+sheetName+"]");
+            Log.info("Method getCellData: rowNumber[" + rowNumber+"], columnNumber["+columnNumber+"], sheetName["+sheetName+"]");
             Log.error("Method getCellData | Exception desc : " + e.getMessage());
             onTestCaseFail("Method getCellData | Exception desc : " + e.getMessage());
             return "";
@@ -62,7 +62,7 @@ public class ExcelUtils {
                 }
             }
         } catch (Throwable e) {
-            Log.warn("Method getRowContains: sTestCaseName[" + sTestCaseName+"], colNum["+colNum+"], sheetName["+sheetName+"]");
+            Log.info("Method getRowContains: sTestCaseName[" + sTestCaseName+"], colNum["+colNum+"], sheetName["+sheetName+"]");
             Log.error("Method getRowContains | Exception desc : " + e.getMessage());
             onTestCaseFail("Method getRowContains | Exception desc : " + e.getMessage());
         }
@@ -81,7 +81,7 @@ public class ExcelUtils {
             int number = ExcelSheet.getLastRowNum() + 1;
             return number;
         }catch (Throwable e){
-            Log.warn("Method getRowContains: sTestCaseID[" + sTestCaseID+"], startTestStep["+startTestStep+"], sheetName["+sheetName+"]");
+            Log.info("Method getRowContains: sTestCaseID[" + sTestCaseID+"], startTestStep["+startTestStep+"], sheetName["+sheetName+"]");
             Log.error("Method getTestStepCount | Exception desc : " + e.getMessage());
             onTestCaseFail("Method getTestStepCount | Exception desc : " + e.getMessage());
             return 0;
@@ -103,7 +103,7 @@ public class ExcelUtils {
             fileOut.close();
             ExcelBook = new XSSFWorkbook(new FileInputStream(path));
         }catch (Exception e){
-            Log.warn("Method getRowContains: result[" + result+"], rowNumber["+rowNumber+"], columnNumber["+columnNumber+"], sheetName["+sheetName+"], path["+path+"]");
+            Log.info("Method getRowContains: result[" + result+"], rowNumber["+rowNumber+"], columnNumber["+columnNumber+"], sheetName["+sheetName+"], path["+path+"]");
             Log.error("Method setCellData | Exception desc : " + e.getMessage());
             RunTestScript.result = Constanst.FAIL;
         }
