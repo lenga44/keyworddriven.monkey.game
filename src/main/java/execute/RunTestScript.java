@@ -99,7 +99,9 @@ public class RunTestScript {
                 testStep = ExcelUtils.getCellData(iTestStep, Constanst.TEST_STEP, Constanst.TEST_STEP_SHEET);
 
                 if (result != Constanst.SKIP) {
-                    execute_action(iTestStep, dataSet);
+                    if(sActionKeyword != "") {
+                        execute_action(iTestStep, dataSet);
+                    }
                     verifyStep(iTestStep);
                 }
                 if(result == "" && result==null){
