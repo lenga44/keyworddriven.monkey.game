@@ -15,6 +15,7 @@ public class Constanst {
     public static final int STATUS_GAME = 3;
     public static final String SCOPE_FILE_PATH = "\\src\\main\\java\\testcases\\Scope.xlsx";
     public static final String TESTCASE_FILE_PATH = "\\src\\main\\java\\testcases\\";
+    public static final String LOG_FILE_PATH = "\\src\\main\\java\\logs\\";
 
     //TC sheet in report file
     public static final int TESTCASE_ID = 0;

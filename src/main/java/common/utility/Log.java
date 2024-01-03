@@ -12,8 +12,7 @@ public class Log {
     private static final Logger Log =  LogManager.getLogger(Log.class);
 
     public static void resetFileLog() throws IOException {
-        System.out.println(Constanst.PROJECT_PATH);
-        FileOutputStream writer = new FileOutputStream(Constanst.PROJECT_PATH +"\\logging.log");
+        FileOutputStream writer = new FileOutputStream(Constanst.PROJECT_PATH + Constanst.LOG_FILE_PATH +"logging.log");
         writer.write(("").getBytes());
         writer.close();
     }
