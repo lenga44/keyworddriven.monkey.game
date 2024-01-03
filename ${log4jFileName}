@@ -1,0 +1,72 @@
+[INFO ] 03-01-2024 14:51:50 [main] Log - TC: TCID
+[INFO ] 03-01-2024 14:51:50 [main] Log - TC: TC01
+[INFO ] 03-01-2024 14:51:50 [main] Log - TS01:  Click nút Home
+[INFO ] 03-01-2024 14:51:50 [main] Log - http://localhost:8342/q/scene//HomeButton
+[INFO ] 03-01-2024 14:51:51 [main] Log - http://localhost:8342/q/scene//HomeButton.Button.onClick()
+[INFO ] 03-01-2024 14:51:52 [main] Log - TS02:  Chọn khóa AI Speak
+[INFO ] 03-01-2024 14:51:52 [main] Log - http://localhost:8342/q/scene//AISpeaking
+[INFO ] 03-01-2024 14:51:52 [main] Log - http://localhost:8342/q/scene//AISpeaking.Button.onClick()
+[INFO ] 03-01-2024 14:51:52 [main] Log - TS02:  Check - Chọn khóa AI Speak
+[INFO ] 03-01-2024 14:51:52 [main] Log - TS03:  Click Monkey debug
+[INFO ] 03-01-2024 14:51:52 [main] Log - http://localhost:8342/q/scene//ButtonMonkey
+[INFO ] 03-01-2024 14:51:52 [main] Log - http://localhost:8342/q/scene//ButtonMonkey[0]
+[INFO ] 03-01-2024 14:51:52 [main] Log - http://localhost:8342/q/pointer.DownToUp(Managers/Canvas/DebugView/ButtonMonkey)
+[INFO ] 03-01-2024 14:51:53 [main] Log - TS04:  Vuốt ngang đến mục AI Speak
+[INFO ] 03-01-2024 14:51:53 [main] Log - http://localhost:8342/q/simulate.drag(1000,500,100,500,0.5)
+[INFO ] 03-01-2024 14:51:53 [main] Log - TS05:  Click Unclock Lesson dropdown
+[INFO ] 03-01-2024 14:51:53 [main] Log - http://localhost:8342/q/scene//DebugAI/button_debug_full_lesson
+[INFO ] 03-01-2024 14:51:53 [main] Log - http://localhost:8342/q/scene//DebugAI/button_debug_full_lesson[0]
+[INFO ] 03-01-2024 14:51:53 [main] Log - http://localhost:8342/q/pointer.DownToUp(Managers/Canvas/DebugView/Debug/Scroll View/Content/DebugAI/button_debug_full_lesson)
+[INFO ] 03-01-2024 14:51:53 [main] Log - TS06:  Chọn On Unlock Leson
+[INFO ] 03-01-2024 14:51:53 [main] Log - http://localhost:8342/q/scene//Item 0: On Unlock Lesson
+[INFO ] 03-01-2024 14:51:53 [main] Log - http://localhost:8342/q/scene//Item 0: On Unlock Lesson[0]
+[INFO ] 03-01-2024 14:51:53 [main] Log - http://localhost:8342/q/pointer.DownToUp(Managers/Canvas/DebugView/Debug/Scroll View/Content/DebugAI/button_debug_full_lesson/Dropdown List/Viewport/Content/Item 0!_! On Unlock Lesson)
+[INFO ] 03-01-2024 14:51:53 [main] Log - TS07:  Close Debug
+[INFO ] 03-01-2024 14:51:53 [main] Log - http://localhost:8342/q/scene//DebugView/Debug/Close
+[INFO ] 03-01-2024 14:51:53 [main] Log - http://localhost:8342/q/scene//DebugView/Debug/Close.Button.onClick()
+[INFO ] 03-01-2024 14:51:54 [main] Log - TC: TC02
+[INFO ] 03-01-2024 14:51:54 [main] Log - TS01:  Play lesson 3
+[INFO ] 03-01-2024 14:51:54 [main] Log - http://localhost:8342/q/scene//Image1/LessonSLot3_3/Lesson(Clone)
+[INFO ] 03-01-2024 14:51:54 [main] Log - http://localhost:8342/q/scene//Image1/LessonSLot3_3/Lesson(Clone)[0]
+[INFO ] 03-01-2024 14:51:54 [main] Log - http://localhost:8342/q/pointer.Press(Canvas - Menu/Game Menu/ListMap(Clone)/Viewport/Content/Map(Clone)/Image1/LessonSLot3_3/Lesson(Clone))
+[INFO ] 03-01-2024 14:51:54 [main] Log - TS01:  Check - Play lesson 3
+[INFO ] 03-01-2024 14:51:54 [main] Log - http://localhost:8342/q/scene//IntroDialog_GamePlay(Clone)/ButtonNextGame
+[INFO ] 03-01-2024 14:51:54 [main] Log - http://localhost:8342/q/scene//IntroDialog_GamePlay(Clone)/ButtonNextGame
+[INFO ] 03-01-2024 14:51:54 [main] Log - http://localhost:8342/q/scene//IntroDialog_GamePlay(Clone)/ButtonNextGame
+[INFO ] 03-01-2024 14:51:54 [main] Log - Check - Play lesson 3
+[INFO ] 03-01-2024 14:52:40 [main] Log - TC: TCID
+[INFO ] 03-01-2024 14:52:40 [main] Log - TC: TC01
+[INFO ] 03-01-2024 14:52:40 [main] Log - TS01:  Click nút Home
+[INFO ] 03-01-2024 14:52:40 [main] Log - http://localhost:8342/q/scene//HomeButton
+[INFO ] 03-01-2024 14:52:41 [main] Log - http://localhost:8342/q/scene//HomeButton.Button.onClick()
+[INFO ] 03-01-2024 14:52:41 [main] Log - TS02:  Chọn khóa AI Speak
+[INFO ] 03-01-2024 14:52:41 [main] Log - http://localhost:8342/q/scene//AISpeaking
+[INFO ] 03-01-2024 14:52:41 [main] Log - http://localhost:8342/q/scene//AISpeaking.Button.onClick()
+[INFO ] 03-01-2024 14:52:41 [main] Log - TS02:  Check - Chọn khóa AI Speak
+[INFO ] 03-01-2024 14:52:42 [main] Log - TS03:  Click Monkey debug
+[INFO ] 03-01-2024 14:52:42 [main] Log - http://localhost:8342/q/scene//ButtonMonkey
+[INFO ] 03-01-2024 14:52:42 [main] Log - http://localhost:8342/q/scene//ButtonMonkey[0]
+[INFO ] 03-01-2024 14:52:42 [main] Log - http://localhost:8342/q/pointer.DownToUp(Managers/Canvas/DebugView/ButtonMonkey)
+[INFO ] 03-01-2024 14:52:42 [main] Log - TS04:  Vuốt ngang đến mục AI Speak
+[INFO ] 03-01-2024 14:52:42 [main] Log - http://localhost:8342/q/simulate.drag(1000,500,100,500,0.5)
+[INFO ] 03-01-2024 14:52:42 [main] Log - TS05:  Click Unclock Lesson dropdown
+[INFO ] 03-01-2024 14:52:42 [main] Log - http://localhost:8342/q/scene//DebugAI/button_debug_full_lesson
+[INFO ] 03-01-2024 14:52:43 [main] Log - http://localhost:8342/q/scene//DebugAI/button_debug_full_lesson[0]
+[INFO ] 03-01-2024 14:52:43 [main] Log - http://localhost:8342/q/pointer.DownToUp(Managers/Canvas/DebugView/Debug/Scroll View/Content/DebugAI/button_debug_full_lesson)
+[INFO ] 03-01-2024 14:52:43 [main] Log - TS06:  Chọn On Unlock Leson
+[INFO ] 03-01-2024 14:52:43 [main] Log - http://localhost:8342/q/scene//Item 0: On Unlock Lesson
+[INFO ] 03-01-2024 14:52:43 [main] Log - http://localhost:8342/q/scene//Item 0: On Unlock Lesson[0]
+[INFO ] 03-01-2024 14:52:43 [main] Log - http://localhost:8342/q/pointer.DownToUp(Managers/Canvas/DebugView/Debug/Scroll View/Content/DebugAI/button_debug_full_lesson/Dropdown List/Viewport/Content/Item 0!_! On Unlock Lesson)
+[INFO ] 03-01-2024 14:52:43 [main] Log - TS07:  Close Debug
+[INFO ] 03-01-2024 14:52:43 [main] Log - http://localhost:8342/q/scene//DebugView/Debug/Close
+[INFO ] 03-01-2024 14:52:43 [main] Log - http://localhost:8342/q/scene//DebugView/Debug/Close.Button.onClick()
+[INFO ] 03-01-2024 14:52:43 [main] Log - TC: TC02
+[INFO ] 03-01-2024 14:52:43 [main] Log - TS01:  Play lesson 3
+[INFO ] 03-01-2024 14:52:43 [main] Log - http://localhost:8342/q/scene//Image1/LessonSLot3_3/Lesson(Clone)
+[INFO ] 03-01-2024 14:52:43 [main] Log - http://localhost:8342/q/scene//Image1/LessonSLot3_3/Lesson(Clone)[0]
+[INFO ] 03-01-2024 14:52:43 [main] Log - http://localhost:8342/q/pointer.Press(Canvas - Menu/Game Menu/ListMap(Clone)/Viewport/Content/Map(Clone)/Image1/LessonSLot3_3/Lesson(Clone))
+[INFO ] 03-01-2024 14:52:43 [main] Log - TS01:  Check - Play lesson 3
+[INFO ] 03-01-2024 14:52:43 [main] Log - http://localhost:8342/q/scene//IntroDialog_GamePlay(Clone)/ButtonNextGame
+[INFO ] 03-01-2024 14:52:44 [main] Log - http://localhost:8342/q/scene//IntroDialog_GamePlay(Clone)/ButtonNextGame
+[INFO ] 03-01-2024 14:52:44 [main] Log - http://localhost:8342/q/scene//IntroDialog_GamePlay(Clone)/ButtonNextGame
+[INFO ] 03-01-2024 14:52:44 [main] Log - Check - Play lesson 3

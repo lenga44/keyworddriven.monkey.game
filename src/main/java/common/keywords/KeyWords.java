@@ -1,15 +1,14 @@
 package common.keywords;
 
 import common.utility.Constanst;
+import common.utility.Log;
 import execute.RunTestScript;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
-import io.restassured.internal.common.assertion.Assertion;
 import io.restassured.path.json.JsonPath;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.response.Response;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.http.HttpClient;
 import org.testng.Assert;
 
 import java.net.URL;
@@ -111,22 +110,27 @@ public class KeyWords {
     }
 
     public static void waitForObject(String locator){
-        LocalDateTime time = LocalDateTime.now();
-        LocalDateTime time1 = time.plusSeconds(15);
-        Response response = null;
-        do {
-            response = request(Constanst.SCENE_URL, "//" + locator);
-            JsonPath json = response.getBody().jsonPath();
-            if (json != null) {
-                break;
-            }
-            time = LocalDateTime.now();
-        } while (time.compareTo(time1) <= 0);
-        Assert.assertTrue(locator.contains(convert(response,"name")));
+        try {
+            LocalDateTime time = LocalDateTime.now();
+            LocalDateTime time1 = time.plusSeconds(30);
+            Response response = null;
+            do {
+                response = request(Constanst.SCENE_URL, "//" + locator);
+                    JsonPath json = response.jsonPath();
+                    List name = (List)json.get("name");
+                    if (json != null && !name.isEmpty()) {
+                        break;
+                    }
+                Thread.sleep(500);
+                time = LocalDateTime.now();
+            } while (time.compareTo(time1) <= 0);
+            Assert.assertTrue(locator.contains(convert(response, "name")));
+        }catch (Throwable e){
+            RunTestScript.error = "\nwaitForObject |"+ RunTestScript.error;
+        }
     }
     public static void waitForObject(String locator,String second){
         Response response = request(Constanst.SCENE_URL,"//"+locator);
-        response.prettyPrint();
     }
     public static String getCurrentScence(){
         RequestSpecification request = given();
@@ -147,6 +151,7 @@ public class KeyWords {
     }
     private static Response request(String baseUri,String basePath){
         try {
+            Log.info(baseUri+basePath);
             RequestSpecification request = given();
             request.baseUri(baseUri);
             request.basePath(basePath);
@@ -168,7 +173,7 @@ public class KeyWords {
         try{
             Assert.assertEquals(actual,expect);
         }catch (Throwable e){
-            RunTestScript.onFail("| Verify | " +e.getMessage());
+            exception(e);
         }
     }
     private static String getAbsolutePath(String locator, String index){
@@ -179,7 +184,7 @@ public class KeyWords {
         try {
             return String.valueOf(response.getBody().jsonPath().getList(key).get(0));
         }catch (Throwable e){
-            RunTestScript.onFail("| convert | "+ e.getMessage());
+            exception(e);
             return null;
         }
     }
@@ -187,5 +192,10 @@ public class KeyWords {
         String result =  String.valueOf(response.getBody().jsonPath().getList(key).get(0));
         String[] a = result.split(splitStr);
         return Arrays.stream(a).toList().get(0);
+    }
+    private static void exception(Throwable e){
+        RunTestScript.error = "Verify | " +e.getMessage();
+        Log.error(RunTestScript.error);
+        RunTestScript.onFail( RunTestScript.error);
     }
 }

@@ -3,7 +3,9 @@ package execute;
 import common.keywords.KeyWords;
 import common.utility.Constanst;
 import common.utility.ExcelUtils;
+import common.utility.Log;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
@@ -12,7 +14,8 @@ public class RunTestScript {
         keyWord = new KeyWords();
         method = keyWord.getClass().getMethods();
     }
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException {
+        Log.resetFileLog();
         scopePath = Constanst.PROJECT_PATH +Constanst.SCOPE_FILE_PATH;
         ExcelUtils.setExcelFile(scopePath);
         RunTestScript runTestScript = new RunTestScript();
@@ -38,7 +41,7 @@ public class RunTestScript {
         int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
         for(int i =0; i<iTotalTestCase;i++) {
             sTestCaseID = ExcelUtils.getCellData(i, Constanst.TESTCASE_ID, Constanst.TESTCASE_SHEET);
-            System.out.println("TC: "+sTestCaseID);
+            Log.info("TC: " + sTestCaseID);
             if (!sTestCaseID.equals(Constanst.TC_LABEL)) {
                 rangeStepByTestCase();
                 if (result != Constanst.SKIP) {
@@ -118,11 +121,12 @@ public class RunTestScript {
             for (int i = 0; i < method.length; i++) {
 
                 if (method[i].getName().equals(sActionKeyword) && method[i].getParameterCount() == paramCount) {
-                    System.out.println(testStep +":  "+description);
+                    Log.info(testStep +":  "+description);
                     if (paramCount > 0) {
                         String type = String.valueOf(method[i].getReturnType());
                         if (!type.equals("void")) {
                             RunTestScript.actual = (String) method[i].invoke(keyWord, param);
+                            Log.info(description);
                             keyWord.check(actual, expected);
                         } else {
                             method[i].invoke(keyWord, param);
@@ -134,6 +138,7 @@ public class RunTestScript {
                 }
             }
         }catch (Throwable e) {
+            Log.error("Method execute_action | Exception desc : " + e.getMessage());
             onResultStep(Constanst.FAIL,error,numberStep);
         }
     }
@@ -152,8 +157,10 @@ public class RunTestScript {
                 }
             }
         }catch (Throwable e){
-            onFail( "Method verify | Exception desc : " + e.getMessage());
-            onResultStep(result,error,numberStep);
+            error = "Method verify | Exception desc : " + e.getMessage();
+            Log.error(error);
+            onFail( error);
+            /*onResultStep(result,error,numberStep);*/
         }
         onResultStep(result,error,numberStep);
     }
@@ -165,6 +172,7 @@ public class RunTestScript {
         ExcelUtils.setCellData(message,  rowNumber, Constanst.ERROR, Constanst.TEST_STEP_SHEET, tcPath);
     }
     public static void onFail(String message) {
+        Log.warn(message);
         result = Constanst.FAIL;
         error = message;
     }
