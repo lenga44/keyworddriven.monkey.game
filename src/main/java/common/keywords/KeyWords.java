@@ -13,6 +13,7 @@ import org.testng.Assert;
 
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -21,6 +22,7 @@ import static io.restassured.RestAssured.given;
 
 public class KeyWords {
     public static AppiumDriver driver;
+    public static String scroll;
 
     //region KEYWORD_EXCEL
     public static AppiumDriver openApp(){
@@ -85,9 +87,14 @@ public class KeyWords {
             absolutePath = absolutePath.replace(":","!_!");
         request(Constanst.POINTER_URL,".Press("+absolutePath+","+index+")");
     }
-    public static void horizontalSwipe(String number){
+    public static void swipeToLeft(String number){
         for(int i = 0; i<Integer.valueOf(number);i++){
             request(Constanst.SIMULATE_URL,Constanst.DRAG_ACTION + "(1000,500,100,500,0.5)");
+        }
+    }
+    public static void swipeToRight(String number){
+        for(int i = 0; i<Integer.valueOf(number);i++){
+            request(Constanst.SIMULATE_URL,Constanst.DRAG_ACTION + "(100,500,1000,500,0.5)");
         }
     }
     public static void simulateClick(String locator){
@@ -97,8 +104,14 @@ public class KeyWords {
         String y = convert(response,"position.y",0,"\\.");
         request(Constanst.SIMULATE_URL,".click("+x+","+y+")");
     }
+    public static void swipeToDown(String number){
+        for(int i = 0; i<Integer.valueOf(number);i++){
+            request(Constanst.SIMULATE_URL,Constanst.DRAG_ACTION + "(1000,500,100,500,0.5)");
+        }
+    }
     //endregion ACTION
 
+    //region VERIFY
     public static String elementDisplay(String locator){
         waitForObject(locator);
         Response response = request(Constanst.SCENE_URL,"//"+locator);
@@ -109,6 +122,24 @@ public class KeyWords {
         return "";
     }
 
+    public static String getPropertyValue(String locator, String pcomponent, String property){
+        waitForObject(locator);
+        Response response = request(Constanst.SCENE_URL,"//"+locator+"."+pcomponent);
+        return convert(response,property);
+    }
+
+    public static String getImageName(String locator){
+       String result =  getPropertyValue(locator,"Image","sprite");
+       if(result.contains("(UnityEngine.Sprite)"))
+           result = result.replace("(UnityEngine.Sprite)","");
+       return result.trim();
+    }
+    public static String getImageColor(String locator){
+        String result =  getPropertyValue(locator,"Image","color");
+        return result.trim();
+    }
+
+    //endregion VERIFY
     public static void waitForObject(String locator){
         try {
             LocalDateTime time = LocalDateTime.now();
@@ -126,17 +157,38 @@ public class KeyWords {
             } while (time.compareTo(time1) <= 0);
             Assert.assertTrue(locator.contains(convert(response, "name")));
         }catch (Throwable e){
-            RunTestScript.error = "\nwaitForObject |"+ RunTestScript.error;
+            exception(e);
         }
     }
     public static void waitForObject(String locator,String second){
-        Response response = request(Constanst.SCENE_URL,"//"+locator);
+        try {
+            LocalDateTime time = LocalDateTime.now();
+            LocalDateTime time1 = time.plusSeconds(Integer.valueOf(second));
+            Response response = null;
+            do {
+                response = request(Constanst.SCENE_URL, "//" + locator);
+                JsonPath json = response.jsonPath();
+                List name = (List)json.get("name");
+                if (json != null && !name.isEmpty()) {
+                    break;
+                }
+                Thread.sleep(500);
+                time = LocalDateTime.now();
+            } while (time.compareTo(time1) <= 0);
+            Assert.assertTrue(locator.contains(convert(response, "name")));
+        }catch (Throwable e){
+            exception(e);
+        }
     }
-    public static String getCurrentScence(){
+    public static String getCurrentScene(){
         RequestSpecification request = given();
         request.baseUri(Constanst.STATUS_URL);
         Response response = request.get();
         return response.jsonPath().get("Scene");
+    }
+    public static String getText(String locator,String component){
+        Response response = request(Constanst.SCENE_URL,"//" +locator+"."+component);
+        return convert(response,"text").trim();
     }
     //endregion KEYWORD_EXCEL
 
@@ -182,8 +234,10 @@ public class KeyWords {
     }
     private static String convert(Response response,String key){
         try {
+            Log.info(String.valueOf(response.getBody().jsonPath().getList(key).get(0)));
             return String.valueOf(response.getBody().jsonPath().getList(key).get(0));
         }catch (Throwable e){
+            Log.info(response.prettyPrint());
             exception(e);
             return null;
         }
