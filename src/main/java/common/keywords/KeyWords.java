@@ -138,6 +138,10 @@ public class KeyWords {
         String result =  getPropertyValue(locator,"Image","color");
         return result.trim();
     }
+    public static String getElements(String locator){
+        Response response = request(Constanst.SCENE_URL,"//"+locator+"[activeInHierarchy=true]");
+        return String.valueOf(response.getBody().jsonPath().getList("name").toArray().length);
+    }
 
     //endregion VERIFY
     public static void waitForObject(String locator){
