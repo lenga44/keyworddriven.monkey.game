@@ -94,7 +94,7 @@ public class KeyWords {
     }
     public static void swipeToRight(String number){
         for(int i = 0; i<Integer.valueOf(number);i++){
-            request(Constanst.SIMULATE_URL,Constanst.DRAG_ACTION + "(100,500,1000,500,0.5)");
+            request(Constanst.SIMULATE_URL,Constanst.DRAG_ACTION + "(500,750,500,800,0.5)");
         }
     }
     public static void simulateClick(String locator){
@@ -190,6 +190,7 @@ public class KeyWords {
         Response response = request(Constanst.SCENE_URL,"//" +locator+"."+component);
         return convert(response,"text").trim();
     }
+
     //endregion KEYWORD_EXCEL
 
     public static void connectUnity(){
