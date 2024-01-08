@@ -47,5 +47,6 @@ public class Constanst {
     public static final String SCENE_URL = "http://localhost:8342/q/scene";
     public static final String POINTER_URL = "http://localhost:8342/q/pointer";
     public static final String STATUS_URL = "http://localhost:8342/about";
+    public static final String TAKE_PHOTO = "http://localhost:8342/utils/appscreenshot";
     public static final String DRAG_ACTION = ".drag";
 }

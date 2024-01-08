@@ -1,12 +1,14 @@
 package common.utility;
 
 import execute.RunTestScript;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class ExcelUtils {
     private static XSSFSheet ExcelSheet;
@@ -86,6 +88,17 @@ public class ExcelUtils {
             onTestCaseFail("Method getTestStepCount | Exception desc : " + e.getMessage());
             return 0;
         }
+    }
+    public static void addPictureInCell(int row, int colum,byte[] imageBytes,String path){
+        int pictureIdx = ExcelBook.addPicture(imageBytes, Workbook.PICTURE_TYPE_PNG);
+        CreationHelper helper = ExcelBook.getCreationHelper();
+        Drawing drawing = ExcelSheet.createDrawingPatriarch();
+        ClientAnchor anchor = helper.createClientAnchor();
+        anchor.setCol1(1);
+        anchor.setCol2(2);
+        anchor.setRow1(row -1);
+        anchor.setRow2(row);
+        drawing.createPicture(anchor, pictureIdx);
     }
 
     @SuppressWarnings("static-access")

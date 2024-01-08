@@ -11,9 +11,10 @@ import io.restassured.response.Response;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -194,6 +195,19 @@ public class KeyWords {
         Response response = request(Constanst.SCENE_URL,"//" +locator+"."+component);
         return convert(response,"text").trim();
     }
+    //region TAKE PHOTO
+    public static String saveFile() {
+        Response response = request(Constanst.TAKE_PHOTO,"");
+        byte[] imageBytes = response.asByteArray();
+        String fileName = Constanst.PROJECT_PATH + "\\src\\main\\screenshots\\"+getCurrentScene()+LocalDateTime.now()+".png";
+        try(FileOutputStream fos = new FileOutputStream(fileName)){
+            fos.write(imageBytes);
+        }catch (IOException e){
+            System.out.println(e.getMessage());
+        }
+        return fileName;
+    }
+    //endregion
 
     //endregion KEYWORD_EXCEL
 

@@ -4,10 +4,14 @@ import common.keywords.KeyWords;
 import common.utility.Constanst;
 import common.utility.ExcelUtils;
 import common.utility.Log;
+import io.restassured.RestAssured;
+import io.restassured.response.Response;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Base64;
 
 public class RunTestScript {
     public RunTestScript() {
@@ -22,7 +26,7 @@ public class RunTestScript {
         runTestScript.execute();
     }
 
-    private void execute() {
+    private void execute() throws IOException {
         int iTotalFeature = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
         for (int i = 0; i<iTotalFeature;i++){
             sRunMode = ExcelUtils.getCellData(i,Constanst.RUN_MODE,Constanst.SCOPE_SHEET);
@@ -37,12 +41,13 @@ public class RunTestScript {
     }
 
     //region TESTCASE
-    private void execute_testcases() {
+    private void execute_testcases() throws IOException {
         int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
         for(int i =0; i<iTotalTestCase;i++) {
             sTestCaseID = ExcelUtils.getCellData(i, Constanst.TESTCASE_ID, Constanst.TESTCASE_SHEET);
-            Log.info("TC: " + sTestCaseID);
-            if (!sTestCaseID.equals(Constanst.TC_LABEL)) {
+            runMode = ExcelUtils.getCellData(i,Constanst.RUN_MODE,Constanst.TESTCASE_SHEET);
+            if(runMode.equals(Constanst.YES)) {
+                Log.info("TC: " + sTestCaseID);
                 rangeStepByTestCase();
                 if (result != Constanst.SKIP) {
                     tcResult = Constanst.PASS;
@@ -86,7 +91,7 @@ public class RunTestScript {
         lastTestStep = ExcelUtils.getTestStepCount(Constanst.TEST_STEP_SHEET,sTestCaseID,iTestStep);
     }
 
-    private void execute_steps(){
+    private void execute_steps() throws IOException {
         result = Constanst.PASS;
         for (; iTestStep < lastTestStep; iTestStep++) {
             process = ExcelUtils.getCellData(iTestStep, Constanst.PROCEED, Constanst.TEST_STEP_SHEET);
@@ -126,17 +131,24 @@ public class RunTestScript {
 
                 if (method[i].getName().equals(sActionKeyword) && method[i].getParameterCount() == paramCount) {
                     Log.info(testStep +":  "+description);
-                    if (paramCount > 0) {
-                        String type = String.valueOf(method[i].getReturnType());
+                    if (paramCount == 0) {
+                        /*String type = String.valueOf(method[i].getReturnType());
                         if (!type.equals("void")) {
                             RunTestScript.actual = (String) method[i].invoke(keyWord, param);
                             Log.info(description);
                             keyWord.check(actual, expected);
                         } else {
                             method[i].invoke(keyWord, param);
-                        }
+                        }*/
+                        param = null;
+                    }
+                    String type = String.valueOf(method[i].getReturnType());
+                    if (!type.equals("void")) {
+                        RunTestScript.actual = (String) method[i].invoke(keyWord, param);
+                        Log.info(description);
+                        keyWord.check(actual, expected);
                     } else {
-                        method[i].invoke(keyWord, null);
+                        method[i].invoke(keyWord, param);
                     }
                     break;
                 }
@@ -148,7 +160,7 @@ public class RunTestScript {
     }
 
     // region verify result after each step
-    private void verifyStep(int numberStep){
+    private void verifyStep(int numberStep) throws IOException {
         try{
             sActionKeyword = ExcelUtils.getCellData(numberStep, Constanst.VERIFY_STEP, Constanst.TEST_STEP_SHEET);
             params = ExcelUtils.getCellData(numberStep, Constanst.PARAM_VERIFY_STEP, Constanst.TEST_STEP_SHEET);
@@ -179,6 +191,7 @@ public class RunTestScript {
         Log.info(message);
         result = Constanst.FAIL;
         error = message;
+        KeyWords.saveFile();
     }
 
     // endregion RESULT
@@ -214,4 +227,5 @@ public class RunTestScript {
     //Testcase
     public static String tcResult;
     public static String tcPath;
+    public static String runMode;
 }
