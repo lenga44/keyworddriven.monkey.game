@@ -1,6 +1,7 @@
 package common.keywords;
 
 import common.utility.Constanst;
+import common.utility.ExcelUtils;
 import common.utility.Log;
 import execute.RunTestScript;
 import io.appium.java_client.AppiumDriver;
@@ -8,11 +9,11 @@ import io.appium.java_client.android.AndroidDriver;
 import io.restassured.path.json.JsonPath;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.response.Response;
+import org.apache.poi.util.IOUtils;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -196,16 +197,10 @@ public class KeyWords {
         return convert(response,"text").trim();
     }
     //region TAKE PHOTO
-    public static String saveFile() {
+    public static void saveFile(int row){
         Response response = request(Constanst.TAKE_PHOTO,"");
         byte[] imageBytes = response.asByteArray();
-        String fileName = Constanst.PROJECT_PATH + "\\src\\main\\screenshots\\"+getCurrentScene()+LocalDateTime.now()+".png";
-        try(FileOutputStream fos = new FileOutputStream(fileName)){
-            fos.write(imageBytes);
-        }catch (IOException e){
-            System.out.println(e.getMessage());
-        }
-        return fileName;
+        ExcelUtils.addPictureInCell(row, imageBytes);
     }
     //endregion
 

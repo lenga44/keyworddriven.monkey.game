@@ -132,14 +132,6 @@ public class RunTestScript {
                 if (method[i].getName().equals(sActionKeyword) && method[i].getParameterCount() == paramCount) {
                     Log.info(testStep +":  "+description);
                     if (paramCount == 0) {
-                        /*String type = String.valueOf(method[i].getReturnType());
-                        if (!type.equals("void")) {
-                            RunTestScript.actual = (String) method[i].invoke(keyWord, param);
-                            Log.info(description);
-                            keyWord.check(actual, expected);
-                        } else {
-                            method[i].invoke(keyWord, param);
-                        }*/
                         param = null;
                     }
                     String type = String.valueOf(method[i].getReturnType());
@@ -155,8 +147,9 @@ public class RunTestScript {
             }
         }catch (Throwable e) {
             Log.error("Method execute_action | Exception desc : " + e.getMessage());
-            onResultStep(Constanst.FAIL,error,numberStep);
+            onFail(error);
         }
+        onResultStep(result,error,numberStep);
     }
 
     // region verify result after each step
@@ -186,12 +179,14 @@ public class RunTestScript {
     private void onResultStep(String status, String message, int rowNumber ){
         ExcelUtils.setCellData(status, rowNumber, Constanst.RESULT, Constanst.TEST_STEP_SHEET, tcPath);
         ExcelUtils.setCellData(message,  rowNumber, Constanst.ERROR, Constanst.TEST_STEP_SHEET, tcPath);
+        if(status == Constanst.FAIL){
+            KeyWords.saveFile(rowNumber);
+        }
     }
     public static void onFail(String message) {
         Log.info(message);
         result = Constanst.FAIL;
         error = message;
-        KeyWords.saveFile();
     }
 
     // endregion RESULT

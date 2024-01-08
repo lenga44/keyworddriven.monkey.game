@@ -33,7 +33,6 @@ public class Constanst {
     public static final int RESULT = 10;
     public static final int ERROR = 11;
     public static final int IMAGE = 12;
-    public static final String TC_LABEL = "TCID";
     public static final String PROCESS_YES = "Y";
     public static final int DESCRIPTION = 2;
     public static final int TEST_STEP = 1;

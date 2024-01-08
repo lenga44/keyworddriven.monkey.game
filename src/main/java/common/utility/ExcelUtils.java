@@ -89,16 +89,21 @@ public class ExcelUtils {
             return 0;
         }
     }
-    public static void addPictureInCell(int row, int colum,byte[] imageBytes,String path){
-        int pictureIdx = ExcelBook.addPicture(imageBytes, Workbook.PICTURE_TYPE_PNG);
-        CreationHelper helper = ExcelBook.getCreationHelper();
-        Drawing drawing = ExcelSheet.createDrawingPatriarch();
-        ClientAnchor anchor = helper.createClientAnchor();
-        anchor.setCol1(1);
-        anchor.setCol2(2);
-        anchor.setRow1(row -1);
-        anchor.setRow2(row);
-        drawing.createPicture(anchor, pictureIdx);
+    public static void addPictureInCell(int row,byte[] imageBytes){
+        /*try {*/
+        //fail pictureIdx
+            int pictureIdx = ExcelBook.addPicture(imageBytes, Workbook.PICTURE_TYPE_PNG);
+            CreationHelper helper = ExcelBook.getCreationHelper();
+            Drawing drawing = ExcelSheet.createDrawingPatriarch();
+            ClientAnchor anchor = helper.createClientAnchor();
+            anchor.setCol1(Constanst.IMAGE);
+            anchor.setRow1(row);;
+            Picture picture = drawing.createPicture(anchor, pictureIdx);
+            picture.resize();
+        /*}catch (RuntimeException e){
+            System.out.println(e.getMessage());
+            Log.error(" | addPictureInCell: "+e.getMessage());
+        }*/
     }
 
     @SuppressWarnings("static-access")
