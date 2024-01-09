@@ -2,17 +2,22 @@ package common.utility;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.appender.FileAppender;
+import org.apache.logging.log4j.core.appender.SyslogAppender;
+import org.apache.logging.log4j.core.config.Property;
+import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilder;
+import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilderFactory;
+import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Properties;
 
 public class Log {
     private static final Logger Log =  LogManager.getLogger(Log.class);
 
     public static void resetFileLog() throws IOException {
-        FileOutputStream writer = new FileOutputStream(Constanst.PROJECT_PATH + Constanst.LOG_FILE_PATH +"logging.log");
+        FileOutputStream writer = new FileOutputStream(Constanst.LOG_FILE_PATH);
         writer.write(("").getBytes());
         writer.close();
     }

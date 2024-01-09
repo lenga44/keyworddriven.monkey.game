@@ -6,11 +6,13 @@ import common.utility.ExcelUtils;
 import common.utility.Log;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import org.apache.logging.log4j.core.appender.FileAppender;
 import org.apache.poi.util.IOUtils;
 
 import java.io.*;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 
 public class RunTestScript {
@@ -18,9 +20,11 @@ public class RunTestScript {
         keyWord = new KeyWords();
         method = keyWord.getClass().getMethods();
     }
+
     public static void main(String[] args) throws IOException {
         Log.resetFileLog();
-        scopePath = Constanst.PROJECT_PATH +Constanst.SCOPE_FILE_PATH;
+        scopePath = Constanst.SCOPE_FILE_PATH;
+        System.out.println(Constanst.PROJECT_PATH);
         ExcelUtils.setExcelFile(scopePath);
         RunTestScript runTestScript = new RunTestScript();
         runTestScript.execute();
@@ -31,7 +35,7 @@ public class RunTestScript {
         for (int i = 0; i<iTotalFeature;i++){
             sRunMode = ExcelUtils.getCellData(i,Constanst.RUN_MODE,Constanst.SCOPE_SHEET);
             if(sRunMode.equals(Constanst.YES)) {
-                tcPath = Constanst.PROJECT_PATH +Constanst.TESTCASE_FILE_PATH + ExcelUtils.getCellData(i,Constanst.TESTCASE_FILE_NAME,Constanst.SCOPE_SHEET)+".xlsx";
+                tcPath = Constanst.TESTCASE_FILE_PATH + ExcelUtils.getCellData(i,Constanst.TESTCASE_FILE_NAME,Constanst.SCOPE_SHEET)+".xlsx";
                 ExcelUtils.setExcelFile(tcPath);
                 execute_testcases();
                 ExcelUtils.setExcelFile(scopePath);
