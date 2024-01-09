@@ -15,10 +15,10 @@ public class Constanst {
     //Scope file
     public static final int TESTCASE_FILE_NAME = 1;
     public static final int STATUS_GAME = 3;
-    public static final String SCOPE_FILE_PATH = "D:\\tool_test_game\\config\\testcases\\Scope.xlsx";
-    public static final String TESTCASE_FILE_PATH = "D:\\tool_test_game\\\\config\\testcases\\";
-    public static final String LOG_FILE_PATH = "D:\\tool_test_game\\config\\logging.txt";
-    public static final String CONFIG_FILE_PATH = "\\tool_test_game\\config\\config.txt";
+    public static final String SCOPE_FILE_PATH = "scope_path";
+    public static final String TESTCASE_FILE_PATH = "testcase_path";
+    public static final String LOG_FILE_PATH = "\\tool_test_game\\config\\logging.txt";
+    public static final String CONFIG_FILE_PATH = "\\tool_test_game\\config\\config.json";
 
     //TC sheet in report file
     public static final int TESTCASE_ID = 0;

@@ -3,6 +3,7 @@ package execute;
 import common.keywords.KeyWords;
 import common.utility.Constanst;
 import common.utility.ExcelUtils;
+import common.utility.FileUtils;
 import common.utility.Log;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -23,8 +24,8 @@ public class RunTestScript {
 
     public static void main(String[] args) throws IOException {
         Log.resetFileLog();
-        scopePath = Constanst.SCOPE_FILE_PATH;
-        System.out.println(Constanst.PROJECT_PATH);
+        scopePath = FileUtils.getRootFolder() + FileUtils.getPathConfig(Constanst.SCOPE_FILE_PATH);
+        Log.info("SCOPE_PATH: "+scopePath);
         ExcelUtils.setExcelFile(scopePath);
         RunTestScript runTestScript = new RunTestScript();
         runTestScript.execute();
@@ -35,7 +36,8 @@ public class RunTestScript {
         for (int i = 0; i<iTotalFeature;i++){
             sRunMode = ExcelUtils.getCellData(i,Constanst.RUN_MODE,Constanst.SCOPE_SHEET);
             if(sRunMode.equals(Constanst.YES)) {
-                tcPath = Constanst.TESTCASE_FILE_PATH + ExcelUtils.getCellData(i,Constanst.TESTCASE_FILE_NAME,Constanst.SCOPE_SHEET)+".xlsx";
+                tcPath = FileUtils.getRootFolder() + FileUtils.getPathConfig(Constanst.TESTCASE_FILE_PATH) + ExcelUtils.getCellData(i,Constanst.TESTCASE_FILE_NAME,Constanst.SCOPE_SHEET)+".xlsx";
+                Log.info("TESTCASE_PATH: "+tcPath);
                 ExcelUtils.setExcelFile(tcPath);
                 execute_testcases();
                 ExcelUtils.setExcelFile(scopePath);
