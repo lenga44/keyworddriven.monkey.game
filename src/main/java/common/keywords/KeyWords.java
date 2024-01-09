@@ -168,6 +168,27 @@ public class KeyWords {
             exception(e);
         }
     }
+    public static void waitForObjectNotPresent(String locator){
+        try {
+            LocalDateTime time = LocalDateTime.now();
+            LocalDateTime time1 = time.plusSeconds(10);
+            Response response = null;
+            do {
+                response = request(Constanst.SCENE_URL, "//" + locator);
+                JsonPath json = response.jsonPath();
+                List name = (List)json.get("name");
+                if (json != null && !name.isEmpty()) {
+                    if(!locator.contains(convert(response, "name"))){
+                        break;
+                    }
+                }
+                Thread.sleep(500);
+                time = LocalDateTime.now();
+            } while (time.compareTo(time1) <= 0);
+        }catch (Throwable e){
+            exception(e);
+        }
+    }
     public static void waitForObject(String locator,String second){
         try {
             LocalDateTime time = LocalDateTime.now();
