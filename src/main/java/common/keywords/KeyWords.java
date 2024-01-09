@@ -15,6 +15,8 @@ import org.testng.Assert;
 
 import java.io.*;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -197,10 +199,9 @@ public class KeyWords {
         return convert(response,"text").trim();
     }
     //region TAKE PHOTO
-    public static void saveFile(int row){
+    public static byte[] takePhoto(){
         Response response = request(Constanst.TAKE_PHOTO,"");
-        byte[] imageBytes = response.asByteArray();
-        ExcelUtils.addPictureInCell(row, imageBytes);
+        return response.asByteArray();
     }
     //endregion
 
@@ -215,7 +216,7 @@ public class KeyWords {
         //Response response = request.get("/1");
         response.prettyPrint();
     }
-    private static Response request(String baseUri,String basePath){
+    public static Response request(String baseUri,String basePath){
         try {
             Log.info(baseUri+basePath);
             RequestSpecification request = given();

@@ -2,19 +2,17 @@ package common.utility;
 
 import execute.RunTestScript;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.util.IOUtils;
+import org.apache.poi.xssf.usermodel.*;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Path;
 
 public class ExcelUtils {
-    private static XSSFSheet ExcelSheet;
-    private static XSSFWorkbook ExcelBook;
+    private static Sheet ExcelSheet;
+    private static Workbook ExcelBook;
     private static org.apache.poi.ss.usermodel.Cell Cell;
-    private static XSSFRow Row;
+    private static Row Row;
 
     public static void setExcelFile(String path) {
         try{
@@ -89,21 +87,27 @@ public class ExcelUtils {
             return 0;
         }
     }
-    public static void addPictureInCell(int row,byte[] imageBytes){
-        /*try {*/
-        //fail pictureIdx
-            int pictureIdx = ExcelBook.addPicture(imageBytes, Workbook.PICTURE_TYPE_PNG);
-            CreationHelper helper = ExcelBook.getCreationHelper();
-            Drawing drawing = ExcelSheet.createDrawingPatriarch();
-            ClientAnchor anchor = helper.createClientAnchor();
-            anchor.setCol1(Constanst.IMAGE);
-            anchor.setRow1(row);;
-            Picture picture = drawing.createPicture(anchor, pictureIdx);
-            picture.resize();
-        /*}catch (RuntimeException e){
-            System.out.println(e.getMessage());
-            Log.error(" | addPictureInCell: "+e.getMessage());
-        }*/
+    public static void addPictureInCell(int row, byte[] imageContent,String path  ) {
+        try {
+            ExcelSheet = ExcelBook.getSheet(Constanst.TEST_STEP_SHEET);
+            int my_picture_id = ExcelBook.addPicture(imageContent, Workbook.PICTURE_TYPE_PNG);
+            XSSFDrawing drawing = (XSSFDrawing) ExcelSheet.createDrawingPatriarch();
+
+            XSSFClientAnchor my_anchor = new XSSFClientAnchor();
+            my_anchor.setCol1(Constanst.IMAGE);
+            my_anchor.setRow1(row);
+            my_anchor.setCol2(Constanst.IMAGE + 1);
+            my_anchor.setRow2(row+1);
+
+            drawing.createPicture(my_anchor, my_picture_id);
+            FileOutputStream fileOut = new FileOutputStream(path);
+            ExcelBook.write(fileOut);
+            /*fileOut.close();
+            ExcelBook.close();*/
+
+        }catch (IOException e) {
+            Log.error("addPictureInCell |" + e.getMessage());
+        }
     }
 
     @SuppressWarnings("static-access")

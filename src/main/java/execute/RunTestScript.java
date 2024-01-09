@@ -6,9 +6,9 @@ import common.utility.ExcelUtils;
 import common.utility.Log;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import org.apache.poi.util.IOUtils;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -112,7 +112,7 @@ public class RunTestScript {
                 if(result == "" && result==null){
                     result = Constanst.SKIP;
                 }
-                onResultStep(result, error, iTestStep);
+                //onResultStep(result, error, iTestStep);
                 error = "";
 
                 if (result == Constanst.FAIL)
@@ -154,37 +154,30 @@ public class RunTestScript {
 
     // region verify result after each step
     private void verifyStep(int numberStep) throws IOException {
-        try{
-            sActionKeyword = ExcelUtils.getCellData(numberStep, Constanst.VERIFY_STEP, Constanst.TEST_STEP_SHEET);
-            params = ExcelUtils.getCellData(numberStep, Constanst.PARAM_VERIFY_STEP, Constanst.TEST_STEP_SHEET);
+        sActionKeyword = ExcelUtils.getCellData(numberStep, Constanst.VERIFY_STEP, Constanst.TEST_STEP_SHEET);
+        params = ExcelUtils.getCellData(numberStep, Constanst.PARAM_VERIFY_STEP, Constanst.TEST_STEP_SHEET);
 
-            if(!sActionKeyword.equals("")){
-                if(result == Constanst.PASS) {
-                    expected = ExcelUtils.getCellData(numberStep,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET);
-                    description = "Check - " +description;
-                    execute_action(numberStep, "");
-                }
+        if(!sActionKeyword.equals("")){
+            if(result == Constanst.PASS) {
+                expected = ExcelUtils.getCellData(numberStep,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET);
+                description = "Check - " +description;
+                execute_action(numberStep, "");
             }
-        }catch (Throwable e){
-            error = "Method verify | Exception desc : " + e.getMessage();
-            Log.error(error);
-            onFail( error);
-            /*onResultStep(result,error,numberStep);*/
         }
-        onResultStep(result,error,numberStep);
     }
     // endregion verify result after each step
 
     //region RESULT
     private void onResultStep(String status, String message, int rowNumber ){
+        if(status == Constanst.FAIL) {
+            byte[] bytes = KeyWords.takePhoto();
+            ExcelUtils.addPictureInCell(rowNumber, bytes, tcPath);
+        }
         ExcelUtils.setCellData(status, rowNumber, Constanst.RESULT, Constanst.TEST_STEP_SHEET, tcPath);
         ExcelUtils.setCellData(message,  rowNumber, Constanst.ERROR, Constanst.TEST_STEP_SHEET, tcPath);
-        if(status == Constanst.FAIL){
-            KeyWords.saveFile(rowNumber);
-        }
     }
     public static void onFail(String message) {
-        Log.info(message);
+        //Log.info(message);
         result = Constanst.FAIL;
         error = message;
     }
