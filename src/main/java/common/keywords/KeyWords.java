@@ -209,7 +209,8 @@ public class KeyWords {
             exception(e);
         }
     }
-    public static String getCurrentScene(){
+    public static String getCurrentScene(String locator){
+        waitForObjectNotPresent(locator);
         RequestSpecification request = given();
         request.baseUri(Constanst.STATUS_URL);
         Response response = request.get();
