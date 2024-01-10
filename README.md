@@ -5,6 +5,7 @@
 4. Hướng dẫn sử dụng:
  + B1: Kiểm tra thư mực chạy test bao gồm: 1 file java để chạy và 1 folder "config" (log, testcase)
  + B2: Kiểm tra folder testcase sẽ bao gồm 1 file excel là scope: file scope sẽ lưu tên các file testcase, và những file testcase còn lại
+ + B3: Để run cần kết nối điện thoại và đổi port trên đt sang 8342
 >> Lưu ý:
 > 
     + Không đổi tên file logging, file config
