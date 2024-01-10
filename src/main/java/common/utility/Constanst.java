@@ -1,7 +1,5 @@
 package common.utility;
 
-import java.util.Arrays;
-
 public class Constanst {
     public static final String SEPARATOR_PATH = System.getProperty("file.separator");
     public static final String PROJECT_PATH = System.getProperty("user.dir");

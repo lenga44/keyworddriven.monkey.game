@@ -1,12 +1,16 @@
 package common.utility;
 
 import execute.RunTestScript;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.util.IOUtils;
-import org.apache.poi.xssf.usermodel.*;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
+import org.apache.poi.xssf.usermodel.XSSFDrawing;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.*;
-import java.nio.file.Path;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class ExcelUtils {
     private static Sheet ExcelSheet;
@@ -72,7 +76,7 @@ public class ExcelUtils {
     public static int getTestStepCount(String sheetName, String sTestCaseID, int startTestStep) {
         try{
             for (int i = startTestStep;i< ExcelUtils.getRowCount(sheetName);i++){
-                if(!sTestCaseID.equals(ExcelUtils.getCellData(i,Constanst.TESTCASE_ID,sheetName))){
+                if(!sTestCaseID.equals(ExcelUtils.getCellData(i, Constanst.TESTCASE_ID,sheetName))){
                     int number = i;
                     return number;
                 }

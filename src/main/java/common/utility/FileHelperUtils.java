@@ -9,7 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
-public class FileUtils {
+public class FileHelperUtils {
     public static String getRootFolder(){
         return Arrays.stream(Constanst.PROJECT_PATH.split("\\:")).toList().get(0)+":";
     }

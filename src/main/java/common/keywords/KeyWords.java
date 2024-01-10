@@ -1,7 +1,6 @@
 package common.keywords;
 
 import common.utility.Constanst;
-import common.utility.ExcelUtils;
 import common.utility.Log;
 import execute.RunTestScript;
 import io.appium.java_client.AppiumDriver;
@@ -9,14 +8,10 @@ import io.appium.java_client.android.AndroidDriver;
 import io.restassured.path.json.JsonPath;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.response.Response;
-import org.apache.poi.util.IOUtils;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
 
-import java.io.*;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
