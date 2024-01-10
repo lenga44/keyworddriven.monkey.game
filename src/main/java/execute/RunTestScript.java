@@ -93,8 +93,8 @@ public class RunTestScript {
     }
 
     private void execute_steps() throws IOException {
-        result = Constanst.PASS;
         for (; iTestStep < lastTestStep; iTestStep++) {
+            result = Constanst.PASS;
             process = ExcelUtils.getCellData(iTestStep, Constanst.PROCEED, Constanst.TEST_STEP_SHEET);
             if(process.equals(Constanst.PROCESS_YES)) {
 
@@ -113,7 +113,7 @@ public class RunTestScript {
                 if(result == "" && result==null){
                     result = Constanst.SKIP;
                 }
-                //onResultStep(result, error, iTestStep);
+                onResultStep(result, error, iTestStep);
                 error = "";
 
                 if (result == Constanst.FAIL)
@@ -123,8 +123,8 @@ public class RunTestScript {
     }
 
     private void execute_action(int numberStep,String data){
+        result = Constanst.PASS;
         try {
-            result = Constanst.PASS;
             param = getParam(params,data);
             paramCount = (param == null) ? 0: param.length;
 
@@ -173,6 +173,8 @@ public class RunTestScript {
         if(status == Constanst.FAIL) {
             byte[] bytes = KeyWords.takePhoto();
             ExcelUtils.addPictureInCell(rowNumber, bytes, tcPath);
+        }else {
+            ExcelUtils.setCellData("", rowNumber, Constanst.IMAGE, Constanst.TEST_STEP_SHEET, tcPath);
         }
         ExcelUtils.setCellData(status, rowNumber, Constanst.RESULT, Constanst.TEST_STEP_SHEET, tcPath);
         ExcelUtils.setCellData(message,  rowNumber, Constanst.ERROR, Constanst.TEST_STEP_SHEET, tcPath);
