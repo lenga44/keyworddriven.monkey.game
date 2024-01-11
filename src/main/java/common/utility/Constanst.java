@@ -1,8 +1,8 @@
 package common.utility;
 
 public class Constanst {
+    public static final String SEPARATOR_PATH = System.getProperty("file.separator");
     public static final String PROJECT_PATH = System.getProperty("user.dir");
-
     // System Variables
     public static final String FAIL = "FAIL";
     public static final String PASS = "PASS";
@@ -13,9 +13,10 @@ public class Constanst {
     //Scope file
     public static final int TESTCASE_FILE_NAME = 1;
     public static final int STATUS_GAME = 3;
-    public static final String SCOPE_FILE_PATH = "\\src\\main\\java\\testcases\\Scope.xlsx";
-    public static final String TESTCASE_FILE_PATH = "\\src\\main\\java\\testcases\\";
-    public static final String LOG_FILE_PATH = "\\src\\main\\java\\logs\\";
+    public static final String SCOPE_FILE_PATH = "scope_path";
+    public static final String TESTCASE_FILE_PATH = "testcase_path";
+    public static final String LOG_FILE_PATH = "\\tool_test_game\\config\\logging.txt";
+    public static final String CONFIG_FILE_PATH = "\\tool_test_game\\config\\config.json";
 
     //TC sheet in report file
     public static final int TESTCASE_ID = 0;
@@ -48,4 +49,5 @@ public class Constanst {
     public static final String STATUS_URL = "http://localhost:8342/about";
     public static final String TAKE_PHOTO = "http://localhost:8342/utils/appscreenshot";
     public static final String DRAG_ACTION = ".drag";
+
 }

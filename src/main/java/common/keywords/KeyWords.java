@@ -1,7 +1,6 @@
 package common.keywords;
 
 import common.utility.Constanst;
-import common.utility.ExcelUtils;
 import common.utility.Log;
 import execute.RunTestScript;
 import io.appium.java_client.AppiumDriver;
@@ -9,14 +8,10 @@ import io.appium.java_client.android.AndroidDriver;
 import io.restassured.path.json.JsonPath;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.response.Response;
-import org.apache.poi.util.IOUtils;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
 
-import java.io.*;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -59,6 +54,14 @@ public class KeyWords {
     }
 
     //region ACTION
+    public static void sleep(String second)  {
+        try {
+            Thread.sleep(Integer.valueOf(second) * 1000);
+            Log.info("Sleep: " +second);
+        }catch (InterruptedException e){
+            Log.error("Sleep: " +e.getMessage());
+        }
+    }
     public static void click(String locator, String property){
         waitForObject(locator);
         request(Constanst.SCENE_URL,"//"+locator+"."+property);
@@ -110,25 +113,30 @@ public class KeyWords {
     }
     public static void swipeToDown(String number){
         for(int i = 0; i<Integer.valueOf(number);i++){
-            request(Constanst.SIMULATE_URL,Constanst.DRAG_ACTION + "(1000,500,100,500,0.5)");
+            request(Constanst.SIMULATE_URL,Constanst.DRAG_ACTION + "(400,500,100,100,0.5)");
+            sleep("1");
         }
     }
     //endregion ACTION
 
     //region VERIFY
     public static String elementDisplay(String locator){
-        waitForObject(locator);
-        Response response = request(Constanst.SCENE_URL,"//"+locator);
-        return convert(response,"activeInHierarchy");
+        try {
+            waitForObject(locator);
+            Response response = request(Constanst.SCENE_URL, "//" + locator);
+            return convert(response, "activeInHierarchy");
+        }catch (Throwable e){
+            return "false";
+        }
     }
 
     public static String elementDisplay(String locator, String index){
         return "";
     }
 
-    public static String getPropertyValue(String locator, String pcomponent, String property){
+    public static String getPropertyValue(String locator, String component, String property){
         waitForObject(locator);
-        Response response = request(Constanst.SCENE_URL,"//"+locator+"."+pcomponent);
+        Response response = request(Constanst.SCENE_URL,"//"+locator+"."+component);
         return convert(response,property);
     }
 
@@ -158,6 +166,7 @@ public class KeyWords {
                     JsonPath json = response.jsonPath();
                     List name = (List)json.get("name");
                     if (json != null && !name.isEmpty()) {
+                        if(convert(response,"activeInHierarchy")=="true")
                         break;
                     }
                 Thread.sleep(500);
@@ -167,6 +176,7 @@ public class KeyWords {
         }catch (Throwable e){
             exception(e);
         }
+        Log.info("waitForObject :" + locator);
     }
     public static void waitForObjectNotPresent(String locator){
         try {
@@ -240,7 +250,7 @@ public class KeyWords {
     }
     public static Response request(String baseUri,String basePath){
         try {
-            Log.info(baseUri+basePath);
+            Log.info("request: "+ baseUri+basePath);
             RequestSpecification request = given();
             request.baseUri(baseUri);
             request.basePath(basePath);

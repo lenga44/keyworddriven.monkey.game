@@ -16,3 +16,7 @@ buildNumber.properties
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 .log
+*.txt
+*.log
+src/main/screenshots/abc.png
+*.png

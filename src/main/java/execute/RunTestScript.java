@@ -3,24 +3,24 @@ package execute;
 import common.keywords.KeyWords;
 import common.utility.Constanst;
 import common.utility.ExcelUtils;
+import common.utility.FileHelperUtils;
 import common.utility.Log;
-import io.restassured.RestAssured;
-import io.restassured.response.Response;
-import org.apache.poi.util.IOUtils;
 
 import java.io.*;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Base64;
 
 public class RunTestScript {
+
     public RunTestScript() {
         keyWord = new KeyWords();
         method = keyWord.getClass().getMethods();
     }
+
     public static void main(String[] args) throws IOException {
         Log.resetFileLog();
-        scopePath = Constanst.PROJECT_PATH +Constanst.SCOPE_FILE_PATH;
+        scopePath = FileHelperUtils.getRootFolder() + FileHelperUtils.getPathConfig(Constanst.SCOPE_FILE_PATH);
+        Log.info("SCOPE_PATH: "+scopePath);
         ExcelUtils.setExcelFile(scopePath);
         RunTestScript runTestScript = new RunTestScript();
         runTestScript.execute();
@@ -31,7 +31,8 @@ public class RunTestScript {
         for (int i = 0; i<iTotalFeature;i++){
             sRunMode = ExcelUtils.getCellData(i,Constanst.RUN_MODE,Constanst.SCOPE_SHEET);
             if(sRunMode.equals(Constanst.YES)) {
-                tcPath = Constanst.PROJECT_PATH +Constanst.TESTCASE_FILE_PATH + ExcelUtils.getCellData(i,Constanst.TESTCASE_FILE_NAME,Constanst.SCOPE_SHEET)+".xlsx";
+                tcPath = FileHelperUtils.getRootFolder() + FileHelperUtils.getPathConfig(Constanst.TESTCASE_FILE_PATH) + ExcelUtils.getCellData(i,Constanst.TESTCASE_FILE_NAME,Constanst.SCOPE_SHEET)+".xlsx";
+                Log.info("TESTCASE_PATH: "+tcPath);
                 ExcelUtils.setExcelFile(tcPath);
                 execute_testcases();
                 ExcelUtils.setExcelFile(scopePath);
@@ -92,8 +93,8 @@ public class RunTestScript {
     }
 
     private void execute_steps() throws IOException {
-        result = Constanst.PASS;
         for (; iTestStep < lastTestStep; iTestStep++) {
+            result = Constanst.PASS;
             process = ExcelUtils.getCellData(iTestStep, Constanst.PROCEED, Constanst.TEST_STEP_SHEET);
             if(process.equals(Constanst.PROCESS_YES)) {
 
@@ -112,7 +113,7 @@ public class RunTestScript {
                 if(result == "" && result==null){
                     result = Constanst.SKIP;
                 }
-                //onResultStep(result, error, iTestStep);
+                onResultStep(result, error, iTestStep);
                 error = "";
 
                 if (result == Constanst.FAIL)
@@ -122,8 +123,8 @@ public class RunTestScript {
     }
 
     private void execute_action(int numberStep,String data){
+        result = Constanst.PASS;
         try {
-            result = Constanst.PASS;
             param = getParam(params,data);
             paramCount = (param == null) ? 0: param.length;
 
@@ -172,6 +173,8 @@ public class RunTestScript {
         if(status == Constanst.FAIL) {
             byte[] bytes = KeyWords.takePhoto();
             ExcelUtils.addPictureInCell(rowNumber, bytes, tcPath);
+        }else {
+            ExcelUtils.setCellData("", rowNumber, Constanst.IMAGE, Constanst.TEST_STEP_SHEET, tcPath);
         }
         ExcelUtils.setCellData(status, rowNumber, Constanst.RESULT, Constanst.TEST_STEP_SHEET, tcPath);
         ExcelUtils.setCellData(message,  rowNumber, Constanst.ERROR, Constanst.TEST_STEP_SHEET, tcPath);

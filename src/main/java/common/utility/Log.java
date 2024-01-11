@@ -3,8 +3,6 @@ package common.utility;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -12,7 +10,7 @@ public class Log {
     private static final Logger Log =  LogManager.getLogger(Log.class);
 
     public static void resetFileLog() throws IOException {
-        FileOutputStream writer = new FileOutputStream(Constanst.PROJECT_PATH + Constanst.LOG_FILE_PATH +"logging.log");
+        FileOutputStream writer = new FileOutputStream(Constanst.LOG_FILE_PATH);
         writer.write(("").getBytes());
         writer.close();
     }
