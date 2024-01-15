@@ -154,8 +154,30 @@ public class KeyWords {
         Response response = request(Constanst.SCENE_URL,"//"+locator+"[activeInHierarchy=true]");
         return String.valueOf(response.getBody().jsonPath().getList("name").toArray().length);
     }
-
+    public static String getCurrentScene(String locator){
+        waitForObjectNotPresent(locator);
+        RequestSpecification request = given();
+        request.baseUri(Constanst.STATUS_URL);
+        Response response = request.get();
+        return response.jsonPath().get("Scene");
+    }
+    public static String getText(String locator,String component){
+        Response response = request(Constanst.SCENE_URL,"//" +locator+"."+component);
+        return convert(response,"text").trim();
+    }
+    public static String getSpineState(String locator){
+        try {
+            return getPropertyValue(locator, "SkeletonGraphic", "AnimationState");
+        }catch (Exception e){
+            return null;
+        }
+    }
+    public static String getAudioSource(String locator){
+        return getPropertyValue(locator,"AudioSource","clip");
+    }
     //endregion VERIFY
+
+    //region WAIT
     public static void waitForObject(String locator){
         try {
             LocalDateTime time = LocalDateTime.now();
@@ -219,26 +241,32 @@ public class KeyWords {
             exception(e);
         }
     }
-    public static String getCurrentScene(String locator){
-        waitForObjectNotPresent(locator);
-        RequestSpecification request = given();
-        request.baseUri(Constanst.STATUS_URL);
-        Response response = request.get();
-        return response.jsonPath().get("Scene");
-    }
-    public static String getText(String locator,String component){
-        Response response = request(Constanst.SCENE_URL,"//" +locator+"."+component);
-        return convert(response,"text").trim();
-    }
-    //region TAKE PHOTO
-    public static byte[] takePhoto(){
-        Response response = request(Constanst.TAKE_PHOTO,"");
-        return response.asByteArray();
+    public static void waitForObjectContain(String locator, String key,String content){
+        try {
+            LocalDateTime time = LocalDateTime.now();
+            LocalDateTime time1 = time.plusSeconds(10);
+            Response response = null;
+            do {
+                response = request(Constanst.SCENE_URL, "//" + locator);
+                JsonPath json = response.jsonPath();
+                List name = (List)json.get("name");
+                if (json != null && !name.isEmpty()) {
+                    if(convert(response,key)==content)
+                        break;
+                }
+                Thread.sleep(500);
+                time = LocalDateTime.now();
+            } while (time.compareTo(time1) <= 0);
+        }catch (Throwable e){
+            exception(e);
+        }
+        Log.info("waitForObject :" + locator);
     }
     //endregion
 
     //endregion KEYWORD_EXCEL
 
+    //region OTHER
     public static void connectUnity(){
         String baseUri = Constanst.SCENE_URL;
         RequestSpecification request = given();
@@ -299,4 +327,12 @@ public class KeyWords {
         Log.error(RunTestScript.error);
         RunTestScript.onFail( RunTestScript.error);
     }
+    //endregion
+
+    //region TAKE PHOTO
+    public static byte[] takePhoto(){
+        Response response = request(Constanst.TAKE_PHOTO,"");
+        return response.asByteArray();
+    }
+    //endregion
 }
