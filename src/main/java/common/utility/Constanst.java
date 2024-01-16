@@ -9,6 +9,10 @@ public class Constanst {
     public static final String SKIP = "SKIP";
     public static final String YES = "Y";
     public static final String NO = "N";
+    public static final String WITH = "w";
+    public static final String HEIGHT = "h";
+    public static final String X = "x";
+    public static final String Y = "y";
 
     //Scope file
     public static final int TESTCASE_FILE_NAME = 1;
@@ -49,5 +53,5 @@ public class Constanst {
     public static final String STATUS_URL = "http://localhost:8342/about";
     public static final String TAKE_PHOTO = "http://localhost:8342/utils/appscreenshot";
     public static final String DRAG_ACTION = ".drag";
-
+    public static final String MOVE_ACTION = ".Move";
 }

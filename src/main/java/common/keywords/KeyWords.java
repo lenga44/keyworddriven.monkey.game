@@ -15,6 +15,7 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import static io.restassured.RestAssured.given;
@@ -68,10 +69,7 @@ public class KeyWords {
     }
     public static void clickDownAndUp(String locator){
         waitForObject(locator);
-        String absolutePath = getAbsolutePath(locator,"0");
-        if(absolutePath.contains(":"))
-            absolutePath = absolutePath.replace(":","!_!");
-        request(Constanst.POINTER_URL,".DownToUp("+absolutePath+")");
+        request(Constanst.POINTER_URL,".DownToUp("+getAbsolutePath(locator,"0")+")");
     }
     public static void clickDownAndUp(String locator,String index){
         waitForObject(locator);
@@ -82,10 +80,7 @@ public class KeyWords {
     }
     public static void press(String locator){
         waitForObject(locator);
-        String absolutePath = getAbsolutePath(locator,"0");
-        if(absolutePath.contains(":"))
-            absolutePath = absolutePath.replace(":","!_!");
-        request(Constanst.POINTER_URL,".Press("+absolutePath+")");
+        request(Constanst.POINTER_URL,".Press("+getAbsolutePath(locator,"0")+")");
     }
     public static void press(String locator,String index){
         waitForObject(locator);
@@ -114,6 +109,16 @@ public class KeyWords {
     public static void swipeToDown(String number){
         for(int i = 0; i<Integer.valueOf(number);i++){
             request(Constanst.SIMULATE_URL,Constanst.DRAG_ACTION + "(400,500,100,100,0.5)");
+            sleep("1");
+        }
+    }
+    public static void move(String locator1, String locator2, String number){
+        waitForObject(locator1);
+        waitForObject(locator2);
+        String absolutePath1 = getAbsolutePath(locator1,"0");
+        String absolutePath2 = getAbsolutePath(locator2,"0");
+        for (int i = 0;i<Integer.valueOf(number);i++) {
+            request(Constanst.POINTER_URL, Constanst.MOVE_ACTION + "(" + absolutePath1 + "," + absolutePath2 + ")");
             sleep("1");
         }
     }
@@ -175,6 +180,47 @@ public class KeyWords {
     public static String getAudioSource(String locator){
         return getPropertyValue(locator,"AudioSource","clip");
     }
+    public static String getPointScreen(String locator, String coordinate){
+        Response response = request(Constanst.SCENE_URL,"//"+locator+".RectTransform");
+        return convert(response,"position."+coordinate,0,"\\.");
+    }
+    public static String getPointScreen(Response response, String coordinate){
+        return convert(response,"position."+coordinate,0,"\\.");
+    }
+    public static String isPointInScreen(String locator){
+        boolean result = false;
+        Response response = request(Constanst.SCENE_URL,"//"+locator+".RectTransform");
+        String x = convert(response,"position.x",0,"\\.");
+        String y = convert(response,"position.y",0,"\\.");
+        String with = getSizeScreen("w");
+        String height = getSizeScreen("y");
+        if(Float.valueOf(x)<Float.valueOf(with)){
+            result = (Float.valueOf(y)<Float.valueOf(height))?true:false;
+        }
+        Log.info("Element In Screen = " +result);
+        return String.valueOf(result);
+    }
+    public static String getSizeScreen(String key){
+        Response response = request(Constanst.SCENE_URL,"//UniumSDK.UniumComponent");
+        if(key.equals(Constanst.WITH))
+            return convert(response, "Width");
+        else
+            return convert(response, "Height");
+    }
+    public static String isMoveLeft(String locator,String second){
+        return isMoveType(locator,second,Constanst.X,Constanst.WITH);
+    }
+    public static String isMoveDown(String locator,String second){
+        return isMoveType(locator,second,Constanst.Y,Constanst.HEIGHT);
+    }
+    public static String isLocationCompare(String locator1,String locator2, String coordinate){
+        String x1 = getPointScreen(locator1,coordinate);
+        String x2 = getPointScreen(locator2,coordinate);
+        boolean result = x1.equals(x2);
+        Log.info("|isLocationCompare| "+ x1 +" compare " +x2);
+        return String.valueOf(result);
+    }
+
     //endregion VERIFY
 
     //region WAIT
@@ -262,6 +308,56 @@ public class KeyWords {
         }
         Log.info("waitForObject :" + locator);
     }
+    public static void waitForObjectInScreen(String locator){
+        try {
+            LocalDateTime time = LocalDateTime.now();
+            LocalDateTime time1 = time.plusSeconds(10);
+            Response response = null;
+            float with = Float.valueOf(getSizeScreen("w"));
+            float height = Float.valueOf(getSizeScreen("h"));
+            do {
+                response = request(Constanst.SCENE_URL,"//"+locator+".RectTransform");
+                JsonPath json = response.jsonPath();
+                List name = (List)json.get("name");
+                if (json != null && !name.isEmpty()) {
+                    float x = Float.valueOf(getPointScreen(response,"x"));
+                    float y = Float.valueOf(getPointScreen(response,"y"));
+                    if(x<= with && y <= height)
+                        break;
+                }
+                Thread.sleep(500);
+                time = LocalDateTime.now();
+            } while (time.compareTo(time1) <= 0);
+        }catch (Throwable e){
+            exception(e);
+        }
+        Log.info("waitForObject :" + locator);
+    }
+    public static void waitForObjectInScreen(String locator,String second){
+        try {
+            LocalDateTime time = LocalDateTime.now();
+            LocalDateTime time1 = time.plusSeconds(Integer.valueOf(second));
+            Response response = null;
+            float with = Float.valueOf(getSizeScreen("w"));
+            float height = Float.valueOf(getSizeScreen("h"));
+            do {
+                response = request(Constanst.SCENE_URL,"//"+locator+".RectTransform");
+                JsonPath json = response.jsonPath();
+                List name = (List)json.get("name");
+                if (json != null && !name.isEmpty()) {
+                    float x = Float.valueOf(getPointScreen(response,"x"));
+                    float y = Float.valueOf(getPointScreen(response,"y"));
+                    if(x<= with && y <= height)
+                        break;
+                }
+                Thread.sleep(500);
+                time = LocalDateTime.now();
+            } while (time.compareTo(time1) <= 0);
+        }catch (Throwable e){
+            exception(e);
+        }
+        Log.info("waitForObject :" + locator);
+    }
     //endregion
 
     //endregion KEYWORD_EXCEL
@@ -305,7 +401,10 @@ public class KeyWords {
     }
     private static String getAbsolutePath(String locator, String index){
         Response response = request(Constanst.SCENE_URL,"//"+locator + "["+Integer.valueOf(index)+"]");
-        return convert(response,"path");
+        String absolutePath = convert(response,"path");
+        if(absolutePath.contains(":"))
+            absolutePath = absolutePath.replace(":","!_!");
+        return absolutePath;
     }
     private static String convert(Response response,String key){
         try {
@@ -320,13 +419,24 @@ public class KeyWords {
     private static String convert(Response response,String key,int index,String splitStr){
         String result =  String.valueOf(response.getBody().jsonPath().getList(key).get(0));
         String[] a = result.split(splitStr);
-        return Arrays.stream(a).toList().get(0);
+        return Arrays.stream(a).toList().get(index);
     }
     private static void exception(Throwable e){
         RunTestScript.error = "Verify | " +e.getMessage();
         Log.error(RunTestScript.error);
         RunTestScript.onFail( RunTestScript.error);
     }
+    public static String isMoveType(String locator,String second, String type,String size){
+        float x1 = Float.valueOf(getPointScreen(locator,type));
+        float with = Float.valueOf(getSizeScreen(size));
+        sleep(second);
+        float x2 = Float.valueOf(getPointScreen(locator,type));
+        Log.info("|isMoveType| "+type + ": |Before : " +x1 +"| -- |AFTER : " +x2+ " |");
+        if(x2<with)
+            return String.valueOf(x1<x2);
+        return null;
+    }
+
     //endregion
 
     //region TAKE PHOTO
