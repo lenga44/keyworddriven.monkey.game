@@ -112,15 +112,13 @@ public class KeyWords {
             sleep("1");
         }
     }
-    public static void move(String locator1, String locator2, String number){
+    public static void move(String locator1, String locator2){
         waitForObject(locator1);
         waitForObject(locator2);
         String absolutePath1 = getAbsolutePath(locator1,"0");
         String absolutePath2 = getAbsolutePath(locator2,"0");
-        for (int i = 0;i<Integer.valueOf(number);i++) {
-            request(Constanst.POINTER_URL, Constanst.MOVE_ACTION + "(" + absolutePath1 + "," + absolutePath2 + ")");
-            sleep("1");
-        }
+        request(Constanst.POINTER_URL, Constanst.MOVE_ACTION + "(" + absolutePath1 + "," + absolutePath2 + ")");
+        sleep("1");
     }
     //endregion ACTION
 
