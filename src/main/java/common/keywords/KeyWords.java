@@ -125,18 +125,30 @@ public class KeyWords {
     //region VERIFY
     public static String elementDisplay(String locator){
         try {
-            waitForObject(locator);
+            //waitForObject(locator);
             Response response = request(Constanst.SCENE_URL, "//" + locator);
             return convert(response, "activeInHierarchy");
         }catch (Throwable e){
             return "false";
         }
     }
-
-    public static String elementDisplay(String locator, String index){
-        return "";
+    public static String elementDisplay(String locator,String second){
+        try {
+            waitForObject(locator,second);
+            Response response = request(Constanst.SCENE_URL, "//" + locator);
+            return convert(response, "activeInHierarchy");
+        }catch (Throwable e){
+            return "false";
+        }
     }
-
+    public static String elementNotDisplay(String locator){
+        try {
+            Response response = request(Constanst.SCENE_URL, "//" + locator);
+            return convert(response, "activeInHierarchy");
+        }catch (Throwable e){
+            return null;
+        }
+    }
     public static String getPropertyValue(String locator, String component, String property){
         waitForObject(locator);
         Response response = request(Constanst.SCENE_URL,"//"+locator+"."+component);
@@ -295,7 +307,7 @@ public class KeyWords {
                 JsonPath json = response.jsonPath();
                 List name = (List)json.get("name");
                 if (json != null && !name.isEmpty()) {
-                    if(convert(response,key)==content)
+                    if(convert(response,key).contains(content))
                         break;
                 }
                 Thread.sleep(500);
@@ -434,7 +446,6 @@ public class KeyWords {
             return String.valueOf(x1<x2);
         return null;
     }
-
     //endregion
 
     //region TAKE PHOTO
