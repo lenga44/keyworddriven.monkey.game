@@ -89,15 +89,21 @@ public class KeyWords {
             absolutePath = absolutePath.replace(":","!_!");
         request(Constanst.POINTER_URL,".Press("+absolutePath+","+index+")");
     }
-    public static void swipeToLeft(String number){
+    /*public static void swipeToLeft(String number){
         for(int i = 0; i<Integer.valueOf(number);i++){
             request(Constanst.SIMULATE_URL,Constanst.DRAG_ACTION + "(1000,500,100,500,0.5)");
         }
+    }*/
+    public static void swipe(String x1, String x2, String y){
+        request(Constanst.SIMULATE_URL,Constanst.DRAG_ACTION + "("+x1+","+y+","+x2+","+y+",0.5)");
     }
-    public static void swipeToRight(String number){
+    /*public static void swipeToRight(String number){
         for(int i = 0; i<Integer.valueOf(number);i++){
             request(Constanst.SIMULATE_URL,Constanst.DRAG_ACTION + "(500,750,500,800,0.5)");
         }
+    }*/
+    public static void swipeToRight(String x1, String x2, String y){
+        request(Constanst.SIMULATE_URL,Constanst.DRAG_ACTION + "("+x2+","+y+","+x1+","+y+",0.5)");
     }
     public static void simulateClick(String locator){
         waitForObject(locator);
