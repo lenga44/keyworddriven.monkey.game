@@ -120,6 +120,12 @@ public class KeyWords {
         request(Constanst.POINTER_URL, Constanst.MOVE_ACTION + "(" + absolutePath1 + "," + absolutePath2 + ")");
         sleep("1");
     }
+    public static void moveByCoordinates(String locator1, String number){
+        waitForObject(locator1);
+        String absolutePath1 = getAbsolutePath(locator1,"0");
+        request(Constanst.POINTER_URL, Constanst.MOVE_COORDINATE + "(" + absolutePath1 + "," + number + ")");
+        sleep("1");
+    }
     //endregion ACTION
 
     //region VERIFY
@@ -149,12 +155,20 @@ public class KeyWords {
             return null;
         }
     }
+    public static String elementNotDisplay(String locator,String second){
+        try {
+            waitForObject(locator,second);
+            Response response = request(Constanst.SCENE_URL, "//" + locator);
+            return convert(response, "activeInHierarchy");
+        }catch (Throwable e){
+            return null;
+        }
+    }
     public static String getPropertyValue(String locator, String component, String property){
         waitForObject(locator);
         Response response = request(Constanst.SCENE_URL,"//"+locator+"."+component);
         return convert(response,property);
     }
-
     public static String getImageName(String locator){
        String result =  getPropertyValue(locator,"Image","sprite");
        if(result.contains("(UnityEngine.Sprite)"))
@@ -220,6 +234,9 @@ public class KeyWords {
     public static String isMoveLeft(String locator,String second){
         return isMoveType(locator,second,Constanst.X,Constanst.WITH);
     }
+    public static String isMoveLeft(String locator){
+        return isMoveType(locator,Constanst.X);
+    }
     public static String isMoveDown(String locator,String second){
         return isMoveType(locator,second,Constanst.Y,Constanst.HEIGHT);
     }
@@ -229,6 +246,14 @@ public class KeyWords {
         boolean result = x1.equals(x2);
         Log.info("|isLocationCompare| "+ x1 +" compare " +x2);
         return String.valueOf(result);
+    }
+    public static String isRotation(String locator,String coordinate){
+        Response response = request(Constanst.SCENE_URL,"//"+locator+".RectTransform");
+        String z1 = convert(response,"position."+coordinate,0,"\\.");
+        sleep("0.5");
+        String z2 = convert(response,"position."+coordinate,0,"\\.");
+        Log.info("|isRotation|: " + z1+ " --- "+z2);
+        return String.valueOf(z1.equals(z2));
     }
 
     //endregion VERIFY
@@ -316,7 +341,7 @@ public class KeyWords {
         }catch (Throwable e){
             exception(e);
         }
-        Log.info("waitForObject :" + locator);
+        Log.info("waitForObjectContain :" + locator);
     }
     public static void waitForObjectInScreen(String locator){
         try {
@@ -341,7 +366,7 @@ public class KeyWords {
         }catch (Throwable e){
             exception(e);
         }
-        Log.info("waitForObject :" + locator);
+        Log.info("waitForObjectInScreen :" + locator);
     }
     public static void waitForObjectInScreen(String locator,String second){
         try {
@@ -366,7 +391,30 @@ public class KeyWords {
         }catch (Throwable e){
             exception(e);
         }
-        Log.info("waitForObject :" + locator);
+        Log.info("waitForObjectInScreen :" + locator);
+    }
+    public static void waitForObjectNotInScreen(String locator,String second,String size,String coordinate){
+        try {
+            LocalDateTime time = LocalDateTime.now();
+            LocalDateTime time1 = time.plusSeconds(Integer.valueOf(second));
+            Response response = null;
+            float with = Float.valueOf(getSizeScreen(size));
+            do {
+                response = request(Constanst.SCENE_URL,"//"+locator+".RectTransform");
+                JsonPath json = response.jsonPath();
+                List name = (List)json.get("name");
+                if (json != null && !name.isEmpty()) {
+                    float x = Float.valueOf(getPointScreen(response,coordinate));
+                    if(x> with)
+                        break;
+                }
+                Thread.sleep(500);
+                time = LocalDateTime.now();
+            } while (time.compareTo(time1) <= 0);
+        }catch (Throwable e){
+            exception(e);
+        }
+        Log.info("waitForObjectNotInScreen :" + locator);
     }
     //endregion
 
@@ -445,6 +493,14 @@ public class KeyWords {
         if(x2<with)
             return String.valueOf(x1<x2);
         return null;
+    }
+    public static String isMoveType(String locator, String type){
+        float x1 = Float.valueOf(getPointScreen(locator,type));
+        sleep("0.5");
+        float x2 = Float.valueOf(getPointScreen(locator,type));
+        Log.info("|isMoveType| "+type + ": |Before : " +x1 +"| -- |AFTER : " +x2+ " |");
+        return String.valueOf(x1<x2);
+
     }
     //endregion
 
