@@ -1,6 +1,7 @@
 package execute;
 
-import common.keywords.KeyWords;
+import common.keywords.KeyWordsToAction;
+import common.keywords.KeyWordsToActionToVerify;
 import common.utility.Constanst;
 import common.utility.ExcelUtils;
 import common.utility.FileHelperUtils;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 public class RunTestScript {
 
     public RunTestScript() {
-        keyWord = new KeyWords();
+        keyWord = new KeyWordsToActionToVerify();
         method = keyWord.getClass().getMethods();
     }
 
@@ -171,7 +172,7 @@ public class RunTestScript {
     //region RESULT
     private void onResultStep(String status, String message, int rowNumber ){
         if(status == Constanst.FAIL) {
-            byte[] bytes = KeyWords.takePhoto();
+            byte[] bytes = KeyWordsToAction.takePhoto();
             ExcelUtils.addPictureInCell(rowNumber, bytes, tcPath);
         }else {
             ExcelUtils.setCellData("", rowNumber, Constanst.IMAGE, Constanst.TEST_STEP_SHEET, tcPath);
@@ -207,7 +208,7 @@ public class RunTestScript {
     public static String testStep;
 
     //Class
-    public static KeyWords keyWord;
+    public static KeyWordsToAction keyWord;
     public static Method method[];
 
     //Scope
