@@ -166,10 +166,8 @@ public class KeyWordsToAction {
                 response = request(Constanst.SCENE_URL, "//" + locator);
                 JsonPath json = response.jsonPath();
                 List name = (List)json.get("name");
-                if (json != null && !name.isEmpty()) {
-                    if(!locator.contains(convert(response, "name"))){
-                        break;
-                    }
+                if(!locator.contains(convert(response, "name"))||convert(response,"activeInHierarchy")=="false"){
+                    break;
                 }
                 Thread.sleep(500);
                 time = LocalDateTime.now();
