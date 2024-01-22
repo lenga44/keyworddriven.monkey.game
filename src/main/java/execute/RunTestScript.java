@@ -157,7 +157,7 @@ public class RunTestScript {
     // region verify result after each step
     private void verifyStep(int numberStep) throws IOException {
         sActionKeyword = ExcelUtils.getCellData(numberStep, Constanst.VERIFY_STEP, Constanst.TEST_STEP_SHEET);
-        params = ExcelUtils.getCellData(numberStep, Constanst.PARAM_VERIFY_STEP, Constanst.TEST_STEP_SHEET);
+        params = "";
 
         if(!sActionKeyword.equals("")){
             if(result == Constanst.PASS) {

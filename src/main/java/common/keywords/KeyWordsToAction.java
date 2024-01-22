@@ -198,39 +198,46 @@ public class KeyWordsToAction {
     }
     public static void waitForObjectContain(String locator, String key,String content){
         try {
+            Log.info("waitForObjectContain :" + locator);
             LocalDateTime time = LocalDateTime.now();
-            LocalDateTime time1 = time.plusSeconds(10);
+            LocalDateTime time1 = time.plusSeconds(30);
             Response response = null;
             do {
                 response = request(Constanst.SCENE_URL, "//" + locator);
-                JsonPath json = response.jsonPath();
-                List name = (List)json.get("name");
-                if (json != null && !name.isEmpty()) {
-                    if(convert(response,key).contains(content))
-                        break;
+                if(response!=null) {
+                    JsonPath json = response.jsonPath();
+                    Log.info("waitForObjectContain :" + json.prettyPrint());
+                    if (json != null && json.toString() != "") {
+                        String value = convert(response, key);
+                        if (value != null) {
+                            if (value.contains(content))
+                                break;
+                        }
+                    }
+                    Thread.sleep(500);
                 }
-                Thread.sleep(500);
                 time = LocalDateTime.now();
             } while (time.compareTo(time1) <= 0);
         }catch (Throwable e){
             exception(e);
         }
-        Log.info("waitForObjectContain :" + locator);
     }
     public static void waitForObjectContain(String locator,String component, String property,String content){
         try {
             LocalDateTime time = LocalDateTime.now();
-            LocalDateTime time1 = time.plusSeconds(10);
+            LocalDateTime time1 = time.plusSeconds(30);
             Response response = null;
             do {
-                response = request(Constanst.SCENE_URL, "//" + locator);
-                JsonPath json = response.jsonPath();
-                List name = (List)json.get("name");
-                if (json != null && !name.isEmpty()) {
-                    if(convert(response,component+"."+property).contains(content))
-                        break;
+                response = request(Constanst.SCENE_URL, "//" + locator+"."+component);
+                if(response!=null) {
+                    JsonPath json = response.jsonPath();
+                    String value = convert(response, property);
+                    if (json != null && json.toString() != "") {
+                        if (value.contains(content))
+                            break;
+                    }
+                    Thread.sleep(500);
                 }
-                Thread.sleep(500);
                 time = LocalDateTime.now();
             } while (time.compareTo(time1) <= 0);
         }catch (Throwable e){
@@ -361,7 +368,7 @@ public class KeyWordsToAction {
     }
     public static String convert(Response response,String key){
         try {
-            Log.info(String.valueOf(response.getBody().jsonPath().getList(key).get(0)));
+            Log.info("|convert 2 param |: "+response.getBody().jsonPath().getList(key).get(0));
             return String.valueOf(response.getBody().jsonPath().getList(key).get(0));
         }catch (Throwable e){
             Log.info(response.prettyPrint());
@@ -374,8 +381,9 @@ public class KeyWordsToAction {
         String[] a = result.split(splitStr);
         return Arrays.stream(a).toList().get(index);
     }
+
     protected static void exception(Throwable e){
-        RunTestScript.error = "Verify | " +e.getMessage();
+        RunTestScript.error = "Exception | " +e.getMessage();
         Log.error(RunTestScript.error);
         RunTestScript.onFail( RunTestScript.error);
     }
