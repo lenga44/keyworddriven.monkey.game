@@ -82,6 +82,13 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         Response response = request(Constanst.SCENE_URL,"//"+locator+"."+component);
         return convert(response,property);
     }
+    public static String getPropertyValue(String locator, String component, String property,String slipStr){
+        waitForObject(locator);
+        Response response = request(Constanst.SCENE_URL,"//"+locator+"."+component);
+        String value = Arrays.stream(convert(response,property).split(slipStr)).toList().get(0).trim();
+        Log.info(value);
+        return value;
+    }
     public static String getImageName(String locator){
         String result =  getPropertyValue(locator,"Image","sprite");
         if(result.contains("(UnityEngine.Sprite)"))
@@ -126,7 +133,8 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         return getStringConvertFromArrayList(second,count,getPropertyValue(locator, "SkeletonGraphic", "AnimationState"));
     }
     public static String getAudioSource(String locator){
-        return getPropertyValue(locator,"AudioSource","clip");
+        Log.info("|getAudioSource |");
+        return getPropertyValue(locator,"AudioSource","clip","(UnityEngine.AudioClip)");
     }
     public static String getListAudioSource(String locator,String count) {
         String audio = null;
@@ -136,7 +144,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
             LocalDateTime time1 = time.plusSeconds(Integer.valueOf(25));
             list = new ArrayList<>();
             do {
-                String value = getPropertyValue(locator, "AudioSource", "clip");
+                String value = getPropertyValue(locator, "AudioSource", "clip","(UnityEngine.AudioClip)");
                 if (!list.contains(value))
                     list.add(value);
                 if (list.size() <= Integer.valueOf(count))

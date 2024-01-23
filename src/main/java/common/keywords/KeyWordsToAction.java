@@ -57,10 +57,10 @@ public class KeyWordsToAction {
     //region ACTION
     public static void sleep(String second)  {
         try {
-            Thread.sleep(Integer.valueOf(second) * 1000);
+            Thread.sleep((long) (Float.valueOf(second) * 1000));
             Log.info("Sleep: " +second);
         }catch (InterruptedException e){
-            Log.error("Sleep: " +e.getMessage());
+            exception(e);
         }
     }
     public static void click(String locator, String property){
@@ -183,10 +183,12 @@ public class KeyWordsToAction {
             Response response = null;
             do {
                 response = request(Constanst.SCENE_URL, "//" + locator);
-                JsonPath json = response.jsonPath();
-                List name = (List)json.get("name");
-                if (json != null && !name.isEmpty()) {
-                    break;
+                if(response!=null) {
+                    JsonPath json = response.jsonPath();
+                    List name = (List) json.get("name");
+                    if (json != null && !name.isEmpty()) {
+                        break;
+                    }
                 }
                 Thread.sleep(500);
                 time = LocalDateTime.now();
@@ -202,13 +204,14 @@ public class KeyWordsToAction {
             LocalDateTime time = LocalDateTime.now();
             LocalDateTime time1 = time.plusSeconds(30);
             Response response = null;
+            String value= null;
             do {
                 response = request(Constanst.SCENE_URL, "//" + locator);
                 if(response!=null) {
                     JsonPath json = response.jsonPath();
                     Log.info("waitForObjectContain :" + json.prettyPrint());
                     if (json != null && json.toString() != "") {
-                        String value = convert(response, key);
+                        value = convert(response, key);
                         if (value != null) {
                             if (value.contains(content))
                                 break;
@@ -218,6 +221,7 @@ public class KeyWordsToAction {
                 }
                 time = LocalDateTime.now();
             } while (time.compareTo(time1) <= 0);
+            Assert.assertTrue(value.contains(content));
         }catch (Throwable e){
             exception(e);
         }
@@ -227,11 +231,12 @@ public class KeyWordsToAction {
             LocalDateTime time = LocalDateTime.now();
             LocalDateTime time1 = time.plusSeconds(30);
             Response response = null;
+            String value = null;
             do {
                 response = request(Constanst.SCENE_URL, "//" + locator+"."+component);
                 if(response!=null) {
                     JsonPath json = response.jsonPath();
-                    String value = convert(response, property);
+                    value = convert(response, property);
                     if (json != null && json.toString() != "") {
                         if (value.contains(content))
                             break;
@@ -240,6 +245,7 @@ public class KeyWordsToAction {
                 }
                 time = LocalDateTime.now();
             } while (time.compareTo(time1) <= 0);
+            Assert.assertTrue(value.contains(content));
         }catch (Throwable e){
             exception(e);
         }

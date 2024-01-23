@@ -130,7 +130,6 @@ public class RunTestScript {
             paramCount = (param == null) ? 0: param.length;
 
             for (int i = 0; i < method.length; i++) {
-
                 if (method[i].getName().equals(sActionKeyword) && method[i].getParameterCount() == paramCount) {
                     Log.info(testStep +":  "+description);
                     if (paramCount == 0) {
