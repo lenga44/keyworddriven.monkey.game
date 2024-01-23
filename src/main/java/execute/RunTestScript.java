@@ -150,7 +150,7 @@ public class RunTestScript {
             Log.error("Method execute_action | Exception desc : " + e.getMessage());
             onFail(error);
         }
-        onResultStep(result,error,numberStep);
+        //onResultStep(result,error,numberStep);
     }
 
     // region verify result after each step

@@ -216,8 +216,8 @@ public class KeyWordsToAction {
                             if (value.contains(content))
                                 break;
                         }
+                        Thread.sleep(500);
                     }
-                    Thread.sleep(500);
                 }
                 time = LocalDateTime.now();
             } while (time.compareTo(time1) <= 0);
@@ -236,12 +236,14 @@ public class KeyWordsToAction {
                 response = request(Constanst.SCENE_URL, "//" + locator+"."+component);
                 if(response!=null) {
                     JsonPath json = response.jsonPath();
-                    value = convert(response, property);
                     if (json != null && json.toString() != "") {
-                        if (value.contains(content))
-                            break;
+                        value = convert(response, property);
+                        if(value!=null) {
+                            if (value.contains(content))
+                                break;
+                        }
+                        Thread.sleep(500);
                     }
-                    Thread.sleep(500);
                 }
                 time = LocalDateTime.now();
             } while (time.compareTo(time1) <= 0);
@@ -374,8 +376,13 @@ public class KeyWordsToAction {
     }
     public static String convert(Response response,String key){
         try {
-            Log.info("|convert 2 param |: "+response.getBody().jsonPath().getList(key).get(0));
-            return String.valueOf(response.getBody().jsonPath().getList(key).get(0));
+            String result = String.valueOf(response.getBody().jsonPath().getList(key).get(0));
+            Log.info("|convert 2 param |: "+result);
+            if(result.contains("\n")) {
+                result = result.replace("\n", "");
+            }
+            Log.info("|convert 2 param |: "+result);
+            return result;
         }catch (Throwable e){
             Log.info(response.prettyPrint());
             exception(e);
