@@ -34,14 +34,15 @@ public class GenerateReport{
     }
     public static void genReport(int row)throws IOException{
         if(RunTestScript.numberLesson>1) {
-            ExcelUtils.setCellData(String.valueOf(RunTestScript.numberLesson), row, Constanst.END_INDEX_COLLUM, Constanst.PLAN_SHEET, RunTestScript.scopePath);
-            courseFolder = FileHelperUtils.getRootFolder() + FileHelperUtils.getPathConfig(Constanst.REPORT_FILE_PATH + ExcelUtils.getCellData(row, Constanst.COURSE_COLLUM, Constanst.PLAN_SHEET));
+            ExcelUtils.setCellData(String.valueOf(RunTestScript.numberLesson), row, Constanst.END_INDEX_COLUM, Constanst.PLAN_SHEET, RunTestScript.scopePath);
+            courseFolder = FileHelperUtils.getRootFolder() + FileHelperUtils.getPathConfig(Constanst.REPORT_FILE_PATH + ExcelUtils.getCellData(row, Constanst.COURSE_COLUM, Constanst.PLAN_SHEET));
             levelFolder = courseFolder + FileHelperUtils.getPathConfig("//" + RunTestScript.level);
             Log.info("Folder path report course: " +courseFolder);
             genFolderReport(courseFolder);
             Log.info("Folder path report level: " +levelFolder);
             genFolderReport(levelFolder);
             genTCReportFile(levelFolder);
+            ExcelUtils.setCellData(Constanst.YES, row, Constanst.RUN_MODE_SCOPE, Constanst.SCOPE_SHEET, RunTestScript.scopePath);
         }
     }
     public static String courseFolder;

@@ -17,19 +17,23 @@ public class Constanst {
     public static final int GAME_MODE = 1;
 
     //Scope file
-    public static final int SCENE_NAME_COLLUM = 1;
+    public static final int SCENE_NAME_COLUM = 1;
     public static final int TESTCASE_FILE_NAME = 2;
     public static final int STATUS_GAME = 4;
-    public static final int RUN_MODE_PLAN_COLLUM = 0;
-    public static final int LEVEL_COLLUM = 1;
-    public static final int NUMBER_COLLUM = 2;
-    public static final int BEGIN_INDEX_COLLUM = 3;
-    public static final int END_INDEX_COLLUM = 4;
-    public static final int CURRENT_INDEX_COLLUM = 6;
-    public static final int COURSE_COLLUM = 5;
+    public static final int RUN_MODE_PLAN_COLUM = 0;
+    public static final int LEVEL_COLUM = 1;
+    public static final int NUMBER_COLUM = 2;
+    public static final int BEGIN_INDEX_COLUM = 3;
+    public static final int END_INDEX_COLUM = 4;
+    public static final int CURRENT_INDEX_COLUM = 6;
+    public static final int COURSE_COLUM = 5;
     public static final String PLAN_SHEET = "Plan";
     public static final String SCOPE_FILE_PATH = "scope_path";
     public static final String TESTCASE_FILE_PATH = "testcase_path";
+    public static final String SETUP_FILE_PATH = "setup_path";
+    public static final String ONCE_TIME_SETUP_FILE_PATH = "once_time_setup_path";
+    public static final String TEARDOWN_FILE_PATH = "teardown_path";
+    public static final String ONCE_TIME_TEARDOWN_SETUP_FILE_PATH = "once_time_teardown_path";
     public static final String LOG_FILE_PATH = "\\tool_test_game\\config\\logging.txt";
     public static final String CONFIG_FILE_PATH = "\\tool_test_game\\config\\config.json";
     public static final String REPORT_FILE_PATH = "\\tool_test_game\\report\\";
@@ -71,7 +75,7 @@ public class Constanst {
 
     //Set up file
     public static final String TC_SETUP_FILE_NAME = "//Report_SetUp.xlsx";
-    public static final int MARK_IS_TEST_COLLUM = 5;
+    public static final int MARK_IS_PASS_COLUM = 5;
 
     //Tear down file
     public static final String TC_TEARDOWN_FILE_NAME = "//Report_TearDown.xlsx";
