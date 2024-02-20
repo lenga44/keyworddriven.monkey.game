@@ -57,7 +57,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
             Response response = request(Constanst.SCENE_URL, "//" + locator);
             return convert(response, "activeInHierarchy");
         }catch (Throwable e){
-            return "false";
+            return String.valueOf(false);
         }
     }
     public static String elementNotDisplay(String locator){

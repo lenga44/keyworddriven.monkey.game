@@ -18,21 +18,27 @@ public class RunTestScript {
         method = keyWord.getClass().getMethods();
     }
 
-    public static void main(String[] args) throws IOException {
-        Log.resetFileLog();
-        scopePath = FileHelperUtils.getRootFolder() + FileHelperUtils.getPathConfig(Constanst.SCOPE_FILE_PATH);
-        Log.info("SCOPE_PATH: "+scopePath);
-        ExcelUtils.setExcelFile(scopePath);
-        RunTestScript runTestScript = new RunTestScript();
-        runTestScript.execute();
+    //region SCOPE
+    private static void cleanContextInCell(int row){
+        tcName = ExcelUtils.getCellData(row,Constanst.TESTCASE_FILE_NAME,Constanst.SCOPE_SHEET);
+        ExcelUtils.setCellData("", row, Constanst.RUN_MODE_SCOPE, Constanst.SCOPE_SHEET, scopePath);
     }
+    private static void setRunMode(int row){
+        if(numberLesson>1) {
+            cleanContextInCell(row);
+            String tc = tcName.replace("Report_","");
+            sRunMode = (tc == ExcelUtils.getCellData(row,Constanst.SCENE_NAME_COLLUM,Constanst.SCOPE_SHEET))?Constanst.YES:Constanst.NO;
+            Log.info("Run mode scope: " +sRunMode);
+        }
+    }
+    protected static void execute() throws IOException {
 
-    private void execute() throws IOException {
         int iTotalFeature = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
         for (int i = 0; i<iTotalFeature;i++){
-            sRunMode = ExcelUtils.getCellData(i,Constanst.RUN_MODE,Constanst.SCOPE_SHEET);
+            sRunMode = ExcelUtils.getCellData(i,Constanst.RUN_MODE_TEST_STEP,Constanst.SCOPE_SHEET);
+            setRunMode(i);
             if(sRunMode.equals(Constanst.YES)) {
-                tcPath = FileHelperUtils.getRootFolder() + FileHelperUtils.getPathConfig(Constanst.TESTCASE_FILE_PATH) + ExcelUtils.getCellData(i,Constanst.TESTCASE_FILE_NAME,Constanst.SCOPE_SHEET)+".xlsx";
+                tcPath = FileHelperUtils.getRootFolder() + FileHelperUtils.getPathConfig(Constanst.TESTCASE_FILE_PATH) + tcName+".xlsx";
                 Log.info("TESTCASE_PATH: "+tcPath);
                 ExcelUtils.setExcelFile(tcPath);
                 execute_testcases();
@@ -41,13 +47,14 @@ public class RunTestScript {
             }
         }
     }
+    //endregion
 
     //region TESTCASE
-    private void execute_testcases() throws IOException {
+    private static void execute_testcases() throws IOException {
         int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
         for(int i =0; i<iTotalTestCase;i++) {
             sTestCaseID = ExcelUtils.getCellData(i, Constanst.TESTCASE_ID, Constanst.TESTCASE_SHEET);
-            runMode = ExcelUtils.getCellData(i,Constanst.RUN_MODE,Constanst.TESTCASE_SHEET);
+            runMode = ExcelUtils.getCellData(i,Constanst.RUN_MODE_TEST_STEP,Constanst.TESTCASE_SHEET);
             if(runMode.equals(Constanst.YES)) {
                 Log.info("TC: " + sTestCaseID);
                 rangeStepByTestCase();
@@ -61,7 +68,7 @@ public class RunTestScript {
         }
     }
 
-    private Object[] getParam(String params, String data){
+    private static Object[] getParam(String params, String data){
         ArrayList<Object> objs = new ArrayList<>();
         if (!params.equals("")) {
             if (params.contains(",")) {
@@ -80,7 +87,7 @@ public class RunTestScript {
         }
     }
 
-    private void onResultTestcase(String status, String message, int rowNumber) {
+    private static void onResultTestcase(String status, String message, int rowNumber) {
         ExcelUtils.setCellData(status, rowNumber, Constanst.TESTCASE_STATUS, Constanst.TESTCASE_SHEET, tcPath);
         ExcelUtils.setCellData(message,  rowNumber, Constanst.TESTCASE_ERROR, Constanst.TESTCASE_SHEET, tcPath);
     }
@@ -88,12 +95,12 @@ public class RunTestScript {
 
     //region TEST STEP
 
-    private void rangeStepByTestCase(){
+    private static void rangeStepByTestCase(){
         iTestStep = ExcelUtils.getRowContains(sTestCaseID,Constanst.TESTCASE_ID,Constanst.TEST_STEP_SHEET);
         lastTestStep = ExcelUtils.getTestStepCount(Constanst.TEST_STEP_SHEET,sTestCaseID,iTestStep);
     }
 
-    private void execute_steps() throws IOException {
+    private static void execute_steps() throws IOException {
         for (; iTestStep < lastTestStep; iTestStep++) {
             result = Constanst.PASS;
             process = ExcelUtils.getCellData(iTestStep, Constanst.PROCEED, Constanst.TEST_STEP_SHEET);
@@ -123,7 +130,7 @@ public class RunTestScript {
         }
     }
 
-    private void execute_action(int numberStep,String data){
+    private static void execute_action(int numberStep,String data){
         result = Constanst.PASS;
         try {
             param = getParam(params,data);
@@ -154,7 +161,7 @@ public class RunTestScript {
     }
 
     // region verify result after each step
-    private void verifyStep(int numberStep) throws IOException {
+    private static void verifyStep(int numberStep) throws IOException {
         sActionKeyword = ExcelUtils.getCellData(numberStep, Constanst.VERIFY_STEP, Constanst.TEST_STEP_SHEET);
         params = "";
 
@@ -169,7 +176,7 @@ public class RunTestScript {
     // endregion verify result after each step
 
     //region RESULT
-    private void onResultStep(String status, String message, int rowNumber ){
+    private static void onResultStep(String status, String message, int rowNumber ){
         if(status == Constanst.FAIL) {
             byte[] bytes = KeyWordsToAction.takePhoto();
             ExcelUtils.addPictureInCell(rowNumber, bytes, tcPath);
@@ -214,9 +221,16 @@ public class RunTestScript {
     public static String sRunMode;
     public static String scopePath;
     public static String sTestCaseID;
+    public static int lesson;
+    public static String level;
+    public static int total;
+    public static int startLesson;
+    public static int numberLesson;
+    public static int currentLesson;
 
     //Testcase
     public static String tcResult;
     public static String tcPath;
     public static String runMode;
+    public static String tcName;
 }

@@ -13,21 +13,34 @@ public class Constanst {
     public static final String HEIGHT = "h";
     public static final String X = "x";
     public static final String Y = "y";
+    public static final int DATA_MODE = 0;
+    public static final int GAME_MODE = 1;
 
     //Scope file
-    public static final int TESTCASE_FILE_NAME = 1;
-    public static final int STATUS_GAME = 3;
+    public static final int SCENE_NAME_COLLUM = 1;
+    public static final int TESTCASE_FILE_NAME = 2;
+    public static final int STATUS_GAME = 4;
+    public static final int RUN_MODE_PLAN_COLLUM = 0;
+    public static final int LEVEL_COLLUM = 1;
+    public static final int NUMBER_COLLUM = 2;
+    public static final int BEGIN_INDEX_COLLUM = 3;
+    public static final int END_INDEX_COLLUM = 4;
+    public static final int CURRENT_INDEX_COLLUM = 6;
+    public static final int COURSE_COLLUM = 5;
+    public static final String PLAN_SHEET = "Plan";
     public static final String SCOPE_FILE_PATH = "scope_path";
     public static final String TESTCASE_FILE_PATH = "testcase_path";
     public static final String LOG_FILE_PATH = "\\tool_test_game\\config\\logging.txt";
     public static final String CONFIG_FILE_PATH = "\\tool_test_game\\config\\config.json";
+    public static final String REPORT_FILE_PATH = "\\tool_test_game\\report\\";
 
     //TC sheet in report file
     public static final int TESTCASE_ID = 0;
     public static final int TESTCASE_STATUS = 3;
-    public static final int RUN_MODE = 2;
+    public static final int RUN_MODE_SCOPE = 2;
     public static final int TESTCASE_ERROR = 4;
     //TS sheet
+    public static final int RUN_MODE_TEST_STEP = 2;
     public static final int KEYWORD = 3;
     public static final int PROCEED= 5;
     public static final int DATA_SET = 6;
