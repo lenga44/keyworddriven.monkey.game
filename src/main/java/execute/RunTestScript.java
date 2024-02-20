@@ -30,16 +30,6 @@ public class RunTestScript {
             Log.info("Run mode scope: " +sRunMode);
         }
     }
-    protected static void setUp(){
-        if(numberLesson>1){
-
-        }
-    }
-    protected static void tearDown(){
-        if(numberLesson>1){
-
-        }
-    }
     protected static void execute() throws IOException {
 
         int iTotalFeature = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
