@@ -68,4 +68,11 @@ public class Constanst {
     public static final String DRAG_ACTION = ".drag";
     public static final String MOVE_ACTION = ".Move";
     public static final String MOVE_COORDINATE = ".MoveX";
+
+    //Set up file
+    public static final String TC_SETUP_FILE_NAME = "//Report_SetUp.xlsx";
+    public static final int MARK_IS_TEST_COLLUM = 5;
+
+    //Tear down file
+    public static final String TC_TEARDOWN_FILE_NAME = "//Report_TearDown.xlsx";
 }

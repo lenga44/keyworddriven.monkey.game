@@ -23,12 +23,21 @@ public class RunTestScript {
         tcName = ExcelUtils.getCellData(row,Constanst.TESTCASE_FILE_NAME,Constanst.SCOPE_SHEET);
         ExcelUtils.setCellData("", row, Constanst.RUN_MODE_SCOPE, Constanst.SCOPE_SHEET, scopePath);
     }
-    private static void setRunMode(int row){
+    private static void setUp(int row){
         if(numberLesson>1) {
-            cleanContextInCell(row);
             String tc = tcName.replace("Report_","");
             sRunMode = (tc == ExcelUtils.getCellData(row,Constanst.SCENE_NAME_COLLUM,Constanst.SCOPE_SHEET))?Constanst.YES:Constanst.NO;
             Log.info("Run mode scope: " +sRunMode);
+        }
+    }
+    protected static void setUp(){
+        if(numberLesson>1){
+
+        }
+    }
+    protected static void tearDown(){
+        if(numberLesson>1){
+
         }
     }
     protected static void execute() throws IOException {
@@ -36,7 +45,7 @@ public class RunTestScript {
         int iTotalFeature = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
         for (int i = 0; i<iTotalFeature;i++){
             sRunMode = ExcelUtils.getCellData(i,Constanst.RUN_MODE_TEST_STEP,Constanst.SCOPE_SHEET);
-            setRunMode(i);
+            setUp(i);
             if(sRunMode.equals(Constanst.YES)) {
                 tcPath = FileHelperUtils.getRootFolder() + FileHelperUtils.getPathConfig(Constanst.TESTCASE_FILE_PATH) + tcName+".xlsx";
                 Log.info("TESTCASE_PATH: "+tcPath);
@@ -233,4 +242,7 @@ public class RunTestScript {
     public static String tcPath;
     public static String runMode;
     public static String tcName;
+
+    //SetUp
+    public static int markTest;
 }

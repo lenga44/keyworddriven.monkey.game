@@ -113,6 +113,12 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         Response response = request.get();
         return response.jsonPath().get("Scene");
     }
+    public static String getCurrentScene(){
+        RequestSpecification request = given();
+        request.baseUri(Constanst.STATUS_URL);
+        Response response = request.get();
+        return response.jsonPath().get("Scene");
+    }
     public static String getText(String locator,String component){
         Response response = request(Constanst.SCENE_URL,"//" +locator+"."+component);
         return convert(response,"text").trim();
