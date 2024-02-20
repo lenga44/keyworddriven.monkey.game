@@ -3,7 +3,7 @@ package common.utility;
 public class Constanst {
     public static final String SEPARATOR_PATH = System.getProperty("file.separator");
     public static final String PROJECT_PATH = System.getProperty("user.dir");
-    // System Variables
+    //region System Variables
     public static final String FAIL = "FAIL";
     public static final String PASS = "PASS";
     public static final String SKIP = "SKIP";
@@ -15,8 +15,9 @@ public class Constanst {
     public static final String Y = "y";
     public static final int DATA_MODE = 0;
     public static final int GAME_MODE = 1;
+    //endregion
 
-    //Scope file
+    //region Scope file
     public static final int SCENE_NAME_COLUM = 1;
     public static final int TESTCASE_FILE_NAME = 2;
     public static final int STATUS_GAME = 4;
@@ -37,13 +38,16 @@ public class Constanst {
     public static final String LOG_FILE_PATH = "\\tool_test_game\\config\\logging.txt";
     public static final String CONFIG_FILE_PATH = "\\tool_test_game\\config\\config.json";
     public static final String REPORT_FILE_PATH = "\\tool_test_game\\report\\";
+    //endregion
 
-    //TC sheet in report file
+    //region TC sheet in report file
     public static final int TESTCASE_ID = 0;
     public static final int TESTCASE_STATUS = 3;
     public static final int RUN_MODE_SCOPE = 2;
     public static final int TESTCASE_ERROR = 4;
-    //TS sheet
+    //endregion
+
+    //region TS sheet
     public static final int RUN_MODE_TEST_STEP = 2;
     public static final int KEYWORD = 3;
     public static final int PROCEED= 5;
@@ -51,19 +55,24 @@ public class Constanst {
     public static final int PARAMS = 4;
     public static final int VERIFY_STEP = 7;
     public static final int PARAM_VERIFY_STEP = 8;
-    public static final int EXPECTED = 9;
-    public static final int RESULT = 10;
-    public static final int ERROR = 11;
-    public static final int IMAGE = 12;
+    public static final int EXPECT_KEYWORD = 9;
+    public static final int PARAM_VERIFY_EXPECT = 10;
+    public static final int EXPECTED = 11;
+    public static final int RESULT = 12;
+    public static final int ERROR = 13;
+    public static final int IMAGE = 14;
     public static final String PROCESS_YES = "Y";
     public static final int DESCRIPTION = 2;
     public static final int TEST_STEP = 1;
-    //Excel sheet
+    //endregion
+
+    //region Excel sheet
     public static final String SCOPE_SHEET = "Scope";
     public static final String TESTCASE_SHEET = "TestCase";
     public static final String TEST_STEP_SHEET = "TestSteps";
+    //endregion
 
-    //KeWords class
+    //region KeWords class
     public static final String SIMULATE_URL = "http://localhost:8342/q/simulate";
     public static final String SCENE_URL = "http://localhost:8342/q/scene";
     public static final String POINTER_URL = "http://localhost:8342/q/pointer";
@@ -72,11 +81,14 @@ public class Constanst {
     public static final String DRAG_ACTION = ".drag";
     public static final String MOVE_ACTION = ".Move";
     public static final String MOVE_COORDINATE = ".MoveX";
+    //endregion
 
-    //Set up file
+    //region Set up file
     public static final String TC_SETUP_FILE_NAME = "//Report_SetUp.xlsx";
     public static final int MARK_IS_PASS_COLUM = 5;
+    //endregion
 
-    //Tear down file
+    //region Tear down file
     public static final String TC_TEARDOWN_FILE_NAME = "//Report_TearDown.xlsx";
+    //endregion
 }

@@ -95,6 +95,12 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
             result = result.replace("(UnityEngine.Sprite)","");
         return result.trim();
     }
+    public static String getImageName(String locator,String component){
+        String result =  getPropertyValue(locator,component,"sprite");
+        if(result.contains("(UnityEngine.Sprite)"))
+            result = result.replace("(UnityEngine.Sprite)","");
+        return result.trim();
+    }
     public static String getImageColor(String locator){
         String result =  getPropertyValue(locator,"Image","color");
         return result.trim();
@@ -236,5 +242,8 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         String z2 = convert(response,"position."+coordinate,0,"\\.");
         Log.info("|isRotation|: " + z1+ " --- "+z2);
         return String.valueOf(z1.equals(z2));
+    }
+    public static String getVideoName(String locator){
+        return getPropertyValue(locator,"VideoPlayer","clip","(UnityEngine.VideoClip)");
     }
 }
