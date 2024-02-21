@@ -11,18 +11,13 @@ import java.io.IOException;
 
 public class GenerateReport{
     //region REPORT
-    private static void genFolderReport(String folderName) throws IOException {
-        File f = new File(folderName);
-        if (!f.exists() && f.isDirectory())
-            f.mkdirs();
-    }
-    private static void genTCReportFile(String folder) throws IOException{
+    private static void genTCReportFile(String folder,int row,String subFolder) throws IOException{
         File f = new File(folder);
         File dest =null;
         try {
             if (f.exists()) {
                 File source = new File(RunTestScript.tcPath);
-                String tcCopyPath = levelFolder + FileHelperUtils.getPathConfig("//" + RunTestScript.tcName + RunTestScript.numberLesson + "_" + ".xlsx");
+                String tcCopyPath = subFolder + FileHelperUtils.convertPath("//" + RunTestScript.tcName +"_"+(RunTestScript.endLesson-1)+"_"+ row+1+".xlsx");
                 Log.info("Path report TC current: " + tcCopyPath);
                 dest = new File(tcCopyPath);
                 ExcelUtils.copyFile(source, dest);
@@ -32,20 +27,12 @@ public class GenerateReport{
             Log.error("Copy file status: " + dest.exists());
         }
     }
-    public static void genReport(int row)throws IOException{
+    public static void genReport(int row,String folderName)throws IOException{
         if(RunTestScript.numberLesson>1) {
-            ExcelUtils.setCellData(String.valueOf(RunTestScript.numberLesson), row, Constanst.END_INDEX_COLUM, Constanst.PLAN_SHEET, RunTestScript.scopePath);
-            courseFolder = FileHelperUtils.getRootFolder() + FileHelperUtils.getPathConfig(Constanst.REPORT_FILE_PATH + ExcelUtils.getCellData(row, Constanst.COURSE_COLUM, Constanst.PLAN_SHEET));
-            levelFolder = courseFolder + FileHelperUtils.getPathConfig("//" + RunTestScript.level);
-            Log.info("Folder path report course: " +courseFolder);
-            genFolderReport(courseFolder);
-            Log.info("Folder path report level: " +levelFolder);
-            genFolderReport(levelFolder);
-            genTCReportFile(levelFolder);
+            FileHelperUtils.genFolderReport(FileHelperUtils.convertPath(folderName));
+            genTCReportFile(FileHelperUtils.convertPath(folderName),row,folderName);
             ExcelUtils.setCellData(Constanst.YES, row, Constanst.RUN_MODE_SCOPE, Constanst.SCOPE_SHEET, RunTestScript.scopePath);
         }
     }
-    public static String courseFolder;
-    public static String levelFolder;
     //endregion
 }

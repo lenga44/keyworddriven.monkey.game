@@ -153,4 +153,9 @@ public class ExcelUtils {
             os.close();
         }
     }
+    public static void cleanContextInRange(int columnNumber, String sheetName,String path){
+        for(int i=1;i<getRowCount(sheetName);i++){
+            setCellData("",i,columnNumber,sheetName,path);
+        }
+    }
 }

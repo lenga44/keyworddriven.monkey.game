@@ -13,7 +13,7 @@ public class Constanst {
     public static final String HEIGHT = "h";
     public static final String X = "x";
     public static final String Y = "y";
-    public static final int DATA_MODE = 0;
+    public static final String DATA_MODE = "Data";
     public static final int GAME_MODE = 1;
     //endregion
 
@@ -43,7 +43,7 @@ public class Constanst {
     //region TC sheet in report file
     public static final int TESTCASE_ID = 0;
     public static final int TESTCASE_STATUS = 3;
-    public static final int RUN_MODE_SCOPE = 2;
+    public static final int RUN_MODE_SCOPE = 3;
     public static final int TESTCASE_ERROR = 4;
     //endregion
 

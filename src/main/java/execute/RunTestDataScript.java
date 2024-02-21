@@ -1,46 +1,54 @@
 package execute;
 
+import common.keywords.KeyWordsToAction;
+import common.keywords.KeyWordsToActionToVerify;
 import common.utility.Constanst;
 import common.utility.ExcelUtils;
-import report.GenerateReport;
+import common.utility.Log;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 
-public class RunTestDataScript extends RunTestScript {
-     public static void main(String[] args) throws IOException {
-         scopePath = openScopeFile(Constanst.SCOPE_FILE_PATH);
-         getNumberInLevel();
-         startLesson = Integer.valueOf(ExcelUtils.getCellData(1,Constanst.BEGIN_INDEX_COLUM,Constanst.PLAN_SHEET));
-         for (int i =0;i<numberLesson;i++) {
-             currentLesson = startLesson + i;
-             ExcelUtils.setCellData(String.valueOf(currentLesson),1,Constanst.CURRENT_INDEX_COLUM,Constanst.PLAN_SHEET,scopePath);
-             execute();
-             GenerateReport.genReport(i);
-         }
-    }
+public class RunTestDataScript {
+    //region Class key
+    public static KeyWordsToAction keyWord;
+    public static Method method[];
+    //endregion
 
     //region RUN_CONFIG
 
     //region PLAN_SHEET
-    private static int getMode(){
-        return Integer.valueOf(ExcelUtils.getCellData(1,Constanst.RUN_MODE_PLAN_COLUM,Constanst.PLAN_SHEET));
+    public static String getMode(int row){
+        String mode = ExcelUtils.getCellData(row,Constanst.RUN_MODE_PLAN_COLUM,Constanst.PLAN_SHEET);
+        Log.info("MODE: " +mode);
+        return mode;
     }
-    private static void getLeveL(){
-         level = ExcelUtils.getCellData(1,Constanst.LEVEL_COLUM,Constanst.PLAN_SHEET);
+    public static void getLeveL(int row){
+         level = ExcelUtils.getCellData(row,Constanst.LEVEL_COLUM,Constanst.PLAN_SHEET);
+        Log.info("LEVEL: " +level);
     }
-    private static void getNumberInLevel(){
-        total =(getMode()==Constanst.DATA_MODE)?Integer.valueOf(ExcelUtils.getCellData(1,Constanst.NUMBER_COLUM,Constanst.PLAN_SHEET)):1;
-        numberLesson = total -startLesson +1;
-        if(numberLesson>1){
-            getLeveL();
-            getStart();
-        }
+    public static void getNumberInLevel(int row){
+        getLeveL(row);
+        getStart(row);
+        endLesson =(getMode(row).equals(Constanst.DATA_MODE))?Integer.valueOf(ExcelUtils.getCellData(row,Constanst.END_INDEX_COLUM,Constanst.PLAN_SHEET)):1;
+        Log.info("END LESSON: " + endLesson);
+        numberLesson = endLesson -lesson;
+        Log.info("NUMBER: " +numberLesson);
     }
-    private static void getStart(){
-        lesson = Integer.valueOf(ExcelUtils.getCellData(1,Constanst.BEGIN_INDEX_COLUM,Constanst.PLAN_SHEET));
+    public static void getStart(int row){
+        lesson = Integer.valueOf(ExcelUtils.getCellData(row,Constanst.BEGIN_INDEX_COLUM,Constanst.PLAN_SHEET));
+        Log.info("START LESSON: " +lesson);
     }
     //endregion
 
 
+    //endregion
+
+    //region KEY
+    public static int lesson;
+    public static String level;
+    public static int endLesson;
+    public static int startLesson;
+    public static int numberLesson;
     //endregion
 }

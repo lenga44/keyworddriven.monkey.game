@@ -3,6 +3,7 @@ package common.utility;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -22,5 +23,13 @@ public class FileHelperUtils {
             Log.error(e.getMessage());
         }
         return null;
+    }
+    public static String convertPath(String path){
+        return path.replace("\"","");
+    }
+    public static void genFolderReport(String folderName) throws IOException {
+        File f = new File(folderName);
+        if (!f.exists())
+            f.mkdirs();
     }
 }

@@ -63,6 +63,13 @@ public class KeyWordsToAction {
             exception(e);
         }
     }
+    public static void sleep()  {
+        try {
+            Thread.sleep((long) (2 * 1000));
+        }catch (InterruptedException e){
+            exception(e);
+        }
+    }
     public static void click(String locator, String property){
         waitForObject(locator);
         request(Constanst.SCENE_URL,"//"+locator+"."+property);
