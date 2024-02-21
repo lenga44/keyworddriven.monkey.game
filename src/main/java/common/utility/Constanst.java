@@ -30,10 +30,11 @@ public class Constanst {
     public static final int PARAMS = 4;
     public static final int VERIFY_STEP = 7;
     public static final int PARAM_VERIFY_STEP = 8;
-    public static final int EXPECTED = 9;
-    public static final int RESULT = 10;
-    public static final int ERROR = 11;
-    public static final int IMAGE = 12;
+    public static final int KEY_DATA_EXPECTED = 9;
+    public static final int EXPECTED = 10;
+    public static final int RESULT = 11;
+    public static final int ERROR = 12;
+    public static final int IMAGE = 13;
     public static final String PROCESS_YES = "Y";
     public static final int DESCRIPTION = 2;
     public static final int TEST_STEP = 1;
