@@ -3,7 +3,7 @@
 2. Get activity name: adb shell "dumpsys activity activities | grep mResumedActivity"
 3. adb forward tcp:8342 tcp:8342
 4. Build java file "mvn clean package -DskipTests"
-5. run test "java -jar target/keyworddriven.monkey.game-1.0-SNAPSHOT-fat-tests.jar"
+5. run test "java -jar keyworddriven.monkey.game-1.0-SNAPSHOT-fat-tests.jar"
 4. Hướng dẫn sử dụng:
  + B1: Kiểm tra thư mực chạy test bao gồm: 1 file java để chạy và 1 folder "config" (log, testcase)
  + B2: Kiểm tra folder testcase sẽ bao gồm 1 file excel là scope: file scope sẽ lưu tên các file testcase, và những file testcase còn lại

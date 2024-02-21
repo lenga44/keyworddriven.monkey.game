@@ -8,9 +8,7 @@ import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
 import org.apache.poi.xssf.usermodel.XSSFDrawing;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 
 public class ExcelUtils {
     private static Sheet ExcelSheet;
@@ -138,5 +136,26 @@ public class ExcelUtils {
     private static void onTestCaseFail(String message){
         RunTestScript.result = Constanst.SKIP;
         RunTestScript.error = message;
+    }
+    public static void copyFile(File source, File dest)throws IOException{
+        InputStream is = null;
+        OutputStream os = null;
+        try {
+            is = new FileInputStream(source);
+            os = new FileOutputStream(dest);
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = is.read(buffer)) > 0) {
+                os.write(buffer, 0, length);
+            }
+        } finally {
+            is.close();
+            os.close();
+        }
+    }
+    public static void cleanContextInRange(int columnNumber, String sheetName,String path){
+        for(int i=1;i<getRowCount(sheetName);i++){
+            setCellData("",i,columnNumber,sheetName,path);
+        }
     }
 }
