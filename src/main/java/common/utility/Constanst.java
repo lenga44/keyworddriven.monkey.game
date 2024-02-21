@@ -57,10 +57,11 @@ public class Constanst {
     public static final int PARAM_VERIFY_STEP = 8;
     public static final int EXPECT_KEYWORD = 9;
     public static final int PARAM_VERIFY_EXPECT = 10;
-    public static final int EXPECTED = 11;
-    public static final int RESULT = 12;
-    public static final int ERROR = 13;
-    public static final int IMAGE = 14;
+    public static final int KEY_DATA_EXPECT = 11;
+    public static final int EXPECTED = 12;
+    public static final int RESULT = 13;
+    public static final int ERROR = 14;
+    public static final int IMAGE = 15;
     public static final String PROCESS_YES = "Y";
     public static final int DESCRIPTION = 2;
     public static final int TEST_STEP = 1;

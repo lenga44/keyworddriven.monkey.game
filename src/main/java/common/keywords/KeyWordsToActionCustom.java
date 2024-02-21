@@ -10,4 +10,7 @@ public class KeyWordsToActionCustom extends KeyWordsToActionToVerify{
             swipe(String.valueOf(600), String.valueOf(200), String.valueOf(450));
         }
     }
+    public static void getIndexStoryThenSearch(String locator){
+
+    }
 }

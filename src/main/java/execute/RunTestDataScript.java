@@ -10,10 +10,6 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 
 public class RunTestDataScript {
-    //region Class key
-    public static KeyWordsToAction keyWord;
-    public static Method method[];
-    //endregion
 
     //region RUN_CONFIG
 
@@ -45,6 +41,8 @@ public class RunTestDataScript {
     //endregion
 
     //region KEY
+    public static KeyWordsToAction keyWord;
+    public static Method method[];
     public static int lesson;
     public static String level;
     public static int endLesson;

@@ -16,22 +16,26 @@ import java.util.ArrayList;
 public class RunTestScript extends RunTestDataScript{
 
     public static void main(String[] args) throws IOException {
-        keyWord = new KeyWordsToActionToVerify();
+        keyWord = new KeyWordsToActionCustom();
         method = keyWord.getClass().getMethods();
 
         Log.resetFileLog();
         scopePath = openScopeFile(Constanst.SCOPE_FILE_PATH);
         int iTotalPlanRow = ExcelUtils.getRowCount(Constanst.PLAN_SHEET);
+
         for (int i =1;i<iTotalPlanRow;i++) {
+
             getNumberInLevel(i);
             currentLesson = lesson + i;
             ExcelUtils.setCellData(String.valueOf(currentLesson), i, Constanst.CURRENT_INDEX_COLUM, Constanst.PLAN_SHEET, scopePath);
             getLevelFolder(i);
+
             for(int row =0;row<numberLesson;row++) {
                 execute();
                 GenerateReport.genReport(row,levelFolder);
                 resetStatusTCFile();
             }
+
         }
     }
     //region SCOPE
@@ -47,10 +51,13 @@ public class RunTestScript extends RunTestDataScript{
     public static void execute() throws IOException {
         int iTotalFeature = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
         Log.info("Total scope : "+iTotalFeature);
+
         for (int i = 1; i<iTotalFeature;i++){
+
             markTest = "";
             sRunMode = ExcelUtils.getCellData(i,Constanst.RUN_MODE_SCOPE,Constanst.SCOPE_SHEET);
             Log.info("Mode in scope: "+sRunMode);
+
             if(sRunMode.equals(Constanst.YES)) {
 
                 tcName = ExcelUtils.getCellData(i, Constanst.TESTCASE_FILE_NAME, Constanst.SCOPE_SHEET);
