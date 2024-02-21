@@ -17,7 +17,7 @@ public class GenerateReport{
         try {
             if (f.exists()) {
                 File source = new File(RunTestScript.tcPath);
-                String tcCopyPath = subFolder + FileHelperUtils.convertPath("//" + RunTestScript.tcName +"_"+(RunTestScript.endLesson-1)+"_"+ row+1+".xlsx");
+                String tcCopyPath = subFolder + FileHelperUtils.convertPath("//" + RunTestScript.tcName +"_"+(RunTestScript.endLesson-1)+"_"+ row+".xlsx");
                 Log.info("Path report TC current: " + tcCopyPath);
                 dest = new File(tcCopyPath);
                 ExcelUtils.copyFile(source, dest);

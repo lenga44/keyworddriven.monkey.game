@@ -86,9 +86,10 @@ public class KeyWordsToAction {
         request(Constanst.POINTER_URL,".DownToUp("+absolutePath+","+index+")");
     }
     public static void press(String locator){
-        waitForObject(locator);
+        //waitForObject(locator);
         request(Constanst.POINTER_URL,".Press("+getAbsolutePath(locator,"0")+")");
     }
+
     public static void press(String locator,String index){
         waitForObject(locator);
         String absolutePath = getAbsolutePath(locator,"0");
