@@ -182,9 +182,7 @@ public class RunTestScript extends RunTestDataScript{
 
     private static void rangeStepByTestCase(){
         iTestStep = ExcelUtils.getRowContains(sTestCaseID,Constanst.TESTCASE_ID,Constanst.TEST_STEP_SHEET);
-        //Log.info("iTestStep " +iTestStep);
         lastTestStep = ExcelUtils.getTestStepCount(Constanst.TEST_STEP_SHEET,sTestCaseID,iTestStep);
-        //Log.info("lastTestStep " +lastTestStep);
     }
 
     private static void execute_steps() throws IOException {
@@ -205,6 +203,7 @@ public class RunTestScript extends RunTestDataScript{
                         execute_action(iTestStep, dataSet);
                     }
                     verifyStep(iTestStep);
+
                 }
                 if(result == "" && result==null){
                     result = Constanst.SKIP;
