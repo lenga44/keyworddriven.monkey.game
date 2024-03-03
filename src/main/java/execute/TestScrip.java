@@ -1,6 +1,7 @@
 package execute;
 
 import common.keywords.KeyWordsToAction;
+import common.keywords.KeyWordsToActionCustom;
 import common.utility.Constanst;
 import common.utility.ExcelUtils;
 import common.utility.FileHelperUtils;
@@ -11,7 +12,10 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 public class TestScrip {
-
+    public TestScrip(KeyWordsToActionCustom keyWord,Method method[]){
+        this.keyWord = keyWord;
+        this.method = method;
+    }
     //region SCOPE
     public static void execute(String scopePath) throws IOException {
         int iTotalFeature = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
@@ -70,8 +74,8 @@ public class TestScrip {
     private static void execute_testcases() throws IOException {
         int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
         Log.info("Total TC: " + iTotalTestCase);
-        for(int i =0; i<iTotalTestCase;i++) {
-
+        for(int i =1; i<iTotalTestCase;i++) {
+            ExcelUtils.setCellData("",i,Constanst.TESTCASE_STATUS,Constanst.TESTCASE_SHEET,tcPath);
             String sTestCaseID = ExcelUtils.getCellData(i, Constanst.TESTCASE_ID, Constanst.TESTCASE_SHEET);
             Log.info("TCID: " + sTestCaseID);
             String runMode = ExcelUtils.getCellData(i,Constanst.RUN_MODE_TEST_STEP,Constanst.TESTCASE_SHEET);
@@ -242,9 +246,9 @@ public class TestScrip {
     public static String params;
     public static String description;
     public static Object[]  param;
-    public static Method method[];
-    public static KeyWordsToAction keyWord;
-    public static String expected;
+    private static Method method[];
+    protected static KeyWordsToAction keyWord;
+    protected static String expected;
     //endregion
 
     //endregion
