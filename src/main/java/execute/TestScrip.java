@@ -2,6 +2,7 @@ package execute;
 
 import common.keywords.KeyWordsToAction;
 import common.keywords.KeyWordsToActionCustom;
+import common.keywords.KeyWordsToActionToVerify;
 import common.utility.Constanst;
 import common.utility.ExcelUtils;
 import common.utility.FileHelperUtils;
@@ -17,37 +18,51 @@ public class TestScrip {
         this.method = method;
     }
     //region SCOPE
-    public static void execute(String scopePath,int iTestSuite, int iTotalSuite) throws IOException {
+    public static void execute(String scopePath, int iTotalSuite) throws IOException {
+        int iFirstSuite = onceTimeScrip(1);
+        int iLastSuite = onceTimeScrip(iTotalSuite-1);
+
+        if(iFirstSuite>0 && iLastSuite==0){
+            Log.info("Run once time set up");
+            execute_suites(scopePath,1,2);
+            execute_suites(scopePath,2,iTotalSuite);
+        }
+        if(iLastSuite>0 && iFirstSuite==0){
+            Log.info("Run once time set up and tear down");
+            execute_suites(scopePath,1,iTotalSuite-1);
+            execute_suites(scopePath,iTotalSuite-1,iTotalSuite);
+        }
+        if (iFirstSuite>0 && iLastSuite>0){
+            Log.info("Run once time set up and tear down");
+            execute_suites(scopePath,1,2);
+            execute_suites(scopePath,2,iTotalSuite-1);
+            execute_suites(scopePath,iTotalSuite-1,iTotalSuite);
+        }
+    }
+    public static void execute_suites(String scopePath,int iTestSuite, int iTotalSuite) throws IOException {
         for (;iTestSuite<iTotalSuite;iTestSuite++){
 
+            ExcelUtils.setCellData("",iTestSuite,Constanst.STATUS_SUITE,Constanst.SCOPE_SHEET,scopePath);
             String sRunMode = ExcelUtils.getCellData(iTestSuite,Constanst.RUN_MODE_SCOPE,Constanst.SCOPE_SHEET);
             Log.info("Mode in scope: "+sRunMode);
 
             if(sRunMode.equals(Constanst.YES)) {
 
-                String tcName = ExcelUtils.getCellData(iTestSuite, Constanst.TESTSUITE_FILE_NAME, Constanst.SCOPE_SHEET);
+                String tcName = ExcelUtils.getCellData(iTestSuite, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET);
+                if(tcName.equals(Constanst.TEST_CASE_GAME_NAME_IN_FLOW))
+                {
+                    KeyWordsToAction.sleep("1");
+                    String game = KeyWordsToActionToVerify.getCurrentScene();
+                    tcName = "Report_"+game;
+                    ExcelUtils.setCellData(tcName,iTestSuite,Constanst.TEST_SUITE_FILE_NAME,Constanst.SCOPE_SHEET,scopePath);
+                }
                 Log.info("TCS name: "+tcName);
-                getTCPath(tcName);
+                tcPath = openScopeFile(Constanst.TESTCASE_FILE_PATH, tcName + ".xlsx");
 
                 execute_testcases();
-                //cleanContextInCell();
-
                 ExcelUtils.setExcelFile(scopePath);
-                ExcelUtils.setCellData(tcResult, iTestSuite, Constanst.STATUS_GAME, Constanst.SCOPE_SHEET, scopePath);
+                ExcelUtils.setCellData(tcResult, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
             }
-        }
-    }
-    public static void getTCPath(String tcName)throws IOException{
-        switch (tcName){
-            case  "Report_OnceTimeSetUp":
-                tcPath = openScopeFile( Constanst.ONCE_TIME_SETUP_FILE_PATH);
-                break;
-            case  "Report_OnceTimeTearDown":
-                tcPath = openScopeFile( Constanst.ONCE_TIME_TEARDOWN_SETUP_FILE_PATH);
-                break;
-            default:
-                tcPath = openScopeFile(Constanst.TESTCASE_FILE_PATH, tcName + ".xlsx");
-                break;
         }
     }
     public static String openScopeFile(String fileName) throws IOException{
@@ -60,7 +75,7 @@ public class TestScrip {
     public static String openScopeFile(String filePath,String fileName) throws IOException{
         Log.info("filePath "+filePath);
         Log.info("fileName "+fileName);
-        String path = FileHelperUtils.getRootFolder() + FileHelperUtils.getPathConfig(filePath)+fileName;
+        String path = /*FileHelperUtils.getRootFolder() +*/ FileHelperUtils.getPathConfig(filePath)+fileName;
         Log.info("==PATH:== "+path);
         ExcelUtils.setExcelFile(path);
         return path;
@@ -69,10 +84,9 @@ public class TestScrip {
 
     //region TESTCASE
     public static int onceTimeScrip(int row) throws IOException {
-        String testSuiteName = ExcelUtils.getCellData(row,Constanst.TESTSUITE_FILE_NAME,Constanst.SCOPE_SHEET);
+        String testSuiteName = ExcelUtils.getCellData(row,Constanst.TEST_SUITE_FILE_NAME,Constanst.SCOPE_SHEET);
         if(testSuiteName.contains(Constanst.ONCE_TIME_KEY)){
-            //execute(scopePath,row,iTotalSuite);
-            return 1;
+            return row;
         }
         return 0;
     }
@@ -80,9 +94,11 @@ public class TestScrip {
         int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
         Log.info("Total TC: " + iTotalTestCase);
         for(int i =1; i<iTotalTestCase;i++) {
+
             ExcelUtils.setCellData("",i,Constanst.TESTCASE_STATUS,Constanst.TESTCASE_SHEET,tcPath);
             String sTestCaseID = ExcelUtils.getCellData(i, Constanst.TESTCASE_ID, Constanst.TESTCASE_SHEET);
             Log.info("TCID: " + sTestCaseID);
+
             String runMode = ExcelUtils.getCellData(i,Constanst.RUN_MODE_TEST_STEP,Constanst.TESTCASE_SHEET);
             Log.info("Run mode in TC: " + runMode);
 
@@ -221,20 +237,6 @@ public class TestScrip {
     // endregion verify result after each step
 
     //endregion
-
-    /*public static void getTCPath()throws IOException{
-        switch (tcName){
-            case  "Report_OnceTimeSetUp":
-                tcPath = openScopeFile( Constanst.ONCE_TIME_SETUP_FILE_PATH);
-                break;
-            case  "Report_OnceTimeTearDown":
-                tcPath = openScopeFile( Constanst.ONCE_TIME_TEARDOWN_SETUP_FILE_PATH);
-                break;
-            default:
-                tcPath = openScopeFile( Constanst.TESTCASE_FILE_PATH, tcName + ".xlsx");
-                break;
-        }
-    }*/
 
     //region KEY
 

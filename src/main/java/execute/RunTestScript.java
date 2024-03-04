@@ -58,7 +58,7 @@ public class RunTestScript extends RunTestDataScript{
 
             if(sRunMode.equals(Constanst.YES)) {
 
-                tcName = ExcelUtils.getCellData(i, Constanst.TESTSUITE_FILE_NAME, Constanst.SCOPE_SHEET);
+                tcName = ExcelUtils.getCellData(i, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET);
                 Log.info("TCS name: "+tcName);
                 getTCPath();
 
@@ -66,7 +66,7 @@ public class RunTestScript extends RunTestDataScript{
                 cleanContextInCell();
 
                 ExcelUtils.setExcelFile(scopePath);
-                ExcelUtils.setCellData(tcResult, i, Constanst.STATUS_GAME, Constanst.SCOPE_SHEET, scopePath);
+                ExcelUtils.setCellData(tcResult, i, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
             }
         }
     }

@@ -17,18 +17,18 @@ public class Run {
 
         Log.resetFileLog();
 
-        scopePath = FileHelperUtils.getRootFolder() + FileHelperUtils.getPathConfig(Constanst.SCOPE_FILE_PATH);
+        scopePath = /*FileHelperUtils.getRootFolder() + */FileHelperUtils.getPathConfig(Constanst.SCOPE_FILE_PATH);
         Log.info("SCOPE_PATH: "+scopePath);
 
         ExcelUtils.setExcelFile(scopePath);
-        getFlowScrip();
+        returnFlowScrip();
 
         int iTotalSuite = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
         Log.info("Total scope : "+iTotalSuite);
 
         runTestScriptModule = new RunTestScriptModule(keyWord,method);
-        /*if(isModuleFlow==true)
-            runModule(iTotalFeature);*/
+        if(isModuleFlow==true)
+            runModule(iTotalSuite);
 
     }
 
@@ -36,7 +36,7 @@ public class Run {
     private static void runModule(int iTotalSuite) throws IOException {
         runTestScriptModule.run(scopePath,iTotalSuite);
     }
-    private static void getFlowScrip(){
+    private static void returnFlowScrip(){
         String flow = ExcelUtils.getCellData(1,Constanst.FLOW_COLLUM,Constanst.PLAN_SHEET);
         if(flow.equals(Constanst.MODULE_FLOW))
             isModuleFlow = true;

@@ -1,7 +1,7 @@
 package common.utility;
 
 public class Constanst {
-    public static final String SEPARATOR_PATH = System.getProperty("file.separator");
+
     public static final String PROJECT_PATH = System.getProperty("user.dir");
     //region System Variables
     public static final String FAIL = "FAIL";
@@ -18,8 +18,10 @@ public class Constanst {
     //endregion
 
     //region Scope file
-    public static final int TESTSUITE_FILE_NAME = 1;
-    public static final int STATUS_GAME = 4;
+    public static final int TEST_SUITE_FILE_NAME = 1;
+    public static final int STATUS_SUITE = 3;
+    public static final int RUN_MODE_SCOPE = 2;
+    public static final String TEST_CASE_GAME_NAME_IN_FLOW = "Report_GameName";
     public static final int RUN_MODE_PLAN_COLUM = 0;
     public static final int LEVEL_COLUM = 1;
     public static final int NUMBER_COLUM = 2;
@@ -50,7 +52,6 @@ public class Constanst {
     //region TC sheet in report file
     public static final int TESTCASE_ID = 0;
     public static final int TESTCASE_STATUS = 3;
-    public static final int RUN_MODE_SCOPE = 3;
     public static final int TESTCASE_ERROR = 4;
     //endregion
 

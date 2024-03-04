@@ -11,8 +11,6 @@ public class RunTestScriptModule extends TestScrip{
         super(keyWord, method);
     }
     public static void run(String scopePath,int iTotalSuite) throws IOException {
-        //onceTimeScrip(1);
-        execute(scopePath,2,iTotalSuite);
-        //onceTimeScrip(iTotalSuite);
+       execute(scopePath,iTotalSuite);
     }
 }
