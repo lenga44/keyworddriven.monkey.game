@@ -17,18 +17,15 @@ public class TestScrip {
         this.method = method;
     }
     //region SCOPE
-    public static void execute(String scopePath) throws IOException {
-        int iTotalFeature = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
-        Log.info("Total scope : "+iTotalFeature);
+    public static void execute(String scopePath,int iTestSuite, int iTotalSuite) throws IOException {
+        for (;iTestSuite<iTotalSuite;iTestSuite++){
 
-        for (int i = 1; i<iTotalFeature;i++){
-
-            String sRunMode = ExcelUtils.getCellData(i,Constanst.RUN_MODE_SCOPE,Constanst.SCOPE_SHEET);
+            String sRunMode = ExcelUtils.getCellData(iTestSuite,Constanst.RUN_MODE_SCOPE,Constanst.SCOPE_SHEET);
             Log.info("Mode in scope: "+sRunMode);
 
             if(sRunMode.equals(Constanst.YES)) {
 
-                String tcName = ExcelUtils.getCellData(i, Constanst.TESTCASE_FILE_NAME, Constanst.SCOPE_SHEET);
+                String tcName = ExcelUtils.getCellData(iTestSuite, Constanst.TESTSUITE_FILE_NAME, Constanst.SCOPE_SHEET);
                 Log.info("TCS name: "+tcName);
                 getTCPath(tcName);
 
@@ -36,7 +33,7 @@ public class TestScrip {
                 //cleanContextInCell();
 
                 ExcelUtils.setExcelFile(scopePath);
-                ExcelUtils.setCellData(tcResult, i, Constanst.STATUS_GAME, Constanst.SCOPE_SHEET, scopePath);
+                ExcelUtils.setCellData(tcResult, iTestSuite, Constanst.STATUS_GAME, Constanst.SCOPE_SHEET, scopePath);
             }
         }
     }
@@ -71,6 +68,14 @@ public class TestScrip {
     //endregion
 
     //region TESTCASE
+    public static int onceTimeScrip(int row) throws IOException {
+        String testSuiteName = ExcelUtils.getCellData(row,Constanst.TESTSUITE_FILE_NAME,Constanst.SCOPE_SHEET);
+        if(testSuiteName.contains(Constanst.ONCE_TIME_KEY)){
+            //execute(scopePath,row,iTotalSuite);
+            return 1;
+        }
+        return 0;
+    }
     private static void execute_testcases() throws IOException {
         int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
         Log.info("Total TC: " + iTotalTestCase);
@@ -236,6 +241,8 @@ public class TestScrip {
     //region Testcase key
     public static String tcResult;
     public static String tcPath;
+    public static boolean isOnceTimeSetUp;
+    public static boolean isIsOnceTimeTearDown;
     //endregion
 
     //region Test Step key

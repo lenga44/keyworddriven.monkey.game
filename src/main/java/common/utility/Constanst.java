@@ -18,8 +18,7 @@ public class Constanst {
     //endregion
 
     //region Scope file
-    public static final int SCENE_NAME_COLUM = 1;
-    public static final int TESTCASE_FILE_NAME = 2;
+    public static final int TESTSUITE_FILE_NAME = 1;
     public static final int STATUS_GAME = 4;
     public static final int RUN_MODE_PLAN_COLUM = 0;
     public static final int LEVEL_COLUM = 1;
@@ -38,6 +37,14 @@ public class Constanst {
     public static final String LOG_FILE_PATH = "\\tool_test_game\\config\\logging.txt";
     public static final String CONFIG_FILE_PATH = "\\tool_test_game\\config\\config.json";
     public static final String REPORT_FILE_PATH = "\\tool_test_game\\report\\";
+    public static final String ONCE_TIME_KEY = "OnceTime";
+
+    //region PLAN
+    public static final String MODULE_FLOW = "Module";
+    public static final String DATA_FLOW = "Data";
+    public static final int FLOW_COLLUM = 0;
+    //endregion
+
     //endregion
 
     //region TC sheet in report file

@@ -1,6 +1,5 @@
 package execute;
 
-import common.keywords.KeyWordsToAction;
 import common.keywords.KeyWordsToActionCustom;
 import common.utility.Constanst;
 import common.utility.ExcelUtils;
@@ -11,9 +10,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 
 public class Run {
-    public static String scopePath;
-    public static KeyWordsToActionCustom keyWord;
-    public static Method method[];
+
     public static void main(String[] args) throws IOException {
         keyWord = new KeyWordsToActionCustom();
         method = keyWord.getClass().getMethods();
@@ -24,7 +21,35 @@ public class Run {
         Log.info("SCOPE_PATH: "+scopePath);
 
         ExcelUtils.setExcelFile(scopePath);
-        RunTestScriptModul runTestScriptModul = new RunTestScriptModul(keyWord,method);
-        runTestScriptModul.execute(scopePath);
+        getFlowScrip();
+
+        int iTotalSuite = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
+        Log.info("Total scope : "+iTotalSuite);
+
+        runTestScriptModule = new RunTestScriptModule(keyWord,method);
+        /*if(isModuleFlow==true)
+            runModule(iTotalFeature);*/
+
     }
+
+
+    private static void runModule(int iTotalSuite) throws IOException {
+        runTestScriptModule.run(scopePath,iTotalSuite);
+    }
+    private static void getFlowScrip(){
+        String flow = ExcelUtils.getCellData(1,Constanst.FLOW_COLLUM,Constanst.PLAN_SHEET);
+        if(flow.equals(Constanst.MODULE_FLOW))
+            isModuleFlow = true;
+        else if(flow.equals(Constanst.DATA_FLOW))
+            isDataFlow = true;
+    }
+    //region KEY
+
+    private static String scopePath;
+    private static KeyWordsToActionCustom keyWord;
+    private static Method method[];
+    private static RunTestScriptModule runTestScriptModule;
+    public static boolean isModuleFlow;
+    public static boolean isDataFlow;
+    //endregion
 }

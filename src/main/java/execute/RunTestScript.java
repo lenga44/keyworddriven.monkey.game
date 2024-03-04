@@ -2,7 +2,6 @@ package execute;
 
 import common.keywords.KeyWordsToActionCustom;
 import common.keywords.KeyWordsToAction;
-import common.keywords.KeyWordsToActionToVerify;
 import common.utility.Constanst;
 import common.utility.ExcelUtils;
 import common.utility.FileHelperUtils;
@@ -10,7 +9,6 @@ import common.utility.Log;
 import report.GenerateReport;
 
 import java.io.*;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 public class RunTestScript extends RunTestDataScript{
@@ -60,7 +58,7 @@ public class RunTestScript extends RunTestDataScript{
 
             if(sRunMode.equals(Constanst.YES)) {
 
-                tcName = ExcelUtils.getCellData(i, Constanst.TESTCASE_FILE_NAME, Constanst.SCOPE_SHEET);
+                tcName = ExcelUtils.getCellData(i, Constanst.TESTSUITE_FILE_NAME, Constanst.SCOPE_SHEET);
                 Log.info("TCS name: "+tcName);
                 getTCPath();
 
