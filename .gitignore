@@ -20,3 +20,4 @@ buildNumber.properties
 *.log
 src/main/screenshots/abc.png
 *.png
+src/main/tool_test_game/AirtestIDE-win-1.2.17.zip
