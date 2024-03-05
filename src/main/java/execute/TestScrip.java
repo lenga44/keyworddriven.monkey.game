@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import static common.keywords.KeyWordsToAction.exception;
+
 public class TestScrip {
     public TestScrip(KeyWordsToActionCustom keyWord,Method method[]){
         this.keyWord = keyWord;
@@ -38,17 +40,21 @@ public class TestScrip {
             execute_suites(scopePath,2,iTotalSuite-1);
             execute_suites(scopePath,iTotalSuite-1,iTotalSuite);
         }
+        if(iFirstSuite == 0 && iLastSuite ==0){
+            Log.info("Run only testcase");
+            execute_suites(scopePath,1,iTotalSuite);
+        }
     }
     public static void execute_suites(String scopePath,int iTestSuite, int iTotalSuite) throws IOException {
         for (;iTestSuite<iTotalSuite;iTestSuite++){
 
             ExcelUtils.setCellData("",iTestSuite,Constanst.STATUS_SUITE,Constanst.SCOPE_SHEET,scopePath);
-            String sRunMode = ExcelUtils.getCellData(iTestSuite,Constanst.RUN_MODE_SCOPE,Constanst.SCOPE_SHEET);
+            String sRunMode = ExcelUtils.getStringValueInCell(iTestSuite,Constanst.RUN_MODE_SCOPE,Constanst.SCOPE_SHEET);
             Log.info("Mode in scope: "+sRunMode);
 
             if(sRunMode.equals(Constanst.YES)) {
 
-                String tcName = ExcelUtils.getCellData(iTestSuite, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET);
+                String tcName = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET);
                 if(tcName.equals(Constanst.TEST_CASE_GAME_NAME_IN_FLOW))
                 {
                     KeyWordsToAction.sleep("1");
@@ -67,7 +73,7 @@ public class TestScrip {
     }
     public static String openScopeFile(String fileName) throws IOException{
         Log.info("fileName "+fileName);
-        String path = FileHelperUtils.getRootFolder() + FileHelperUtils.getPathConfig(fileName);
+        String path = /*FileHelperUtils.getRootFolder() +*/ FileHelperUtils.getPathConfig(fileName);
         Log.info("==PATH:== "+path);
         ExcelUtils.setExcelFile(path);
         return path;
@@ -75,7 +81,7 @@ public class TestScrip {
     public static String openScopeFile(String filePath,String fileName) throws IOException{
         Log.info("filePath "+filePath);
         Log.info("fileName "+fileName);
-        String path = /*FileHelperUtils.getRootFolder() +*/ FileHelperUtils.getPathConfig(filePath)+fileName;
+        String path = FileHelperUtils.getRootFolder() + FileHelperUtils.getPathConfig(filePath)+fileName;
         Log.info("==PATH:== "+path);
         ExcelUtils.setExcelFile(path);
         return path;
@@ -84,7 +90,7 @@ public class TestScrip {
 
     //region TESTCASE
     public static int onceTimeScrip(int row) throws IOException {
-        String testSuiteName = ExcelUtils.getCellData(row,Constanst.TEST_SUITE_FILE_NAME,Constanst.SCOPE_SHEET);
+        String testSuiteName = ExcelUtils.getStringValueInCell(row,Constanst.TEST_SUITE_FILE_NAME,Constanst.SCOPE_SHEET);
         if(testSuiteName.contains(Constanst.ONCE_TIME_KEY)){
             return row;
         }
@@ -96,10 +102,10 @@ public class TestScrip {
         for(int i =1; i<iTotalTestCase;i++) {
 
             ExcelUtils.setCellData("",i,Constanst.TESTCASE_STATUS,Constanst.TESTCASE_SHEET,tcPath);
-            String sTestCaseID = ExcelUtils.getCellData(i, Constanst.TESTCASE_ID, Constanst.TESTCASE_SHEET);
+            String sTestCaseID = ExcelUtils.getStringValueInCell(i, Constanst.TESTCASE_ID, Constanst.TESTCASE_SHEET);
             Log.info("TCID: " + sTestCaseID);
 
-            String runMode = ExcelUtils.getCellData(i,Constanst.RUN_MODE_TEST_STEP,Constanst.TESTCASE_SHEET);
+            String runMode = ExcelUtils.getStringValueInCell(i,Constanst.RUN_MODE_TEST_STEP,Constanst.TESTCASE_SHEET);
             Log.info("Run mode in TC: " + runMode);
 
             if(runMode.equals(Constanst.YES)) {
@@ -149,14 +155,15 @@ public class TestScrip {
     private static void execute_steps() throws IOException {
         for (; iTestStep < lastTestStep; iTestStep++) {
             result = Constanst.PASS;
-            String process = ExcelUtils.getCellData(iTestStep, Constanst.PROCEED, Constanst.TEST_STEP_SHEET);
+            error = "";
+            String process = ExcelUtils.getStringValueInCell(iTestStep, Constanst.PROCEED, Constanst.TEST_STEP_SHEET);
             Log.info("Process TS: "+process);
             if(process.equals(Constanst.PROCESS_YES)) {
 
-                String sActionKeyword = ExcelUtils.getCellData(iTestStep, Constanst.KEYWORD, Constanst.TEST_STEP_SHEET);
-                params = ExcelUtils.getCellData(iTestStep, Constanst.PARAMS, Constanst.TEST_STEP_SHEET);
-                String dataSet = ExcelUtils.getCellData(iTestStep, Constanst.DATA_SET, Constanst.TEST_STEP_SHEET);
-                description = ExcelUtils.getCellData(iTestStep, Constanst.DESCRIPTION, Constanst.TEST_STEP_SHEET);
+                String sActionKeyword = ExcelUtils.getStringValueInCell(iTestStep, Constanst.KEYWORD, Constanst.TEST_STEP_SHEET);
+                params = ExcelUtils.getStringValueInCell(iTestStep, Constanst.PARAMS, Constanst.TEST_STEP_SHEET);
+                String dataSet = ExcelUtils.getStringValueInCell(iTestStep, Constanst.DATA_SET, Constanst.TEST_STEP_SHEET);
+                description = ExcelUtils.getStringValueInCell(iTestStep, Constanst.DESCRIPTION, Constanst.TEST_STEP_SHEET);
 
                 if (result != Constanst.SKIP) {
                     if(sActionKeyword != "") {
@@ -169,7 +176,6 @@ public class TestScrip {
                     result = Constanst.SKIP;
                 }
                 onResultStep(result, error, iTestStep);
-                error = "";
 
                 if (result == Constanst.FAIL)
                     tcResult = Constanst.FAIL;
@@ -187,7 +193,7 @@ public class TestScrip {
         ExcelUtils.setCellData(message,  rowNumber, Constanst.ERROR, Constanst.TEST_STEP_SHEET, tcPath);
     }
     private static void execute_action(String data,String sActionKeyword){
-        String testStep = ExcelUtils.getCellData(iTestStep, Constanst.TEST_STEP, Constanst.TEST_STEP_SHEET);
+        String testStep = ExcelUtils.getStringValueInCell(iTestStep, Constanst.TEST_STEP, Constanst.TEST_STEP_SHEET);
         result = Constanst.PASS;
         try {
             param = getParam(params,data);
@@ -211,8 +217,7 @@ public class TestScrip {
                 }
             }
         }catch (Throwable e) {
-            Log.error("Method execute_action | Exception desc : " + e.getMessage());
-            onFail(error);
+            exception(e);
         }
         //onResultStep(result,error,numberStep);
     }
@@ -223,12 +228,12 @@ public class TestScrip {
     }
     // region verify result after each step
     private static void verifyStep(int numberStep) throws IOException {
-        String sActionKeyword = ExcelUtils.getCellData(numberStep, Constanst.VERIFY_STEP, Constanst.TEST_STEP_SHEET);
+        String sActionKeyword = ExcelUtils.getStringValueInCell(numberStep, Constanst.VERIFY_STEP, Constanst.TEST_STEP_SHEET);
         params = "";
 
         if(!sActionKeyword.equals("")){
             if(result == Constanst.PASS) {
-                expected = ExcelUtils.getCellData(numberStep,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET);
+                expected = ExcelUtils.getStringValueInCell(numberStep,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET);
                 description = "Check - " +description;
                 execute_action("",sActionKeyword);
             }
@@ -243,8 +248,7 @@ public class TestScrip {
     //region Testcase key
     public static String tcResult;
     public static String tcPath;
-    public static boolean isOnceTimeSetUp;
-    public static boolean isIsOnceTimeTearDown;
+    public static boolean isDataFlow;
     //endregion
 
     //region Test Step key

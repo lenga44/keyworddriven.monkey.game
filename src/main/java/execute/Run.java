@@ -17,7 +17,7 @@ public class Run {
 
         Log.resetFileLog();
 
-        scopePath = /*FileHelperUtils.getRootFolder() + */FileHelperUtils.getPathConfig(Constanst.SCOPE_FILE_PATH);
+        scopePath = FileHelperUtils.getRootFolder() + FileHelperUtils.getPathConfig(Constanst.SCOPE_FILE_PATH);
         Log.info("SCOPE_PATH: "+scopePath);
 
         ExcelUtils.setExcelFile(scopePath);
@@ -26,18 +26,27 @@ public class Run {
         int iTotalSuite = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
         Log.info("Total scope : "+iTotalSuite);
 
-        runTestScriptModule = new RunTestScriptModule(keyWord,method);
-        if(isModuleFlow==true)
-            runModule(iTotalSuite);
 
+        if (isModuleFlow == true) {
+            runTestScriptModule = new RunTestScriptModule(keyWord, method);
+            runModuleFlow(iTotalSuite);
+        }
+        if(isDataFlow == true){
+            runTestScriptData = new RunTestScriptData(keyWord,method);
+            runDataFlow(iTotalSuite);
+        }
     }
 
 
-    private static void runModule(int iTotalSuite) throws IOException {
+    private static void runModuleFlow(int iTotalSuite) throws IOException {
         runTestScriptModule.run(scopePath,iTotalSuite);
     }
+    private static void runDataFlow(int iTotalSuite) throws IOException {
+        runTestScriptData.run(scopePath,iTotalSuite);
+    }
     private static void returnFlowScrip(){
-        String flow = ExcelUtils.getCellData(1,Constanst.FLOW_COLLUM,Constanst.PLAN_SHEET);
+        String flow = ExcelUtils.getStringValueInCell(1,Constanst.FLOW_COLLUM,Constanst.PLAN_SHEET);
+        Log.info("FLOW: " +flow);
         if(flow.equals(Constanst.MODULE_FLOW))
             isModuleFlow = true;
         else if(flow.equals(Constanst.DATA_FLOW))
@@ -49,6 +58,7 @@ public class Run {
     private static KeyWordsToActionCustom keyWord;
     private static Method method[];
     private static RunTestScriptModule runTestScriptModule;
+    private static RunTestScriptData runTestScriptData;
     public static boolean isModuleFlow;
     public static boolean isDataFlow;
     //endregion

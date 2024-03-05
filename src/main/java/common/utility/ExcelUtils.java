@@ -39,8 +39,7 @@ public class ExcelUtils {
         }
         return iMumber;
     }
-
-    public static String getCellData(int rowNumber, int columnNumber, String sheetName){
+    public static String getStringValueInCell(int rowNumber, int columnNumber, String sheetName){
         try {
             ExcelSheet = ExcelBook.getSheet(sheetName);
             Cell = ExcelSheet.getRow(rowNumber).getCell(columnNumber);
@@ -53,13 +52,26 @@ public class ExcelUtils {
             return "";
         }
     }
+    public static int getNumberValueInCell(int rowNumber, int columnNumber, String sheetName){
+        try {
+            ExcelSheet = ExcelBook.getSheet(sheetName);
+            Cell = ExcelSheet.getRow(rowNumber).getCell(columnNumber);
+            int cellData = (int) Cell.getNumericCellValue();
+            return cellData;
+        } catch (Throwable e) {
+            Log.info("Method getCellData: rowNumber[" + rowNumber+"], columnNumber["+columnNumber+"], sheetName["+sheetName+"]");
+            Log.error("Method getCellData | Exception desc : " + e.getMessage());
+            onTestCaseFail("Method getCellData | Exception desc : " + e.getMessage());
+            return 0;
+        }
+    }
 
     public static int getRowContains(String sTestCaseName, int colNum, String sheetName)  {
         int iRowNum = 0;
         try {
             int rowCount = ExcelUtils.getRowCount(sheetName);
             for (; iRowNum < rowCount; iRowNum++) {
-                if (ExcelUtils.getCellData(iRowNum, colNum, sheetName).equalsIgnoreCase(sTestCaseName)) {
+                if (ExcelUtils.getStringValueInCell(iRowNum, colNum, sheetName).equalsIgnoreCase(sTestCaseName)) {
                     break;
                 }
             }
@@ -74,7 +86,7 @@ public class ExcelUtils {
     public static int getTestStepCount(String sheetName, String sTestCaseID, int startTestStep) {
         try{
             for (int i = startTestStep;i< ExcelUtils.getRowCount(sheetName);i++){
-                if(!sTestCaseID.equals(ExcelUtils.getCellData(i, Constanst.TESTCASE_ID,sheetName))){
+                if(!sTestCaseID.equals(ExcelUtils.getStringValueInCell(i, Constanst.TESTCASE_ID,sheetName))){
                     int number = i;
                     return number;
                 }
@@ -114,6 +126,25 @@ public class ExcelUtils {
 
     @SuppressWarnings("static-access")
     public static void setCellData(String result, int rowNumber, int columnNumber, String sheetName,String path) {
+        try{
+            ExcelSheet = ExcelBook.getSheet(sheetName);
+            Row = ExcelSheet.getRow(rowNumber);
+            Cell = Row.getCell(columnNumber, org.apache.poi.ss.usermodel.Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
+            if(Cell == null){
+                Cell = Row.createCell(columnNumber);
+            }
+            Cell.setCellValue(result);
+            FileOutputStream fileOut = new FileOutputStream(path);
+            ExcelBook.write(fileOut);
+            fileOut.close();
+            ExcelBook = new XSSFWorkbook(new FileInputStream(path));
+        }catch (Exception e){
+            Log.info("Method getRowContains: result[" + result+"], rowNumber["+rowNumber+"], columnNumber["+columnNumber+"], sheetName["+sheetName+"], path["+path+"]");
+            Log.error("Method setCellData | Exception desc : " + e.getMessage());
+            RunTestScript.result = Constanst.FAIL;
+        }
+    }
+    public static void setCellData(int result, int rowNumber, int columnNumber, String sheetName,String path) {
         try{
             ExcelSheet = ExcelBook.getSheet(sheetName);
             Row = ExcelSheet.getRow(rowNumber);

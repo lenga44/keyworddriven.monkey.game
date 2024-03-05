@@ -3,6 +3,7 @@ package common.keywords;
 import common.utility.Constanst;
 import common.utility.Log;
 import execute.RunTestScript;
+import execute.TestScrip;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import io.restassured.path.json.JsonPath;
@@ -74,6 +75,14 @@ public class KeyWordsToAction {
         waitForObject(locator);
         request(Constanst.SCENE_URL,"//"+locator+"."+property);
     }
+    public static void click(String locator,String component, String property){
+        waitForObject(locator);
+        request(Constanst.SCENE_URL,"//"+locator+"."+component+"."+property);
+    }
+    public static void click(String locator,String index,String component, String property){
+        waitForObject(locator);
+        request(Constanst.SCENE_URL,"//"+locator+"[" +index+"]"+"."+component+"."+property);
+    }
     public static void clickDownAndUp(String locator){
         waitForObject(locator);
         request(Constanst.POINTER_URL,".DownToUp("+getAbsolutePath(locator,"0")+")");
@@ -139,6 +148,12 @@ public class KeyWordsToAction {
         String absolutePath1 = getAbsolutePath(locator1,"0");
         request(Constanst.POINTER_URL, Constanst.MOVE_COORDINATE + "(" + absolutePath1 + "," + number + ")");
         sleep("1");
+    }
+    public static void sendKey(String locator,String component, String property,String name){
+        request(Constanst.SCENE_URL,"//"+locator+"."+component+"."+property+"="+name);
+    }
+    public static void sendKey(String locator,String component,String name){
+        request(Constanst.SCENE_URL,"//"+locator+"."+component+".text="+name);
     }
     //endregion ACTION
 
@@ -367,8 +382,8 @@ public class KeyWordsToAction {
         return request.get("/"+number);
     }
     public static void check(String actual,String expect){
-        RunTestScript.result = Constanst.PASS;
-        RunTestScript.error = "";
+        TestScrip.result = Constanst.PASS;
+        TestScrip.error = "";
         try{
             Assert.assertEquals(actual,expect);
         }catch (Throwable e){
@@ -403,10 +418,10 @@ public class KeyWordsToAction {
         return Arrays.stream(a).toList().get(index);
     }
 
-    protected static void exception(Throwable e){
-        RunTestScript.error = "Exception | " +e.getMessage();
-        Log.error(RunTestScript.error);
-        RunTestScript.onFail( RunTestScript.error);
+    public static void exception(Throwable e){
+        TestScrip.error = "Exception | " +e.getMessage();
+        Log.error(TestScrip.error);
+        TestScrip.onFail( TestScrip.error);
     }
     public static String isMoveType(String locator,String second, String type,String size){
         float x1 = Float.valueOf(KeyWordsToActionToVerify.getPointScreen(locator,type));

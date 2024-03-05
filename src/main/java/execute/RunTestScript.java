@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class RunTestScript extends RunTestDataScript{
 
-    public static void main(String[] args) throws IOException {
+    /*public static void main(String[] args) throws IOException {
         keyWord = new KeyWordsToActionCustom();
         method = keyWord.getClass().getMethods();
 
@@ -35,12 +35,12 @@ public class RunTestScript extends RunTestDataScript{
             }
 
         }
-    }
+    }*/
     //region SCOPE
     private static void cleanContextInCell(){
         if(isMarkTest==true) {
             if (markTest == "1") {
-                String markResult = ExcelUtils.getCellData(markRow, Constanst.TESTCASE_STATUS, Constanst.TESTCASE_SHEET);
+                String markResult = ExcelUtils.getStringValueInCell(markRow, Constanst.TESTCASE_STATUS, Constanst.TESTCASE_SHEET);
                 String status = (numberLesson > 1 && markResult == Constanst.PASS) ? Constanst.YES : Constanst.NO;
                 ExcelUtils.setCellData(status, markRow, Constanst.RUN_MODE_SCOPE, Constanst.SCOPE_SHEET, scopePath);
             }
@@ -53,12 +53,12 @@ public class RunTestScript extends RunTestDataScript{
         for (int i = 1; i<iTotalFeature;i++){
 
             markTest = "";
-            sRunMode = ExcelUtils.getCellData(i,Constanst.RUN_MODE_SCOPE,Constanst.SCOPE_SHEET);
+            sRunMode = ExcelUtils.getStringValueInCell(i,Constanst.RUN_MODE_SCOPE,Constanst.SCOPE_SHEET);
             Log.info("Mode in scope: "+sRunMode);
 
             if(sRunMode.equals(Constanst.YES)) {
 
-                tcName = ExcelUtils.getCellData(i, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET);
+                tcName = ExcelUtils.getStringValueInCell(i, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET);
                 Log.info("TCS name: "+tcName);
                 getTCPath();
 
@@ -73,7 +73,7 @@ public class RunTestScript extends RunTestDataScript{
     //endregion
 
     public static void getLevelFolder(int row)throws IOException{
-        courseFolder = FileHelperUtils.getRootFolder() + Constanst.REPORT_FILE_PATH + ExcelUtils.getCellData(row, Constanst.COURSE_COLUM, Constanst.PLAN_SHEET);
+        courseFolder = FileHelperUtils.getRootFolder() + Constanst.REPORT_FILE_PATH + ExcelUtils.getStringValueInCell(row, Constanst.COURSE_COLUM, Constanst.PLAN_SHEET);
         levelFolder = courseFolder +"//" + RunTestScript.level;
         Log.info("levelFolder: "+levelFolder);
         Log.info("Folder path report course: " +FileHelperUtils.convertPath(levelFolder));
@@ -125,9 +125,9 @@ public class RunTestScript extends RunTestDataScript{
         Log.info("Total TC: " + iTotalTestCase);
         for(int i =0; i<iTotalTestCase;i++) {
 
-            sTestCaseID = ExcelUtils.getCellData(i, Constanst.TESTCASE_ID, Constanst.TESTCASE_SHEET);
+            sTestCaseID = ExcelUtils.getStringValueInCell(i, Constanst.TESTCASE_ID, Constanst.TESTCASE_SHEET);
             Log.info("TCID: " + sTestCaseID);
-            runMode = ExcelUtils.getCellData(i,Constanst.RUN_MODE_TEST_STEP,Constanst.TESTCASE_SHEET);
+            runMode = ExcelUtils.getStringValueInCell(i,Constanst.RUN_MODE_TEST_STEP,Constanst.TESTCASE_SHEET);
             Log.info("Run mode in TC: " + runMode);
 
             if(runMode.equals(Constanst.YES)) {
@@ -186,15 +186,15 @@ public class RunTestScript extends RunTestDataScript{
     private static void execute_steps() throws IOException {
         for (; iTestStep < lastTestStep; iTestStep++) {
             result = Constanst.PASS;
-            process = ExcelUtils.getCellData(iTestStep, Constanst.PROCEED, Constanst.TEST_STEP_SHEET);
+            process = ExcelUtils.getStringValueInCell(iTestStep, Constanst.PROCEED, Constanst.TEST_STEP_SHEET);
             Log.info("Process TS: "+process);
             if(process.equals(Constanst.PROCESS_YES)) {
 
-                sActionKeyword = ExcelUtils.getCellData(iTestStep, Constanst.KEYWORD, Constanst.TEST_STEP_SHEET);
-                params = ExcelUtils.getCellData(iTestStep, Constanst.PARAMS, Constanst.TEST_STEP_SHEET);
-                dataSet = ExcelUtils.getCellData(iTestStep, Constanst.DATA_SET, Constanst.TEST_STEP_SHEET);
-                description = ExcelUtils.getCellData(iTestStep, Constanst.DESCRIPTION, Constanst.TEST_STEP_SHEET);
-                testStep = ExcelUtils.getCellData(iTestStep, Constanst.TEST_STEP, Constanst.TEST_STEP_SHEET);
+                sActionKeyword = ExcelUtils.getStringValueInCell(iTestStep, Constanst.KEYWORD, Constanst.TEST_STEP_SHEET);
+                params = ExcelUtils.getStringValueInCell(iTestStep, Constanst.PARAMS, Constanst.TEST_STEP_SHEET);
+                dataSet = ExcelUtils.getStringValueInCell(iTestStep, Constanst.DATA_SET, Constanst.TEST_STEP_SHEET);
+                description = ExcelUtils.getStringValueInCell(iTestStep, Constanst.DESCRIPTION, Constanst.TEST_STEP_SHEET);
+                testStep = ExcelUtils.getStringValueInCell(iTestStep, Constanst.TEST_STEP, Constanst.TEST_STEP_SHEET);
 
                 if (result != Constanst.SKIP) {
                     if(sActionKeyword != "") {
@@ -247,12 +247,12 @@ public class RunTestScript extends RunTestDataScript{
 
     // region verify result after each step
     private static void verifyStep(int numberStep) throws IOException {
-        sActionKeyword = ExcelUtils.getCellData(numberStep, Constanst.VERIFY_STEP, Constanst.TEST_STEP_SHEET);
+        sActionKeyword = ExcelUtils.getStringValueInCell(numberStep, Constanst.VERIFY_STEP, Constanst.TEST_STEP_SHEET);
         params = "";
 
         if(!sActionKeyword.equals("")){
             if(result == Constanst.PASS) {
-                expected = ExcelUtils.getCellData(numberStep,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET);
+                expected = ExcelUtils.getStringValueInCell(numberStep,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET);
                 description = "Check - " +description;
                 execute_action(numberStep, "");
             }
@@ -263,6 +263,7 @@ public class RunTestScript extends RunTestDataScript{
     //region RESULT
     private static void onResultStep(String status, String message, int rowNumber ){
         if(status == Constanst.FAIL) {
+            ExcelUtils.setCellData("",rowNumber,Constanst.IMAGE,Constanst.TEST_STEP_SHEET,tcPath);
             byte[] bytes = KeyWordsToAction.takePhoto();
             ExcelUtils.addPictureInCell(rowNumber, bytes, tcPath);
         }else {

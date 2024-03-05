@@ -24,10 +24,9 @@ public class Constanst {
     public static final String TEST_CASE_GAME_NAME_IN_FLOW = "Report_GameName";
     public static final int RUN_MODE_PLAN_COLUM = 0;
     public static final int LEVEL_COLUM = 1;
-    public static final int NUMBER_COLUM = 2;
     public static final int BEGIN_INDEX_COLUM = 3;
     public static final int END_INDEX_COLUM = 4;
-    public static final int CURRENT_INDEX_COLUM = 6;
+    public static final int CURRENT_INDEX_COLUM = 5;
     public static final int COURSE_COLUM = 5;
     public static final String PLAN_SHEET = "Plan";
     public static final String SCOPE_FILE_PATH = "scope_path";
@@ -45,6 +44,8 @@ public class Constanst {
     public static final String MODULE_FLOW = "Module";
     public static final String DATA_FLOW = "Data";
     public static final int FLOW_COLLUM = 0;
+    public static final int PASS_PLAN_COLLUM = 8;
+    public static final int FAIL_PLAN_COLLUM = 9;
     //endregion
 
     //endregion
@@ -58,8 +59,8 @@ public class Constanst {
     //region TS sheet
     public static final int RUN_MODE_TEST_STEP = 2;
     public static final int KEYWORD = 3;
-    public static final int PROCEED= 5;
-    public static final int DATA_SET = 6;
+    public static final int PROCEED= 6;
+    public static final int DATA_SET = 5;
     public static final int PARAMS = 4;
     public static final int VERIFY_STEP = 7;
     public static final int PARAM_VERIFY_STEP = 8;

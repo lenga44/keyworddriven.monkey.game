@@ -34,5 +34,20 @@ public class GenerateReport{
             ExcelUtils.setCellData(Constanst.YES, row, Constanst.RUN_MODE_SCOPE, Constanst.SCOPE_SHEET, RunTestScript.scopePath);
         }
     }
+    public static void countResultPlan(String path,int totalSuite){
+        ExcelUtils.setExcelFile(path);
+        int pass = Integer.valueOf(ExcelUtils.getStringValueInCell(1,Constanst.PASS_PLAN_COLLUM,Constanst.PLAN_SHEET));
+        int fail =0;
+        for (int i = 0;i<totalSuite;i++){
+            if(ExcelUtils.getStringValueInCell(i,Constanst.STATUS_SUITE,Constanst.SCOPE_SHEET)==Constanst.FAIL){
+                fail = 1;
+                break;
+            }
+        }
+        pass = (fail==0)?pass+1:pass;
+        fail += Integer.valueOf(ExcelUtils.getStringValueInCell(1,Constanst.FAIL_PLAN_COLLUM,Constanst.PLAN_SHEET));
+        ExcelUtils.setCellData(pass,1,Constanst.PASS_PLAN_COLLUM,Constanst.PLAN_SHEET,path);
+        ExcelUtils.setCellData(fail,1,Constanst.FAIL_PLAN_COLLUM,Constanst.PLAN_SHEET,path);
+    }
     //endregion
 }
