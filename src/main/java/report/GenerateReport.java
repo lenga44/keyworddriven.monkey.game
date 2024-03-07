@@ -5,6 +5,7 @@ import common.utility.ExcelUtils;
 import common.utility.FileHelpers;
 import common.utility.Log;
 import execute.RunTestScript;
+import execute.TestScrip;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +18,7 @@ public class GenerateReport{
         try {
             if (f.exists()) {
                 File source = new File(RunTestScript.tcPath);
-                String tcCopyPath = subFolder + FileHelpers.convertPath("//" + RunTestScript.tcName +"_"+(RunTestScript.endLesson-1)+"_"+ row+".xlsx");
+                String tcCopyPath = subFolder + FileHelpers.convertPath("//" + TestScrip.tcName +"_"+Constanst.FILE_NAME_REPORT_DATA_FLOW+"_"+ row+".xlsx");
                 Log.info("Path report TC current: " + tcCopyPath);
                 dest = new File(tcCopyPath);
                 ExcelUtils.copyFile(source, dest);
@@ -49,5 +50,6 @@ public class GenerateReport{
         ExcelUtils.setCellData(pass,1,Constanst.PASS_PLAN_COLLUM,Constanst.PLAN_SHEET,path);
         ExcelUtils.setCellData(fail,1,Constanst.FAIL_PLAN_COLLUM,Constanst.PLAN_SHEET,path);
     }
+
     //endregion
 }

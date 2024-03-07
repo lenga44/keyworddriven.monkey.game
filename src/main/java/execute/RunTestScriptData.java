@@ -2,6 +2,7 @@ package execute;
 
 import common.keywords.KeyWordsToActionCustom;
 import common.utility.*;
+import org.json.simple.parser.ParseException;
 import report.GenerateReport;
 
 import java.io.IOException;
@@ -12,7 +13,7 @@ public class RunTestScriptData extends TestScrip{
         super(keyWord, method);
     }
 
-    public static void run(String scopePath, int iTotalSuite) throws IOException {
+    public static void run(String scopePath, int iTotalSuite) throws IOException, ParseException {
 
         isDataFlow = true;
         int begin = ExcelUtils.getNumberValueInCell(1, Constanst.BEGIN_INDEX_COLUM,Constanst.PLAN_SHEET)-1;

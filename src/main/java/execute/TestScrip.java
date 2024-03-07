@@ -51,7 +51,7 @@ public class TestScrip {
 
             if(sRunMode.equals(Constanst.YES)) {
 
-                String tcName = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET);
+                tcName = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET);
                 if(tcName.equals(Constanst.TEST_CASE_GAME_NAME_IN_FLOW))
                 {
                     KeyWordsToAction.sleep("1");
@@ -255,7 +255,8 @@ public class TestScrip {
     public static String tcResult;
     public static String tcPath;
     public static boolean isDataFlow;
-    public static String json;
+    public static Object json;
+    public static String tcName;
     //endregion
 
     //region Test Step key

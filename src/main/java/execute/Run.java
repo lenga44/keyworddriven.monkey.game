@@ -5,13 +5,14 @@ import common.utility.Constanst;
 import common.utility.ExcelUtils;
 import common.utility.FileHelpers;
 import common.utility.Log;
+import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
 
 public class Run {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ParseException {
 
         keyWord = new KeyWordsToActionCustom();
         method = keyWord.getClass().getMethods();
@@ -42,7 +43,7 @@ public class Run {
     private static void runModuleFlow(int iTotalSuite) throws IOException {
         runTestScriptModule.run(scopePath,iTotalSuite);
     }
-    private static void runDataFlow(int iTotalSuite) throws IOException {
+    private static void runDataFlow(int iTotalSuite) throws IOException, ParseException {
         runTestScriptData.run(scopePath,iTotalSuite);
     }
     private static void returnFlowScrip(){

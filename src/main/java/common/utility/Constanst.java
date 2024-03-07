@@ -104,5 +104,6 @@ public class Constanst {
 
     //region file config
     public static final String DATA_FILE_PATH = "data_file_path";
+    public static final String FILE_NAME_REPORT_DATA_FLOW = "file_name_report_data_flow";
     //endregion
 }
