@@ -101,4 +101,8 @@ public class Constanst {
     //region Tear down file
     public static final String TC_TEARDOWN_FILE_NAME = "//Report_TearDown.xlsx";
     //endregion
+
+    //region file config
+    public static final String DATA_FILE_PATH = "data_file_path";
+    //endregion
 }

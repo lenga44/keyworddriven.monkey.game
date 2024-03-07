@@ -1,4 +1,5 @@
 {
   "scope_path": "\\tool_test_game\\config\\Scope.xlsx",
-  "testcase_path": "\\tool_test_game\\config\\testcases\\"
+  "testcase_path": "\\tool_test_game\\config\\testcases\\",
+  "data_file_path":"\\tool_test_game\\config\\data\\data.json"
 }

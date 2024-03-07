@@ -3,7 +3,7 @@ package execute;
 import common.keywords.KeyWordsToActionCustom;
 import common.utility.Constanst;
 import common.utility.ExcelUtils;
-import common.utility.FileHelperUtils;
+import common.utility.FileHelpers;
 import common.utility.Log;
 
 import java.io.IOException;
@@ -12,14 +12,13 @@ import java.lang.reflect.Method;
 public class Run {
 
     public static void main(String[] args) throws IOException {
-        //String s = "{\"name\":\"John\", \"age\":30, \"cars\":[{\"a\":\"Ford\", \"b\":\"BMW\", \"c\":\"Fiat\"},{\"a\":\"Ford1\", \"b\":\"BMW1\", \"c\":\"Fiat1\"}]}";
 
         keyWord = new KeyWordsToActionCustom();
         method = keyWord.getClass().getMethods();
 
         Log.resetFileLog();
 
-        scopePath = FileHelperUtils.getRootFolder() + FileHelperUtils.getPathConfig(Constanst.SCOPE_FILE_PATH);
+        scopePath = FileHelpers.getRootFolder() + FileHelpers.getPathConfig(Constanst.SCOPE_FILE_PATH);
         Log.info("SCOPE_PATH: "+scopePath);
 
         ExcelUtils.setExcelFile(scopePath);

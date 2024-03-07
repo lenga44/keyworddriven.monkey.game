@@ -2,7 +2,7 @@ package report;
 
 import common.utility.Constanst;
 import common.utility.ExcelUtils;
-import common.utility.FileHelperUtils;
+import common.utility.FileHelpers;
 import common.utility.Log;
 import execute.RunTestScript;
 
@@ -17,7 +17,7 @@ public class GenerateReport{
         try {
             if (f.exists()) {
                 File source = new File(RunTestScript.tcPath);
-                String tcCopyPath = subFolder + FileHelperUtils.convertPath("//" + RunTestScript.tcName +"_"+(RunTestScript.endLesson-1)+"_"+ row+".xlsx");
+                String tcCopyPath = subFolder + FileHelpers.convertPath("//" + RunTestScript.tcName +"_"+(RunTestScript.endLesson-1)+"_"+ row+".xlsx");
                 Log.info("Path report TC current: " + tcCopyPath);
                 dest = new File(tcCopyPath);
                 ExcelUtils.copyFile(source, dest);
@@ -29,8 +29,8 @@ public class GenerateReport{
     }
     public static void genReport(int row,String folderName)throws IOException{
         if(RunTestScript.numberLesson>1) {
-            FileHelperUtils.genFolderReport(FileHelperUtils.convertPath(folderName));
-            genTCReportFile(FileHelperUtils.convertPath(folderName),row,folderName);
+            FileHelpers.genFolderReport(FileHelpers.convertPath(folderName));
+            genTCReportFile(FileHelpers.convertPath(folderName),row,folderName);
             ExcelUtils.setCellData(Constanst.YES, row, Constanst.RUN_MODE_SCOPE, Constanst.SCOPE_SHEET, RunTestScript.scopePath);
         }
     }

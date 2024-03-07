@@ -1,0 +1,501 @@
+{
+    "Id": 1921,
+    "Name": "The Fox and the Stork",
+    "Type": "Truyện icon",
+    "Level": "",
+    "Category": "",
+    "TacGia": "Caspian Scott",
+    "MinhHoa": "Layla Quinn",
+    "TongSoTrang": 5,
+    "Page": [
+     {
+      "Id": 19307,
+      "Sentence": [
+       {
+        "Text": "THE FOX AND THE STORK",
+        "Audio": "8/1edf7cdbf295e86fe726e8dd33af74f4.mp3",
+        "TextPosition": "250,696",
+        "TextContentSize": "549,68",
+        "Image": []
+       }
+      ],
+      "Object": [
+       {
+        "Id": 0,
+        "Text": "bowl",
+        "ImagePos": "",
+        "ImageSize": "",
+        "Gaf": "",
+        "SoundEffect": "",
+        "Touch": [
+         {
+          "Text": "bowl",
+          "Audio": "t/5f25c0e9abdae9f2113652907c474027.mp3",
+          "TouchPos": "0,0",
+          "TouchSize": "150,150",
+          "StarPos": "",
+          "TextPosition": "",
+          "TextSize": "",
+          "TouchVector": [
+           "594,559",
+           "527,560",
+           "485,571",
+           "518,597",
+           "582,597",
+           "618,587",
+           "615,569"
+          ]
+         }
+        ]
+       },
+       {
+        "Id": 0,
+        "Text": "bowls",
+        "ImagePos": "",
+        "ImageSize": "",
+        "Gaf": "",
+        "SoundEffect": "",
+        "Touch": [
+         {
+          "Text": "bowls",
+          "Audio": "4/2737388de7710e942934c6b8c0bb1629.mp3",
+          "TouchPos": "0,0",
+          "TouchSize": "150,150",
+          "StarPos": "",
+          "TextPosition": "",
+          "TextSize": "",
+          "TouchVector": [
+           "936,532",
+           "852,527",
+           "818,541",
+           "843,566",
+           "837,586",
+           "896,607",
+           "965,581",
+           "954,542"
+          ]
+         }
+        ]
+       },
+       {
+        "Id": 0,
+        "Text": "stork",
+        "ImagePos": "",
+        "ImageSize": "",
+        "Gaf": "",
+        "SoundEffect": "",
+        "Touch": [
+         {
+          "Text": "stork",
+          "Audio": "9/acd62ffc1e21d4d750676dfd5998d2de.mp3",
+          "TouchPos": "0,0",
+          "TouchSize": "150,150",
+          "StarPos": "",
+          "TextPosition": "",
+          "TextSize": "",
+          "TouchVector": [
+           "1023,135",
+           "985,156",
+           "956,178",
+           "965,196",
+           "1006,185",
+           "1016,199",
+           "992,213",
+           "1011,259",
+           "1027,269",
+           "1042,300",
+           "1024,311",
+           "1045,330",
+           "1072,311",
+           "1086,270",
+           "1090,244",
+           "1053,235",
+           "1044,200"
+          ]
+         }
+        ]
+       },
+       {
+        "Id": 0,
+        "Text": "bottle",
+        "ImagePos": "",
+        "ImageSize": "",
+        "Gaf": "",
+        "SoundEffect": "",
+        "Touch": [
+         {
+          "Text": "bottle",
+          "Audio": "x/ef2653f0ea7050b21bee6d79a52e1c61.mp3",
+          "TouchPos": "0,0",
+          "TouchSize": "150,150",
+          "StarPos": "",
+          "TextPosition": "",
+          "TextSize": "",
+          "TouchVector": [
+           "1175,439",
+           "1184,515",
+           "1157,577",
+           "1175,586",
+           "1247,567",
+           "1223,534",
+           "1208,440"
+          ]
+         }
+        ]
+       },
+       {
+        "Id": 0,
+        "Text": "fox",
+        "ImagePos": "",
+        "ImageSize": "",
+        "Gaf": "",
+        "SoundEffect": "",
+        "Touch": [
+         {
+          "Text": "fox",
+          "Audio": "j/ea1e06b20a27a2457f7ef5656afe872d.mp3",
+          "TouchPos": "0,0",
+          "TouchSize": "150,150",
+          "StarPos": "",
+          "TextPosition": "",
+          "TextSize": "",
+          "TouchVector": [
+           "701,133",
+           "680,170",
+           "648,185",
+           "612,200",
+           "609,238",
+           "629,280",
+           "655,310",
+           "680,332",
+           "725,328",
+           "750,288",
+           "764,246",
+           "775,201",
+           "745,155",
+           "738,129"
+          ]
+         }
+        ]
+       }
+      ],
+      "Background": "upload/cms/story/page/background/hd/v/3f1b123691f31bb63da2be0388046b8f.png"
+     },
+     {
+      "Id": 19308,
+      "Sentence": [
+       {
+        "Text": "Once, a fox and a stork were friends. One day, the fox wanted to play a prank on the stork, so he invited the stork to his house for a dinner. The fox put the soup into two shallow bowls. He said to the stork, \"Let's enjoy!\"",
+        "Audio": "a/11a93f241d320d3e951597dc99173857.mp3",
+        "TextPosition": "38,198",
+        "TextContentSize": "923,544",
+        "Image": [
+         {
+          "Image": "1/17b7e64ab42432b7af5a057735b3cbdd.png",
+          "Audio": "j/ea1e06b20a27a2457f7ef5656afe872d.mp3",
+          "Text": "fox",
+          "PositionNum": "1",
+          "ImageHeight": 80,
+          "ImageWidth": 80
+         },
+         {
+          "Image": "8/11c3d0a3287b077a55ee4270c1a13483.png",
+          "Audio": "9/acd62ffc1e21d4d750676dfd5998d2de.mp3",
+          "Text": "stork",
+          "PositionNum": "1",
+          "ImageHeight": 100,
+          "ImageWidth": 100
+         },
+         {
+          "Image": "1/17b7e64ab42432b7af5a057735b3cbdd.png",
+          "Audio": "j/ea1e06b20a27a2457f7ef5656afe872d.mp3",
+          "Text": "fox",
+          "PositionNum": "2",
+          "ImageHeight": 80,
+          "ImageWidth": 80
+         },
+         {
+          "Image": "8/11c3d0a3287b077a55ee4270c1a13483.png",
+          "Audio": "9/acd62ffc1e21d4d750676dfd5998d2de.mp3",
+          "Text": "stork",
+          "PositionNum": "2",
+          "ImageHeight": 100,
+          "ImageWidth": 100
+         },
+         {
+          "Image": "8/11c3d0a3287b077a55ee4270c1a13483.png",
+          "Audio": "9/acd62ffc1e21d4d750676dfd5998d2de.mp3",
+          "Text": "stork",
+          "PositionNum": "3",
+          "ImageHeight": 80,
+          "ImageWidth": 80
+         },
+         {
+          "Image": "1/17b7e64ab42432b7af5a057735b3cbdd.png",
+          "Audio": "j/ea1e06b20a27a2457f7ef5656afe872d.mp3",
+          "Text": "fox",
+          "PositionNum": "3",
+          "ImageHeight": 80,
+          "ImageWidth": 80
+         },
+         {
+          "Image": "8/11c3d0a3287b077a55ee4270c1a13483.png",
+          "Audio": "9/acd62ffc1e21d4d750676dfd5998d2de.mp3",
+          "Text": "stork",
+          "PositionNum": "4",
+          "ImageHeight": 80,
+          "ImageWidth": 80
+         },
+         {
+          "Image": "v/241ea6271a2ac5069df59e98cf049e79.png",
+          "Audio": "n/d6f0e7fabd1564f25864afe0277ee793.mp3",
+          "Text": "bowls",
+          "PositionNum": "1",
+          "ImageHeight": 70,
+          "ImageWidth": 100
+         }
+        ]
+       }
+      ],
+      "Object": [
+       {
+        "Id": 0,
+        "Text": "",
+        "ImagePos": "",
+        "ImageSize": "546,170",
+        "Gaf": "",
+        "SoundEffect": "",
+        "Touch": [
+         {
+          "Text": "",
+          "Audio": "",
+          "TouchPos": "",
+          "TouchSize": "",
+          "StarPos": "",
+          "TextPosition": "",
+          "TextSize": "",
+          "TouchVector": null
+         }
+        ]
+       }
+      ],
+      "Background": "upload/cms/story/page/background/hd/1/35bbcfebcc09f02abc54eef824529912.jpg"
+     },
+     {
+      "Id": 19309,
+      "Sentence": [
+       {
+        "Text": "The stork could not eat the soup with her long, thin beak. She was upset. Seeing this, the fox said, \"If you don't like the soup, I can eat it for you.\" Then he ate all of the stork's soup. The next day, the stork invited the fox to her house for a meal.",
+        "Audio": "i/cafa131fc4422a08f00cf9ccd7921250.mp3",
+        "TextPosition": "41,165",
+        "TextContentSize": "941,558",
+        "Image": [
+         {
+          "Image": "8/11c3d0a3287b077a55ee4270c1a13483.png",
+          "Audio": "9/acd62ffc1e21d4d750676dfd5998d2de.mp3",
+          "Text": "stork",
+          "PositionNum": "1",
+          "ImageHeight": 100,
+          "ImageWidth": 100
+         },
+         {
+          "Image": "1/17b7e64ab42432b7af5a057735b3cbdd.png",
+          "Audio": "j/ea1e06b20a27a2457f7ef5656afe872d.mp3",
+          "Text": "fox",
+          "PositionNum": "1",
+          "ImageHeight": 100,
+          "ImageWidth": 100
+         },
+         {
+          "Image": "8/11c3d0a3287b077a55ee4270c1a13483.png",
+          "Audio": "9/acd62ffc1e21d4d750676dfd5998d2de.mp3",
+          "Text": "stork",
+          "PositionNum": "3",
+          "ImageHeight": 100,
+          "ImageWidth": 100
+         },
+         {
+          "Image": "8/11c3d0a3287b077a55ee4270c1a13483.png",
+          "Audio": "9/acd62ffc1e21d4d750676dfd5998d2de.mp3",
+          "Text": "stork",
+          "PositionNum": "2",
+          "ImageHeight": 100,
+          "ImageWidth": 100
+         },
+         {
+          "Image": "1/17b7e64ab42432b7af5a057735b3cbdd.png",
+          "Audio": "w/69b1ed9cc3e41aaef72f001fbe838807.mp3",
+          "Text": "fox",
+          "PositionNum": "2",
+          "ImageHeight": 100,
+          "ImageWidth": 100
+         }
+        ]
+       }
+      ],
+      "Object": [
+       {
+        "Id": 0,
+        "Text": "",
+        "ImagePos": "",
+        "ImageSize": "544,174",
+        "Gaf": "",
+        "SoundEffect": "",
+        "Touch": [
+         {
+          "Text": "",
+          "Audio": "",
+          "TouchPos": "",
+          "TouchSize": "",
+          "StarPos": "",
+          "TextPosition": "",
+          "TextSize": "",
+          "TouchVector": null
+         }
+        ]
+       }
+      ],
+      "Background": "upload/cms/story/page/background/hd/z/b2c960485c64645a26fdddb0502d3dfe.jpg"
+     },
+     {
+      "Id": 19310,
+      "Sentence": [
+       {
+        "Text": "The stork gave the fox a thin-necked bottle of soup. But the fox could not eat it. He got angry. The stork said, \"Now you know how I felt when you tricked me, don't you?\"",
+        "Audio": "4/98a32c6ba97d7aab67742dfb98a25d5e.mp3",
+        "TextPosition": "63,214",
+        "TextContentSize": "900,453",
+        "Image": [
+         {
+          "Image": "8/11c3d0a3287b077a55ee4270c1a13483.png",
+          "Audio": "9/acd62ffc1e21d4d750676dfd5998d2de.mp3",
+          "Text": "stork",
+          "PositionNum": "1",
+          "ImageHeight": 100,
+          "ImageWidth": 100
+         },
+         {
+          "Image": "1/17b7e64ab42432b7af5a057735b3cbdd.png",
+          "Audio": "j/ea1e06b20a27a2457f7ef5656afe872d.mp3",
+          "Text": "fox",
+          "PositionNum": "1",
+          "ImageHeight": 80,
+          "ImageWidth": 80
+         },
+         {
+          "Image": "1/17b7e64ab42432b7af5a057735b3cbdd.png",
+          "Audio": "j/ea1e06b20a27a2457f7ef5656afe872d.mp3",
+          "Text": "fox",
+          "PositionNum": "2",
+          "ImageHeight": 80,
+          "ImageWidth": 80
+         },
+         {
+          "Image": "8/11c3d0a3287b077a55ee4270c1a13483.png",
+          "Audio": "9/acd62ffc1e21d4d750676dfd5998d2de.mp3",
+          "Text": "stork",
+          "PositionNum": "2",
+          "ImageHeight": 100,
+          "ImageWidth": 100
+         },
+         {
+          "Image": "c/a1180393e01fb906670fb9d13747d328.png",
+          "Audio": "r/30f03974bc5b07656ee210d97e2cc870.mp3",
+          "Text": "bottle",
+          "PositionNum": "1",
+          "ImageHeight": 70,
+          "ImageWidth": 100
+         }
+        ]
+       }
+      ],
+      "Object": [
+       {
+        "Id": 0,
+        "Text": "",
+        "ImagePos": "",
+        "ImageSize": "459,177",
+        "Gaf": "",
+        "SoundEffect": "",
+        "Touch": [
+         {
+          "Text": "",
+          "Audio": "",
+          "TouchPos": "",
+          "TouchSize": "",
+          "StarPos": "",
+          "TextPosition": "",
+          "TextSize": "",
+          "TouchVector": null
+         }
+        ]
+       }
+      ],
+      "Background": "upload/cms/story/page/background/hd/r/292d8a9a05aa5a8f6b3b22eab66d8be5.jpg"
+     },
+     {
+      "Id": 19311,
+      "Sentence": [
+       {
+        "Text": "Then she poured the soup into a bowl for the fox. The fox felt ashamed. He promised not to trick anyone like that again.",
+        "Audio": "0/dd63035174e885d6dc0a6da68ea1ce81.mp3",
+        "TextPosition": "74,231",
+        "TextContentSize": "878,378",
+        "Image": [
+         {
+          "Image": "m/d084a5655f0b9c8d60c5faa6e5f14fe5.png",
+          "Audio": "t/5f25c0e9abdae9f2113652907c474027.mp3",
+          "Text": "bowl",
+          "PositionNum": "1",
+          "ImageHeight": 50,
+          "ImageWidth": 100
+         },
+         {
+          "Image": "1/17b7e64ab42432b7af5a057735b3cbdd.png",
+          "Audio": "j/ea1e06b20a27a2457f7ef5656afe872d.mp3",
+          "Text": "fox",
+          "PositionNum": "1",
+          "ImageHeight": 80,
+          "ImageWidth": 80
+         },
+         {
+          "Image": "1/17b7e64ab42432b7af5a057735b3cbdd.png",
+          "Audio": "j/ea1e06b20a27a2457f7ef5656afe872d.mp3",
+          "Text": "fox",
+          "PositionNum": "2",
+          "ImageHeight": 80,
+          "ImageWidth": 80
+         }
+        ]
+       }
+      ],
+      "Object": [
+       {
+        "Id": 0,
+        "Text": "",
+        "ImagePos": "",
+        "ImageSize": "459,216",
+        "Gaf": "",
+        "SoundEffect": "",
+        "Touch": [
+         {
+          "Text": "",
+          "Audio": "",
+          "TouchPos": "",
+          "TouchSize": "",
+          "StarPos": "",
+          "TextPosition": "",
+          "TextSize": "",
+          "TouchVector": null
+         }
+        ]
+       }
+      ],
+      "Background": "upload/cms/story/page/background/hd/o/e86abbae056ff1912039a4256868e9c2.jpg"
+     }
+    ],
+    "Title": {
+     "AudioStoryTitle": "0/3fbc5325e12703e5e6163524eefe6e29.mp3",
+     "SyncDataAudio": "[{\"w\":\"The\",\"ts\":0,\"te\":2,\"s\":0,\"e\":280},{\"w\":\"Fox\",\"ts\":4,\"te\":6,\"s\":280,\"e\":830},{\"w\":\"and\",\"ts\":8,\"te\":10,\"s\":830,\"e\":1290},{\"w\":\"the\",\"ts\":12,\"te\":14,\"s\":1290,\"e\":1390},{\"w\":\"Stork\",\"ts\":16,\"te\":20,\"s\":1390,\"e\":2070}]"
+    }
+   }

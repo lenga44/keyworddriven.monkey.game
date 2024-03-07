@@ -5,7 +5,7 @@ import common.keywords.KeyWordsToActionCustom;
 import common.keywords.KeyWordsToActionToVerify;
 import common.utility.Constanst;
 import common.utility.ExcelUtils;
-import common.utility.FileHelperUtils;
+import common.utility.FileHelpers;
 import common.utility.Log;
 
 import java.io.IOException;
@@ -73,7 +73,7 @@ public class TestScrip {
     }
     public static String openScopeFile(String fileName) throws IOException{
         Log.info("fileName "+fileName);
-        String path = /*FileHelperUtils.getRootFolder() +*/ FileHelperUtils.getPathConfig(fileName);
+        String path = /*FileHelperUtils.getRootFolder() +*/ FileHelpers.getPathConfig(fileName);
         Log.info("==PATH:== "+path);
         ExcelUtils.setExcelFile(path);
         return path;
@@ -81,7 +81,7 @@ public class TestScrip {
     public static String openScopeFile(String filePath,String fileName) throws IOException{
         Log.info("filePath "+filePath);
         Log.info("fileName "+fileName);
-        String path = FileHelperUtils.getRootFolder() + FileHelperUtils.getPathConfig(filePath)+fileName;
+        String path = FileHelpers.getRootFolder() + FileHelpers.getPathConfig(filePath)+fileName;
         Log.info("==PATH:== "+path);
         ExcelUtils.setExcelFile(path);
         return path;

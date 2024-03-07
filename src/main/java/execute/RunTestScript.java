@@ -1,12 +1,10 @@
 package execute;
 
-import common.keywords.KeyWordsToActionCustom;
 import common.keywords.KeyWordsToAction;
 import common.utility.Constanst;
 import common.utility.ExcelUtils;
-import common.utility.FileHelperUtils;
+import common.utility.FileHelpers;
 import common.utility.Log;
-import report.GenerateReport;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -73,13 +71,13 @@ public class RunTestScript extends RunTestDataScript{
     //endregion
 
     public static void getLevelFolder(int row)throws IOException{
-        courseFolder = FileHelperUtils.getRootFolder() + Constanst.REPORT_FILE_PATH + ExcelUtils.getStringValueInCell(row, Constanst.COURSE_COLUM, Constanst.PLAN_SHEET);
+        courseFolder = FileHelpers.getRootFolder() + Constanst.REPORT_FILE_PATH + ExcelUtils.getStringValueInCell(row, Constanst.COURSE_COLUM, Constanst.PLAN_SHEET);
         levelFolder = courseFolder +"//" + RunTestScript.level;
         Log.info("levelFolder: "+levelFolder);
-        Log.info("Folder path report course: " +FileHelperUtils.convertPath(levelFolder));
+        Log.info("Folder path report course: " + FileHelpers.convertPath(levelFolder));
 
-        FileHelperUtils.genFolderReport(courseFolder);
-        Log.info("Folder path report level: " +FileHelperUtils.convertPath(levelFolder));
+        FileHelpers.genFolderReport(courseFolder);
+        Log.info("Folder path report level: " + FileHelpers.convertPath(levelFolder));
     }
 
     public static void getTCPath()throws IOException{
@@ -105,7 +103,7 @@ public class RunTestScript extends RunTestDataScript{
     }
     public static String openScopeFile(String fileName) throws IOException{
         Log.info("fileName "+fileName);
-        String path = FileHelperUtils.getRootFolder() + FileHelperUtils.getPathConfig(fileName);
+        String path = FileHelpers.getRootFolder() + FileHelpers.getPathConfig(fileName);
         Log.info("==PATH:== "+path);
         ExcelUtils.setExcelFile(path);
         return path;
@@ -113,7 +111,7 @@ public class RunTestScript extends RunTestDataScript{
     public static String openScopeFile(String filePath,String fileName) throws IOException{
         Log.info("filePath "+filePath);
         Log.info("fileName "+fileName);
-        String path = FileHelperUtils.getRootFolder() + FileHelperUtils.getPathConfig(filePath)+fileName;
+        String path = FileHelpers.getRootFolder() + FileHelpers.getPathConfig(filePath)+fileName;
         Log.info("==PATH:== "+path);
         ExcelUtils.setExcelFile(path);
         return path;
