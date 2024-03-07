@@ -1,10 +1,7 @@
 package execute;
 
 import common.keywords.KeyWordsToActionCustom;
-import common.utility.Constanst;
-import common.utility.ExcelUtils;
-import common.utility.FileHelpers;
-import common.utility.Log;
+import common.utility.*;
 import report.GenerateReport;
 
 import java.io.IOException;
@@ -25,6 +22,7 @@ public class RunTestScriptData extends TestScrip{
         for(int index = begin;index<end;index++){
             getLevelFolder(begin);
             int start = begin+1;
+            json = JsonHandle.getObjectInJsonData(index);
 
             execute(scopePath,iTotalSuite);
             ExcelUtils.setCellData(start,1,Constanst.CURRENT_INDEX_COLUM,Constanst.PLAN_SHEET,scopePath);

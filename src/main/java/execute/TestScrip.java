@@ -3,10 +3,7 @@ package execute;
 import common.keywords.KeyWordsToAction;
 import common.keywords.KeyWordsToActionCustom;
 import common.keywords.KeyWordsToActionToVerify;
-import common.utility.Constanst;
-import common.utility.ExcelUtils;
-import common.utility.FileHelpers;
-import common.utility.Log;
+import common.utility.*;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -152,7 +149,15 @@ public class TestScrip {
         iTestStep = ExcelUtils.getRowContains(sTestCaseID,Constanst.TESTCASE_ID,Constanst.TEST_STEP_SHEET);
         lastTestStep = ExcelUtils.getTestStepCount(Constanst.TEST_STEP_SHEET,sTestCaseID,iTestStep);
     }
-    private static void execute_steps() throws IOException {
+
+    private static String getDataSet(int row){
+        String data = ExcelUtils.getStringValueInCell(row, Constanst.DATA_SET, Constanst.TEST_STEP_SHEET);
+        if(data.contains("$")&& !json.equals(null)){
+            data = JsonHandle.getValue(json,data);
+        }
+        return data;
+    }
+    public static void execute_steps() throws IOException {
         for (; iTestStep < lastTestStep; iTestStep++) {
             result = Constanst.PASS;
             error = "";
@@ -162,7 +167,7 @@ public class TestScrip {
 
                 String sActionKeyword = ExcelUtils.getStringValueInCell(iTestStep, Constanst.KEYWORD, Constanst.TEST_STEP_SHEET);
                 params = ExcelUtils.getStringValueInCell(iTestStep, Constanst.PARAMS, Constanst.TEST_STEP_SHEET);
-                String dataSet = ExcelUtils.getStringValueInCell(iTestStep, Constanst.DATA_SET, Constanst.TEST_STEP_SHEET);
+                String dataSet = getDataSet(iTestStep);
                 description = ExcelUtils.getStringValueInCell(iTestStep, Constanst.DESCRIPTION, Constanst.TEST_STEP_SHEET);
 
                 if (result != Constanst.SKIP) {
@@ -221,6 +226,7 @@ public class TestScrip {
         }
         //onResultStep(result,error,numberStep);
     }
+
     public static void onFail(String message) {
         //Log.info(message);
         result = Constanst.FAIL;
@@ -249,6 +255,7 @@ public class TestScrip {
     public static String tcResult;
     public static String tcPath;
     public static boolean isDataFlow;
+    public static String json;
     //endregion
 
     //region Test Step key
