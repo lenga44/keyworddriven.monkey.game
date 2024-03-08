@@ -1,6 +1,7 @@
 package common.utility;
 
-import execute.RunTestScript;
+import execute.TestScrip;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -13,7 +14,7 @@ import java.io.*;
 public class ExcelUtils {
     private static Sheet ExcelSheet;
     private static Workbook ExcelBook;
-    private static org.apache.poi.ss.usermodel.Cell Cell;
+    private static Cell Cell;
     private static Row Row;
 
     public static void setExcelFile(String path) {
@@ -47,6 +48,17 @@ public class ExcelUtils {
             return cellData;
         } catch (Throwable e) {
             Log.info("Method getCellData: rowNumber[" + rowNumber+"], columnNumber["+columnNumber+"], sheetName["+sheetName+"]");
+            Log.error("Method getCellData | Exception desc : " + e.getMessage());
+            onTestCaseFail("Method getCellData | Exception desc : " + e.getMessage());
+            return "";
+        }
+    }
+    public static String getStringValueInCell(int rowNumber, int columnNumber){
+        try {
+            Cell cell  = Cell = ExcelSheet.getRow(rowNumber).getCell(columnNumber);
+            String cellData = cell.getStringCellValue();
+            return cellData;
+        } catch (Throwable e) {
             Log.error("Method getCellData | Exception desc : " + e.getMessage());
             onTestCaseFail("Method getCellData | Exception desc : " + e.getMessage());
             return "";
@@ -141,7 +153,7 @@ public class ExcelUtils {
         }catch (Exception e){
             Log.info("Method getRowContains: result[" + result+"], rowNumber["+rowNumber+"], columnNumber["+columnNumber+"], sheetName["+sheetName+"], path["+path+"]");
             Log.error("Method setCellData | Exception desc : " + e.getMessage());
-            RunTestScript.result = Constanst.FAIL;
+            TestScrip.result = Constanst.FAIL;
         }
     }
     public static void setCellData(int result, int rowNumber, int columnNumber, String sheetName,String path) {
@@ -160,13 +172,13 @@ public class ExcelUtils {
         }catch (Exception e){
             Log.info("Method getRowContains: result[" + result+"], rowNumber["+rowNumber+"], columnNumber["+columnNumber+"], sheetName["+sheetName+"], path["+path+"]");
             Log.error("Method setCellData | Exception desc : " + e.getMessage());
-            RunTestScript.result = Constanst.FAIL;
+            TestScrip.result = Constanst.FAIL;
         }
     }
 
     private static void onTestCaseFail(String message){
-        RunTestScript.result = Constanst.SKIP;
-        RunTestScript.error = message;
+        TestScrip.result = Constanst.SKIP;
+        TestScrip.error = message;
     }
     public static void copyFile(File source, File dest)throws IOException{
         InputStream is = null;
@@ -187,6 +199,29 @@ public class ExcelUtils {
     public static void cleanContextInRange(int columnNumber, String sheetName,String path){
         for(int i=1;i<getRowCount(sheetName);i++){
             setCellData("",i,columnNumber,sheetName,path);
+        }
+    }
+    public static void closeFile(File file) throws IOException {
+        FileInputStream fis = new FileInputStream(file);
+        BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+        br.close();
+        fis.close();
+    }
+    public static void closeFile(String path) throws IOException {
+        File file = new File(path);
+        FileInputStream fis = new FileInputStream(file);
+        BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+        br.close();
+        fis.close();
+    }
+    public static void replaceValueInAnyCell(String value,String key) throws IOException {
+        ExcelSheet = ExcelBook.getSheet(Constanst.TEST_STEP_SHEET);
+        for (Row row:ExcelSheet) {
+            for (Cell cell: row){
+                if(cell.getStringCellValue().equals(key)){
+                    cell.setCellValue(FileHelpers.getValueConfig(value));
+                }
+            }
         }
     }
 }

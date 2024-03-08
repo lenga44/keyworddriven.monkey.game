@@ -19,7 +19,7 @@ public class Run {
 
         Log.resetFileLog();
 
-        scopePath = FileHelpers.getRootFolder() + FileHelpers.getPathConfig(Constanst.SCOPE_FILE_PATH);
+        scopePath = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.SCOPE_FILE_PATH);
         Log.info("SCOPE_PATH: "+scopePath);
 
         ExcelUtils.setExcelFile(scopePath);
@@ -56,7 +56,7 @@ public class Run {
     }
     //region KEY
 
-    private static String scopePath;
+    public static String scopePath;
     private static KeyWordsToActionCustom keyWord;
     private static Method method[];
     private static RunTestScriptModule runTestScriptModule;

@@ -46,6 +46,7 @@ public class Constanst {
     public static final int FLOW_COLLUM = 0;
     public static final int PASS_PLAN_COLLUM = 8;
     public static final int FAIL_PLAN_COLLUM = 9;
+    public static final int DATA_PLAN_COLLUM = 5;
     //endregion
 
     //endregion
@@ -104,6 +105,7 @@ public class Constanst {
 
     //region file config
     public static final String DATA_FILE_PATH = "data_file_path";
+    public static final String VARIABLE_FILE_PATH = "variable_file_path";
     public static final String FILE_NAME_REPORT_DATA_FLOW = "file_name_report_data_flow";
     //endregion
 }

@@ -2,7 +2,6 @@ package common.keywords;
 
 import common.utility.Constanst;
 import common.utility.Log;
-import execute.RunTestScript;
 import execute.TestScrip;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
@@ -371,7 +370,7 @@ public class KeyWordsToAction {
             request.basePath(basePath);
             return request.get();
         }catch (Throwable e){
-            RunTestScript.onFail("| request | "+ e.getMessage());
+            TestScrip.onFail("| request | "+ e.getMessage());
             return null;
         }
     }

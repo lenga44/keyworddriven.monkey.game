@@ -1,9 +1,11 @@
 package execute;
 
+import com.google.common.collect.Table;
 import common.keywords.KeyWordsToAction;
 import common.keywords.KeyWordsToActionCustom;
 import common.keywords.KeyWordsToActionToVerify;
 import common.utility.*;
+import org.apache.poi.ss.usermodel.Cell;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -70,7 +72,7 @@ public class TestScrip {
     }
     public static String openScopeFile(String fileName) throws IOException{
         Log.info("fileName "+fileName);
-        String path = /*FileHelperUtils.getRootFolder() +*/ FileHelpers.getPathConfig(fileName);
+        String path = /*FileHelperUtils.getRootFolder() +*/ FileHelpers.getValueConfig(fileName);
         Log.info("==PATH:== "+path);
         ExcelUtils.setExcelFile(path);
         return path;
@@ -78,7 +80,7 @@ public class TestScrip {
     public static String openScopeFile(String filePath,String fileName) throws IOException{
         Log.info("filePath "+filePath);
         Log.info("fileName "+fileName);
-        String path = FileHelpers.getRootFolder() + FileHelpers.getPathConfig(filePath)+fileName;
+        String path = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(filePath)+fileName;
         Log.info("==PATH:== "+path);
         ExcelUtils.setExcelFile(path);
         return path;
@@ -126,7 +128,7 @@ public class TestScrip {
         Log.info("Params: "+params);
         Log.info("Data: "+data);
         ArrayList<Object> objs = new ArrayList<>();
-        if (!params.equals("")) {
+        if (!params.equals("")&& !params.equals(null)) {
             if (params.contains(",")) {
                 for (String value : params.split(",")) {
                     objs.add(value);
@@ -150,12 +152,31 @@ public class TestScrip {
         lastTestStep = ExcelUtils.getTestStepCount(Constanst.TEST_STEP_SHEET,sTestCaseID,iTestStep);
     }
 
-    private static String getDataSet(int row){
-        String data = ExcelUtils.getStringValueInCell(row, Constanst.DATA_SET, Constanst.TEST_STEP_SHEET);
-        if(data.contains("$")&& !json.equals(null)){
-            data = JsonHandle.getValue(json,data);
+    public static String getDataSet(int row){
+        String key = ExcelUtils.getStringValueInCell(row, Constanst.DATA_SET, Constanst.TEST_STEP_SHEET);
+        String value = null;
+        if(key.contains("$")&& !json.equals(null)) {
+            value = JsonHandle.getValue(json, key);
+            FileHelpers.setJsonVariable(key, value);
+            return value;
+        }else
+            return key;
+    }
+    public static String getDataSet(String key){
+        String value = null;
+        if(key.contains("$")&& !json.equals(null)) {
+            value = JsonHandle.getValue(json, key);
+            FileHelpers.setJsonVariable(key, value);
+            return value;
+        }else return key;
+    }
+    public static String getDataSet(String key,int rowNumber, int columnNumber){
+        String value = null;
+        if(!json.equals(null)){
+            value = JsonHandle.getValue(json,ExcelUtils.getStringValueInCell(rowNumber,columnNumber));
         }
-        return data;
+        FileHelpers.setJsonVariable(key,value);
+        return value;
     }
     public static void execute_steps() throws IOException {
         for (; iTestStep < lastTestStep; iTestStep++) {
@@ -169,6 +190,7 @@ public class TestScrip {
                 params = ExcelUtils.getStringValueInCell(iTestStep, Constanst.PARAMS, Constanst.TEST_STEP_SHEET);
                 String dataSet = getDataSet(iTestStep);
                 description = ExcelUtils.getStringValueInCell(iTestStep, Constanst.DESCRIPTION, Constanst.TEST_STEP_SHEET);
+                Log.info(description);
 
                 if (result != Constanst.SKIP) {
                     if(sActionKeyword != "") {
