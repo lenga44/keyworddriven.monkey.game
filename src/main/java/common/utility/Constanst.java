@@ -27,7 +27,7 @@ public class Constanst {
     public static final int BEGIN_INDEX_COLUM = 3;
     public static final int END_INDEX_COLUM = 4;
     public static final int CURRENT_INDEX_COLUM = 5;
-    public static final int COURSE_COLUM = 5;
+    public static final int COURSE_COLUM = 6;
     public static final String PLAN_SHEET = "Plan";
     public static final String SCOPE_FILE_PATH = "scope_path";
     public static final String TESTCASE_FILE_PATH = "testcase_path";
@@ -59,6 +59,7 @@ public class Constanst {
 
     //region TS sheet
     public static final int RUN_MODE_TEST_STEP = 2;
+    public static final int RUN_MODE_TEST_CASE = 2;
     public static final int KEYWORD = 3;
     public static final int PROCEED= 6;
     public static final int DATA_SET = 5;

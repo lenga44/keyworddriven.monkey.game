@@ -1,11 +1,10 @@
 package execute;
 
-import com.google.common.collect.Table;
 import common.keywords.KeyWordsToAction;
 import common.keywords.KeyWordsToActionCustom;
 import common.keywords.KeyWordsToActionToVerify;
 import common.utility.*;
-import org.apache.poi.ss.usermodel.Cell;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -104,7 +103,7 @@ public class TestScrip {
             String sTestCaseID = ExcelUtils.getStringValueInCell(i, Constanst.TESTCASE_ID, Constanst.TESTCASE_SHEET);
             Log.info("TCID: " + sTestCaseID);
 
-            String runMode = ExcelUtils.getStringValueInCell(i,Constanst.RUN_MODE_TEST_STEP,Constanst.TESTCASE_SHEET);
+            String runMode = ExcelUtils.getStringValueInCell(i,Constanst.RUN_MODE_TEST_CASE,Constanst.TESTCASE_SHEET);
             Log.info("Run mode in TC: " + runMode);
 
             if(runMode.equals(Constanst.YES)) {
@@ -155,6 +154,7 @@ public class TestScrip {
     public static String getDataSet(int row){
         String key = ExcelUtils.getStringValueInCell(row, Constanst.DATA_SET, Constanst.TEST_STEP_SHEET);
         String value = null;
+        System.out.println(json);
         if(key.contains("$")&& !json.equals(null)) {
             value = JsonHandle.getValue(json, key);
             FileHelpers.setJsonVariable(key, value);
@@ -189,6 +189,7 @@ public class TestScrip {
                 String sActionKeyword = ExcelUtils.getStringValueInCell(iTestStep, Constanst.KEYWORD, Constanst.TEST_STEP_SHEET);
                 params = ExcelUtils.getStringValueInCell(iTestStep, Constanst.PARAMS, Constanst.TEST_STEP_SHEET);
                 String dataSet = getDataSet(iTestStep);
+                System.out.println("DATASET" +dataSet);
                 description = ExcelUtils.getStringValueInCell(iTestStep, Constanst.DESCRIPTION, Constanst.TEST_STEP_SHEET);
                 Log.info(description);
 
@@ -274,10 +275,10 @@ public class TestScrip {
     //region KEY
 
     //region Testcase key
-    public static String tcResult;
+    public static String tcResult = Constanst.PASS;
     public static String tcPath;
     public static boolean isDataFlow;
-    public static Object json;
+    public static JSONObject json;
     public static String tcName;
     //endregion
 
