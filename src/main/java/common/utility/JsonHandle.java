@@ -2,6 +2,7 @@ package common.utility;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -18,21 +19,17 @@ import java.util.stream.Collectors;
 
 public class JsonHandle {
 
-    public static String getValue(Object json,String jsonPath){
+    public static String getValue(String json,String jsonPath){
         //$.Page[0].Id
-        Object id = JsonPath.read(json, jsonPath);
-        return id.toString();
+        Object document = Configuration.defaultConfiguration().jsonProvider().parse(json);
+        String id = JsonPath.read(document, jsonPath);
+        return id;
     }
     @Deprecated
-    public static JSONObject getObjectInJsonData(int index) throws IOException, ParseException {
+    public static String getObjectInJsonData(int index) throws IOException, ParseException {
         String objects = FileHelpers.getAllData(Constanst.DATA_FILE_PATH);
         JSONArray jsonArr = new JSONArray(objects);
-        for(int n = 0; n < jsonArr.length(); n++)
-        {
-            JSONObject object = jsonArr.getJSONObject(n);
-            System.out.println(object);
-        }
-        return jsonArr.getJSONObject(index);
+        return jsonArr.getJSONObject(index).toString();
     }
     public static Object getValueInJsonObject(String path,String key) throws IOException{
         String json = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);

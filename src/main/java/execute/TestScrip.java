@@ -278,7 +278,7 @@ public class TestScrip {
     public static String tcResult = Constanst.PASS;
     public static String tcPath;
     public static boolean isDataFlow;
-    public static JSONObject json;
+    public static String json;
     public static String tcName;
     //endregion
 

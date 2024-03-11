@@ -13,6 +13,7 @@ public class RunTestScriptData extends TestScrip{
         super(keyWord, method);
     }
 
+    @Deprecated
     public static void run(String scopePath, int iTotalSuite) throws IOException, ParseException {
 
         isDataFlow = true;

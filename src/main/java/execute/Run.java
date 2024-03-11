@@ -43,6 +43,7 @@ public class Run {
     private static void runModuleFlow(int iTotalSuite) throws IOException {
         runTestScriptModule.run(scopePath,iTotalSuite);
     }
+    @Deprecated
     private static void runDataFlow(int iTotalSuite) throws IOException, ParseException {
         runTestScriptData.run(scopePath,iTotalSuite);
     }
