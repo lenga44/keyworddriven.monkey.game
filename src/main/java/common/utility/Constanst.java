@@ -46,7 +46,7 @@ public class Constanst {
     public static final int FLOW_COLLUM = 0;
     public static final int PASS_PLAN_COLLUM = 8;
     public static final int FAIL_PLAN_COLLUM = 9;
-    public static final int DATA_PLAN_COLLUM = 5;
+    public static final int DATA_PLAN_COLLUM = 6;
     //endregion
 
     //endregion

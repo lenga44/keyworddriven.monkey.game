@@ -1,15 +1,13 @@
 package execute;
 
-import common.keywords.KeyWordsToAction;
-import common.keywords.KeyWordsToActionCustom;
-import common.utility.Log;
+import common.keywords.KeyWordsToActionPocoSDK;
 import report.GenerateReport;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
 
 public class RunTestScriptModule extends TestScrip{
-    public RunTestScriptModule(KeyWordsToActionCustom keyWord, Method method[]){
+    public RunTestScriptModule(KeyWordsToActionPocoSDK keyWord, Method method[]){
         super(keyWord, method);
     }
     public static void run(String scopePath,int iTotalSuite) throws IOException {

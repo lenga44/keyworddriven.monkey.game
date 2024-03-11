@@ -1,6 +1,6 @@
 package execute;
 
-import common.keywords.KeyWordsToActionCustom;
+import common.keywords.KeyWordsToActionPocoSDK;
 import common.utility.Constanst;
 import common.utility.ExcelUtils;
 import common.utility.FileHelpers;
@@ -14,7 +14,7 @@ public class Run {
 
     public static void main(String[] args) throws IOException, ParseException {
 
-        keyWord = new KeyWordsToActionCustom();
+        keyWord = new KeyWordsToActionPocoSDK();
         method = keyWord.getClass().getMethods();
 
         Log.resetFileLog();
@@ -58,7 +58,7 @@ public class Run {
     //region KEY
 
     public static String scopePath;
-    private static KeyWordsToActionCustom keyWord;
+    private static KeyWordsToActionPocoSDK keyWord;
     private static Method method[];
     private static RunTestScriptModule runTestScriptModule;
     private static RunTestScriptData runTestScriptData;

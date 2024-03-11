@@ -1,10 +1,9 @@
 package execute;
 
 import common.keywords.KeyWordsToAction;
-import common.keywords.KeyWordsToActionCustom;
+import common.keywords.KeyWordsToActionPocoSDK;
 import common.keywords.KeyWordsToActionToVerify;
 import common.utility.*;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 import static common.keywords.KeyWordsToAction.exception;
 
 public class TestScrip {
-    public TestScrip(KeyWordsToActionCustom keyWord,Method method[]){
+    public TestScrip(KeyWordsToActionPocoSDK keyWord, Method method[]){
         this.keyWord = keyWord;
         this.method = method;
     }

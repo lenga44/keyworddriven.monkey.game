@@ -1,6 +1,6 @@
 package execute;
 
-import common.keywords.KeyWordsToActionCustom;
+import common.keywords.KeyWordsToActionPocoSDK;
 import common.utility.*;
 import org.json.simple.parser.ParseException;
 import report.GenerateReport;
@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 
 public class RunTestScriptData extends TestScrip{
-    public RunTestScriptData(KeyWordsToActionCustom keyWord, Method method[]){
+    public RunTestScriptData(KeyWordsToActionPocoSDK keyWord, Method method[]){
         super(keyWord, method);
     }
 
@@ -23,7 +23,7 @@ public class RunTestScriptData extends TestScrip{
 
         for(int index = begin;index<=end;index++){
             getLevelFolder(begin);
-            json = JsonHandle.getObjectInJsonData(index);
+            json = JsonHandle.getObjectInJsonData(index-1);
 
             execute(scopePath,iTotalSuite);
 
