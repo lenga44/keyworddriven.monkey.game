@@ -8,6 +8,7 @@ import common.utility.*;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Map;
 
 import static common.keywords.KeyWordsToAction.exception;
 
@@ -18,6 +19,7 @@ public class TestScrip {
     }
     //region SCOPE
     public static void execute(String scopePath, int iTotalSuite) throws IOException {
+        System.out.println("Run only testcase1");
         int iFirstSuite = onceTimeScrip(1);
         int iLastSuite = onceTimeScrip(iTotalSuite-1);
 
@@ -153,10 +155,11 @@ public class TestScrip {
     public static String getDataSet(int row){
         String key = ExcelUtils.getStringValueInCell(row, Constanst.DATA_SET, Constanst.TEST_STEP_SHEET);
         String value = null;
-        System.out.println(json);
         if(key.contains("$")&& !json.equals(null)) {
             value = JsonHandle.getValue(json, key);
             FileHelpers.setJsonVariable(key, value);
+            map_key_data_set.put(row,key);
+            ExcelUtils.setCellData(value,row, Constanst.DATA_SET, Constanst.TEST_STEP_SHEET,tcPath);
             return value;
         }else
             return key;
@@ -165,9 +168,10 @@ public class TestScrip {
         String value = null;
         if(key.contains("$")&& !json.equals(null)) {
             value = JsonHandle.getValue(json, key);
-            FileHelpers.setJsonVariable(key, value);
-            return value;
-        }else return key;
+            //FileHelpers.setJsonVariable(key, value);
+        }else
+            value = key;
+        return value;
     }
     public static String getDataSet(String key,int rowNumber, int columnNumber){
         String value = null;
@@ -188,7 +192,6 @@ public class TestScrip {
                 String sActionKeyword = ExcelUtils.getStringValueInCell(iTestStep, Constanst.KEYWORD, Constanst.TEST_STEP_SHEET);
                 params = ExcelUtils.getStringValueInCell(iTestStep, Constanst.PARAMS, Constanst.TEST_STEP_SHEET);
                 String dataSet = getDataSet(iTestStep);
-                System.out.println("DATASET" +dataSet);
                 description = ExcelUtils.getStringValueInCell(iTestStep, Constanst.DESCRIPTION, Constanst.TEST_STEP_SHEET);
                 Log.info(description);
 
@@ -257,16 +260,35 @@ public class TestScrip {
     // region verify result after each step
     private static void verifyStep(int numberStep) throws IOException {
         String sActionKeyword = ExcelUtils.getStringValueInCell(numberStep, Constanst.VERIFY_STEP, Constanst.TEST_STEP_SHEET);
-        params = "";
+        String dataSetActual =ExcelUtils.getStringValueInCell(numberStep, Constanst.DATA_SET_ACTUAL, Constanst.TEST_STEP_SHEET);
+        getActualWithKey(iTestStep,dataSetActual);
+        params = ExcelUtils.getStringValueInCell(numberStep, Constanst.PARAM_VERIFY_STEP, Constanst.TEST_STEP_SHEET)+ dataSetActual ;
 
         if(!sActionKeyword.equals("")){
             if(result == Constanst.PASS) {
-                expected = ExcelUtils.getStringValueInCell(numberStep,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET);
+                expected = getExpectedWithKey(numberStep);
                 description = "Check - " +description;
                 execute_action("",sActionKeyword);
             }
         }
     }
+    private static String getExpectedWithKey(int numberStep){
+        String ex = ExcelUtils.getStringValueInCell(numberStep,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET);
+        if(isDataFlow ==true && ex.contains("$")) {
+            String value = JsonHandle.getValue(json, ex);
+            map_key_expected.put(numberStep, ex);
+            ExcelUtils.setCellData(value,numberStep,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET,tcPath);
+            return value;
+        }
+        else
+            return ex;
+    }
+    private static void getActualWithKey(int numberStep,String value){
+        if(isDataFlow ==true && params.contains("$")) {
+            map_key_actual.put(numberStep, value);
+        }
+    }
+
     // endregion verify result after each step
 
     //endregion
@@ -292,6 +314,9 @@ public class TestScrip {
     private static Method method[];
     protected static KeyWordsToAction keyWord;
     protected static String expected;
+    protected static Map<Integer, String> map_key_expected;
+    protected static Map<Integer, String> map_key_actual;
+    protected static Map<Integer, String> map_key_data_set;
     //endregion
 
     //endregion

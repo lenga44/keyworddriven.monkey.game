@@ -1,5 +1,7 @@
 package common.utility;
 
+import java.util.Map;
+
 public class Constanst {
 
     public static final String PROJECT_PATH = System.getProperty("user.dir");
@@ -37,7 +39,7 @@ public class Constanst {
     public static final String ONCE_TIME_TEARDOWN_SETUP_FILE_PATH = "once_time_teardown_path";
     public static final String LOG_FILE_PATH = "\\tool_test_game\\config\\logging.txt";
     public static final String CONFIG_FILE_PATH = "\\tool_test_game\\config\\config.json";
-    public static final String REPORT_FILE_PATH = "\\tool_test_game\\report\\";
+    public static final String REPORT_FILE_PATH = "\\tool_test_game\\config\\report\\";
     public static final String ONCE_TIME_KEY = "OnceTime";
 
     //region PLAN
@@ -66,13 +68,11 @@ public class Constanst {
     public static final int PARAMS = 4;
     public static final int VERIFY_STEP = 7;
     public static final int PARAM_VERIFY_STEP = 8;
-    public static final int EXPECT_KEYWORD = 9;
-    public static final int PARAM_VERIFY_EXPECT = 10;
-    public static final int KEY_DATA_EXPECT = 11;
-    public static final int EXPECTED = 12;
-    public static final int RESULT = 13;
-    public static final int ERROR = 14;
-    public static final int IMAGE = 15;
+    public static final int DATA_SET_ACTUAL = 9;
+    public static final int EXPECTED = 10;
+    public static final int RESULT = 11;
+    public static final int ERROR = 12;
+    public static final int IMAGE = 13;
     public static final String PROCESS_YES = "Y";
     public static final int DESCRIPTION = 2;
     public static final int TEST_STEP = 1;

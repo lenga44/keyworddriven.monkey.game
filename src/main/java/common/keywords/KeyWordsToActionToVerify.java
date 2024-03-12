@@ -1,6 +1,7 @@
 package common.keywords;
 
 import common.utility.Constanst;
+import common.utility.JsonHandle;
 import common.utility.Log;
 import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import io.restassured.path.json.JsonPath;
@@ -248,5 +249,11 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
     }
     public static String getVideoName(String locator){
         return getPropertyValue(locator,"VideoPlayer","clip","(UnityEngine.VideoClip)");
+    }
+    public static String getResultByKey(String locator,String component,String key){
+        Response response = request(Constanst.SCENE_URL,"//" +locator+"."+component);
+        String value = JsonHandle.getValue(response.getBody().asString(),key);
+        return value;
+
     }
 }

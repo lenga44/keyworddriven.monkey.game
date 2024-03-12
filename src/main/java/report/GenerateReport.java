@@ -15,39 +15,44 @@ public class GenerateReport{
         try {
             if (f.exists()) {
                 File source = new File(TestScrip.tcPath);
-                String tcCopyPath = subFolder + FileHelpers.convertPath("//" + TestScrip.tcName +"_"+reportName+"_"+ row+".xlsx");
+                String tcCopyPath = subFolder + FileHelpers.convertPath("//_"+TestScrip.tcName+"_"+reportName+"_"+ row+".xlsx");
                 Log.info("Path report TC current: " + tcCopyPath);
                 dest = new File(tcCopyPath);
-                ExcelUtils.copyFile(source, dest);
-                if(dest.exists()) {
-                    replaceValueInReport(tcCopyPath);
-                    ExcelUtils.closeFile(dest);
+                if(!dest.exists()) {
+                    ExcelUtils.copyFile(source, dest);
                 }else
-                    Log.error(tcCopyPath.toUpperCase() +"not exist!!");
+                    System.out.println("tcCopyPathtcCopyPath " +tcCopyPath);
+                    replaceValueInReport(tcCopyPath);
+                ExcelUtils.closeFile(dest);
             }
         }catch (Exception e){
             Log.error("Copy file status: " + dest.exists());
         }
     }
     public static void genReport(int row,String folderName,String reportName)throws IOException{
-        FileHelpers.genFolderReport(FileHelpers.convertPath(folderName+"//"+reportName));
+        FileHelpers.genFolderReport(FileHelpers.convertPath(folderName));
         genTCReportFile(FileHelpers.convertPath(folderName),row,folderName,reportName);
         ExcelUtils.setCellData(Constanst.YES, row, Constanst.RUN_MODE_SCOPE, Constanst.SCOPE_SHEET, Run.scopePath);
     }
     public static void countResultPlan(String path,int totalSuite){
-        ExcelUtils.setExcelFile(path);
-        int pass = Integer.valueOf(ExcelUtils.getStringValueInCell(1,Constanst.PASS_PLAN_COLLUM,Constanst.PLAN_SHEET));
-        int fail =0;
-        for (int i = 0;i<totalSuite;i++){
-            if(ExcelUtils.getStringValueInCell(i,Constanst.STATUS_SUITE,Constanst.SCOPE_SHEET)==Constanst.FAIL){
-                fail = 1;
-                break;
+        try {
+            ExcelUtils.setExcelFile(path);
+            int pass = ExcelUtils.getNumberValueInCell(1, Constanst.PASS_PLAN_COLLUM, Constanst.PLAN_SHEET);
+            int fail = 0;
+            for (int i = 0; i < totalSuite; i++) {
+                if (ExcelUtils.getStringValueInCell(i, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET) == Constanst.FAIL) {
+                    fail = 1;
+                    break;
+                }
             }
+            pass = (fail == 0) ? pass + 1 : pass;
+            fail += ExcelUtils.getNumberValueInCell(1, Constanst.FAIL_PLAN_COLLUM, Constanst.PLAN_SHEET);
+            ExcelUtils.setCellData(pass, 1, Constanst.PASS_PLAN_COLLUM, Constanst.PLAN_SHEET, path);
+            ExcelUtils.setCellData(fail, 1, Constanst.FAIL_PLAN_COLLUM, Constanst.PLAN_SHEET, path);
+        }catch (Exception e){
+            Log.error("countResultPlan || "+ e.getMessage());
+            e.printStackTrace();
         }
-        pass = (fail==0)?pass+1:pass;
-        fail += Integer.valueOf(ExcelUtils.getStringValueInCell(1,Constanst.FAIL_PLAN_COLLUM,Constanst.PLAN_SHEET));
-        ExcelUtils.setCellData(pass,1,Constanst.PASS_PLAN_COLLUM,Constanst.PLAN_SHEET,path);
-        ExcelUtils.setCellData(fail,1,Constanst.FAIL_PLAN_COLLUM,Constanst.PLAN_SHEET,path);
     }
     @Deprecated
     private static void replaceValueInReport(String path) throws IOException {
