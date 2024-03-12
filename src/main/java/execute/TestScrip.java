@@ -18,34 +18,10 @@ public class TestScrip {
         this.method = method;
     }
     //region SCOPE
-    public static void execute(String scopePath, int iTotalSuite) throws IOException {
-        System.out.println("Run only testcase1");
-        int iFirstSuite = onceTimeScrip(1);
-        int iLastSuite = onceTimeScrip(iTotalSuite-1);
-
-        if(iFirstSuite>0 && iLastSuite==0){
-            Log.info("Run once time set up");
-            execute_suites(scopePath,1,2);
-            execute_suites(scopePath,2,iTotalSuite);
-        }
-        if(iLastSuite>0 && iFirstSuite==0){
-            Log.info("Run once time set up and tear down");
-            execute_suites(scopePath,1,iTotalSuite-1);
-            execute_suites(scopePath,iTotalSuite-1,iTotalSuite);
-        }
-        if (iFirstSuite>0 && iLastSuite>0){
-            Log.info("Run once time set up and tear down");
-            execute_suites(scopePath,1,2);
-            execute_suites(scopePath,2,iTotalSuite-1);
-            execute_suites(scopePath,iTotalSuite-1,iTotalSuite);
-        }
-        if(iFirstSuite == 0 && iLastSuite ==0){
-            Log.info("Run only testcase");
-            execute_suites(scopePath,1,iTotalSuite);
-        }
-    }
     public static void execute_suites(String scopePath,int iTestSuite, int iTotalSuite) throws IOException {
-        for (;iTestSuite<iTotalSuite;iTestSuite++){
+        Log.info("execute_suites");
+        ExcelUtils.setExcelFile(scopePath);
+        for (;iTestSuite<=iTotalSuite;iTestSuite++){
 
             ExcelUtils.setCellData("",iTestSuite,Constanst.STATUS_SUITE,Constanst.SCOPE_SHEET,scopePath);
             String sRunMode = ExcelUtils.getStringValueInCell(iTestSuite,Constanst.RUN_MODE_SCOPE,Constanst.SCOPE_SHEET);
@@ -301,6 +277,8 @@ public class TestScrip {
     public static boolean isDataFlow;
     public static String json;
     public static String tcName;
+    public static int iFirstSuite;
+    public static int iLastSuite;
     //endregion
 
     //region Test Step key

@@ -17,7 +17,7 @@ public class RunTestScriptData extends TestScrip{
     }
 
     @Deprecated
-    public static void run(String scopePath, int iTotalSuite) throws IOException, ParseException {
+    public static void run(String scopePath, int iTestSuit, int iTotalSuite) throws IOException, ParseException {
 
         //reset total Pass Fail
         setPassAndFail(0,0,scopePath);
@@ -38,9 +38,8 @@ public class RunTestScriptData extends TestScrip{
 
             //get node need check
             json = JsonHandle.getObjectInJsonData(index-1);
-
             //execute tc
-            execute(scopePath,iTotalSuite);
+            execute_suites(scopePath,iTestSuit,iTotalSuite);
             ExcelUtils.setCellData(begin,1,Constanst.CURRENT_INDEX_COLUM,Constanst.PLAN_SHEET,scopePath);
             String key = ExcelUtils.getStringValueInCell(1,Constanst.DATA_PLAN_COLLUM,Constanst.PLAN_SHEET);
 

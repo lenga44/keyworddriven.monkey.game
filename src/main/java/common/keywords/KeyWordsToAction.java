@@ -82,6 +82,9 @@ public class KeyWordsToAction {
         waitForObject(locator);
         request(Constanst.SCENE_URL,"//"+locator+"[" +index+"]"+"."+component+"."+property);
     }
+    public static void clickByPathWithCondition(String locator,String component){
+
+    }
     public static void clickDownAndUp(String locator){
         waitForObject(locator);
         request(Constanst.POINTER_URL,".DownToUp("+getAbsolutePath(locator,"0")+")");
