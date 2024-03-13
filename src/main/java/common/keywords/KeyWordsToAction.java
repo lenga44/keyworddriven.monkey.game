@@ -98,7 +98,6 @@ public class KeyWordsToAction {
     }
     public static void clickLocatorChild(String locator, String component, String property,String key){
         String locatorChild = FileHelpers.getValueConfig(FileHelpers.getRootFolder()+Constanst.VARIABLE_PATH_FILE,key)+"/"+locator;
-        System.out.println(locatorChild);
         waitForObject(locatorChild);
         request(Constanst.SCENE_URL,"//"+locatorChild+"."+component+"."+property);
     }
@@ -131,6 +130,9 @@ public class KeyWordsToAction {
         String result = JsonHandle.setValueInJsonObject(path,Constanst.PATH_GAME_OBJECT,value);
         FileHelpers.writeFile(result,path);
         ExcelUtils.closeFile(path);
+    }
+    public static void returnIndex(){
+
     }
     public static void press(String locator){
         //waitForObject(locator);

@@ -1,6 +1,7 @@
 package common.keywords;
 
 import common.utility.Constanst;
+import common.utility.FileHelpers;
 import common.utility.JsonHandle;
 import common.utility.Log;
 import groovyjarjarantlr4.v4.runtime.misc.NotNull;
@@ -10,10 +11,7 @@ import io.restassured.specification.RequestSpecification;
 import org.testng.Assert;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static io.restassured.RestAssured.given;
 
@@ -134,8 +132,21 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         return convert(response,"text").trim();
     }
     public static String getTextNoColor(String locator,String component,String... StrSplit){
-
-        return null;
+        Response response = request(Constanst.SCENE_URL,"//" +locator+"."+component);
+        String values = convert(response,"text").trim();
+        String result = null;
+        for (String value:values.split(" ")) {
+            for (String str:StrSplit) {
+                if(value.contains(str))
+                    result += value.replace(str,"")+" ";
+            }
+        }
+        return result.trim();
+    }
+    public static String getTextLocatorChild(String locator, String component, String key,String... StrSplit){
+        String locatorChild = FileHelpers.getValueConfig(FileHelpers.getRootFolder()+Constanst.VARIABLE_PATH_FILE,key)+"/"+locator;
+        waitForObject(locatorChild);
+        return  getTextNoColor(locatorChild,component,StrSplit);
     }
     public static String getTextContain(String locator,String component,String contain){
         Response response = request(Constanst.SCENE_URL,"//" +locator+"."+component);
