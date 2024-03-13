@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -18,6 +19,16 @@ public class FileHelpers {
     public static String getValueConfig(String key){
         try {
             String json = new String(Files.readAllBytes(Paths.get(getRootFolder() +Constanst.CONFIG_FILE_PATH)), StandardCharsets.UTF_8);
+            JsonObject jsonObject = JsonParser.parseString(json).getAsJsonObject();
+            return jsonObject.get(key).toString().replace("\"","");
+        } catch (IOException e) {
+            Log.error(e.getMessage());
+        }
+        return null;
+    }
+    public static String getValueConfig(String path,String key){
+        try {
+            String json = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
             JsonObject jsonObject = JsonParser.parseString(json).getAsJsonObject();
             return jsonObject.get(key).toString().replace("\"","");
         } catch (IOException e) {
@@ -41,16 +52,27 @@ public class FileHelpers {
     public static String setJsonVariable(String key, String value) {
         return '"'+key+'"'+":"+'"'+value+'"'+",";
     }
-    public static void writeFile(String variable){
-        String json = variable.substring(0,variable.length()-1);
-        json ="{"+json+"}";
+    public static void writeFile(String variable,String path){
         try {
-            FileWriter myObj = new FileWriter (getRootFolder()+ getValueConfig(Constanst.VARIABLE_FILE_PATH));
-            myObj.write(json);
+            FileWriter myObj = new FileWriter (path);
+            myObj.write(variable);
             myObj.close();
         } catch (Throwable e) {
             Log.error(e.getMessage());
         }
     }
-
+    public static String readFile(String path){
+        String json = null;
+        try {
+            File file = new File(path);
+            FileInputStream fis = new FileInputStream(file);
+            byte[] data = new byte[(int) file.length()];
+            fis.read(data);
+            fis.close();
+            json = new String(data, "UTF-8");
+        } catch (Throwable e) {
+            Log.error(e.getMessage());
+        }
+        return json;
+    }
 }

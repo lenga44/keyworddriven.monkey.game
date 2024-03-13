@@ -81,7 +81,7 @@ public class TestScrip {
             Log.info("TCID: " + sTestCaseID);
 
             String runMode = ExcelUtils.getStringValueInCell(i,Constanst.RUN_MODE_TEST_CASE,Constanst.TESTCASE_SHEET);
-            Log.info("Run mode in TC: " + runMode);
+            Log.info(sTestCaseID+ " - Run mode in TC: " + runMode);
 
             if(runMode.equals(Constanst.YES)) {
                 rangeStepByTestCase(sTestCaseID);
@@ -166,8 +166,10 @@ public class TestScrip {
             if(process.equals(Constanst.PROCESS_YES)) {
 
                 String sActionKeyword = ExcelUtils.getStringValueInCell(iTestStep, Constanst.KEYWORD, Constanst.TEST_STEP_SHEET);
+
                 params = ExcelUtils.getStringValueInCell(iTestStep, Constanst.PARAMS, Constanst.TEST_STEP_SHEET);
                 String dataSet = getDataSet(iTestStep);
+
                 description = ExcelUtils.getStringValueInCell(iTestStep, Constanst.DESCRIPTION, Constanst.TEST_STEP_SHEET);
                 Log.info(description);
 

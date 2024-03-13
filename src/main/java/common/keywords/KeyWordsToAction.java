@@ -1,16 +1,19 @@
 package common.keywords;
 
-import common.utility.Constanst;
-import common.utility.Log;
+import com.google.gson.JsonElement;
+import common.utility.*;
 import execute.TestScrip;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import io.restassured.response.ResponseBody;
 import io.restassured.specification.RequestSpecification;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -63,6 +66,14 @@ public class KeyWordsToAction {
             exception(e);
         }
     }
+    public static void sleep(int second)  {
+        try {
+            Thread.sleep (second * 1000);
+            Log.info("Sleep: " +second);
+        }catch (InterruptedException e){
+            exception(e);
+        }
+    }
     public static void sleep()  {
         try {
             Thread.sleep((long) (2 * 1000));
@@ -82,8 +93,11 @@ public class KeyWordsToAction {
         waitForObject(locator);
         request(Constanst.SCENE_URL,"//"+locator+"[" +index+"]"+"."+component+"."+property);
     }
-    public static void clickByPathWithCondition(String locator,String component){
-
+    public static void clickLocatorChild(String locator, String component, String property,String key){
+        String locatorChild = FileHelpers.getValueConfig(FileHelpers.getRootFolder()+Constanst.VARIABLE_PATH_FILE,key)+"/"+locator;
+        System.out.println(locatorChild);
+        waitForObject(locatorChild);
+        request(Constanst.SCENE_URL,"//"+locatorChild+"."+component+"."+property);
     }
     public static void clickDownAndUp(String locator){
         waitForObject(locator);
@@ -95,6 +109,25 @@ public class KeyWordsToAction {
         if(absolutePath.contains(":"))
             absolutePath = absolutePath.replace(":","!_!");
         request(Constanst.POINTER_URL,".DownToUp("+absolutePath+","+index+")");
+    }
+    @Deprecated
+    public static void returnPath(String locator, String component,String key,String expected) throws IOException {
+        String path = FileHelpers.getRootFolder()+FileHelpers.convertPath(Constanst.VARIABLE_PATH_FILE);
+        waitForObject(locator);
+        int index = 0;
+        Response response = request(Constanst.SCENE_URL,"//"+locator+"."+component);
+        ResponseBody body = response.getBody();
+        String json = body.asString();
+        for (JsonElement element: JsonHandle.getJsonArray(json)) {
+            if(JsonHandle.getValue(element.toString(),"$."+key).equals(expected))
+                break;
+            index++;
+        }
+        Response response1 = request(Constanst.SCENE_URL,"//"+locator);
+        String value = getAbsolutePath(response1,String.valueOf(index));
+        String result = JsonHandle.setValueInJsonObject(path,Constanst.PATH_GAME_OBJECT,value);
+        FileHelpers.writeFile(result,path);
+        ExcelUtils.closeFile(path);
     }
     public static void press(String locator){
         //waitForObject(locator);
@@ -394,6 +427,12 @@ public class KeyWordsToAction {
     }
     private static String getAbsolutePath(String locator, String index){
         Response response = request(Constanst.SCENE_URL,"//"+locator + "["+Integer.valueOf(index)+"]");
+        String absolutePath = convert(response,"path");
+        if(absolutePath.contains(":"))
+            absolutePath = absolutePath.replace(":","!_!");
+        return absolutePath;
+    }
+    private static String getAbsolutePath(Response response, String index){
         String absolutePath = convert(response,"path");
         if(absolutePath.contains(":"))
             absolutePath = absolutePath.replace(":","!_!");

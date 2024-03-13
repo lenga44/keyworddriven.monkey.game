@@ -106,11 +106,11 @@ public class Constanst {
 
     //region file config
     public static final String DATA_FILE_PATH = "data_file_path";
-    public static final String VARIABLE_FILE_PATH = "variable_file_path";
     public static final String FILE_NAME_REPORT_DATA_FLOW = "file_name_report_data_flow";
     //endregion
     //region file variable file
     public static final String PATH_GAME_OBJECT = "path";
     public static final String INDEX_GAME_OBJECT = "index";
+    public static final String VARIABLE_PATH_FILE = "\\tool_test_game\\config\\data\\variable.json";
     //endregion
 }
