@@ -93,6 +93,9 @@ public class KeyWordsToAction {
         waitForObject(locator);
         request(Constanst.SCENE_URL,"//"+locator+"[" +index+"]"+"."+component+"."+property);
     }
+    public static void clickWhichObjectEnable(String locator,String index,String component, String property){
+        request(Constanst.SCENE_URL,"//"+locator+"[" +index+"]"+"."+component+"."+property);
+    }
     public static void clickLocatorChild(String locator, String component, String property,String key){
         String locatorChild = FileHelpers.getValueConfig(FileHelpers.getRootFolder()+Constanst.VARIABLE_PATH_FILE,key)+"/"+locator;
         System.out.println(locatorChild);

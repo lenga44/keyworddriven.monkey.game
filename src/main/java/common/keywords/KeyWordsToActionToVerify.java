@@ -133,6 +133,10 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         Response response = request(Constanst.SCENE_URL,"//" +locator+"."+component);
         return convert(response,"text").trim();
     }
+    public static String getTextNoColor(String locator,String component,String... StrSplit){
+
+        return null;
+    }
     public static String getTextContain(String locator,String component,String contain){
         Response response = request(Constanst.SCENE_URL,"//" +locator+"."+component);
         return String.valueOf(convert(response,"text").trim().contains(contain));

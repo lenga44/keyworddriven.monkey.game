@@ -52,10 +52,14 @@ public class RunTestScriptData extends TestScrip{
             ExcelUtils.closeFile(scopePath);
 
             ExcelUtils.setExcelFile(tcPath);
+
+            Log.info("Reset key");
             resetKey(map_key_expected,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET,tcPath);
             resetKey(map_key_actual,Constanst.DATA_SET_ACTUAL,Constanst.TEST_STEP_SHEET,tcPath);
             resetKey(map_key_data_set,Constanst.DATA_SET,Constanst.TEST_STEP_SHEET,tcPath);
-            Log.info("Reset key");
+
+            Log.info("Reset status,image, error");
+
             ExcelUtils.closeFile(tcPath);
         }
     }
