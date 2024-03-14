@@ -103,6 +103,18 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
             result = result.replace("(UnityEngine.Sprite)","");
         return result.trim();
     }
+    public static String getImageNameVariable(String generate,String locator,String key){
+        String result =  getPropertyValue(FileHelpers.getValueConfig(Constanst.VARIABLE_PATH_FILE,key)+generate+locator,"Image","sprite");
+        if(result.contains("(UnityEngine.Sprite)"))
+            result = result.replace("(UnityEngine.Sprite)","");
+        return result.trim();
+    }
+    public static String getImageNameVariable(String generate,String locator,String component,String key){
+        String result =  getPropertyValue(FileHelpers.getValueConfig(Constanst.VARIABLE_PATH_FILE,key)+generate+locator,component,"sprite");
+        if(result.contains("(UnityEngine.Sprite)"))
+            result = result.replace("(UnityEngine.Sprite)","");
+        return result.trim();
+    }
     public static String getImageColor(String locator){
         String result =  getPropertyValue(locator,"Image","color");
         return result.trim();

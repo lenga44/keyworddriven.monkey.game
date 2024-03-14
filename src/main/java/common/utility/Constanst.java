@@ -110,7 +110,7 @@ public class Constanst {
     //endregion
     //region file variable file
     public static final String PATH_GAME_OBJECT = "path";
-    public static final String INDEX_GAME_OBJECT = "index";
-    public static final String VARIABLE_PATH_FILE = "\\tool_test_game\\config\\data\\variable.json";
+    public static final String VARIABLE_PATH_FILE = FileHelpers.getRootFolder()
+            +FileHelpers.convertPath("\\tool_test_game\\config\\data\\variable.json");
     //endregion
 }

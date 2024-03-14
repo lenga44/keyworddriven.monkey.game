@@ -96,8 +96,8 @@ public class KeyWordsToAction {
     public static void clickWhichObjectEnable(String locator,String index,String component, String property){
         request(Constanst.SCENE_URL,"//"+locator+"[" +index+"]"+"."+component+"."+property);
     }
-    public static void clickLocatorChild(String locator, String component, String property,String key){
-        String locatorChild = FileHelpers.getValueConfig(FileHelpers.getRootFolder()+Constanst.VARIABLE_PATH_FILE,key)+"/"+locator;
+    public static void clickLocatorChild(String generate,String locator, String component, String property,String key){
+        String locatorChild = FileHelpers.getValueConfig(Constanst.VARIABLE_PATH_FILE,key)+generate+locator;
         waitForObject(locatorChild);
         request(Constanst.SCENE_URL,"//"+locatorChild+"."+component+"."+property);
     }
@@ -114,7 +114,6 @@ public class KeyWordsToAction {
     }
     @Deprecated
     public static void returnPath(String locator, String component,String key,String expected) throws IOException {
-        String path = FileHelpers.getRootFolder()+FileHelpers.convertPath(Constanst.VARIABLE_PATH_FILE);
         waitForObject(locator);
         int index = 0;
         Response response = request(Constanst.SCENE_URL,"//"+locator+"."+component);
@@ -127,9 +126,16 @@ public class KeyWordsToAction {
         }
         Response response1 = request(Constanst.SCENE_URL,"//"+locator);
         String value = getAbsolutePath(response1,String.valueOf(index));
-        String result = JsonHandle.setValueInJsonObject(path,Constanst.PATH_GAME_OBJECT,value);
-        FileHelpers.writeFile(result,path);
-        ExcelUtils.closeFile(path);
+        String result = JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.PATH_GAME_OBJECT,value);
+        FileHelpers.writeFile(result,Constanst.VARIABLE_PATH_FILE);
+        ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
+    }
+    public static void returnPath(String locator,String groupID,String plusStr) throws IOException {
+        waitForObject(locator);
+        String index = FileHelpers.getValueConfig(Constanst.VARIABLE_PATH_FILE,groupID);
+        String result = JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.PATH_GAME_OBJECT,locator+index+plusStr);
+        FileHelpers.writeFile(result,Constanst.VARIABLE_PATH_FILE);
+        ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
     public static void returnIndex(){
 
