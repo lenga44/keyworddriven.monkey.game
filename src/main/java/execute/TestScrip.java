@@ -4,11 +4,14 @@ import common.keywords.KeyWordsToAction;
 import common.keywords.KeyWordsToActionPocoSDK;
 import common.keywords.KeyWordsToActionToVerify;
 import common.utility.*;
+import report.GenerateReport;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import static common.keywords.KeyWordsToAction.exception;
 
@@ -37,8 +40,11 @@ public class TestScrip {
                     tcName = "Report_"+game;
                     ExcelUtils.setCellData(tcName,iTestSuite,Constanst.TEST_SUITE_FILE_NAME,Constanst.SCOPE_SHEET,scopePath);
                 }
+
                 Log.info("TCS name: "+tcName);
-                tcPath = openScopeFile(Constanst.TESTCASE_FILE_PATH, tcName + ".xlsx");
+                tcPath = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.TESTCASE_FILE_PATH)+ tcName + ".xlsx";
+                reportPath = GenerateReport.genReport(levelFolder,tcName+currentDataName);
+                openScopeFile(reportPath);
 
                 execute_testcases();
                 ExcelUtils.setExcelFile(scopePath);
@@ -74,13 +80,12 @@ public class TestScrip {
     private static void execute_testcases() throws IOException {
         int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
         Log.info("Total TC: " + iTotalTestCase);
-        for(int i =1; i<iTotalTestCase;i++) {
+        for(int iTestCase =1; iTestCase<iTotalTestCase;iTestCase++) {
 
-            ExcelUtils.setCellData("",i,Constanst.TESTCASE_STATUS,Constanst.TESTCASE_SHEET,tcPath);
-            String sTestCaseID = ExcelUtils.getStringValueInCell(i, Constanst.TESTCASE_ID, Constanst.TESTCASE_SHEET);
+            String sTestCaseID = ExcelUtils.getStringValueInCell(iTestCase, Constanst.TESTCASE_ID, Constanst.TESTCASE_SHEET);
             Log.info("TCID: " + sTestCaseID);
 
-            String runMode = ExcelUtils.getStringValueInCell(i,Constanst.RUN_MODE_TEST_CASE,Constanst.TESTCASE_SHEET);
+            String runMode = ExcelUtils.getStringValueInCell(iTestCase,Constanst.RUN_MODE_TEST_CASE,Constanst.TESTCASE_SHEET);
             Log.info(sTestCaseID+ " - Run mode in TC: " + runMode);
 
             if(runMode.equals(Constanst.YES)) {
@@ -89,16 +94,20 @@ public class TestScrip {
                 if (result != Constanst.SKIP) {
                     tcResult = Constanst.PASS;
                     execute_steps();
-                    onResultTestcase(tcResult, "", i);
+                    onResultTestcase(tcResult, "", iTestCase);
 
                 } else
-                    onResultTestcase(Constanst.SKIP, error, i);
+                    onResultTestcase(Constanst.SKIP, error, iTestCase);
             }
         }
     }
-    private static void onResultTestcase(String status, String message, int rowNumber) {
-        ExcelUtils.setCellData(status, rowNumber, Constanst.TESTCASE_STATUS, Constanst.TESTCASE_SHEET, tcPath);
-        ExcelUtils.setCellData(message,  rowNumber, Constanst.TESTCASE_ERROR, Constanst.TESTCASE_SHEET, tcPath);
+    private static void executeTCSByGroup(int iTestCase){
+        groupIDS = new HashSet<>();
+    }
+    private static void onResultTestcase(String status, String message, int rowNumber) throws IOException {
+        ExcelUtils.setCellData(status, rowNumber, Constanst.TESTCASE_STATUS, Constanst.TESTCASE_SHEET, reportPath);
+        ExcelUtils.setCellData(message,  rowNumber, Constanst.TESTCASE_ERROR, Constanst.TESTCASE_SHEET, reportPath);
+        ExcelUtils.closeFile(reportPath);
     }
     private static Object[] getParam(String params, String data){
         Log.info("Params: "+params);
@@ -126,6 +135,10 @@ public class TestScrip {
     private static void rangeStepByTestCase(String sTestCaseID){
         iTestStep = ExcelUtils.getRowContains(sTestCaseID,Constanst.TESTCASE_ID,Constanst.TEST_STEP_SHEET);
         lastTestStep = ExcelUtils.getTestStepCount(Constanst.TEST_STEP_SHEET,sTestCaseID,iTestStep);
+    }
+    private static void rangeByID(String id,int collum,String sheetName,int startID){
+        iTestStep = ExcelUtils.getRowContains(id,collum,sheetName);
+        lastTestStep = ExcelUtils.getTestStepCount(sheetName,id,startID);
     }
 
     public static String getDataSet(int row){
@@ -279,6 +292,7 @@ public class TestScrip {
     public static boolean isDataFlow;
     public static String json;
     public static String tcName;
+    public static Set<String> groupIDS;
     public static int iFirstSuite;
     public static int iLastSuite;
     //endregion
@@ -297,6 +311,12 @@ public class TestScrip {
     protected static Map<Integer, String> map_key_expected;
     protected static Map<Integer, String> map_key_actual;
     protected static Map<Integer, String> map_key_data_set;
+    //endregion
+
+    //region report key
+    protected static String reportPath;
+    public static String levelFolder;
+    public static String currentDataName;
     //endregion
 
     //endregion

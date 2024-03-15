@@ -10,6 +10,8 @@ import org.apache.poi.xssf.usermodel.XSSFDrawing;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ExcelUtils {
     private static Sheet ExcelSheet;
@@ -52,6 +54,17 @@ public class ExcelUtils {
             onTestCaseFail("Method getCellData | Exception desc : " + e.getMessage());
             return "";
         }
+    }
+    public static Set<String> getListValueInCollum(int columnNumber, String sheetName){
+        Set<String> values = new HashSet<>();
+        try{
+            ExcelSheet = ExcelBook.getSheet(sheetName);
+            int rowCount = ExcelUtils.getRowCount(sheetName);
+            
+        }catch (Throwable e){
+            Log.error("Method getCellData | Exception desc : " + e.getMessage());
+        }
+        return values;
     }
     public static String getStringValueInCell(int rowNumber, int columnNumber){
         try {

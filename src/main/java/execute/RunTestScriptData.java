@@ -44,8 +44,8 @@ public class RunTestScriptData extends TestScrip{
             String key = ExcelUtils.getStringValueInCell(1,Constanst.DATA_PLAN_COLLUM,Constanst.PLAN_SHEET);
 
             //gen report
-            String dataName = getDataSet(key);
-            GenerateReport.genReport(begin,levelFolder,dataName);
+            currentDataName = getDataSet(key);
+            //GenerateReport.genReport(levelFolder,currentDataName);
 
             //sum pass fail
             GenerateReport.countResultPlan(scopePath,iTotalSuite);
@@ -85,5 +85,4 @@ public class RunTestScriptData extends TestScrip{
         ExcelUtils.setCellData(fail, 1, Constanst.FAIL_PLAN_COLLUM, Constanst.PLAN_SHEET, path);
 
     }
-    private static String levelFolder;
 }
