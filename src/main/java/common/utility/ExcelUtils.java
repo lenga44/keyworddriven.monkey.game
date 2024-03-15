@@ -60,7 +60,7 @@ public class ExcelUtils {
         try{
             ExcelSheet = ExcelBook.getSheet(sheetName);
             int rowCount = ExcelUtils.getRowCount(sheetName);
-            
+
         }catch (Throwable e){
             Log.error("Method getCellData | Exception desc : " + e.getMessage());
         }
