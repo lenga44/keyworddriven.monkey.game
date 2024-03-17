@@ -8,6 +8,7 @@ import common.utility.*;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import static common.keywords.KeyWordsToAction.exception;
@@ -21,6 +22,7 @@ public class TestScrip {
     public static void execute_suites(String scopePath,int iTestSuite, int iTotalSuite) throws IOException {
         Log.info("execute_suites");
         ExcelUtils.setExcelFile(scopePath);
+        ArrayList<String> groups = getGroup();
         for (;iTestSuite<=iTotalSuite;iTestSuite++){
 
             ExcelUtils.setCellData("",iTestSuite,Constanst.STATUS_SUITE,Constanst.SCOPE_SHEET,scopePath);
@@ -40,6 +42,10 @@ public class TestScrip {
                 Log.info("TCS name: "+tcName);
                 tcPath = openScopeFile(Constanst.TESTCASE_FILE_PATH, tcName + ".xlsx");
 
+                Map<String,ArrayList<Integer>> rangeMap = getRangeGroups(groups);
+                if(rangeMap.keySet().size()>0){
+                    Map<String,String> map = getValueGroups(json,groups);
+                }
                 execute_testcases();
                 ExcelUtils.setExcelFile(scopePath);
                 ExcelUtils.setCellData(tcResult, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
@@ -271,6 +277,41 @@ public class TestScrip {
 
     //endregion
 
+    //region Group
+    private static ArrayList<String> getGroup(){
+        ArrayList<String> list = new ArrayList<>();
+        int totalGroup = ExcelUtils.getRowCount(Constanst.GROUP_SHEET);
+        for(int i=1;i<totalGroup;i++){
+            String name = ExcelUtils.getStringValueInCell(i,Constanst.GROUP_NAME_COLUM,Constanst.GROUP_SHEET);
+            if(!name.equals(""))
+                list.add(name);
+        }
+        return list;
+    }
+    private static Map<String,ArrayList<Integer>> getRangeGroups(ArrayList<String> groups){
+        Map<String,ArrayList<Integer>> map = new HashMap<>();
+        if(groups.size()>0){
+            for (String group:groups) {
+                int first = ExcelUtils.getRowContains(group,Constanst.GROUP_COLUM_IN_TC_SHEET,Constanst.TESTCASE_SHEET);
+                int last = ExcelUtils.getValueCount(Constanst.TESTCASE_SHEET,group,first,Constanst.GROUP_COLUM_IN_TC_SHEET);
+                ArrayList<Integer> list = new ArrayList<>();
+                list.add(first,last);
+                if(list.size()>0)
+                    map.put(group,list);
+            }
+        }
+        return map;
+    }
+    private static Map<String,String> getValueGroups(String json,ArrayList<String> groups){
+        Map<String,String> map = new HashMap<>();
+        for(int i =0;i<groups.size();i++){
+            map.put(groups.get(i),JsonHandle.getValue(json,ExcelUtils.getStringValueInCell(i+1,Constanst.GROUP_VALUE_COLUM,Constanst.GROUP_SHEET)));
+        }
+        return map;
+    }
+    private static void insertAndCopyTCByGroup(ArrayList<String> groups){
+
+    }
     //region KEY
 
     //region Testcase key

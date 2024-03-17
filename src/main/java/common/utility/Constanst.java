@@ -78,6 +78,15 @@ public class Constanst {
     public static final int TEST_STEP = 1;
     //endregion
 
+    //region Group-Turn sheet
+    public static final String GROUP_SHEET = "Group-Turn";
+    public static final int GROUP_NAME_COLUM = 0;
+    public static final int GROUP_VALUE_COLUM = 1;
+    //endregion
+    //region TC sheet
+    public static final int GROUP_COLUM_IN_TC_SHEET = 5;
+    //endregion
+
     //region Excel sheet
     public static final String SCOPE_SHEET = "Scope";
     public static final String TESTCASE_SHEET = "TestCase";

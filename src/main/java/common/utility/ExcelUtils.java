@@ -113,6 +113,24 @@ public class ExcelUtils {
             return 0;
         }
     }
+    public static int getValueCount(String sheetName, String value, int start,int colum) {
+        try{
+            for (int i = start;i< ExcelUtils.getRowCount(sheetName);i++){
+                if(!value.equals(ExcelUtils.getStringValueInCell(i, colum,sheetName))){
+                    int number = i;
+                    return number;
+                }
+            }
+            ExcelSheet = ExcelBook.getSheet(sheetName);
+            int number = ExcelSheet.getLastRowNum() + 1;
+            return number;
+        }catch (Throwable e){
+            Log.info("Method getRowContains: sTestCaseID[" + value+"], startTestStep["+start+"], sheetName["+sheetName+"]");
+            Log.error("Method getTestStepCount | Exception desc : " + e.getMessage());
+            onTestCaseFail("Method getTestStepCount | Exception desc : " + e.getMessage());
+            return 0;
+        }
+    }
     public static void addPictureInCell(int row, byte[] imageContent,String path  ) {
         try {
             ExcelSheet = ExcelBook.getSheet(Constanst.TEST_STEP_SHEET);
