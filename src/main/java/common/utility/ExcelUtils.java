@@ -1,10 +1,8 @@
 package common.utility;
 
+import com.aspose.cells.License;
 import execute.TestScrip;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
 import org.apache.poi.xssf.usermodel.XSSFDrawing;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -242,4 +240,29 @@ public class ExcelUtils {
             }
         }
     }
+    public static void createRow(int row,String sheetName){
+        try {
+            ExcelSheet = ExcelBook.getSheet(sheetName);
+            ExcelSheet.createRow(row);
+        }catch (Exception e){
+            Log.error("Method getCellData | Exception desc : " + e.getMessage());
+            onTestCaseFail("Method getCellData | Exception desc : " + e.getMessage());
+        }
+    }
+    public static int getAmountRowInGroup(String group,String sheetName){
+        int start = getRowContains(group,Constanst.GROUP_COLUM_IN_TC_SHEET,sheetName);
+        int end = getTestStepCount(sheetName,group,start);
+        return end -start +1;
+    }
+    public static void copyRow(String path,String sheetName,int from, int to) throws Exception {
+        com.aspose.cells.Workbook workbook = new com.aspose.cells.Workbook(path);
+        com.aspose.cells.Worksheet worksheet = workbook.getWorksheets().get(sheetName);
+        worksheet.getCells().copyRow(worksheet.getCells(), from, to);
+        deleteSheetAspose(workbook,path);
+    }
+    private static void deleteSheetAspose(com.aspose.cells.Workbook workbook,String path) throws Exception {
+        workbook.getWorksheets().removeAt("Evaluation Warning");
+        workbook.save(path);
+    }
+
 }
