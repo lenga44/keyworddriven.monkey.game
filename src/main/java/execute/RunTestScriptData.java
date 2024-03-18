@@ -39,15 +39,13 @@ public class RunTestScriptData extends TestScrip{
 
             //get node need check
             json = JsonHandle.getObjectInJsonData(index-1);
-            //execute tc
-            execute_suites(scopePath,iTestSuit,iTotalSuite);
             ExcelUtils.setCellData(begin,1,Constanst.CURRENT_INDEX_COLUM,Constanst.PLAN_SHEET,scopePath);
             String key = ExcelUtils.getStringValueInCell(1,Constanst.DATA_PLAN_COLLUM,Constanst.PLAN_SHEET);
-
+            reportName = getDataSet(key);
+            //execute tc
+            execute_suites(scopePath,iTestSuit,iTotalSuite);
             //gen report
-            String dataName = getDataSet(key);
-            GenerateReport.genReport(begin,levelFolder,dataName);
-
+            GenerateReport.genReport(begin,levelFolder,reportName);
             //sum pass fail
             GenerateReport.countResultPlan(scopePath,iTotalSuite);
             ExcelUtils.closeFile(scopePath);
@@ -89,5 +87,4 @@ public class RunTestScriptData extends TestScrip{
 
 
     //endregion
-    private static String levelFolder;
 }

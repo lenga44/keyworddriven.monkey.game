@@ -9,13 +9,13 @@ import java.io.IOException;
 
 public class GenerateReport{
     //region REPORT
-    private static void genTCReportFile(String folder,int row,String subFolder,String reportName) throws IOException{
+    public static String genTCReportFile(String folder,String subFolder,String reportName) throws IOException{
         File f = new File(folder);
         File dest =null;
         try {
             if (f.exists()) {
                 File source = new File(TestScrip.tcPath);
-                String tcCopyPath = subFolder + FileHelpers.convertPath("//_"+TestScrip.tcName+"_"+reportName+"_"+ row+".xlsx");
+                String tcCopyPath = subFolder + FileHelpers.convertPath("//_"+TestScrip.tcName+"_"+reportName+".xlsx");
                 Log.info("Path report TC current: " + tcCopyPath);
                 dest = new File(tcCopyPath);
                 if(!dest.exists()) {
@@ -28,10 +28,15 @@ public class GenerateReport{
         }catch (Exception e){
             Log.error("Copy file status: " + dest.exists());
         }
+        return dest.getAbsolutePath();
+    }
+    public static String genTCReport(String folderName,String reportName) throws IOException {
+        FileHelpers.genFolderReport(FileHelpers.convertPath(folderName));
+        return genTCReportFile(FileHelpers.convertPath(folderName),folderName,reportName);
     }
     public static void genReport(int row,String folderName,String reportName)throws IOException{
         FileHelpers.genFolderReport(FileHelpers.convertPath(folderName));
-        genTCReportFile(FileHelpers.convertPath(folderName),row,folderName,reportName);
+        genTCReportFile(FileHelpers.convertPath(folderName),folderName,reportName);
         ExcelUtils.setCellData(Constanst.YES, row, Constanst.RUN_MODE_SCOPE, Constanst.SCOPE_SHEET, Run.scopePath);
     }
     public static void countResultPlan(String path,int totalSuite){

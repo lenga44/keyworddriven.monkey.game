@@ -1,13 +1,16 @@
 package execute;
 
+import com.beust.ah.A;
 import common.keywords.KeyWordsToAction;
 import common.keywords.KeyWordsToActionPocoSDK;
 import common.keywords.KeyWordsToActionToVerify;
 import common.utility.*;
+import report.GenerateReport;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,7 +25,6 @@ public class TestScrip {
     public static void execute_suites(String scopePath,int iTestSuite, int iTotalSuite) throws IOException {
         Log.info("execute_suites");
         ExcelUtils.setExcelFile(scopePath);
-        ArrayList<String> groups = getGroup();
         for (;iTestSuite<=iTotalSuite;iTestSuite++){
 
             ExcelUtils.setCellData("",iTestSuite,Constanst.STATUS_SUITE,Constanst.SCOPE_SHEET,scopePath);
@@ -40,12 +42,21 @@ public class TestScrip {
                     ExcelUtils.setCellData(tcName,iTestSuite,Constanst.TEST_SUITE_FILE_NAME,Constanst.SCOPE_SHEET,scopePath);
                 }
                 Log.info("TCS name: "+tcName);
-                tcPath = openScopeFile(Constanst.TESTCASE_FILE_PATH, tcName + ".xlsx");
+                tcPath = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.TESTCASE_FILE_PATH)+ tcName + ".xlsx";
+                reportPath = openScopeFile(GenerateReport.genTCReport(levelFolder,reportName));
+                ArrayList<String> groups = getGroup();
+                int totalGroup = ExcelUtils.getRowCount(Constanst.GROUP_SHEET);
+                Map<String,String> mapGroupValue = getValueGroups(json,groups);
+                Map<String,ArrayList<Integer>> mapGroupRange = getRangeGroups(groups);
+                if(totalGroup>0) {
+                    for (int level : getListLevel(totalGroup)) {
+                        for (String groupName : getGroupWithLeve(totalGroup, level)) {
 
-                Map<String,ArrayList<Integer>> rangeMap = getRangeGroups(groups);
-                if(rangeMap.keySet().size()>0){
-                    Map<String,String> map = getValueGroups(json,groups);
+                            //copy
+                        }
+                    }
                 }
+
                 execute_testcases();
                 ExcelUtils.setExcelFile(scopePath);
                 ExcelUtils.setCellData(tcResult, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
@@ -288,6 +299,34 @@ public class TestScrip {
         }
         return list;
     }
+    private static Map<String,Integer> mapGroupLevel(int totalGroup){
+        Map<String,Integer> map = new HashMap<>();
+        for(int i=1;i<totalGroup;i++){
+            map.put(ExcelUtils.getStringValueInCell(i+1,Constanst.GROUP_NAME_COLUM,Constanst.GROUP_SHEET)
+                    ,ExcelUtils.getNumberValueInCell(i+1,Constanst.GROUP_LEVEL_COLUM,Constanst.GROUP_SHEET));
+        }
+        return map;
+    }
+    private static ArrayList<Integer> getListLevel(int totalGroup){
+        Map<String,Integer> map = mapGroupLevel(totalGroup);
+        ArrayList<Integer> list = new ArrayList<>();
+        for (String group: map.keySet()) {
+            int level = map.get(group);
+            if(!list.contains(level))
+                list.add(level);
+        }
+        Collections.sort(list);
+        return list;
+    }
+    private static ArrayList<String> getGroupWithLeve(int totalGroup,int level){
+        Map<String,Integer> map = mapGroupLevel(totalGroup);
+        ArrayList<String > list = new ArrayList<>();
+        for (String group: map.keySet()) {
+            if(map.get(group)==level)
+                list.add(group);
+        }
+        return list;
+    }
     private static Map<String,ArrayList<Integer>> getRangeGroups(ArrayList<String> groups){
         Map<String,ArrayList<Integer>> map = new HashMap<>();
         if(groups.size()>0){
@@ -309,9 +348,7 @@ public class TestScrip {
         }
         return map;
     }
-    private static void insertAndCopyTCByGroup(ArrayList<String> groups){
 
-    }
     //region KEY
 
     //region Testcase key
@@ -339,6 +376,12 @@ public class TestScrip {
     protected static Map<Integer, String> map_key_actual;
     protected static Map<Integer, String> map_key_data_set;
     //endregion
+
+    //region report key
+    public static String levelFolder;
+    public static String reportName;
+    public static String reportPath;
+    //end region
 
     //endregion
 }

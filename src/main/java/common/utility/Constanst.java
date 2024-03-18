@@ -81,6 +81,7 @@ public class Constanst {
     //region Group-Turn sheet
     public static final String GROUP_SHEET = "Group-Turn";
     public static final int GROUP_NAME_COLUM = 0;
+    public static final int GROUP_LEVEL_COLUM = 2;
     public static final int GROUP_VALUE_COLUM = 1;
     //endregion
     //region TC sheet
