@@ -258,9 +258,9 @@ public class ExcelUtils {
         com.aspose.cells.Workbook workbook = new com.aspose.cells.Workbook(path);
         com.aspose.cells.Worksheet worksheet = workbook.getWorksheets().get(sheetName);
         worksheet.getCells().copyRow(worksheet.getCells(), from, to);
-        deleteSheetAspose(workbook,path);
+        deleteDefaultSheetAspose(workbook,path);
     }
-    private static void deleteSheetAspose(com.aspose.cells.Workbook workbook,String path) throws Exception {
+    private static void deleteDefaultSheetAspose(com.aspose.cells.Workbook workbook,String path) throws Exception {
         workbook.getWorksheets().removeAt("Evaluation Warning");
         workbook.save(path);
     }
