@@ -30,8 +30,8 @@ public class GroupInTest {
                             int from = first+j;
                             int to = last +j;
                             ExcelUtils.copyRow(reportPath, Constanst.TESTCASE_SHEET, from, to);
-                            String id = ExcelUtils.getStringValueInCell(to-1,Constanst.TESTCASE_ID,Constanst.TESTCASE_SHEET);
-                           genTestcaseID(id,to,reportPath);
+                            /*String id = ExcelUtils.getStringValueInCell(to-1,Constanst.TESTCASE_ID,Constanst.TESTCASE_SHEET);
+                           genTestcaseID(id,to,reportPath);*/
                         }
                         first = last;
                         last = first + countRow;
