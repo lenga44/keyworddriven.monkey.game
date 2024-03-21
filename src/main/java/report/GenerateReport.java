@@ -6,6 +6,9 @@ import execute.TestScrip;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class GenerateReport{
     //region REPORT
@@ -15,17 +18,20 @@ public class GenerateReport{
         try {
             if (f.exists()) {
                 File source = new File(TestScrip.tcPath);
-                String tcCopyPath = subFolder + FileHelpers.convertPath("//_"+TestScrip.tcName+"_"+reportName+".xlsx");
+                String tcCopyPath = subFolder + FileHelpers.convertPath("\\"+TestScrip.tcName+"_"+reportName+".xlsx");
                 Log.info("Path report TC current: " + tcCopyPath);
                 dest = new File(tcCopyPath);
                 if(!dest.exists()) {
+                    Path newFilePath = Paths.get(tcCopyPath);
+                    Files.createFile(newFilePath);
                     ExcelUtils.copyFile(source, dest);
-                }else
-                    System.out.println("tcCopyPathtcCopyPath " +tcCopyPath);
+                }else {
                     replaceValueInReport(tcCopyPath);
+                }
                 ExcelUtils.closeFile(dest);
             }
         }catch (Exception e){
+            Log.error("Copy file status: " + e.getMessage());
             Log.error("Copy file status: " + dest.exists());
         }
         return dest.getAbsolutePath();

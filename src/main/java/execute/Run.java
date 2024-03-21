@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
 
 public class Run {
 
-    public static void main(String[] args) throws IOException, ParseException {
+    public static void main(String[] args) throws Exception {
 
         keyWord = new KeyWordsToActionPocoSDK();
         method = keyWord.getClass().getMethods();
@@ -41,7 +41,7 @@ public class Run {
         }
         runOneTime(iOnceTimeTearDown);
     }
-    private static void runOneTime(int iOnceTime) throws IOException {
+    private static void runOneTime(int iOnceTime) throws Exception {
         Log.info("runOneTime " +iOnceTime);
         if(iOnceTime>0){
             TestScrip.execute_suites(scopePath,iOnceTime,iOnceTime);
@@ -76,11 +76,11 @@ public class Run {
         Log.info("iFirstTestSuit: "+iFirstTestSuit);
         Log.info("iLastTestSuit: "+iLastTestSuit);
     }
-    private static void runModuleFlow(int iTestSuit,int iTotalSuite) throws IOException {
+    private static void runModuleFlow(int iTestSuit,int iTotalSuite) throws Exception {
         runTestScriptModule.run(scopePath,iTestSuit,iTotalSuite);
     }
     @Deprecated
-    private static void runDataFlow(int iTestSuit,int iTotalSuite) throws IOException, ParseException {
+    private static void runDataFlow(int iTestSuit,int iTotalSuite) throws Exception {
         runTestScriptData.run(scopePath,iTestSuit,iTotalSuite);
     }
     private static void returnFlowScrip(){

@@ -7,6 +7,8 @@ import common.utility.Log;
 import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import io.restassured.response.ResponseBody;
+import io.restassured.response.ResponseBodyData;
 import io.restassured.specification.RequestSpecification;
 import org.testng.Assert;
 
@@ -282,5 +284,18 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         String value = JsonHandle.getValue(response.getBody().asString(),key);
         return value;
 
+    }
+    public static String getSentenceByText(String locators,String component){
+        String sentence = null;
+        Response response = request(Constanst.SCENE_URL,"//" +locators+"."+component);
+        List<String> list = convertToList(response,"text");
+        for (String text: list) {
+           if(text.matches("^[a-z0-9A-Z]{2,25}$")){
+               sentence = sentence + text +" ";
+           }else {
+               sentence = sentence + text +" ";
+           }
+        }
+        return sentence;
     }
 }

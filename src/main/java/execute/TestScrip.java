@@ -22,7 +22,7 @@ public class TestScrip {
         this.method = method;
     }
     //region SCOPE
-    public static void execute_suites(String scopePath,int iTestSuite, int iTotalSuite) throws IOException {
+    public static void execute_suites(String scopePath,int iTestSuite, int iTotalSuite) throws Exception {
         Log.info("execute_suites");
         ExcelUtils.setExcelFile(scopePath);
         for (;iTestSuite<=iTotalSuite;iTestSuite++){
@@ -43,29 +43,18 @@ public class TestScrip {
                 }
                 Log.info("TCS name: "+tcName);
                 tcPath = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.TESTCASE_FILE_PATH)+ tcName + ".xlsx";
-                reportPath = openScopeFile(GenerateReport.genTCReport(levelFolder,reportName));
-                ArrayList<String> groups = getGroup();
-                int totalGroup = ExcelUtils.getRowCount(Constanst.GROUP_SHEET);
-                Map<String,String> mapGroupValue = getValueGroups(json,groups);
-                Map<String,ArrayList<Integer>> mapGroupRange = getRangeGroups(groups);
-                if(totalGroup>0) {
-                    for (int level : getListLevel(totalGroup)) {
-                        for (String groupName : getGroupWithLeve(totalGroup, level)) {
-
-                            //copy
-                        }
-                    }
-                }
-
-                execute_testcases();
+                reportPath = GenerateReport.genTCReport(levelFolder,reportName);
+                ExcelUtils.setExcelFile(reportPath);
+                GroupInTest.copyRowIfTCContainGroup(json,reportPath);
+               /* execute_testcases();
                 ExcelUtils.setExcelFile(scopePath);
-                ExcelUtils.setCellData(tcResult, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
+                ExcelUtils.setCellData(tcResult, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);*/
             }
         }
     }
     public static String openScopeFile(String fileName) throws IOException{
         Log.info("fileName "+fileName);
-        String path = /*FileHelperUtils.getRootFolder() +*/ FileHelpers.getValueConfig(fileName);
+        String path =  FileHelpers.getValueConfig(fileName);
         Log.info("==PATH:== "+path);
         ExcelUtils.setExcelFile(path);
         return path;
@@ -288,66 +277,6 @@ public class TestScrip {
 
     //endregion
 
-    //region Group
-    private static ArrayList<String> getGroup(){
-        ArrayList<String> list = new ArrayList<>();
-        int totalGroup = ExcelUtils.getRowCount(Constanst.GROUP_SHEET);
-        for(int i=1;i<totalGroup;i++){
-            String name = ExcelUtils.getStringValueInCell(i,Constanst.GROUP_NAME_COLUM,Constanst.GROUP_SHEET);
-            if(!name.equals(""))
-                list.add(name);
-        }
-        return list;
-    }
-    private static Map<String,Integer> mapGroupLevel(int totalGroup){
-        Map<String,Integer> map = new HashMap<>();
-        for(int i=1;i<totalGroup;i++){
-            map.put(ExcelUtils.getStringValueInCell(i+1,Constanst.GROUP_NAME_COLUM,Constanst.GROUP_SHEET)
-                    ,ExcelUtils.getNumberValueInCell(i+1,Constanst.GROUP_LEVEL_COLUM,Constanst.GROUP_SHEET));
-        }
-        return map;
-    }
-    private static ArrayList<Integer> getListLevel(int totalGroup){
-        Map<String,Integer> map = mapGroupLevel(totalGroup);
-        ArrayList<Integer> list = new ArrayList<>();
-        for (String group: map.keySet()) {
-            int level = map.get(group);
-            if(!list.contains(level))
-                list.add(level);
-        }
-        Collections.sort(list);
-        return list;
-    }
-    private static ArrayList<String> getGroupWithLeve(int totalGroup,int level){
-        Map<String,Integer> map = mapGroupLevel(totalGroup);
-        ArrayList<String > list = new ArrayList<>();
-        for (String group: map.keySet()) {
-            if(map.get(group)==level)
-                list.add(group);
-        }
-        return list;
-    }
-    private static Map<String,ArrayList<Integer>> getRangeGroups(ArrayList<String> groups){
-        Map<String,ArrayList<Integer>> map = new HashMap<>();
-        if(groups.size()>0){
-            for (String group:groups) {
-                int first = ExcelUtils.getRowContains(group,Constanst.GROUP_COLUM_IN_TC_SHEET,Constanst.TESTCASE_SHEET);
-                int last = ExcelUtils.getValueCount(Constanst.TESTCASE_SHEET,group,first,Constanst.GROUP_COLUM_IN_TC_SHEET);
-                ArrayList<Integer> list = new ArrayList<>();
-                list.add(first,last);
-                if(list.size()>0)
-                    map.put(group,list);
-            }
-        }
-        return map;
-    }
-    private static Map<String,String> getValueGroups(String json,ArrayList<String> groups){
-        Map<String,String> map = new HashMap<>();
-        for(int i =0;i<groups.size();i++){
-            map.put(groups.get(i),JsonHandle.getValue(json,ExcelUtils.getStringValueInCell(i+1,Constanst.GROUP_VALUE_COLUM,Constanst.GROUP_SHEET)));
-        }
-        return map;
-    }
 
     //region KEY
 

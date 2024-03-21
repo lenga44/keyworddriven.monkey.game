@@ -12,7 +12,6 @@ import io.restassured.specification.RequestSpecification;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -468,6 +467,9 @@ public class KeyWordsToAction {
         String result =  String.valueOf(response.getBody().jsonPath().getList(key).get(0));
         String[] a = result.split(splitStr);
         return Arrays.stream(a).toList().get(index);
+    }
+    public static List<String> convertToList(Response response,String key){
+        return response.jsonPath().getList(key);
     }
 
     public static void exception(Throwable e){

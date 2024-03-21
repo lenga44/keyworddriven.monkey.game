@@ -10,7 +10,7 @@ public class RunTestScriptModule extends TestScrip{
     public RunTestScriptModule(KeyWordsToActionPocoSDK keyWord, Method method[]){
         super(keyWord, method);
     }
-    public static void run(String scopePath,int iTestSuit,int iTotalSuite) throws IOException {
+    public static void run(String scopePath,int iTestSuit,int iTotalSuite) throws Exception {
        execute_suites(scopePath,iTestSuit,iTotalSuite);
        GenerateReport.countResultPlan(scopePath,iTotalSuite);
     }

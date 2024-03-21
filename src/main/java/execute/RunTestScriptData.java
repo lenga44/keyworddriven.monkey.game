@@ -18,7 +18,7 @@ public class RunTestScriptData extends TestScrip{
     }
 
     @Deprecated
-    public static void run(String scopePath, int iTestSuit, int iTotalSuite) throws IOException, ParseException {
+    public static void run(String scopePath, int iTestSuit, int iTotalSuite) throws Exception {
 
         //reset total Pass Fail
         setPassAndFail(0,0,scopePath);
@@ -44,8 +44,9 @@ public class RunTestScriptData extends TestScrip{
             reportName = getDataSet(key);
             //execute tc
             execute_suites(scopePath,iTestSuit,iTotalSuite);
+            break;
             //gen report
-            GenerateReport.genReport(begin,levelFolder,reportName);
+            /*GenerateReport.genReport(begin,levelFolder,reportName);
             //sum pass fail
             GenerateReport.countResultPlan(scopePath,iTotalSuite);
             ExcelUtils.closeFile(scopePath);
@@ -59,7 +60,7 @@ public class RunTestScriptData extends TestScrip{
 
             Log.info("Reset status,image, error");
 
-            ExcelUtils.closeFile(tcPath);
+            ExcelUtils.closeFile(tcPath);*/
         }
     }
     private static void getLevelFolder(int row)throws IOException{

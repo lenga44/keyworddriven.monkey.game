@@ -129,6 +129,24 @@ public class ExcelUtils {
             return 0;
         }
     }
+    public static int getLastByContain(String sheetName, String value, int start,int colum) {
+        int number = 0;
+        try{
+            for (int i = start;i< ExcelUtils.getRowCount(sheetName);i++){
+                if(value.equals(ExcelUtils.getStringValueInCell(i, colum,sheetName))){
+                    number = i;
+                }
+            }
+            /*ExcelSheet = ExcelBook.getSheet(sheetName);
+            int number = ExcelSheet.getLastRowNum() + 1;*/
+            return number;
+        }catch (Throwable e){
+            Log.info("Method getRowContains: sTestCaseID[" + value+"], startTestStep["+start+"], sheetName["+sheetName+"]");
+            Log.error("Method getTestStepCount | Exception desc : " + e.getMessage());
+            onTestCaseFail("Method getTestStepCount | Exception desc : " + e.getMessage());
+            return 0;
+        }
+    }
     public static void addPictureInCell(int row, byte[] imageContent,String path  ) {
         try {
             ExcelSheet = ExcelBook.getSheet(Constanst.TEST_STEP_SHEET);
@@ -207,7 +225,9 @@ public class ExcelUtils {
             while ((length = is.read(buffer)) > 0) {
                 os.write(buffer, 0, length);
             }
-        } finally {
+        }catch (Exception e) {
+            Log.error("|copyFile|: " +e.getMessage());
+        }finally {
             is.close();
             os.close();
         }
@@ -265,4 +285,7 @@ public class ExcelUtils {
         workbook.save(path);
     }
 
+   /* public static void main(String[] args) throws Exception {
+        copyRow("E:\\tool_test_game\\config\\report\\All Level\\Report_TestStory__My Family.xlsx","TestCase",3,6);
+    }*/
 }
