@@ -30,8 +30,8 @@ public class GroupInTest {
                             int from = first+j;
                             int to = last +j;
                             ExcelUtils.copyRow(reportPath, Constanst.TESTCASE_SHEET, from, to);
-                            /*String id = ExcelUtils.getStringValueInCell(to-1,Constanst.TESTCASE_ID,Constanst.TESTCASE_SHEET);
-                           genTestcaseID(id,to,reportPath);*/
+                            String id = ExcelUtils.getStringValueInCell(list.get(0)+j,Constanst.TESTCASE_ID,Constanst.TESTCASE_SHEET)+"_"+(i+1);
+                           genTestcaseID(id,to,reportPath);
                         }
                         first = last;
                         last = first + countRow;
@@ -42,13 +42,9 @@ public class GroupInTest {
         }
     }
     public static void genTestcaseID(String id,int row,String reportPath) throws IOException {
-        if(id.contains("TC")) {
-            int number = Integer.valueOf(id.replace("TC", "")) + 1;
-            String tcId = "TC" + number;
-            ExcelUtils.setExcelFile(reportPath);
-            ExcelUtils.setCellData(tcId,row,Constanst.TESTCASE_ID,Constanst.TESTCASE_SHEET,reportPath);
-            ExcelUtils.closeFile(reportPath);
-        }
+        ExcelUtils.setExcelFile(reportPath);
+        ExcelUtils.setCellData(id,row,Constanst.TESTCASE_ID,Constanst.TESTCASE_SHEET,reportPath);
+        ExcelUtils.closeFile(reportPath);
     }
     public static String genTestStepId(int row, int firstStep,String id){
         if(id.contains("TS")){
