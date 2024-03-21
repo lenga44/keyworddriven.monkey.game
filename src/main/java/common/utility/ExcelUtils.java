@@ -280,12 +280,15 @@ public class ExcelUtils {
         worksheet.getCells().copyRow(worksheet.getCells(), from, to);
         deleteDefaultSheetAspose(workbook,path);
     }
+    public static void insertRow(String path,String sheetName,int row,int number) throws Exception {
+        com.aspose.cells.Workbook workbook = new com.aspose.cells.Workbook(path);
+        com.aspose.cells.Worksheet worksheet = workbook.getWorksheets().get(sheetName);
+        worksheet.getCells().insertRows(row,number);
+        deleteDefaultSheetAspose(workbook,path);
+    }
     private static void deleteDefaultSheetAspose(com.aspose.cells.Workbook workbook,String path) throws Exception {
         workbook.getWorksheets().removeAt("Evaluation Warning");
         workbook.save(path);
     }
 
-   /* public static void main(String[] args) throws Exception {
-        copyRow("E:\\tool_test_game\\config\\report\\All Level\\Report_TestStory__My Family.xlsx","TestCase",3,6);
-    }*/
 }

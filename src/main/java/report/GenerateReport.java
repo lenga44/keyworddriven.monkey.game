@@ -21,13 +21,12 @@ public class GenerateReport{
                 String tcCopyPath = subFolder + FileHelpers.convertPath("\\"+TestScrip.tcName+"_"+reportName+".xlsx");
                 Log.info("Path report TC current: " + tcCopyPath);
                 dest = new File(tcCopyPath);
-                if(!dest.exists()) {
-                    Path newFilePath = Paths.get(tcCopyPath);
-                    Files.createFile(newFilePath);
-                    ExcelUtils.copyFile(source, dest);
-                }else {
-                    replaceValueInReport(tcCopyPath);
+                if(dest.exists()) {
+                    dest.delete();
                 }
+                Path newFilePath = Paths.get(tcCopyPath);
+                Files.createFile(newFilePath);
+                ExcelUtils.copyFile(source, dest);
                 ExcelUtils.closeFile(dest);
             }
         }catch (Exception e){

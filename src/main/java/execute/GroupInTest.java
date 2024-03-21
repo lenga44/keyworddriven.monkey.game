@@ -4,6 +4,7 @@ import common.utility.Constanst;
 import common.utility.ExcelUtils;
 import common.utility.JsonHandle;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -26,7 +27,11 @@ public class GroupInTest {
                     int loop = Integer.valueOf(mapGroupValue.get(groupName));
                     for (int i = 0;i<loop-1;i++){
                         for (int j = 0; j<countRow;j++) {
-                            ExcelUtils.copyRow(reportPath, Constanst.TESTCASE_SHEET, first+j, last +j);
+                            int from = first+j;
+                            int to = last +j;
+                            ExcelUtils.copyRow(reportPath, Constanst.TESTCASE_SHEET, from, to);
+                            String id = ExcelUtils.getStringValueInCell(to-1,Constanst.TESTCASE_ID,Constanst.TESTCASE_SHEET);
+                           genTestcaseID(id,to,reportPath);
                         }
                         first = last;
                         last = first + countRow;
@@ -36,11 +41,25 @@ public class GroupInTest {
             }
         }
     }
-    public static void copyRowTestCases(){
-
+    public static void genTestcaseID(String id,int row,String reportPath) throws IOException {
+        if(id.contains("TC")) {
+            int number = Integer.valueOf(id.replace("TC", "")) + 1;
+            String tcId = "TC" + number;
+            ExcelUtils.setExcelFile(reportPath);
+            ExcelUtils.setCellData(tcId,row,Constanst.TESTCASE_ID,Constanst.TESTCASE_SHEET,reportPath);
+            ExcelUtils.closeFile(reportPath);
+        }
     }
-    public static void copyRowTestStepsByTestcase(){
-
+    public static String genTestStepId(int row, int firstStep,String id){
+        if(id.contains("TS")){
+            if(row !=firstStep) {
+                int number = Integer.valueOf(id.replace("TS",""))+1;
+                return "TS" + number;
+            }
+            else
+                return "TS1";
+        }
+        return id;
     }
     //endregion
 
