@@ -277,6 +277,7 @@ public class ExcelUtils {
     public static void copyRow(String path,String sheetName,int from, int to) throws Exception {
         com.aspose.cells.Workbook workbook = new com.aspose.cells.Workbook(path);
         com.aspose.cells.Worksheet worksheet = workbook.getWorksheets().get(sheetName);
+        worksheet.getCells().insertRows(to,1);
         worksheet.getCells().copyRow(worksheet.getCells(), from, to);
         deleteDefaultSheetAspose(workbook,path);
     }

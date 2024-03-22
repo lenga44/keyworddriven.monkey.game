@@ -3,12 +3,10 @@ package execute;
 import common.utility.Constanst;
 import common.utility.ExcelUtils;
 import common.utility.JsonHandle;
+import common.utility.LogicHandle;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class GroupInTest {
 
@@ -20,24 +18,23 @@ public class GroupInTest {
         if(totalGroup>0) {
             for (int level : getListLevel(totalGroup)) {
                 for (String groupName : getGroupWithLeve(totalGroup, level)) {
-                    ArrayList<Integer> list = getRangeByGroup(groups,groupName);
-                    int first = list.get(0);
-                    int last = list.get(1)+1;
-                    int countRow = last - first ;
-                    int loop = Integer.valueOf(mapGroupValue.get(groupName));
-                    for (int i = 0;i<loop-1;i++){
-                        for (int j = 0; j<countRow;j++) {
-                            int from = first+j;
-                            int to = last +j;
-                            ExcelUtils.copyRow(reportPath, Constanst.TESTCASE_SHEET, from, to);
-                            String id = ExcelUtils.getStringValueInCell(list.get(0)+j,Constanst.TESTCASE_ID,Constanst.TESTCASE_SHEET)+"_"+(i+1);
-                           genTestcaseID(id,to,reportPath);
+                    ArrayList<Integer> ranges = getRangeByGroup(groups, groupName);
+                    if(level >1) {
+                        int totalTestSuites = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
+                        ExcelUtils.closeFile(reportPath);
+                        List<Integer> list = LogicHandle.convertToArrayListInt(mapGroupValue.get(groupName));
+                        if(!list.equals(null)){
+                            Map<Integer,ArrayList<Integer>> map = getListRangeByGroup(groupName,totalTestSuites);
+                            for(int i = 0;i<list.size();i++){
+                                int loop = list.get(i);
+                                copyRowsWithGroupSubLevel(map.get(i),loop,reportPath);
+                            }
                         }
-                        first = last;
-                        last = first + countRow;
+                    }else {
+                        int loop = Integer.valueOf(mapGroupValue.get(groupName));
+                        copyRowsWithGroup(ranges,loop,reportPath);
                     }
                 }
-                break;
             }
         }
     }
@@ -56,6 +53,53 @@ public class GroupInTest {
                 return "TS1";
         }
         return id;
+    }
+    public static Map<Integer,ArrayList<Integer>> getListRangeByGroup(String group,int total){
+        Map<Integer,ArrayList<Integer>> map = new HashMap<>();
+        int j=0;
+        for (int i =1; i<total;i++){
+            ArrayList<Integer> list = new ArrayList<>();
+            if(ExcelUtils.getStringValueInCell(i,Constanst.GROUP_COLUM_IN_TC_SHEET,Constanst.TESTCASE_SHEET).equals(group)){
+                int first = ExcelUtils.getRowContains(group,Constanst.GROUP_COLUM_IN_TC_SHEET,Constanst.TESTCASE_SHEET);
+                int last = ExcelUtils.getLastByContain(Constanst.TESTCASE_SHEET,group,first,Constanst.GROUP_COLUM_IN_TC_SHEET);
+                list.add(first);
+                list.add(last);
+                map.put(j,list);
+                j++;
+            }
+        }
+        return map;
+    }
+
+    private static void copyRowsWithGroup(ArrayList<Integer> ranges,int loop,String reportPath) throws Exception {
+        int first = ranges.get(0);
+        int last = ranges.get(1) + 1;
+        int countRow = last - first;
+        for (int i = 0; i < loop - 1; i++) {
+            for (int j = 0; j < countRow; j++) {
+                int from = first + j;
+                int to = last + j;
+                ExcelUtils.copyRow(reportPath, Constanst.TESTCASE_SHEET, from, to);
+                String id = ExcelUtils.getStringValueInCell(ranges.get(0) + j, Constanst.TESTCASE_ID, Constanst.TESTCASE_SHEET) + "_" + (i + 1);
+                genTestcaseID(id, to, reportPath);
+            }
+            first = last;
+            last = first + countRow;
+        }
+    }
+    private static void copyRowsWithGroupSubLevel(ArrayList<Integer> ranges,int loop,String reportPath) throws Exception {
+        int first = ranges.get(0);
+        int last = ranges.get(1) + 1;
+        int countRow = last - first;
+        for (int i = 0; i < loop - 1; i++) {
+            for (int j = 0; j < countRow; j++) {
+                int from = first + j;
+                int to = last + j;
+                ExcelUtils.copyRow(reportPath, Constanst.TESTCASE_SHEET, from, to);
+            }
+            first = last;
+            last = first + countRow;
+        }
     }
     //endregion
 
