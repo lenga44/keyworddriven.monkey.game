@@ -95,10 +95,18 @@ public class KeyWordsToAction {
     public static void clickWhichObjectEnable(String locator,String index,String component, String property){
         request(Constanst.SCENE_URL,"//"+locator+"[" +index+"]"+"."+component+"."+property);
     }
-    public static void clickLocatorChild(String generate,String locator, String component, String property,String key){
+    public static void clickLocatorByVarFile(String generate,String locator, String component, String property,String key){
         String locatorChild = FileHelpers.getValueConfig(Constanst.VARIABLE_PATH_FILE,key)+generate+locator;
         waitForObject(locatorChild);
         request(Constanst.SCENE_URL,"//"+locatorChild+"."+component+"."+property);
+    }
+    public static void pressLocatorByVarFile(String locator,String key){
+        if(key.equals(Constanst.PATH_GAME_OBJECT)){
+            String locatorChild = FileHelpers.getValueConfig(Constanst.VARIABLE_PATH_FILE,key)+locator;
+            press(locatorChild);
+        }else {
+            press(locator,FileHelpers.getValueConfig(Constanst.VARIABLE_PATH_FILE,key));
+        }
     }
     public static void clickDownAndUp(String locator){
         waitForObject(locator);
@@ -119,7 +127,7 @@ public class KeyWordsToAction {
         ResponseBody body = response.getBody();
         String json = body.asString();
         for (JsonElement element: JsonHandle.getJsonArray(json)) {
-            if(JsonHandle.getValue(element.toString(),"$."+key).equals(expected))
+            if(JsonHandle.getValue(element.toString(),"$."+key).toLowerCase().equals(expected.toLowerCase()))
                 break;
             index++;
         }
@@ -136,8 +144,22 @@ public class KeyWordsToAction {
         FileHelpers.writeFile(result,Constanst.VARIABLE_PATH_FILE);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
-    public static void returnIndex(){
-
+    public static void returnIndex(String locator, String component,String key,String expected) throws IOException {
+        waitForObject(locator);
+        int index = 0;
+        Response response = request(Constanst.SCENE_URL,"//"+locator+"."+component);
+        ResponseBody body = response.getBody();
+        String json = body.asString();
+        for (JsonElement element: JsonHandle.getJsonArray(json)) {
+            if(JsonHandle.getValue(element.toString(),"$."+key).toLowerCase().equals(expected.toLowerCase()))
+                break;
+            index++;
+        }
+        Response response1 = request(Constanst.SCENE_URL,"//"+locator);
+        String value = getAbsolutePath(response1,String.valueOf(index));
+        String result = JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,value);
+        FileHelpers.writeFile(result,Constanst.VARIABLE_PATH_FILE);
+        ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
     public static void press(String locator){
         //waitForObject(locator);
@@ -158,6 +180,14 @@ public class KeyWordsToAction {
     }*/
     public static void swipe(String x1, String x2, String y){
         request(Constanst.SIMULATE_URL,Constanst.DRAG_ACTION + "("+x1+","+y+","+x2+","+y+",0.5)");
+    }
+    public static void swipe(String x1, String x2, String y,String number){
+        int loop = Integer.valueOf(number);
+        if(loop!=0) {
+            for(int i=0;i<loop;i++) {
+                request(Constanst.SIMULATE_URL, Constanst.DRAG_ACTION + "(" + x1 + "," + y + "," + x2 + "," + y + ",0.5)");
+            }
+        }
     }
     /*public static void swipeToRight(String number){
         for(int i = 0; i<Integer.valueOf(number);i++){
@@ -430,10 +460,20 @@ public class KeyWordsToAction {
         TestScrip.result = Constanst.PASS;
         TestScrip.error = "";
         try{
-            Assert.assertEquals(actual,expect);
+            if(expect.contains("[")){
+                assertEqual(actual, List.of(expect.replace("[", "").replace("]", "").split(",")));
+            }else {
+                assertEqual(actual, expect);
+            }
         }catch (Throwable e){
             exception(e);
         }
+    }
+    private static void assertEqual(String actual,String expect){
+        Assert.assertEquals(actual,expect);
+    }
+    private static void assertEqual(String actual,List<String> expect){
+        Assert.assertTrue(expect.contains(actual));
     }
     private static String getAbsolutePath(String locator, String index){
         Response response = request(Constanst.SCENE_URL,"//"+locator + "["+Integer.valueOf(index)+"]");

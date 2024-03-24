@@ -2,12 +2,9 @@ package execute;
 
 import common.keywords.KeyWordsToActionPocoSDK;
 import common.utility.*;
-import org.json.simple.parser.ParseException;
-import report.GenerateReport;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -40,7 +37,7 @@ public class RunTestScriptData extends TestScrip{
             //get node need check
             json = JsonHandle.getObjectInJsonData(index-1);
             ExcelUtils.setCellData(begin,1,Constanst.CURRENT_INDEX_COLUM,Constanst.PLAN_SHEET,scopePath);
-            String key = ExcelUtils.getStringValueInCell(1,Constanst.DATA_PLAN_COLLUM,Constanst.PLAN_SHEET);
+            String key = ExcelUtils.getStringValueInCell(1,Constanst.DATA_PLAN_COLUM,Constanst.PLAN_SHEET);
             reportName = getDataSet(key);
             //execute tc
             execute_suites(scopePath,iTestSuit,iTotalSuite);
@@ -81,8 +78,8 @@ public class RunTestScriptData extends TestScrip{
         }
     }
     private static void setPassAndFail(int pass, int fail, String path) throws IOException {
-        ExcelUtils.setCellData(pass, 1, Constanst.PASS_PLAN_COLLUM, Constanst.PLAN_SHEET, path);
-        ExcelUtils.setCellData(fail, 1, Constanst.FAIL_PLAN_COLLUM, Constanst.PLAN_SHEET, path);
+        ExcelUtils.setCellData(pass, 1, Constanst.PASS_PLAN_COLUM, Constanst.PLAN_SHEET, path);
+        ExcelUtils.setCellData(fail, 1, Constanst.FAIL_PLAN_COLUM, Constanst.PLAN_SHEET, path);
 
     }
 

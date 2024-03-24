@@ -285,11 +285,13 @@ public class ExcelUtils {
         com.aspose.cells.Workbook workbook = new com.aspose.cells.Workbook(path);
         com.aspose.cells.Worksheet worksheet = workbook.getWorksheets().get(sheetName);
         worksheet.getCells().insertRows(row,number);
+        worksheet.getOleObjects().get(0).setAutoLoad(true);
         deleteDefaultSheetAspose(workbook,path);
     }
     private static void deleteDefaultSheetAspose(com.aspose.cells.Workbook workbook,String path) throws Exception {
         workbook.getWorksheets().removeAt("Evaluation Warning");
         workbook.save(path);
+        workbook.dispose();
     }
 
 }

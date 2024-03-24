@@ -15,19 +15,23 @@ public class GroupInTest {
         ArrayList<String> groups = getGroup();
         int totalGroup = ExcelUtils.getRowCount(Constanst.GROUP_SHEET);
         Map<String,String> mapGroupValue = getValueGroups(json,groups);
+        Map<String,ArrayList<Integer>> mapGroupRange = getRangeGroups(groups);
         if(totalGroup>0) {
             for (int level : getListLevel(totalGroup)) {
                 for (String groupName : getGroupWithLeve(totalGroup, level)) {
-                    ArrayList<Integer> ranges = getRangeByGroup(groups, groupName);
+                    ArrayList<Integer> ranges = mapGroupRange.get(groupName);
                     if(level >1) {
-                        int totalTestSuites = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
-                        ExcelUtils.closeFile(reportPath);
                         List<Integer> list = LogicHandle.convertToArrayListInt(mapGroupValue.get(groupName));
+                        int rowInsert =0;
                         if(!list.equals(null)){
-                            Map<Integer,ArrayList<Integer>> map = getListRangeByGroup(groupName,totalTestSuites);
                             for(int i = 0;i<list.size();i++){
                                 int loop = list.get(i);
-                                copyRowsWithGroupSubLevel(map.get(i),loop,reportPath);
+                                if(loop>20){
+                                    loop = 20;
+                                }
+                                ArrayList<Integer> listRange = getListRangeByGroup(rowInsert,groupName,ranges);
+                                copyRowsWithGroupSubLevel(listRange,loop,reportPath);
+                                rowInsert = listRange.get(0)+loop+1;
                             }
                         }
                     }else {
@@ -54,21 +58,22 @@ public class GroupInTest {
         }
         return id;
     }
-    public static Map<Integer,ArrayList<Integer>> getListRangeByGroup(String group,int total){
-        Map<Integer,ArrayList<Integer>> map = new HashMap<>();
-        int j=0;
-        for (int i =1; i<total;i++){
-            ArrayList<Integer> list = new ArrayList<>();
+    public static ArrayList<Integer> getListRangeByGroup(int i,String group, ArrayList<Integer> ranges){
+        int totalTestSuites = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
+        int countRow = ranges.get(0) - ranges.get(1);
+        int last = ranges.get(1)+1;
+        ArrayList<Integer> list = new ArrayList<>();
+        for (; i<totalTestSuites;i++){
             if(ExcelUtils.getStringValueInCell(i,Constanst.GROUP_COLUM_IN_TC_SHEET,Constanst.TESTCASE_SHEET).equals(group)){
-                int first = ExcelUtils.getRowContains(group,Constanst.GROUP_COLUM_IN_TC_SHEET,Constanst.TESTCASE_SHEET);
-                int last = ExcelUtils.getLastByContain(Constanst.TESTCASE_SHEET,group,first,Constanst.GROUP_COLUM_IN_TC_SHEET);
-                list.add(first);
-                list.add(last);
-                map.put(j,list);
-                j++;
+                if(i!=last) {
+                    last = i +countRow;
+                    list.add(i);
+                    list.add(last);
+                    break;
+                }
             }
         }
-        return map;
+        return list;
     }
 
     private static void copyRowsWithGroup(ArrayList<Integer> ranges,int loop,String reportPath) throws Exception {

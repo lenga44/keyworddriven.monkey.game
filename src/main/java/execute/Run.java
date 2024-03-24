@@ -5,7 +5,6 @@ import common.utility.Constanst;
 import common.utility.ExcelUtils;
 import common.utility.FileHelpers;
 import common.utility.Log;
-import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -84,7 +83,7 @@ public class Run {
         runTestScriptData.run(scopePath,iTestSuit,iTotalSuite);
     }
     private static void returnFlowScrip(){
-        String flow = ExcelUtils.getStringValueInCell(1,Constanst.FLOW_COLLUM,Constanst.PLAN_SHEET);
+        String flow = ExcelUtils.getStringValueInCell(1,Constanst.FLOW_COLUM,Constanst.PLAN_SHEET);
         Log.info("FLOW: " +flow);
         if(flow.equals(Constanst.MODULE_FLOW))
             isModuleFlow = true;

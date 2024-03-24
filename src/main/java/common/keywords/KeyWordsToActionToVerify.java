@@ -8,9 +8,7 @@ import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
-import io.restassured.response.ResponseBodyData;
 import io.restassured.specification.RequestSpecification;
-import org.testng.Assert;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -140,6 +138,12 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         request.baseUri(Constanst.STATUS_URL);
         Response response = request.get();
         return response.jsonPath().get("Scene");
+    }
+    public static String getAllScene(){
+        RequestSpecification request = given();
+        request.baseUri(Constanst.ALL_SCENE);
+        Response response = request.get();
+        return response.jsonPath().get("name").toString().replace("[","").replace("]","");
     }
     public static String getText(String locator,String component){
         Response response = request(Constanst.SCENE_URL,"//" +locator+"."+component);

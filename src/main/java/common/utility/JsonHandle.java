@@ -6,6 +6,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
+import io.restassured.response.Response;
+import io.restassured.response.ResponseBody;
+import io.restassured.specification.RequestSpecification;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.simple.parser.ParseException;
@@ -18,6 +21,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static io.restassured.RestAssured.given;
 
 public class JsonHandle {
 
@@ -67,4 +72,5 @@ public class JsonHandle {
                 .collect(Collectors.toCollection(ArrayList::new));
         return keys;
     }
+
 }

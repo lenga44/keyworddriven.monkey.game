@@ -1,7 +1,5 @@
 package common.utility;
 
-import java.util.Map;
-
 public class Constanst {
 
     public static final String PROJECT_PATH = System.getProperty("user.dir");
@@ -24,19 +22,13 @@ public class Constanst {
     public static final int STATUS_SUITE = 3;
     public static final int RUN_MODE_SCOPE = 2;
     public static final String TEST_CASE_GAME_NAME_IN_FLOW = "Report_GameName";
-    public static final int RUN_MODE_PLAN_COLUM = 0;
     public static final int LEVEL_COLUM = 1;
     public static final int BEGIN_INDEX_COLUM = 3;
     public static final int END_INDEX_COLUM = 4;
     public static final int CURRENT_INDEX_COLUM = 5;
-    public static final int COURSE_COLUM = 6;
     public static final String PLAN_SHEET = "Plan";
     public static final String SCOPE_FILE_PATH = "scope_path";
     public static final String TESTCASE_FILE_PATH = "testcase_path";
-    public static final String SETUP_FILE_PATH = "setup_path";
-    public static final String ONCE_TIME_SETUP_FILE_PATH = "once_time_setup_path";
-    public static final String TEARDOWN_FILE_PATH = "teardown_path";
-    public static final String ONCE_TIME_TEARDOWN_SETUP_FILE_PATH = "once_time_teardown_path";
     public static final String LOG_FILE_PATH = "\\tool_test_game\\config\\logging.txt";
     public static final String CONFIG_FILE_PATH = "\\tool_test_game\\config\\config.json";
     public static final String REPORT_FILE_PATH = "\\tool_test_game\\config\\report\\";
@@ -45,10 +37,14 @@ public class Constanst {
     //region PLAN
     public static final String MODULE_FLOW = "Module";
     public static final String DATA_FLOW = "Data";
-    public static final int FLOW_COLLUM = 0;
-    public static final int PASS_PLAN_COLLUM = 8;
-    public static final int FAIL_PLAN_COLLUM = 9;
-    public static final int DATA_PLAN_COLLUM = 6;
+    public static final int FLOW_COLUM = 0;
+    public static final int PASS_PLAN_COLUM = 8;
+    public static final int FAIL_PLAN_COLUM = 9;
+    public static final int DATA_PLAN_COLUM = 6;
+    public static final int COURSE_PLAN_COLUM = 8;
+    public static final String EE_COURSE = "EE";
+    public static final String LRC_COURSE = "LRC";
+    public static final String AI_COURSE = "AI_Speak";
     //endregion
 
     //endregion
@@ -99,6 +95,7 @@ public class Constanst {
     public static final String SCENE_URL = "http://localhost:8342/q/scene";
     public static final String POINTER_URL = "http://localhost:8342/q/pointer";
     public static final String STATUS_URL = "http://localhost:8342/about";
+    public static final String ALL_SCENE = "http://localhost:8342/q/scene";
     public static final String TAKE_PHOTO = "http://localhost:8342/utils/appscreenshot";
     public static final String DRAG_ACTION = ".drag";
     public static final String MOVE_ACTION = ".Move";
@@ -120,6 +117,8 @@ public class Constanst {
     //endregion
     //region file variable file
     public static final String PATH_GAME_OBJECT = "path";
+    public static final String INDEX_GAME_OBJECT = "index";
+    public static final String CURRENT_SCENE = "current_scene";
     public static final String VARIABLE_PATH_FILE = FileHelpers.getRootFolder()
             +FileHelpers.convertPath("\\tool_test_game\\config\\data\\variable.json");
     //endregion

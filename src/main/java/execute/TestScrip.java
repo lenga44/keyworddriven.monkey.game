@@ -1,12 +1,14 @@
 package execute;
 
 import com.beust.ah.A;
+import com.jayway.jsonpath.JsonPath;
 import common.keywords.KeyWordsToAction;
 import common.keywords.KeyWordsToActionPocoSDK;
 import common.keywords.KeyWordsToActionToVerify;
 import common.utility.*;
 import report.GenerateReport;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -31,25 +33,53 @@ public class TestScrip {
             String sRunMode = ExcelUtils.getStringValueInCell(iTestSuite,Constanst.RUN_MODE_SCOPE,Constanst.SCOPE_SHEET);
             Log.info("Mode in scope: "+sRunMode);
 
-            if(sRunMode.equals(Constanst.YES)) {
+            tcName = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET);
+            deFindFlowGame(iTestSuite,scopePath);
 
-                tcName = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET);
-                if(tcName.equals(Constanst.TEST_CASE_GAME_NAME_IN_FLOW))
-                {
-                    KeyWordsToAction.sleep("1");
-                    String game = KeyWordsToActionToVerify.getCurrentScene();
-                    tcName = "Report_"+game;
-                    ExcelUtils.setCellData(tcName,iTestSuite,Constanst.TEST_SUITE_FILE_NAME,Constanst.SCOPE_SHEET,scopePath);
-                }
+            if(sRunMode.equals(Constanst.YES)) {
                 Log.info("TCS name: "+tcName);
                 tcPath = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.TESTCASE_FILE_PATH)+ tcName + ".xlsx";
                 reportPath = GenerateReport.genTCReport(levelFolder,reportName);
                 ExcelUtils.setExcelFile(reportPath);
                 GroupInTest.copyRowIfTCContainGroup(json,reportPath);
-               /* execute_testcases();
+                execute_testcases();
                 ExcelUtils.setExcelFile(scopePath);
-                ExcelUtils.setCellData(tcResult, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);*/
+                ExcelUtils.setCellData(tcResult, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
             }
+        }
+    }
+    private static void deFindFlowGame(int row, String path){
+        if(tcName.equals(Constanst.TEST_CASE_GAME_NAME_IN_FLOW))
+        {
+            KeyWordsToAction.sleep("1");
+            returnGame(row,path);
+        }
+    }
+    private static String deFindGame(int row){
+        String course = ExcelUtils.getStringValueInCell(row,Constanst.COURSE_PLAN_COLUM,Constanst.PLAN_SHEET);
+        String game = null;
+        if(course.equals(Constanst.AI_COURSE)){
+            game = KeyWordsToActionToVerify.getAllScene();
+        }else if (course.equals(Constanst.EE_COURSE)){
+            game = KeyWordsToActionToVerify.getCurrentScene();
+        }
+        return game;
+    }
+    private static void returnGame(int row,String path){
+        String games = deFindGame(row);
+        boolean exits = false;
+        for (String game: games.split(",")) {
+            tcName = "Report_" + game;
+            tcPath = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.TESTCASE_FILE_PATH)+ tcName + ".xlsx";
+            if(new File(tcPath).exists()){
+                exits = true;
+                ExcelUtils.setCellData(tcName, row, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET, path);
+                break;
+            }
+        }
+        if (exits == false){
+            tcResult = Constanst.SKIP;
+            ExcelUtils.setCellData(Constanst.NO,row,Constanst.RUN_MODE_SCOPE,Constanst.SCOPE_SHEET,path);
         }
     }
     public static String openScopeFile(String fileName) throws IOException{
@@ -209,11 +239,13 @@ public class TestScrip {
     private static void execute_action(String data,String sActionKeyword){
         String testStep = ExcelUtils.getStringValueInCell(iTestStep, Constanst.TEST_STEP, Constanst.TEST_STEP_SHEET);
         result = Constanst.PASS;
+        String name=null;
         try {
             param = getParam(params,data);
             int paramCount = (param == null) ? 0: param.length;
             for (int i = 0; i < method.length; i++) {
                 if (method[i].getName().equals(sActionKeyword) && method[i].getParameterCount() == paramCount) {
+                    name = method[i].getName();
                     Log.info(testStep +":  "+description);
                     if (paramCount == 0) {
                         param = null;
@@ -231,6 +263,7 @@ public class TestScrip {
                 }
             }
         }catch (Throwable e) {
+            Log.error(name);
             exception(e);
         }
         //onResultStep(result,error,numberStep);
