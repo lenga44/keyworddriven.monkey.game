@@ -133,8 +133,8 @@ public class TestScrip {
         }
     }
     private static void onResultTestcase(String status, String message, int rowNumber) {
-        ExcelUtils.setCellData(status, rowNumber, Constanst.TESTCASE_STATUS, Constanst.TESTCASE_SHEET, tcPath);
-        ExcelUtils.setCellData(message,  rowNumber, Constanst.TESTCASE_ERROR, Constanst.TESTCASE_SHEET, tcPath);
+        ExcelUtils.setCellData(status, rowNumber, Constanst.TESTCASE_STATUS, Constanst.TESTCASE_SHEET, reportPath);
+        ExcelUtils.setCellData(message,  rowNumber, Constanst.TESTCASE_ERROR, Constanst.TESTCASE_SHEET, reportPath);
     }
     private static Object[] getParam(String params, String data){
         Log.info("Params: "+params);
@@ -229,12 +229,12 @@ public class TestScrip {
     private static void onResultStep(String status, String message, int rowNumber ){
         if(status == Constanst.FAIL) {
             byte[] bytes = KeyWordsToAction.takePhoto();
-            ExcelUtils.addPictureInCell(rowNumber, bytes, tcPath);
+            ExcelUtils.addPictureInCell(rowNumber, bytes, reportPath);
         }else {
-            ExcelUtils.setCellData("", rowNumber, Constanst.IMAGE, Constanst.TEST_STEP_SHEET, tcPath);
+            ExcelUtils.setCellData("", rowNumber, Constanst.IMAGE, Constanst.TEST_STEP_SHEET, reportPath);
         }
-        ExcelUtils.setCellData(status, rowNumber, Constanst.RESULT, Constanst.TEST_STEP_SHEET, tcPath);
-        ExcelUtils.setCellData(message,  rowNumber, Constanst.ERROR, Constanst.TEST_STEP_SHEET, tcPath);
+        ExcelUtils.setCellData(status, rowNumber, Constanst.RESULT, Constanst.TEST_STEP_SHEET, reportPath);
+        ExcelUtils.setCellData(message,  rowNumber, Constanst.ERROR, Constanst.TEST_STEP_SHEET, reportPath);
     }
     private static void execute_action(String data,String sActionKeyword){
         String testStep = ExcelUtils.getStringValueInCell(iTestStep, Constanst.TEST_STEP, Constanst.TEST_STEP_SHEET);
@@ -294,7 +294,7 @@ public class TestScrip {
         if(isDataFlow ==true && ex.contains("$")) {
             String value = JsonHandle.getValue(json, ex);
             map_key_expected.put(numberStep, ex);
-            ExcelUtils.setCellData(value,numberStep,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET,tcPath);
+            ExcelUtils.setCellData(value,numberStep,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET,reportPath);
             return value;
         }
         else
