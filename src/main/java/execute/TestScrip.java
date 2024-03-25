@@ -307,7 +307,15 @@ public class TestScrip {
     }
 
     // endregion verify result after each step
+    public static void getLevelFolder(int row)throws IOException{
+        String courseFolder = FileHelpers.getRootFolder() + Constanst.REPORT_FILE_PATH;
+        levelFolder = courseFolder +"//" + ExcelUtils.getStringValueInCell(row,Constanst.LEVEL_COLUM,Constanst.PLAN_SHEET);
+        Log.info("levelFolder: "+levelFolder);
+        Log.info("Folder path report course: " + FileHelpers.convertPath(levelFolder));
 
+        FileHelpers.genFolderReport(courseFolder);
+        Log.info("Folder path report level: " + FileHelpers.convertPath(levelFolder));
+    }
     //endregion
 
 

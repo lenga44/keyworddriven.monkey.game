@@ -11,6 +11,8 @@ public class RunTestScriptModule extends TestScrip{
         super(keyWord, method);
     }
     public static void run(String scopePath,int iTestSuit,int iTotalSuite) throws Exception {
+        getLevelFolder(1);
+        reportName = tcName;
        execute_suites(scopePath,iTestSuit,iTotalSuite);
        GenerateReport.countResultPlan(scopePath,iTotalSuite);
     }

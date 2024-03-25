@@ -85,6 +85,8 @@ public class GroupInTest {
                 int from = first + j;
                 int to = last + j;
                 ExcelUtils.copyRow(reportPath, Constanst.TESTCASE_SHEET, from, to);
+                ExcelUtils.setExcelFile(reportPath);
+                ExcelUtils.closeFile(reportPath);
                 String id = ExcelUtils.getStringValueInCell(ranges.get(0) + j, Constanst.TESTCASE_ID, Constanst.TESTCASE_SHEET) + "_" + (i + 1);
                 genTestcaseID(id, to, reportPath);
             }
@@ -101,6 +103,8 @@ public class GroupInTest {
                 int from = first + j;
                 int to = last + j;
                 ExcelUtils.copyRow(reportPath, Constanst.TESTCASE_SHEET, from, to);
+                ExcelUtils.setExcelFile(reportPath);
+                ExcelUtils.closeFile(reportPath);
             }
             first = last;
             last = first + countRow;
