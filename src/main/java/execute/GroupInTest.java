@@ -10,8 +10,8 @@ import java.util.*;
 
 public class GroupInTest {
 
-    //region Copy
-    public static void copyRowIfTCContainGroup(String json, String reportPath) throws Exception {
+    //region COPY TESTCASES
+    public static void copyTestCaseWhichGroupContain(String json, String reportPath) throws Exception {
         ArrayList<String> groups = getGroup();
         int totalGroup = ExcelUtils.getRowCount(Constanst.GROUP_SHEET);
         Map<String,String> mapGroupValue = getValueGroups(json,groups);
@@ -30,17 +30,25 @@ public class GroupInTest {
                                     loop = 20;
                                 }
                                 ArrayList<Integer> listRange = getListRangeByGroup(rowInsert,groupName,ranges);
-                                copyRowsWithGroupSubLevel(listRange,loop,reportPath);
+                                copyTestCasesWithGroupSubLevel(listRange,loop,reportPath);
                                 rowInsert = listRange.get(0)+loop+1;
+                                if(i>0) {
+                                    break;
+                                }
                             }
                         }
                     }else {
                         int loop = Integer.valueOf(mapGroupValue.get(groupName));
-                        copyRowsWithGroup(ranges,loop,reportPath);
+                        copyTestCasesWithGroup(ranges,loop,reportPath);
                     }
                 }
             }
         }
+    }
+    public static void copyTestStepByTestCase(String reportPath){
+        ExcelUtils.setExcelFile(reportPath);
+        int totalTestStep = ExcelUtils.getRowCount(Constanst.TEST_STEP_SHEET);
+
     }
     public static void genTestcaseID(String id,int row,String reportPath) throws IOException {
         ExcelUtils.setExcelFile(reportPath);
@@ -76,7 +84,7 @@ public class GroupInTest {
         return list;
     }
 
-    private static void copyRowsWithGroup(ArrayList<Integer> ranges,int loop,String reportPath) throws Exception {
+    private static void copyTestCasesWithGroup(ArrayList<Integer> ranges, int loop, String reportPath) throws Exception {
         int first = ranges.get(0);
         int last = ranges.get(1) + 1;
         int countRow = last - first;
@@ -86,15 +94,15 @@ public class GroupInTest {
                 int to = last + j;
                 ExcelUtils.copyRow(reportPath, Constanst.TESTCASE_SHEET, from, to);
                 ExcelUtils.setExcelFile(reportPath);
-                ExcelUtils.closeFile(reportPath);
                 String id = ExcelUtils.getStringValueInCell(ranges.get(0) + j, Constanst.TESTCASE_ID, Constanst.TESTCASE_SHEET) + "_" + (i + 1);
                 genTestcaseID(id, to, reportPath);
+                ExcelUtils.closeFile(reportPath);
             }
             first = last;
             last = first + countRow;
         }
     }
-    private static void copyRowsWithGroupSubLevel(ArrayList<Integer> ranges,int loop,String reportPath) throws Exception {
+    private static void copyTestCasesWithGroupSubLevel(ArrayList<Integer> ranges, int loop, String reportPath) throws Exception {
         int first = ranges.get(0);
         int last = ranges.get(1) + 1;
         int countRow = last - first;
@@ -104,12 +112,17 @@ public class GroupInTest {
                 int to = last + j;
                 ExcelUtils.copyRow(reportPath, Constanst.TESTCASE_SHEET, from, to);
                 ExcelUtils.setExcelFile(reportPath);
+                String id = ExcelUtils.getStringValueInCell(ranges.get(0) + j, Constanst.TESTCASE_ID, Constanst.TESTCASE_SHEET) + "." + (i + 1);
+                genTestcaseID(id, to, reportPath);
                 ExcelUtils.closeFile(reportPath);
             }
             first = last;
             last = first + countRow;
         }
     }
+    //endregion
+
+    //region COPY TEST STEPS
     //endregion
 
     //region Group

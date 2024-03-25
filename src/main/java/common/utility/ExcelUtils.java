@@ -1,6 +1,5 @@
 package common.utility;
 
-import com.aspose.cells.License;
 import execute.TestScrip;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFClientAnchor;

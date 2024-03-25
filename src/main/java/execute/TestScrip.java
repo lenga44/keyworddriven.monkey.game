@@ -1,7 +1,5 @@
 package execute;
 
-import com.beust.ah.A;
-import com.jayway.jsonpath.JsonPath;
 import common.keywords.KeyWordsToAction;
 import common.keywords.KeyWordsToActionPocoSDK;
 import common.keywords.KeyWordsToActionToVerify;
@@ -12,8 +10,6 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 import static common.keywords.KeyWordsToAction.exception;
@@ -41,10 +37,10 @@ public class TestScrip {
                 tcPath = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.TESTCASE_FILE_PATH)+ tcName + ".xlsx";
                 reportPath = GenerateReport.genTCReport(levelFolder,reportName);
                 ExcelUtils.setExcelFile(reportPath);
-                GroupInTest.copyRowIfTCContainGroup(json,reportPath);
-                execute_testcases();
+                GroupInTest.copyTestCaseWhichGroupContain(json,reportPath);
+                /*execute_testcases();
                 ExcelUtils.setExcelFile(scopePath);
-                ExcelUtils.setCellData(tcResult, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
+                ExcelUtils.setCellData(tcResult, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);*/
             }
         }
     }
