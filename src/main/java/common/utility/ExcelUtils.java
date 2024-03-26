@@ -274,27 +274,30 @@ public class ExcelUtils {
             onTestCaseFail("Method getCellData | Exception desc : " + e.getMessage());
         }
     }
-    public static void insertRow(int start,int end,String sheetName,String path){
+    public static void insertRow(int start,String path){
         try {
-            setExcelFile(path);
-            ExcelSheet = ExcelBook.getSheet(sheetName);
-            ExcelSheet.shiftRows(start, end, 1, true, true);
+            ExcelSheet.shiftRows(start, ExcelSheet.getLastRowNum(), 1,true,true);
             ExcelSheet.createRow(start);
         }catch (Exception e){
-            Log.error("Method getCellData | Exception desc : " + e.getMessage());
-            onTestCaseFail("Method getCellData | Exception desc : " + e.getMessage());
+            Log.error("Method insertRow | Exception desc : " + e.getMessage());
+            onTestCaseFail("Method insertRow | Exception desc : " + e.getMessage());
+            e.printStackTrace();
         }
     }
     public static void copyRow(String path,String sheetName,int from, int to,int totalCellInRow){
         try {
             ExcelSheet = ExcelBook.getSheet(sheetName);
+            insertRow(to,path);
             for(int i =1;i<=totalCellInRow;i++) {
                 String value = getStringValueInCell(from,i-1,sheetName);
                 setCellData(value,to,i-1,sheetName,path);
             }
+            FileOutputStream outFile = new FileOutputStream(new File(path));
+            ExcelBook.write(outFile);
+            outFile.close();
         }catch (Exception e){
-            Log.error("Method getCellData | Exception desc : " + e.getMessage());
-            onTestCaseFail("Method getCellData | Exception desc : " + e.getMessage());
+            Log.error("Method copyRow | Exception desc : " + e.getMessage());
+            onTestCaseFail("Method copyRow | Exception desc : " + e.getMessage());
         }
     }
     public static int getAmountRowInGroup(String group,String sheetName){

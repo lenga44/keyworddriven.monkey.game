@@ -1,9 +1,6 @@
 package execute;
 
-import common.utility.Constanst;
-import common.utility.ExcelUtils;
-import common.utility.JsonHandle;
-import common.utility.LogicHandle;
+import common.utility.*;
 
 import java.io.IOException;
 import java.util.*;
@@ -30,10 +27,10 @@ public class GroupInTest {
                                 if(loop>10){
                                     loop = 10;
                                 }
-                                /*System.out.println("=============="+rowInsert);
+                                Log.info("=======Copy=======" + rowInsert);
                                 ArrayList<Integer> listRange = getListRangeByGroup(rowInsert,groupName,ranges);
                                 copyTestCasesWithGroupSubLevel(listRange,loop,reportPath,totalCellInRow);
-                                rowInsert = listRange.get(0)+loop+1;*/
+                                rowInsert = listRange.get(0)+loop+1;
                             }
                         }
                     }else {
