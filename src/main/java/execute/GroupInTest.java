@@ -131,8 +131,8 @@ public class GroupInTest {
                 int end = ExcelUtils.getTestStepCount(Constanst.TEST_STEP_SHEET,id,start);
                 for (int i = 0;i<(end-start+1);i++) {
                     ///////////////////////////////////////////////
-                    totalTestStep = ExcelUtils.getRowCount(Constanst.TEST_STEP_SHEET);
                     ExcelUtils.copyRow(path, Constanst.TEST_STEP_SHEET,start+i,totalTestStep,totalCellInRow);
+                    totalTestStep = ExcelUtils.getRowCount(Constanst.TEST_STEP_SHEET)-1;
                     ExcelUtils.setCellData(tcID,totalTestStep,Constanst.TESTCASE_ID,Constanst.TEST_STEP_SHEET,path);
                 }
             }
