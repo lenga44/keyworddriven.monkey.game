@@ -264,17 +264,22 @@ public class ExcelUtils {
             }
         }
     }
-    public static void createRow(int start,int end,String sheetName){
+    public static void createRowLastest(int number,String sheetName,String path){
         try {
-            ExcelSheet = ExcelBook.getSheet(sheetName);
-            ExcelSheet.shiftRows(start, end, 1, true, true);
-            ExcelSheet.createRow(end);
+            com.aspose.cells.Workbook workbook = new com.aspose.cells.Workbook(path);
+            com.aspose.cells.Worksheet worksheet = workbook.getWorksheets().get(sheetName);
+            worksheet.getCells().insertRows(number,1);
+            worksheet.getCells().get(number,0).setValue("END");
+            deleteDefaultSheetAspose(workbook,path);
+            closeFile(path);
+            setExcelFile(path);
         }catch (Exception e){
-            Log.error("Method getCellData | Exception desc : " + e.getMessage());
-            onTestCaseFail("Method getCellData | Exception desc : " + e.getMessage());
+            Log.error("Method createRow | Exception desc : " + e.getMessage());
+            onTestCaseFail("Method createRow | Exception desc : " + e.getMessage());
+            e.printStackTrace();
         }
     }
-    public static void insertRow(int start,String path){
+    public static void insertRow(int start){
         try {
             ExcelSheet.shiftRows(start, ExcelSheet.getLastRowNum(), 1,true,true);
             ExcelSheet.createRow(start);
@@ -287,7 +292,7 @@ public class ExcelUtils {
     public static void copyRow(String path,String sheetName,int from, int to,int totalCellInRow){
         try {
             ExcelSheet = ExcelBook.getSheet(sheetName);
-            insertRow(to,path);
+            insertRow(to);
             for(int i =1;i<=totalCellInRow;i++) {
                 String value = getStringValueInCell(from,i-1,sheetName);
                 setCellData(value,to,i-1,sheetName,path);

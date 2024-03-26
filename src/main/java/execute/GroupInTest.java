@@ -41,11 +41,6 @@ public class GroupInTest {
             }
         }
     }
-    public static void copyTestStepByTestCase(String reportPath){
-        ExcelUtils.setExcelFile(reportPath);
-        int totalTestStep = ExcelUtils.getRowCount(Constanst.TEST_STEP_SHEET);
-
-    }
     public static void genTestcaseID(String id,int row,String reportPath) throws IOException {
         ExcelUtils.setExcelFile(reportPath);
         ExcelUtils.setCellData(id,row,Constanst.TESTCASE_ID,Constanst.TESTCASE_SHEET,reportPath);
@@ -118,6 +113,43 @@ public class GroupInTest {
     }
     //endregion
 
+    //region COPY TEST STEP
+    public static void copyTestStepByTestCase(String path){
+        List<String> testCaseIDs = getToTalTestCaseID();
+        int totalTestStep = ExcelUtils.getRowCount(Constanst.TEST_STEP_SHEET);
+        int totalCellInRow = ExcelUtils.getRow(Constanst.TEST_STEP_SHEET,1);
+        ExcelUtils.createRowLastest(totalTestStep,Constanst.TEST_STEP_SHEET,path);
+        for (String tcID: testCaseIDs) {
+            if(ExcelUtils.getRowContains(tcID,Constanst.TESTCASE_ID,Constanst.TEST_STEP_SHEET)==0){
+                String id = tcID;
+                if(id.contains(".")){
+                    id = Arrays.stream(id.split("\\.")).toList().get(0);
+                }else if (id.contains("_")){
+                    id = Arrays.stream(id.split("_")).toList().get(0);
+                }
+                int start = ExcelUtils.getRowContains(id,Constanst.TESTCASE_ID,Constanst.TEST_STEP_SHEET);
+                int end = ExcelUtils.getTestStepCount(Constanst.TEST_STEP_SHEET,id,start);
+                for (int i = 0;i<(end-start+1);i++) {
+                    ///////////////////////////////////////////////
+                    totalTestStep = ExcelUtils.getRowCount(Constanst.TEST_STEP_SHEET);
+                    ExcelUtils.copyRow(path, Constanst.TEST_STEP_SHEET,start+i,totalTestStep,totalCellInRow);
+                    ExcelUtils.setCellData(tcID,totalTestStep,Constanst.TESTCASE_ID,Constanst.TEST_STEP_SHEET,path);
+                }
+            }
+        }
+    }
+    private static List<String> getToTalTestCaseID(){
+        List<String> testCaseIDs = new ArrayList<>();
+        int totalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET)-1;
+        for (int i =1;i<totalTestCase;i++){
+            testCaseIDs.add(ExcelUtils.getStringValueInCell(i,Constanst.TESTCASE_ID,Constanst.TESTCASE_SHEET));
+        }
+        return testCaseIDs;
+    }
+    private static int getToTalTestStep(){
+        return ExcelUtils.getRowCount(Constanst.TEST_STEP_SHEET);
+    }
+    //endregion
     //region COPY TEST STEPS
     //endregion
 

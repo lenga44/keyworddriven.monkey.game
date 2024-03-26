@@ -41,8 +41,11 @@ public class TestScrip {
                     reportPath = GenerateReport.genTCReport(levelFolder, "");
                 }
                 ExcelUtils.setExcelFile(reportPath);
+                int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
+                ExcelUtils.createRowLastest(iTotalTestCase,Constanst.TESTCASE_SHEET,reportPath);
                 GroupInTest.copyTestCaseWhichGroupContain(json,reportPath);
-                /*execute_testcases();
+                GroupInTest.copyTestStepByTestCase(reportPath);
+                /*execute_testcases(iTotalTestCase);
                 ExcelUtils.setExcelFile(scopePath);
                 ExcelUtils.setCellData(tcResult, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);*/
             }
@@ -107,8 +110,7 @@ public class TestScrip {
         }
         return 0;
     }
-    private static void execute_testcases() throws IOException {
-        int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
+    private static void execute_testcases(int iTotalTestCase) throws IOException {
         Log.info("Total TC: " + iTotalTestCase);
         for(int i =1; i<iTotalTestCase;i++) {
 
