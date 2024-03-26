@@ -183,7 +183,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
     }
     public static String getAudioSource(String locator){
         Log.info("|getAudioSource |");
-        return getPropertyValue(locator,"AudioSource","clip","(UnityEngine.AudioClip)");
+        return getPropertyValue(locator,"AudioSource","clip"," (UnityEngine.AudioClip)");
     }
     public static String getListAudioSource(String locator,String count) {
         String audio = null;

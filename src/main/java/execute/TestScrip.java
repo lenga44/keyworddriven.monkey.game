@@ -35,7 +35,11 @@ public class TestScrip {
             if(sRunMode.equals(Constanst.YES)) {
                 Log.info("TCS name: "+tcName);
                 tcPath = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.TESTCASE_FILE_PATH)+ tcName + ".xlsx";
-                reportPath = GenerateReport.genTCReport(levelFolder,reportName);
+                if(isDataFlow==true) {
+                    reportPath = GenerateReport.genTCReport(levelFolder, reportName);
+                }else {
+                    reportPath = GenerateReport.genTCReport(levelFolder, "");
+                }
                 ExcelUtils.setExcelFile(reportPath);
                 GroupInTest.copyTestCaseWhichGroupContain(json,reportPath);
                 /*execute_testcases();

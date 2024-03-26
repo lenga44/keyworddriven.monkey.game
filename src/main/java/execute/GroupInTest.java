@@ -16,6 +16,7 @@ public class GroupInTest {
         int totalGroup = ExcelUtils.getRowCount(Constanst.GROUP_SHEET);
         Map<String,String> mapGroupValue = getValueGroups(json,groups);
         Map<String,ArrayList<Integer>> mapGroupRange = getRangeGroups(groups);
+        int totalCellInRow = ExcelUtils.getRow(Constanst.TESTCASE_SHEET,1);
         if(totalGroup>0) {
             for (int level : getListLevel(totalGroup)) {
                 for (String groupName : getGroupWithLeve(totalGroup, level)) {
@@ -26,20 +27,18 @@ public class GroupInTest {
                         if(!list.equals(null)){
                             for(int i = 0;i<list.size();i++){
                                 int loop = list.get(i);
-                                if(loop>20){
-                                    loop = 20;
+                                if(loop>10){
+                                    loop = 10;
                                 }
+                                /*System.out.println("=============="+rowInsert);
                                 ArrayList<Integer> listRange = getListRangeByGroup(rowInsert,groupName,ranges);
-                                copyTestCasesWithGroupSubLevel(listRange,loop,reportPath);
-                                rowInsert = listRange.get(0)+loop+1;
-                                if(i>0) {
-                                    break;
-                                }
+                                copyTestCasesWithGroupSubLevel(listRange,loop,reportPath,totalCellInRow);
+                                rowInsert = listRange.get(0)+loop+1;*/
                             }
                         }
                     }else {
                         int loop = Integer.valueOf(mapGroupValue.get(groupName));
-                        copyTestCasesWithGroup(ranges,loop,reportPath);
+                        copyTestCasesWithGroup(ranges,loop,reportPath,totalCellInRow);
                     }
                 }
             }
@@ -84,7 +83,7 @@ public class GroupInTest {
         return list;
     }
 
-    private static void copyTestCasesWithGroup(ArrayList<Integer> ranges, int loop, String reportPath) throws Exception {
+    private static void copyTestCasesWithGroup(ArrayList<Integer> ranges, int loop, String reportPath,int totalCell) throws Exception {
         int first = ranges.get(0);
         int last = ranges.get(1) + 1;
         int countRow = last - first;
@@ -92,7 +91,7 @@ public class GroupInTest {
             for (int j = 0; j < countRow; j++) {
                 int from = first + j;
                 int to = last + j;
-                ExcelUtils.copyRow(reportPath, Constanst.TESTCASE_SHEET, from, to);
+                ExcelUtils.copyRow(reportPath, Constanst.TESTCASE_SHEET, from, to,totalCell);
                 ExcelUtils.setExcelFile(reportPath);
                 String id = ExcelUtils.getStringValueInCell(ranges.get(0) + j, Constanst.TESTCASE_ID, Constanst.TESTCASE_SHEET) + "_" + (i + 1);
                 genTestcaseID(id, to, reportPath);
@@ -102,7 +101,7 @@ public class GroupInTest {
             last = first + countRow;
         }
     }
-    private static void copyTestCasesWithGroupSubLevel(ArrayList<Integer> ranges, int loop, String reportPath) throws Exception {
+    private static void copyTestCasesWithGroupSubLevel(ArrayList<Integer> ranges, int loop, String reportPath,int totalCell) throws Exception {
         int first = ranges.get(0);
         int last = ranges.get(1) + 1;
         int countRow = last - first;
@@ -110,7 +109,7 @@ public class GroupInTest {
             for (int j = 0; j < countRow; j++) {
                 int from = first + j;
                 int to = last + j;
-                ExcelUtils.copyRow(reportPath, Constanst.TESTCASE_SHEET, from, to);
+                ExcelUtils.copyRow(reportPath, Constanst.TESTCASE_SHEET, from, to,totalCell);
                 ExcelUtils.setExcelFile(reportPath);
                 String id = ExcelUtils.getStringValueInCell(ranges.get(0) + j, Constanst.TESTCASE_ID, Constanst.TESTCASE_SHEET) + "." + (i + 1);
                 genTestcaseID(id, to, reportPath);

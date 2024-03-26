@@ -37,6 +37,11 @@ public class ExcelUtils {
         }
         return iMumber;
     }
+    public static int getRow(String sheetName,int i){
+        ExcelSheet = ExcelBook.getSheet(sheetName);
+        return ExcelSheet.getRow(i).getLastCellNum();
+    }
+
     public static String getStringValueInCell(int rowNumber, int columnNumber, String sheetName){
         try {
             ExcelSheet = ExcelBook.getSheet(sheetName);
@@ -259,10 +264,34 @@ public class ExcelUtils {
             }
         }
     }
-    public static void createRow(int row,String sheetName){
+    public static void createRow(int start,int end,String sheetName){
         try {
             ExcelSheet = ExcelBook.getSheet(sheetName);
-            ExcelSheet.createRow(row);
+            ExcelSheet.shiftRows(start, end, 1, true, true);
+            ExcelSheet.createRow(end);
+        }catch (Exception e){
+            Log.error("Method getCellData | Exception desc : " + e.getMessage());
+            onTestCaseFail("Method getCellData | Exception desc : " + e.getMessage());
+        }
+    }
+    public static void insertRow(int start,int end,String sheetName,String path){
+        try {
+            setExcelFile(path);
+            ExcelSheet = ExcelBook.getSheet(sheetName);
+            ExcelSheet.shiftRows(start, end, 1, true, true);
+            ExcelSheet.createRow(start);
+        }catch (Exception e){
+            Log.error("Method getCellData | Exception desc : " + e.getMessage());
+            onTestCaseFail("Method getCellData | Exception desc : " + e.getMessage());
+        }
+    }
+    public static void copyRow(String path,String sheetName,int from, int to,int totalCellInRow){
+        try {
+            ExcelSheet = ExcelBook.getSheet(sheetName);
+            for(int i =1;i<=totalCellInRow;i++) {
+                String value = getStringValueInCell(from,i-1,sheetName);
+                setCellData(value,to,i-1,sheetName,path);
+            }
         }catch (Exception e){
             Log.error("Method getCellData | Exception desc : " + e.getMessage());
             onTestCaseFail("Method getCellData | Exception desc : " + e.getMessage());
@@ -273,13 +302,13 @@ public class ExcelUtils {
         int end = getTestStepCount(sheetName,group,start);
         return end -start +1;
     }
-    public static void copyRow(String path,String sheetName,int from, int to) throws Exception {
+    /*public static void copyRow(String path,String sheetName,int from, int to) throws Exception {
         com.aspose.cells.Workbook workbook = new com.aspose.cells.Workbook(path);
         com.aspose.cells.Worksheet worksheet = workbook.getWorksheets().get(sheetName);
         worksheet.getCells().insertRows(to,1);
         worksheet.getCells().copyRow(worksheet.getCells(), from, to);
         deleteDefaultSheetAspose(workbook,path);
-    }
+    }*/
     public static void insertRow(String path,String sheetName,int row,int number) throws Exception {
         com.aspose.cells.Workbook workbook = new com.aspose.cells.Workbook(path);
         com.aspose.cells.Worksheet worksheet = workbook.getWorksheets().get(sheetName);

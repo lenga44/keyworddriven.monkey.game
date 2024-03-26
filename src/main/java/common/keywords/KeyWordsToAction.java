@@ -165,6 +165,9 @@ public class KeyWordsToAction {
         //waitForObject(locator);
         request(Constanst.POINTER_URL,".Press("+getAbsolutePath(locator,"0")+")");
     }
+    public static void pressWithTag(String tagNew,String tagOld){
+        request(Constanst.POINTER_URL,".PressWithTag("+tagNew +","+tagOld+")");
+    }
 
     public static void press(String locator,String index){
         waitForObject(locator);
@@ -578,6 +581,9 @@ public class KeyWordsToAction {
             exception(e);
         }
         return list;
+    }
+    public static void setTagGameObject(String locator,String tagName){
+        request(Constanst.SCENE_URL,"//"+locator+".tag="+tagName);
     }
     //endregion
 }
