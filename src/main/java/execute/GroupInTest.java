@@ -179,7 +179,7 @@ public class GroupInTest {
             for (int i =iStartTestStep;i<=iEndTestStep;i++){
                 List<String> values = new ArrayList<>();
                 for (int j=0;j<totalCell;j++){
-                    values.add(ExcelUtils.getStringValueInCell(i,j,nameSheetClone);
+                    values.add(ExcelUtils.getStringValueInCell(i,j,nameSheetClone));
                 }
                 map.put(i,values);
             }
