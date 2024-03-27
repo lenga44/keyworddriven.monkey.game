@@ -349,14 +349,60 @@ public class ExcelUtils {
             Log.error("|createSheet|: " +e.getMessage());
         }
     }
-    public static Sheet cloneSheet(String sheetName){
+    public static Sheet cloneSheet(String sheetName,String path){
         try{
             int index = ExcelBook.getSheetIndex(sheetName);
             ExcelSheet = ExcelBook.cloneSheet(index);
+            FileOutputStream fos = new FileOutputStream(path);
+            ExcelBook.write(fos);
+            // Close streams
+            fos.close();
             return ExcelSheet;
         }catch (Exception e){
             Log.error("|cloneSheet|: " +e.getMessage());
         }
         return null;
+    }
+   /* public static void cloneSheet(String originalSheet, String clonedSheet) {
+        ExcelSheet = ExcelBook.createSheet(Constanst.TC_TS_SHEET);
+        Sheet original = ExcelBook.getSheet(originalSheet);
+        Sheet cloned = ExcelBook.getSheet(clonedSheet);
+        // Iterate over each row in the original sheet
+        for (int i = 0; i <= original.getLastRowNum(); i++) {
+            Row originalRow = original.getRow(i);
+            Row clonedRow = cloned.createRow(i);
+
+            if (originalRow != null) {
+                // Iterate over each cell in the original row
+                for (int j = 0; j < originalRow.getLastCellNum(); j++) {
+                    Cell originalCell = originalRow.getCell(j);
+                    if (originalCell != null) {
+                        Cell clonedCell = clonedRow.createCell(j);
+                        // Copy value and cell style
+                        clonedCell.setCellValue(getCellValue(originalCell).toString());
+                        clonedCell.setCellStyle(originalCell.getCellStyle());
+                    }
+                }
+            }
+        }
+    }
+*/
+    private static Object getCellValue(Cell cell) {
+        switch (cell.getCellType()) {
+            case STRING:
+                return cell.getRichStringCellValue().getString();
+            case NUMERIC:
+                if (DateUtil.isCellDateFormatted(cell)) {
+                    return cell.getDateCellValue();
+                } else {
+                    return cell.getNumericCellValue();
+                }
+            case BOOLEAN:
+                return cell.getBooleanCellValue();
+            case FORMULA:
+                return cell.getCellFormula();
+            default:
+                return null;
+        }
     }
 }

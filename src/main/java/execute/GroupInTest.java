@@ -28,7 +28,6 @@ public class GroupInTest {
                                 if(loop>10){
                                     loop = 10;
                                 }
-                                Log.info("=======Copy=======" + rowInsert);
                                 ArrayList<Integer> listRange = getListRangeByGroup(rowInsert,groupName,ranges);
                                 copyTestCasesWithGroupSubLevel(listRange,loop,reportPath,totalCellInRow);
                                 rowInsert = listRange.get(0)+loop+1;
@@ -43,6 +42,7 @@ public class GroupInTest {
                 }
             }
         }
+        ExcelUtils.closeFile(reportPath);
     }
     public static void genTestcaseID(String id,int row,String reportPath) throws IOException {
         ExcelUtils.setExcelFile(reportPath);
@@ -118,32 +118,40 @@ public class GroupInTest {
 
     //region COPY TEST STEP
     public static void genTestStepFollowTestCase(String path){
-        cloneSheet();
-        List<String> listTestCases = getTestCaseIDs(Constanst.TESTCASE_SHEET);
-        int totalCellInRow = ExcelUtils.getRow(Constanst.TEST_STEP_SHEET,1);
-        int totalRowTestStep = ExcelUtils.getRowCount(Constanst.TEST_STEP_SHEET);
-        int i =1;
-        for (String tcID: listTestCases) {
-            String id = tcID;
-            if(id.contains(".")){
-                id = Arrays.stream(id.split(".")).toList().get(0);
-            }else if(id.contains("_")){
-                id = Arrays.stream(id.split("_")).toList().get(0);
+        try {
+            ExcelUtils.setExcelFile(path);
+            Sheet sheet = ExcelUtils.cloneSheet(Constanst.TEST_STEP_SHEET, path);
+            nameSheetClone = sheet.getSheetName();
+            List<String> listTestCases = getTestCaseIDs(Constanst.TESTCASE_SHEET);
+            int totalCellInRow = ExcelUtils.getRow(Constanst.TEST_STEP_SHEET, 1);
+            int index = 1;
+            Map<String, List<String>> map = mapTestCaseWithTestStep(totalCellInRow);
+            for (String tcID : listTestCases) {
+                int totalRowTestStep = ExcelUtils.getRowCount(Constanst.TEST_STEP_SHEET);
+                if (index >= totalRowTestStep) {
+                    ExcelUtils.insertRow(index, Constanst.TEST_STEP_SHEET);
+                }
+                copyRowByTC(map,tcID,index,path);
             }
-            //rangeStepByTestCase(id);
-            if(i>=totalRowTestStep){
-                ExcelUtils.insertRow(i,Constanst.TEST_STEP_SHEET);
-            }
-            Map<Integer,List<String>> map = mapTestCaseWithTestStep(totalCellInRow);
-            for (int row : map.keySet()) {
-                ExcelUtils.copyRow(path,Constanst.TEST_STEP_SHEET,i,map.get(row));
-                i++;
-            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
-    private static void cloneSheet(){
-        Sheet sheet = ExcelUtils.cloneSheet(Constanst.TEST_STEP_SHEET);
-        nameSheetClone = sheet.getSheetName();
+    private static void copyRowByTC(Map<String, List<String>> map,String tcID,int index,String path){
+        String id = tcID;
+        if(id.contains(".")){
+            id = Arrays.asList(id.split("\\.")).get(0);
+        }else if(id.contains("_")){
+            id = Arrays.asList(id.split("\\_")).get(0);
+        }
+        for (String str: map.keySet()) {
+            if(id.equals(str)){
+                //copy wrong index ????
+                ExcelUtils.copyRow(path, Constanst.TEST_STEP_SHEET, index, map.get(str));
+                ExcelUtils.setCellData(tcID, index, Constanst.TESTCASE_ID, Constanst.TEST_STEP_SHEET, path);
+                index++;
+            }
+        }
     }
     private static List<String> getTestCaseIDs(String sheetName){
         List<String> testCaseIDs = new ArrayList<>();
@@ -169,19 +177,21 @@ public class GroupInTest {
     }
     private static void rangeStepByTestCase(String sTestCaseID){
         iStartTestStep = ExcelUtils.getRowContains(sTestCaseID,Constanst.TESTCASE_ID,nameSheetClone);
-        iEndTestStep = ExcelUtils.getTestStepCount(nameSheetClone,sTestCaseID,iStartTestStep);
+        iEndTestStep = ExcelUtils.getTestStepCount(nameSheetClone,sTestCaseID,iStartTestStep)-1;
     }
-    private static Map<Integer,List<String>> mapTestCaseWithTestStep(int totalCell){
-        Map<Integer,List<String>> map = new HashMap<>();
+    private static Map<String,List<String>> mapTestCaseWithTestStep(int totalCell){
+        Map<String,List<String>> map = new HashMap<>();
         List<String> tcIDs = getTestCaseIDs(nameSheetClone);
         for (String id:tcIDs) {
-            rangeStepByTestCase(id);
+            if(!id.equals("")) {
+                rangeStepByTestCase(id);
             for (int i =iStartTestStep;i<=iEndTestStep;i++){
                 List<String> values = new ArrayList<>();
-                for (int j=0;j<totalCell;j++){
+                for (int j=1;j<totalCell;j++){
                     values.add(ExcelUtils.getStringValueInCell(i,j,nameSheetClone));
                 }
-                map.put(i,values);
+                map.put(id,values);
+            }
             }
             /////////////////
         }

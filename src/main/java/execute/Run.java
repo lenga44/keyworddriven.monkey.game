@@ -5,9 +5,12 @@ import common.utility.Constanst;
 import common.utility.ExcelUtils;
 import common.utility.FileHelpers;
 import common.utility.Log;
+import org.apache.poi.ss.formula.FormulaParser;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Run {
 
@@ -16,6 +19,8 @@ public class Run {
         keyWord = new KeyWordsToActionPocoSDK();
         method = keyWord.getClass().getMethods();
 
+        Logger formulaParserLogger = Logger.getLogger(FormulaParser.class.getName());
+        formulaParserLogger.setLevel(Level.OFF);
         Log.resetFileLog();
 
         scopePath = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.SCOPE_FILE_PATH);
