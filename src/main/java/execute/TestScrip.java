@@ -43,8 +43,7 @@ public class TestScrip {
                 ExcelUtils.setExcelFile(reportPath);
                 int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
                 ExcelUtils.createRowLastest(iTotalTestCase,Constanst.TESTCASE_SHEET,reportPath);
-                GroupInTest.copyTestCaseWhichGroupContain(json,reportPath);
-                GroupInTest.copyTestStepByTestCase(reportPath);
+                GroupInTest.genTestCaseWhichGroupContain(json,reportPath);
                 /*execute_testcases(iTotalTestCase);
                 ExcelUtils.setExcelFile(scopePath);
                 ExcelUtils.setCellData(tcResult, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);*/

@@ -76,12 +76,15 @@ public class Constanst {
 
     //region Group-Turn sheet
     public static final String GROUP_SHEET = "Group-Turn";
-    public static final int GROUP_NAME_COLUM = 0;
-    public static final int GROUP_LEVEL_COLUM = 2;
-    public static final int GROUP_VALUE_COLUM = 1;
+    public static final int GROUP_NAME_COLLUM = 0;
+    public static final int GROUP_LEVEL_COLLUM = 2;
+    public static final int GROUP_VALUE_COLLUM = 1;
+    //region TC_TS sheet
+    public static final String TC_TS_SHEET = "TC_TS";
+    //endregion
     //endregion
     //region TC sheet
-    public static final int GROUP_COLUM_IN_TC_SHEET = 5;
+    public static final int GROUP_COLLUM_IN_TC_SHEET = 5;
     //endregion
 
     //region Excel sheet

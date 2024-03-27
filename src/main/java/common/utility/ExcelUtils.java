@@ -7,6 +7,7 @@ import org.apache.poi.xssf.usermodel.XSSFDrawing;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
+import java.util.List;
 
 public class ExcelUtils {
     private static Sheet ExcelSheet;
@@ -284,7 +285,16 @@ public class ExcelUtils {
             ExcelSheet.createRow(start);
         }catch (Exception e){
             Log.error("Method insertRow | Exception desc : " + e.getMessage());
-            onTestCaseFail("Method insertRow | Exception desc : " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    public static void insertRow(int start,String sheetName){
+        try {
+            ExcelSheet = ExcelBook.getSheet(sheetName);
+            ExcelSheet.shiftRows(start, ExcelSheet.getLastRowNum(), 1,true,true);
+            ExcelSheet.createRow(start);
+        }catch (Exception e){
+            Log.error("Method insertRow | Exception desc : " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -295,6 +305,20 @@ public class ExcelUtils {
             for(int i =1;i<=totalCellInRow;i++) {
                 String value = getStringValueInCell(from,i-1,sheetName);
                 setCellData(value,to,i-1,sheetName,path);
+            }
+            FileOutputStream outFile = new FileOutputStream(new File(path));
+            ExcelBook.write(outFile);
+            outFile.close();
+        }catch (Exception e){
+            Log.error("Method copyRow | Exception desc : " + e.getMessage());
+            onTestCaseFail("Method copyRow | Exception desc : " + e.getMessage());
+        }
+    }
+    public static void copyRow(String path, String sheetName, int to, List<String> values){
+        try {
+            ExcelSheet = ExcelBook.getSheet(sheetName);
+            for(int i =1;i<=values.size();i++) {
+                setCellData(values.get(i-1),to+i,i-1,sheetName,path);
             }
             FileOutputStream outFile = new FileOutputStream(new File(path));
             ExcelBook.write(outFile);
@@ -318,5 +342,21 @@ public class ExcelUtils {
         workbook.save(path);
         workbook.dispose();
     }
-
+    public static void createSheet(String sheetName){
+        try{
+            ExcelBook.createSheet(sheetName);
+        }catch (Exception e){
+            Log.error("|createSheet|: " +e.getMessage());
+        }
+    }
+    public static Sheet cloneSheet(String sheetName){
+        try{
+            int index = ExcelBook.getSheetIndex(sheetName);
+            ExcelSheet = ExcelBook.cloneSheet(index);
+            return ExcelSheet;
+        }catch (Exception e){
+            Log.error("|cloneSheet|: " +e.getMessage());
+        }
+        return null;
+    }
 }
