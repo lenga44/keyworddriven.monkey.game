@@ -96,7 +96,6 @@ public class ExcelUtils {
         }
         return iRowNum;
     }
-
     public static int getTestStepCount(String sheetName, String sTestCaseID, int startTestStep) {
         try{
             for (int i = startTestStep;i< ExcelUtils.getRowCount(sheetName);i++){
@@ -305,24 +304,14 @@ public class ExcelUtils {
             onTestCaseFail("Method copyRow | Exception desc : " + e.getMessage());
         }
     }
-    public static int getAmountRowInGroup(String group,String sheetName){
-        int start = getRowContains(group,Constanst.GROUP_COLUM_IN_TC_SHEET,sheetName);
-        int end = getTestStepCount(sheetName,group,start);
-        return end -start +1;
-    }
-    /*public static void copyRow(String path,String sheetName,int from, int to) throws Exception {
-        com.aspose.cells.Workbook workbook = new com.aspose.cells.Workbook(path);
-        com.aspose.cells.Worksheet worksheet = workbook.getWorksheets().get(sheetName);
-        worksheet.getCells().insertRows(to,1);
-        worksheet.getCells().copyRow(worksheet.getCells(), from, to);
-        deleteDefaultSheetAspose(workbook,path);
-    }*/
-    public static void insertRow(String path,String sheetName,int row,int number) throws Exception {
-        com.aspose.cells.Workbook workbook = new com.aspose.cells.Workbook(path);
-        com.aspose.cells.Worksheet worksheet = workbook.getWorksheets().get(sheetName);
-        worksheet.getCells().insertRows(row,number);
-        worksheet.getOleObjects().get(0).setAutoLoad(true);
-        deleteDefaultSheetAspose(workbook,path);
+    public static void deleteRow(int number,String sheetName){
+        try {
+            ExcelSheet = ExcelBook.getSheet(sheetName);
+            Row row = ExcelSheet.getRow(number);
+            ExcelSheet.removeRow(row);
+        }catch (Exception e){
+            Log.error("|deleteRow|: " +e.getMessage());
+        }
     }
     private static void deleteDefaultSheetAspose(com.aspose.cells.Workbook workbook,String path) throws Exception {
         workbook.getWorksheets().removeAt("Evaluation Warning");
