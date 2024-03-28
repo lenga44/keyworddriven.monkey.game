@@ -125,69 +125,68 @@ public class GroupInTest {
             List<String> listTestCases = getTestCaseIDs(Constanst.TESTCASE_SHEET);
             int totalCellInRow = ExcelUtils.getRow(Constanst.TEST_STEP_SHEET, 1);
             int index = 1;
-            Map<String, List<String>> map = mapTestCaseWithTestStep(totalCellInRow);
+            int totalRowTestStep = 0;
+            Map<String, ArrayList<String>> map = mapTestCaseWithTestStep(totalCellInRow);
             for (String tcID : listTestCases) {
-                int totalRowTestStep = ExcelUtils.getRowCount(Constanst.TEST_STEP_SHEET);
-                if (index >= totalRowTestStep) {
+                totalRowTestStep = ExcelUtils.getRowCount(Constanst.TEST_STEP_SHEET)-1;
+                if (index == totalRowTestStep) {
                     ExcelUtils.insertRow(index, Constanst.TEST_STEP_SHEET);
                 }
-                copyRowByTC(map,tcID,index,path);
+                for (String id: map.keySet()) {
+                    System.out.println(map.get(id));
+                }
+                //sai map copy step ????
+                //copyRowByTC(map,tcID,index,path);
             }
+           /* ExcelUtils.deleteRow(totalRowTestStep,Constanst.TEST_STEP_SHEET);
+            ExcelUtils.deleteSheet(nameSheetClone,path);*/
         }catch (Exception e){
             e.printStackTrace();
         }
     }
-    private static void copyRowByTC(Map<String, List<String>> map,String tcID,int index,String path){
+    private static void copyRowByTC(Map<String, ArrayList<String>> map,String tcID,int index,String path) throws IOException {
         String id = tcID;
         if(id.contains(".")){
             id = Arrays.asList(id.split("\\.")).get(0);
-        }else if(id.contains("_")){
+        }
+        if(id.contains("_")){
             id = Arrays.asList(id.split("\\_")).get(0);
         }
         for (String str: map.keySet()) {
             if(id.equals(str)){
-                //copy wrong index ????
                 ExcelUtils.copyRow(path, Constanst.TEST_STEP_SHEET, index, map.get(str));
                 ExcelUtils.setCellData(tcID, index, Constanst.TESTCASE_ID, Constanst.TEST_STEP_SHEET, path);
-                index++;
+                ExcelUtils.closeFile(path);
+                ExcelUtils.setExcelFile(path);
+                break;
             }
         }
     }
     private static List<String> getTestCaseIDs(String sheetName){
         List<String> testCaseIDs = new ArrayList<>();
         int totalTestCase = ExcelUtils.getRowCount(sheetName)-1;
-        for (int i =1;i<totalTestCase;i++){
+        for (int i =1;i<=totalTestCase;i++){
             String id = ExcelUtils.getStringValueInCell(i,Constanst.TESTCASE_ID,sheetName);
             if(!testCaseIDs.contains(id)) {
                 testCaseIDs.add(id);
             }
         }
-        return testCaseIDs;
-    }
-    private static int getToTalTestStep(){
-        return ExcelUtils.getRowCount(Constanst.TEST_STEP_SHEET);
-    }
-    private static List<String> getListTestCaseIDInTestStep(){
-        List<String> testCaseIDs = new ArrayList<>();
-        int totalTestCase = ExcelUtils.getRowCount(Constanst.TEST_STEP_SHEET)-1;
-        for (int i =1;i<totalTestCase;i++){
-            testCaseIDs.add(ExcelUtils.getStringValueInCell(i,Constanst.TESTCASE_ID,Constanst.TEST_STEP_SHEET));
-        }
+        System.out.println("getTestCaseIDs: "+testCaseIDs);
         return testCaseIDs;
     }
     private static void rangeStepByTestCase(String sTestCaseID){
         iStartTestStep = ExcelUtils.getRowContains(sTestCaseID,Constanst.TESTCASE_ID,nameSheetClone);
         iEndTestStep = ExcelUtils.getTestStepCount(nameSheetClone,sTestCaseID,iStartTestStep)-1;
     }
-    private static Map<String,List<String>> mapTestCaseWithTestStep(int totalCell){
-        Map<String,List<String>> map = new HashMap<>();
+    private static Map<String,ArrayList<String>> mapTestCaseWithTestStep(int totalCell){
+        Map<String,ArrayList<String>> map = new HashMap<>();
         List<String> tcIDs = getTestCaseIDs(nameSheetClone);
         for (String id:tcIDs) {
             if(!id.equals("")) {
                 rangeStepByTestCase(id);
-            for (int i =iStartTestStep;i<=iEndTestStep;i++){
-                List<String> values = new ArrayList<>();
-                for (int j=1;j<totalCell;j++){
+                ArrayList<String> values = new ArrayList<>();
+            for (int i =iStartTestStep-1;i<=iEndTestStep;i++){
+                for (int j=0;j<totalCell;j++){
                     values.add(ExcelUtils.getStringValueInCell(i,j,nameSheetClone));
                 }
                 map.put(id,values);

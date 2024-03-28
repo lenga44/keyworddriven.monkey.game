@@ -317,8 +317,8 @@ public class ExcelUtils {
     public static void copyRow(String path, String sheetName, int to, List<String> values){
         try {
             ExcelSheet = ExcelBook.getSheet(sheetName);
-            for(int i =1;i<=values.size();i++) {
-                setCellData(values.get(i-1),to+i,i-1,sheetName,path);
+            for(int i =0;i<values.size();i++) {
+                setCellData(values.get(i),to,i,sheetName,path);
             }
             FileOutputStream outFile = new FileOutputStream(new File(path));
             ExcelBook.write(outFile);
@@ -363,46 +363,14 @@ public class ExcelUtils {
         }
         return null;
     }
-   /* public static void cloneSheet(String originalSheet, String clonedSheet) {
-        ExcelSheet = ExcelBook.createSheet(Constanst.TC_TS_SHEET);
-        Sheet original = ExcelBook.getSheet(originalSheet);
-        Sheet cloned = ExcelBook.getSheet(clonedSheet);
-        // Iterate over each row in the original sheet
-        for (int i = 0; i <= original.getLastRowNum(); i++) {
-            Row originalRow = original.getRow(i);
-            Row clonedRow = cloned.createRow(i);
-
-            if (originalRow != null) {
-                // Iterate over each cell in the original row
-                for (int j = 0; j < originalRow.getLastCellNum(); j++) {
-                    Cell originalCell = originalRow.getCell(j);
-                    if (originalCell != null) {
-                        Cell clonedCell = clonedRow.createCell(j);
-                        // Copy value and cell style
-                        clonedCell.setCellValue(getCellValue(originalCell).toString());
-                        clonedCell.setCellStyle(originalCell.getCellStyle());
-                    }
-                }
-            }
-        }
-    }
-*/
-    private static Object getCellValue(Cell cell) {
-        switch (cell.getCellType()) {
-            case STRING:
-                return cell.getRichStringCellValue().getString();
-            case NUMERIC:
-                if (DateUtil.isCellDateFormatted(cell)) {
-                    return cell.getDateCellValue();
-                } else {
-                    return cell.getNumericCellValue();
-                }
-            case BOOLEAN:
-                return cell.getBooleanCellValue();
-            case FORMULA:
-                return cell.getCellFormula();
-            default:
-                return null;
+    public static void deleteSheet(String sheetName,String path){
+        try {
+            ExcelBook.removeSheetAt(ExcelBook.getSheetIndex(sheetName));
+            FileOutputStream outFile =new FileOutputStream(new File(path));
+            ExcelBook.write(outFile);
+            outFile.close();
+        }catch (Exception e){
+            Log.error("|deleteSheet|: "+e.getMessage());
         }
     }
 }
