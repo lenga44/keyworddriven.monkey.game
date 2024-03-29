@@ -298,6 +298,15 @@ public class ExcelUtils {
             e.printStackTrace();
         }
     }
+    public static void insertCell(int row,int cell,String sheetName){
+        try {
+            ExcelSheet = ExcelBook.getSheet(sheetName);
+            ExcelSheet.getRow(row).createCell(cell);
+        }catch (Exception e){
+            Log.error("Method insertRow | Exception desc : " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
     public static void copyRow(String path,String sheetName,int from, int to,int totalCellInRow){
         try {
             ExcelSheet = ExcelBook.getSheet(sheetName);
