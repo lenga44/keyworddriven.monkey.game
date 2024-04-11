@@ -1,6 +1,7 @@
 package execute;
 
 import common.keywords.KeyWordsToActionPocoSDK;
+import common.keywords.KeyWordsToActionToVerify;
 import common.utility.*;
 
 import java.io.IOException;
@@ -10,7 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class RunTestScriptData extends TestScrip{
-    public RunTestScriptData(KeyWordsToActionPocoSDK keyWord, Method method[]){
+    public RunTestScriptData(KeyWordsToActionToVerify keyWord, Method method[]){
         super(keyWord, method);
     }
 

@@ -4,6 +4,8 @@ public class Constanst {
 
     public static final String PROJECT_PATH = System.getProperty("user.dir");
     //region System Variables
+    public static final String TRUE = "true";
+    public static final String FALSE = "false";
     public static final String FAIL = "FAIL";
     public static final String PASS = "PASS";
     public static final String SKIP = "SKIP";

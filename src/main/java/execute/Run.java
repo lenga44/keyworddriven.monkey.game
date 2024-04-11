@@ -1,6 +1,7 @@
 package execute;
 
 import common.keywords.KeyWordsToActionPocoSDK;
+import common.keywords.KeyWordsToActionToVerify;
 import common.utility.Constanst;
 import common.utility.ExcelUtils;
 import common.utility.FileHelpers;
@@ -16,7 +17,7 @@ public class Run {
 
     public static void main(String[] args) throws Exception {
 
-        keyWord = new KeyWordsToActionPocoSDK();
+        keyWord = new KeyWordsToActionToVerify();
         method = keyWord.getClass().getMethods();
 
         Logger formulaParserLogger = Logger.getLogger(FormulaParser.class.getName());
@@ -99,7 +100,7 @@ public class Run {
 
     //region KEY
     public static String scopePath;
-    private static KeyWordsToActionPocoSDK keyWord;
+    private static KeyWordsToActionToVerify keyWord;
     private static Method method[];
     private static RunTestScriptModule runTestScriptModule;
     private static RunTestScriptData runTestScriptData;

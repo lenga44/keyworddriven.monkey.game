@@ -4,7 +4,7 @@ import common.utility.FileHelpers;
 
 import java.io.IOException;
 
-public class KeyWordsToActionPocoSDK extends KeyWordsToActionToVerify{
+public class KeyWordsToActionPocoSDK{
     public static void clickInput(){
 
     }

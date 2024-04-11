@@ -15,7 +15,7 @@ import java.util.Map;
 import static common.keywords.KeyWordsToAction.exception;
 
 public class TestScrip {
-    public TestScrip(KeyWordsToActionPocoSDK keyWord, Method method[]){
+    public TestScrip(KeyWordsToActionToVerify keyWord, Method method[]){
         this.keyWord = keyWord;
         this.method = method;
     }

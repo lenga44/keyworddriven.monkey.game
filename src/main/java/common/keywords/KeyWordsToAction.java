@@ -181,6 +181,9 @@ public class KeyWordsToAction {
             request(Constanst.SIMULATE_URL,Constanst.DRAG_ACTION + "(1000,500,100,500,0.5)");
         }
     }*/
+    public static void drag(String locator1, String locator2){
+        request(Constanst.SIMULATE_URL,Constanst.DRAG_ACTION + "("+locator1+","+locator2+")");
+    }
     public static void swipe(String x1, String x2, String y){
         request(Constanst.SIMULATE_URL,Constanst.DRAG_ACTION + "("+x1+","+y+","+x2+","+y+",0.5)");
     }
@@ -475,7 +478,7 @@ public class KeyWordsToAction {
     private static void assertEqual(String actual,String expect){
         Assert.assertEquals(actual,expect);
     }
-    private static void assertEqual(String actual,List<String> expect){
+    private static void assertEqual(String actual, List<String> expect){
         Assert.assertTrue(expect.contains(actual));
     }
     private static String getAbsolutePath(String locator, String index){
@@ -584,6 +587,18 @@ public class KeyWordsToAction {
     }
     public static void setTagGameObject(String locator,String tagName){
         request(Constanst.SCENE_URL,"//"+locator+".tag="+tagName);
+    }
+    //endregion
+
+    //region KeyWordsToActionPocoSDK
+    public static void swipeInput() throws IOException {
+        KeyWordsToActionPocoSDK.swipeInput();
+    }
+    //endregion
+
+    //region KeyWordCustomForAISpeak
+    public static void returnChooseTopic(String locator,String path,String sheetName,String row){
+        KeyWordCustomForAISpeak.returnChooseTopic(locator,path,sheetName,row);
     }
     //endregion
 }
