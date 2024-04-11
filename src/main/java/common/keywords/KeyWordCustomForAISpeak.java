@@ -15,5 +15,4 @@ public class KeyWordCustomForAISpeak {
             ExcelUtils.setCellData(Constanst.NO,number,Constanst.RUN_MODE_TEST_CASE,sheetName,path);
         }
     }
-
 }

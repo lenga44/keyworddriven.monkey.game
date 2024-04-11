@@ -91,6 +91,14 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         Log.info(value);
         return value;
     }
+    public static String getPropertyValue(String locator, String component, String property,String slipStr,String index){
+        int number = Integer.valueOf(index);
+        waitForObject(locator);
+        Response response = request(Constanst.SCENE_URL,"//"+locator+"."+component);
+        String value = Arrays.stream(convert(response,property).split(slipStr)).toList().get(number).trim();
+        Log.info(value);
+        return value;
+    }
     public static String getImageName(String locator){
         String result =  getPropertyValue(locator,"Image","sprite");
         if(result.contains("(UnityEngine.Sprite)"))
@@ -282,6 +290,12 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
     }
     public static String getVideoName(String locator){
         return getPropertyValue(locator,"VideoPlayer","clip","(UnityEngine.VideoClip)");
+    }
+    public static String getVideoName(String locator,String strSplit,String indexSplit){
+        return getPropertyValue(locator,"VideoPlayer","clip",strSplit,indexSplit);
+    }
+    public static String getVideoUrl(String locator,String strSplit,String indexSplit){
+        return getPropertyValue(locator,"VideoPlayer","url",strSplit,indexSplit);
     }
     public static String getResultByKey(String locator,String component,String key){
         Response response = request(Constanst.SCENE_URL,"//" +locator+"."+component);

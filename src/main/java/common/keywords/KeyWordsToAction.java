@@ -88,7 +88,7 @@ public class KeyWordsToAction {
         waitForObject(locator);
         request(Constanst.SCENE_URL,"//"+locator+"."+component+"."+property);
     }
-    public static void click(String locator,String index,String component, String property){
+    public static void click(String locator,String component, String property,String index){
         waitForObject(locator);
         request(Constanst.SCENE_URL,"//"+locator+"[" +index+"]"+"."+component+"."+property);
     }

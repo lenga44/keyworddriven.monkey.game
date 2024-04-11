@@ -45,9 +45,9 @@ public class TestScrip {
                 ExcelUtils.createRowLastest(iTotalTestCase,Constanst.TESTCASE_SHEET,reportPath);
                 GroupInTest.genTestCaseWhichGroupContain(json,reportPath);
                 GroupInTest.genTestStepFollowTestCase(reportPath);
-                /*execute_testcases(iTotalTestCase);
+                execute_testcases(iTotalTestCase);
                 ExcelUtils.setExcelFile(scopePath);
-                ExcelUtils.setCellData(tcResult, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);*/
+                ExcelUtils.setCellData(tcResult, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
             }
         }
     }
