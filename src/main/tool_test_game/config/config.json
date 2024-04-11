@@ -1,7 +1,7 @@
 {
   "scope_path": "\\tool_test_game\\config\\Scope.xlsx",
   "testcase_path": "\\tool_test_game\\config\\testcases\\",
-  "data_file_path":"\\tool_test_game\\config\\data\\data.json",
+  "data_file_path":"\\tool_test_game\\config\\data\\flow4Valid answer to the question.json",
   "file_name_report_data_flow": "",
   "variable_file_path": "\\tool_test_game\\config\\data\\variable.json"
 }

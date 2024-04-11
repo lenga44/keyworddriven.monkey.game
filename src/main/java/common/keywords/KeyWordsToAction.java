@@ -597,8 +597,11 @@ public class KeyWordsToAction {
     //endregion
 
     //region KeyWordCustomForAISpeak
-    public static void returnChooseTopic(String locator,String path,String sheetName,String row){
-        KeyWordCustomForAISpeak.returnChooseTopic(locator,path,sheetName,row);
+    public static void returnChooseTopic(String locator,String fileName,String sheetName,String row){
+        KeyWordCustomForAISpeak.returnChooseTopic(locator,fileName,sheetName,row);
+    }
+    public static void deFindModeRunTestCase(String key,String fileName,String sheetName,String from, String to){
+        KeyWordCustomForAISpeak.deFindModeRunTestCase(key,fileName,sheetName,from, to );
     }
     //endregion
 }

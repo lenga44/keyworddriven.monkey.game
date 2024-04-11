@@ -54,6 +54,9 @@ public class JsonHandle {
         String json = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
         return  JsonParser.parseString(json.toString()).getAsJsonObject();
     }
+    public static JsonObject getObject(String json) {
+        return JsonParser.parseString(json).getAsJsonObject();
+    }
     @Deprecated
     public static JsonArray getJsonArray(String json) throws IOException{
         JsonParser parser = new JsonParser();
