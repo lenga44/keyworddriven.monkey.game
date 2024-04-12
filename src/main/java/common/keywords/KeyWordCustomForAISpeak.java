@@ -23,7 +23,6 @@ public class KeyWordCustomForAISpeak {
             String result = "";
             try {
                 result  = KeyWordsToActionToVerify.isElementDisplay(locator);
-                System.out.println("ressult1  " +result);
             }catch (Throwable e){
                 result = "false";
             }

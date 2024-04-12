@@ -51,11 +51,6 @@ public class KeyWordsToAction {
         return driver;
     }
 
-    public static void waitingForCourseListDisplay(){
-        System.out.println("=======================");
-        System.out.println("| waitingForCourseListDisplay |Bạn đang đứng ở Course List");
-        System.out.println("=======================");
-    }
 
     //region ACTION
     public static void sleep(String second)  {
@@ -147,26 +142,29 @@ public class KeyWordsToAction {
             JsonArray array = JsonHandle.getJsonArray(body.asString());
             for (int i = 0; i < array.size(); i++) {
                 String value = JsonHandle.getValue(array.get(i).toString(), "$.components");
+                String name = JsonHandle.getValue(array.get(i).toString(), "$.path");
                 if (value.contains(component)) {
+                    index =i;
                     Response response1 = request(Constanst.SCENE_URL, "//" + locator + "." + component);
                     ResponseBody body1 = response1.getBody();
                     String json1 = body1.asString();
                     for (JsonElement element : JsonHandle.getJsonArray(json1)) {
-                        String name = JsonHandle.getValue(array.get(i).toString(), "$.path");
-                        if (JsonHandle.getValue(element.toString(), "$." + key).toLowerCase().contains(expected.toLowerCase())) {
-                            path = name;
+                        path="";
+                        String s = JsonHandle.getValue(element.toString(), "$." + key);
+                        if (s.toLowerCase().contains(expected.toLowerCase())) {
+                            path =name;
                             break;
                         }
+                        index++;
                     }
                 }
                 if (!path.equals("")) {
                     break;
                 }
-                index++;
             }
+            System.out.println("path111 "+index);
+            path = convertToList(response,"path").get(index);
             JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, Constanst.PATH_GAME_OBJECT, path);
-            System.out.println("path111 " +component);
-            System.out.println("path111 " +path);
             ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
         }catch (Exception e){
             System.out.println(e.getMessage());
@@ -348,7 +346,6 @@ public class KeyWordsToAction {
                 response = request(Constanst.SCENE_URL, "//" + locator);
                 if(response!=null) {
                     JsonPath json = response.jsonPath();
-                    Log.info("waitForObjectContain :" + json.prettyPrint());
                     if (json != null && json.toString() != "") {
                         value = convert(response, key);
                         if (value != null) {

@@ -287,7 +287,6 @@ public class TestScrip {
     private static void verifyStep(int numberStep) throws IOException {
         String sActionKeyword = ExcelUtils.getStringValueInCell(numberStep, Constanst.VERIFY_STEP, Constanst.TEST_STEP_SHEET);
         String dataSetActual =ExcelUtils.getStringValueInCell(numberStep, Constanst.DATA_SET_ACTUAL, Constanst.TEST_STEP_SHEET);
-        getActualWithKey(iTestStep,dataSetActual);
         params = ExcelUtils.getStringValueInCell(numberStep, Constanst.PARAM_VERIFY_STEP, Constanst.TEST_STEP_SHEET)+ dataSetActual ;
 
         if(!sActionKeyword.equals("")){
