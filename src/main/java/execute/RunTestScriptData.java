@@ -30,36 +30,17 @@ public class RunTestScriptData extends TestScrip{
 
         for(int index = begin;index<=end;index++){
 
-            //init map key by cell
-            map_key_expected = new HashMap<>();
-            map_key_actual = new HashMap<>();
-            map_key_data_set =new HashMap<>();
-
             //get node need check
             json = JsonHandle.getObjectInJsonData(index-1);
-            ExcelUtils.setCellData(begin,1,Constanst.CURRENT_INDEX_COLUM,Constanst.PLAN_SHEET,scopePath);
+            ExcelUtils.setCellData(index,1,Constanst.CURRENT_INDEX_COLUM,Constanst.PLAN_SHEET,scopePath);
             String key = ExcelUtils.getStringValueInCell(1,Constanst.DATA_PLAN_COLUM,Constanst.PLAN_SHEET);
             reportName = getDataSet(key);
             //execute tc
             execute_suites(scopePath,iTestSuit,iTotalSuite);
-            break;
-            //gen report
-            /*GenerateReport.genReport(begin,levelFolder,reportName);
-            //sum pass fail
-            GenerateReport.countResultPlan(scopePath,iTotalSuite);
-            ExcelUtils.closeFile(scopePath);
-
-            ExcelUtils.setExcelFile(tcPath);
-
-            Log.info("Reset key");
-            resetKey(map_key_expected,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET,tcPath);
-            resetKey(map_key_actual,Constanst.DATA_SET_ACTUAL,Constanst.TEST_STEP_SHEET,tcPath);
-            resetKey(map_key_data_set,Constanst.DATA_SET,Constanst.TEST_STEP_SHEET,tcPath);
-
-            Log.info("Reset status,image, error");
-
-            ExcelUtils.closeFile(tcPath);*/
+            ExcelUtils.closeFile(reportPath);
+            ExcelUtils.closeFile(tcPath);
         }
+        ExcelUtils.closeFile(scopePath);
     }
     private static void resetKey(Map<Integer,String> map,int collum,String sheetName,String path) throws IOException {
         if(!map.isEmpty()) {

@@ -1,40 +1,64 @@
 package common.keywords;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import common.utility.Constanst;
 import common.utility.ExcelUtils;
 import common.utility.FileHelpers;
 import common.utility.JsonHandle;
 import execute.RunTestScriptData;
+import execute.TestScrip;
+import io.basc.framework.lang.Nullable;
+import io.restassured.response.Response;
+import org.apache.commons.lang3.ObjectUtils;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.Set;
 
 public class KeyWordCustomForAISpeak {
 
-    public static void returnChooseTopic(String locator,String fileName,String sheetName,String row){
-        String result = KeyWordsToActionToVerify.elementDisplay(locator);
-        String path = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.TESTCASE_FILE_PATH) +fileName +".xlsx";
-        ExcelUtils.setExcelFile(path);
-        int number = Integer.valueOf(row);
-        if(result.equals(Constanst.TRUE)){
-            ExcelUtils.setCellData(Constanst.YES,number,Constanst.RUN_MODE_TEST_CASE,sheetName,path);
-        }else {
-            ExcelUtils.setCellData(Constanst.NO,number,Constanst.RUN_MODE_TEST_CASE,sheetName,path);
+    public static void returnChooseTopic(String locator,String sheetName,String from, String to) throws IOException {
+        try {
+            String result = "";
+            try {
+                result  = KeyWordsToActionToVerify.isElementDisplay(locator);
+                System.out.println("ressult1  " +result);
+            }catch (Throwable e){
+                result = "false";
+            }
+            String path = TestScrip.reportPath;
+            for (int i = Integer.valueOf(from); i <= Integer.valueOf(to); i++) {
+                if (result.equals(Constanst.TRUE)) {
+                    ExcelUtils.setCellData(Constanst.NO, i, Constanst.RUN_MODE_TEST_CASE, sheetName, TestScrip.reportPath);
+                } else {
+                    ExcelUtils.setCellData(Constanst.YES, i, Constanst.RUN_MODE_TEST_CASE, sheetName, TestScrip.reportPath);
+                }
+            }
+            ExcelUtils.closeFile(path);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
-    public static void deFindModeRunTestCase(String key,String fileName,String sheetName,String from, String to)  {
-        JsonObject jsonObject = JsonHandle.getObject(RunTestScriptData.json);
-        String path = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.TESTCASE_FILE_PATH) +fileName +".xlsx";
-        ExcelUtils.setExcelFile(path);
+    public static void deFindModeRunTestCase(String key,String sheetName,String from, String to)  {
         String result = Constanst.NO;
-        for (String k:jsonObject.keySet()){
-            if (k.equals(key)){
-                result = Constanst.YES;
-                break;
+        try {
+            JsonObject jsonObject = JsonHandle.getObject(RunTestScriptData.json);
+            Set<Map.Entry<String, JsonElement>> entries = jsonObject.entrySet();
+            for (Map.Entry<String, JsonElement> entry: entries) {
+                if(entry.getKey().equals(key)){
+                    result = Constanst.YES;
+                    break;
+                }
             }
+        }catch (Exception e){
+            result = Constanst.NO;
+            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
-        for(int i = Integer.valueOf(from) ; i<= Integer.valueOf(to);i++){
-            ExcelUtils.setCellData(result,i,Constanst.RUN_MODE_TEST_CASE,sheetName,path);
+        for (int i = Integer.valueOf(from); i <= Integer.valueOf(to); i++) {
+            ExcelUtils.setCellData(result, i, Constanst.RUN_MODE_TEST_CASE, sheetName, TestScrip.reportPath);
         }
     }
 }

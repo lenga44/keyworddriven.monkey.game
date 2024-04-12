@@ -42,9 +42,14 @@ public class TestScrip {
                 }
                 ExcelUtils.setExcelFile(reportPath);
                 int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
-                ExcelUtils.createRowLastest(iTotalTestCase,Constanst.TESTCASE_SHEET,reportPath);
-                GroupInTest.genTestCaseWhichGroupContain(json,reportPath);
-                GroupInTest.genTestStepFollowTestCase(reportPath);
+                if(isDataFlow ==true) {
+                    int group = GroupInTest.getGroup().size();
+                    if (group > 0) {
+                        ExcelUtils.createRowLastest(iTotalTestCase, Constanst.TESTCASE_SHEET, reportPath);
+                        GroupInTest.genTestCaseWhichGroupContain(json, reportPath);
+                        GroupInTest.genTestStepFollowTestCase(reportPath);
+                    }
+                }
                 execute_testcases(iTotalTestCase);
                 ExcelUtils.setExcelFile(scopePath);
                 ExcelUtils.setCellData(tcResult, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
@@ -114,7 +119,7 @@ public class TestScrip {
         Log.info("Total TC: " + iTotalTestCase);
         for(int i =1; i<iTotalTestCase;i++) {
 
-            ExcelUtils.setCellData("",i,Constanst.TESTCASE_STATUS,Constanst.TESTCASE_SHEET,tcPath);
+            ExcelUtils.setCellData("",i,Constanst.TESTCASE_STATUS,Constanst.TESTCASE_SHEET,reportPath);
             String sTestCaseID = ExcelUtils.getStringValueInCell(i, Constanst.TESTCASE_ID, Constanst.TESTCASE_SHEET);
             Log.info("TCID: " + sTestCaseID);
 
@@ -127,7 +132,7 @@ public class TestScrip {
                 if (result != Constanst.SKIP) {
                     tcResult = Constanst.PASS;
                     execute_steps();
-                    onResultTestcase(tcResult, "", i);
+                    onResultTestcase(tcResult, error, i);
 
                 } else
                     onResultTestcase(Constanst.SKIP, error, i);
@@ -138,7 +143,12 @@ public class TestScrip {
         ExcelUtils.setCellData(status, rowNumber, Constanst.TESTCASE_STATUS, Constanst.TESTCASE_SHEET, reportPath);
         ExcelUtils.setCellData(message,  rowNumber, Constanst.TESTCASE_ERROR, Constanst.TESTCASE_SHEET, reportPath);
     }
-    private static Object[] getParam(String params, String data){
+    private static Object[] getParam(String params, String data,int row,int colum)  {
+        if(params.contains("$.path")){
+            String locator = FileHelpers.getValueVariableFile("path");
+            params = params.replace("$.path",locator);
+            ExcelUtils.setCellData(params,row,colum,Constanst.TEST_STEP_SHEET,reportPath);
+        }
         Log.info("Params: "+params);
         Log.info("Data: "+data);
         ArrayList<Object> objs = new ArrayList<>();
@@ -172,8 +182,7 @@ public class TestScrip {
         if(key.contains("$")&& !json.equals(null)) {
             value = JsonHandle.getValue(json, key);
             FileHelpers.setJsonVariable(key, value);
-            map_key_data_set.put(row,key);
-            ExcelUtils.setCellData(value,row, Constanst.DATA_SET, Constanst.TEST_STEP_SHEET,tcPath);
+            ExcelUtils.setCellData(value,row, Constanst.DATA_SET, Constanst.TEST_STEP_SHEET,reportPath);
             return value;
         }else
             return key;
@@ -213,20 +222,17 @@ public class TestScrip {
 
                 if (result != Constanst.SKIP) {
                     if(sActionKeyword != "") {
-                        execute_action(dataSet,sActionKeyword);
+                        execute_action(dataSet,sActionKeyword,iTestStep,Constanst.PARAMS);
                     }
                     verifyStep(iTestStep);
 
                 }
-                if(result == "" && result==null){
-                    result = Constanst.SKIP;
-                }
                 onResultStep(result, error, iTestStep);
 
-                if (result == Constanst.FAIL)
-                    tcResult = Constanst.FAIL;
             }
         }
+        if (result == Constanst.FAIL)
+            tcResult = Constanst.FAIL;
     }
     private static void onResultStep(String status, String message, int rowNumber ){
         if(status == Constanst.FAIL) {
@@ -238,12 +244,12 @@ public class TestScrip {
         ExcelUtils.setCellData(status, rowNumber, Constanst.RESULT, Constanst.TEST_STEP_SHEET, reportPath);
         ExcelUtils.setCellData(message,  rowNumber, Constanst.ERROR, Constanst.TEST_STEP_SHEET, reportPath);
     }
-    private static void execute_action(String data,String sActionKeyword){
+    private static void execute_action(String data,String sActionKeyword,int row,int colum){
         String testStep = ExcelUtils.getStringValueInCell(iTestStep, Constanst.TEST_STEP, Constanst.TEST_STEP_SHEET);
         result = Constanst.PASS;
         String name=null;
         try {
-            param = getParam(params,data);
+            param = getParam(params,data,row,colum);
             int paramCount = (param == null) ? 0: param.length;
             for (int i = 0; i < method.length; i++) {
                 if (method[i].getName().equals(sActionKeyword) && method[i].getParameterCount() == paramCount) {
@@ -266,7 +272,7 @@ public class TestScrip {
             }
         }catch (Throwable e) {
             Log.error(name);
-            exception(e);
+            onFail(e.getMessage());
         }
         //onResultStep(result,error,numberStep);
     }
@@ -275,6 +281,7 @@ public class TestScrip {
         //Log.info(message);
         result = Constanst.FAIL;
         error = message;
+        Log.error(message);
     }
     // region verify result after each step
     private static void verifyStep(int numberStep) throws IOException {
@@ -287,7 +294,7 @@ public class TestScrip {
             if(result == Constanst.PASS) {
                 expected = getExpectedWithKey(numberStep);
                 description = "Check - " +description;
-                execute_action("",sActionKeyword);
+                execute_action("",sActionKeyword,numberStep,Constanst.PARAM_VERIFY_STEP);
             }
         }
     }
@@ -295,7 +302,7 @@ public class TestScrip {
         String ex = ExcelUtils.getStringValueInCell(numberStep,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET);
         if(isDataFlow ==true && ex.contains("$")) {
             String value = JsonHandle.getValue(json, ex);
-            map_key_expected.put(numberStep, ex);
+            //map_key_expected.put(numberStep, ex);
             ExcelUtils.setCellData(value,numberStep,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET,reportPath);
             return value;
         }

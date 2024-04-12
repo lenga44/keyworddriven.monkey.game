@@ -36,6 +36,17 @@ public class FileHelpers {
         }
         return null;
     }
+    public static String getValueVariableFile(String key){
+        try {
+            String json = new String(Files.readAllBytes(Paths.get(Constanst.VARIABLE_PATH_FILE)), StandardCharsets.UTF_8);
+            JsonObject jsonObject = JsonParser.parseString(json).getAsJsonObject();
+            String value = jsonObject.get(key).getAsString();
+            return value.trim();
+        } catch (IOException e) {
+            Log.error(e.getMessage());
+        }
+        return null;
+    }
     public static String convertPath(String path){
         return path.replace("\"","");
     }

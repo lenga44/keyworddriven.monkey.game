@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class GenerateReport{
     //region REPORT
@@ -18,7 +21,9 @@ public class GenerateReport{
         try {
             if (f.exists()) {
                 File source = new File(TestScrip.tcPath);
-                String tcCopyPath = subFolder + FileHelpers.convertPath("\\"+TestScrip.tcName+"_"+reportName+".xlsx");
+                ExcelUtils.setExcelFile(Run.scopePath);
+                int number = ExcelUtils.getNumberValueInCell(1,Constanst.CURRENT_INDEX_COLUM,Constanst.PLAN_SHEET);
+                String tcCopyPath = subFolder + FileHelpers.convertPath("\\"+TestScrip.tcName+"_"+reportName+"_"+number+".xlsx");
                 Log.info("Path report TC current: " + tcCopyPath);
                 dest = new File(tcCopyPath);
                 if(dest.exists()) {

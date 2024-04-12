@@ -43,11 +43,11 @@ public class JsonHandle {
         JsonObject jsonObject = JsonParser.parseString(json).getAsJsonObject();
         return jsonObject.get(key);
     }
-    public static String setValueInJsonObject(String path,String key,String property) throws IOException{
+    public static void setValueInJsonObject(String path,String key,String property) throws IOException{
         String json = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
         JsonObject jsonObject = JsonParser.parseString(json).getAsJsonObject();
         jsonObject.addProperty(key,property);
-        return jsonObject.toString();
+        FileHelpers.writeFile(jsonObject.toString(),path);
     }
 
     public static JsonObject getJsonObject(String path) throws IOException{

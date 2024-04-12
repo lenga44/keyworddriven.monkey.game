@@ -189,7 +189,7 @@ public class GroupInTest {
     //endregion
 
     //region Group
-    private static ArrayList<String> getGroup(){
+    public static ArrayList<String> getGroup(){
         ArrayList<String> list = new ArrayList<>();
         int totalGroup = ExcelUtils.getRowCount(Constanst.GROUP_SHEET);
         for(int i=1;i<totalGroup;i++){

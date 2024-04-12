@@ -53,6 +53,19 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
             return "false";
         }
     }
+    public static String isElementDisplay(String locator){
+        try {
+            Response response = request(Constanst.SCENE_URL, "//" + locator);
+            ResponseBody body = response.getBody();
+            if(body.jsonPath().getList("activeInHierarchy").size()>0){
+                return "true";
+            }else {
+                return "false";
+            }
+        }catch (Exception e){
+            return "false";
+        }
+    }
     public static String elementDisplay(String locator,String second){
         try {
             waitForObject(locator,second);
@@ -91,11 +104,18 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         Log.info(value);
         return value;
     }
-    public static String getPropertyValue(String locator, String component, String property,String slipStr,String index){
-        int number = Integer.valueOf(index);
+    public static String getPropertyValue(String locator, String component, String property,String slipStr,String contain){
         waitForObject(locator);
         Response response = request(Constanst.SCENE_URL,"//"+locator+"."+component);
-        String value = Arrays.stream(convert(response,property).split(slipStr)).toList().get(number).trim();
+        String result = convert(response,property);
+        List<String> list = Arrays.stream(result.split(slipStr)).toList();
+        String value = "";
+        for (String str: list){
+            if(str.contains(contain)){
+                value = str;
+                break;
+            }
+        }
         Log.info(value);
         return value;
     }
@@ -294,8 +314,8 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
     public static String getVideoName(String locator,String strSplit,String indexSplit){
         return getPropertyValue(locator,"VideoPlayer","clip",strSplit,indexSplit);
     }
-    public static String getVideoUrl(String locator,String strSplit,String indexSplit){
-        return getPropertyValue(locator,"VideoPlayer","url",strSplit,indexSplit);
+    public static String getVideoUrl(String locator,String strSplit,String contain){
+        return getPropertyValue(locator,"VideoPlayer","url",strSplit,contain);
     }
     public static String getResultByKey(String locator,String component,String key){
         Response response = request(Constanst.SCENE_URL,"//" +locator+"."+component);

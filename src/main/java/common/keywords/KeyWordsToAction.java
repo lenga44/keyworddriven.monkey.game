@@ -1,5 +1,6 @@
 package common.keywords;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import common.utility.*;
 import execute.TestScrip;
@@ -133,15 +134,49 @@ public class KeyWordsToAction {
         }
         Response response1 = request(Constanst.SCENE_URL,"//"+locator);
         String value = getAbsolutePath(response1,String.valueOf(index));
-        String result = JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.PATH_GAME_OBJECT,value);
-        FileHelpers.writeFile(result,Constanst.VARIABLE_PATH_FILE);
+        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.PATH_GAME_OBJECT,value);
+        //FileHelpers.writeFile(result,Constanst.VARIABLE_PATH_FILE);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
+    }
+    public static void returnPathContain(String locator, String component,String key,String expected) throws IOException {
+        try {
+            String path = "";
+            int index = 0;
+            Response response = request(Constanst.SCENE_URL, "//" + locator);
+            ResponseBody body = response.getBody();
+            JsonArray array = JsonHandle.getJsonArray(body.asString());
+            for (int i = 0; i < array.size(); i++) {
+                String value = JsonHandle.getValue(array.get(i).toString(), "$.components");
+                if (value.contains(component)) {
+                    Response response1 = request(Constanst.SCENE_URL, "//" + locator + "." + component);
+                    ResponseBody body1 = response1.getBody();
+                    String json1 = body1.asString();
+                    for (JsonElement element : JsonHandle.getJsonArray(json1)) {
+                        String name = JsonHandle.getValue(array.get(i).toString(), "$.path");
+                        if (JsonHandle.getValue(element.toString(), "$." + key).toLowerCase().contains(expected.toLowerCase())) {
+                            path = name;
+                            break;
+                        }
+                    }
+                }
+                if (!path.equals("")) {
+                    break;
+                }
+                index++;
+            }
+            JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, Constanst.PATH_GAME_OBJECT, path);
+            System.out.println("path111 " +component);
+            System.out.println("path111 " +path);
+            ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
     }
     public static void returnPath(String locator,String groupID,String plusStr) throws IOException {
         waitForObject(locator);
         String index = FileHelpers.getValueConfig(Constanst.VARIABLE_PATH_FILE,groupID);
-        String result = JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.PATH_GAME_OBJECT,locator+index+plusStr);
-        FileHelpers.writeFile(result,Constanst.VARIABLE_PATH_FILE);
+        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.PATH_GAME_OBJECT,locator+index+plusStr);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
     public static void returnIndex(String locator, String component,String key,String expected) throws IOException {
@@ -157,8 +192,8 @@ public class KeyWordsToAction {
         }
         Response response1 = request(Constanst.SCENE_URL,"//"+locator);
         String value = getAbsolutePath(response1,String.valueOf(index));
-        String result = JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,value);
-        FileHelpers.writeFile(result,Constanst.VARIABLE_PATH_FILE);
+        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,value);
+        //FileHelpers.writeFile(result,Constanst.VARIABLE_PATH_FILE);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
     public static void press(String locator){
@@ -287,12 +322,11 @@ public class KeyWordsToAction {
             Response response = null;
             do {
                 response = request(Constanst.SCENE_URL, "//" + locator);
-                if(response!=null) {
-                    JsonPath json = response.jsonPath();
-                    List name = (List) json.get("name");
-                    if (json != null && !name.isEmpty()) {
+                JsonPath json = response.jsonPath();
+                List name = (List)json.get("name");
+                if (json != null && !name.isEmpty()) {
+                    if(convert(response,"activeInHierarchy")=="true")
                         break;
-                    }
                 }
                 Thread.sleep(500);
                 time = LocalDateTime.now();
@@ -301,6 +335,7 @@ public class KeyWordsToAction {
         }catch (Throwable e){
             exception(e);
         }
+        Log.info("waitForObject :" + locator);
     }
     public static void waitForObjectContain(String locator, String key,String content){
         try {
@@ -339,14 +374,45 @@ public class KeyWordsToAction {
             do {
                 response = request(Constanst.SCENE_URL, "//" + locator+"."+component);
                 if(response!=null) {
-                    JsonPath json = response.jsonPath();
-                    if (json != null && json.toString() != "") {
-                        value = convert(response, property);
-                        if(value!=null) {
-                            if (value.contains(content))
-                                break;
+                    if (convert(response, "activeInHierarchy") == "true") {
+                        JsonPath json = response.jsonPath();
+                        if (json != null && json.toString() != "") {
+                            value = convert(response, property);
+                            if (value != null) {
+                                if (value.contains(content))
+                                    break;
+                            }
+                            Thread.sleep(500);
                         }
-                        Thread.sleep(500);
+                    }
+                }
+                time = LocalDateTime.now();
+            } while (time.compareTo(time1) <= 0);
+            Assert.assertTrue(value.contains(content));
+        }catch (Throwable e){
+            exception(e);
+        }
+        Log.info("waitForObjectContain :" + locator);
+    }
+    public static void waitForObjectContainNotAble(String locator,String component, String property,String content){
+        try {
+            LocalDateTime time = LocalDateTime.now();
+            LocalDateTime time1 = time.plusSeconds(30);
+            Response response = null;
+            String value = null;
+            do {
+                response = request(Constanst.SCENE_URL, "//" + locator+"."+component);
+                if(response!=null) {
+                    if (convert(response, "activeInHierarchy") == "true") {
+                        JsonPath json = response.jsonPath();
+                        if (json != null && json.toString() != "") {
+                            value = convert(response, property);
+                            if (value != null) {
+                                if (!value.contains(content))
+                                    break;
+                            }
+                            Thread.sleep(500);
+                        }
                     }
                 }
                 time = LocalDateTime.now();
@@ -597,11 +663,11 @@ public class KeyWordsToAction {
     //endregion
 
     //region KeyWordCustomForAISpeak
-    public static void returnChooseTopic(String locator,String fileName,String sheetName,String row){
-        KeyWordCustomForAISpeak.returnChooseTopic(locator,fileName,sheetName,row);
+    public static void returnChooseTopic(String locator,String sheetName,String from, String to) throws IOException {
+        KeyWordCustomForAISpeak.returnChooseTopic(locator,sheetName,from, to);
     }
-    public static void deFindModeRunTestCase(String key,String fileName,String sheetName,String from, String to){
-        KeyWordCustomForAISpeak.deFindModeRunTestCase(key,fileName,sheetName,from, to );
+    public static void deFindModeRunTestCase(String key,String sheetName,String from, String to){
+        KeyWordCustomForAISpeak.deFindModeRunTestCase(key,sheetName,from, to );
     }
     //endregion
 }
