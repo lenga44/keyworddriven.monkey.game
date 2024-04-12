@@ -141,6 +141,7 @@ public class KeyWordsToAction {
             ResponseBody body = response.getBody();
             JsonArray array = JsonHandle.getJsonArray(body.asString());
             for (int i = 0; i < array.size(); i++) {
+                System.out.println("path111 " +array.get(i).toString());
                 String value = JsonHandle.getValue(array.get(i).toString(), "$.components");
                 String name = JsonHandle.getValue(array.get(i).toString(), "$.path");
                 if (value.contains(component)) {
@@ -162,11 +163,12 @@ public class KeyWordsToAction {
                     break;
                 }
             }
+            System.out.println("path111 " +index);
             path = convertToList(response,"path").get(index);
             JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, Constanst.PATH_GAME_OBJECT, path);
             ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            Log.info(e.getMessage());
             e.printStackTrace();
         }
     }
