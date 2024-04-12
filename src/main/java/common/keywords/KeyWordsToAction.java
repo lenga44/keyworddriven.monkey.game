@@ -162,7 +162,6 @@ public class KeyWordsToAction {
                     break;
                 }
             }
-            System.out.println("path111 "+index);
             path = convertToList(response,"path").get(index);
             JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, Constanst.PATH_GAME_OBJECT, path);
             ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
