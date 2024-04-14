@@ -136,36 +136,34 @@ public class KeyWordsToAction {
     public static void returnPathContain(String locator, String component,String key,String expected) throws IOException {
         try {
             String path = "";
-            int index = 0;
             Response response = request(Constanst.SCENE_URL, "//" + locator);
             ResponseBody body = response.getBody();
             JsonArray array = JsonHandle.getJsonArray(body.asString());
             for (int i = 0; i < array.size(); i++) {
-                System.out.println("path111 " +array.get(i).toString());
                 String value = JsonHandle.getValue(array.get(i).toString(), "$.components");
                 String name = JsonHandle.getValue(array.get(i).toString(), "$.path");
                 if (value.contains(component)) {
-                    index =i;
-                    Response response1 = request(Constanst.SCENE_URL, "//" + locator + "." + component);
+                    Response response1 = request(Constanst.SCENE_URL, "//" + name + "." + component);
                     ResponseBody body1 = response1.getBody();
                     String json1 = body1.asString();
                     for (JsonElement element : JsonHandle.getJsonArray(json1)) {
                         path="";
                         String s = JsonHandle.getValue(element.toString(), "$." + key);
-                        if (s.toLowerCase().contains(expected.toLowerCase())) {
-                            path =name;
-                            break;
+                        if(!s.equals("")) {
+                            if (s.toLowerCase().contains(expected.toLowerCase())) {
+                                path = name;
+                                break;
+                            }
                         }
-                        index++;
                     }
                 }
                 if (!path.equals("")) {
                     break;
                 }
             }
-            System.out.println("path111 " +index);
-            path = convertToList(response,"path").get(index);
-            JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, Constanst.PATH_GAME_OBJECT, path);
+            FileHelpers.writeFile("",Constanst.VARIABLE_PATH_FILE);
+            ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
+            FileHelpers.writeFile("{'path':'"+path+"'}",Constanst.VARIABLE_PATH_FILE);
             ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
         }catch (Exception e){
             Log.info(e.getMessage());
@@ -192,11 +190,9 @@ public class KeyWordsToAction {
         Response response1 = request(Constanst.SCENE_URL,"//"+locator);
         String value = getAbsolutePath(response1,String.valueOf(index));
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,value);
-        //FileHelpers.writeFile(result,Constanst.VARIABLE_PATH_FILE);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
     public static void press(String locator){
-        //waitForObject(locator);
         request(Constanst.POINTER_URL,".Press("+getAbsolutePath(locator,"0")+")");
     }
     public static void pressWithTag(String tagNew,String tagOld){
@@ -294,6 +290,26 @@ public class KeyWordsToAction {
             exception(e);
         }
         Log.info("waitForObject :" + locator);
+    }
+    public static void waitForObjectNoReturn(String locator,String second){
+        try {
+            LocalDateTime time = LocalDateTime.now();
+            LocalDateTime time1 = time.plusSeconds(Integer.valueOf(second));
+            Response response = null;
+            do {
+                response = request(Constanst.SCENE_URL, "//" + locator);
+                JsonPath json = response.jsonPath();
+                List name = (List)json.get("name");
+                if (json != null && !name.isEmpty()) {
+                    if(convert(response,"activeInHierarchy")=="true")
+                        break;
+                }
+                Thread.sleep(500);
+                time = LocalDateTime.now();
+            } while (time.compareTo(time1) <= 0);
+        }catch (Throwable e){
+        }
+        Log.info("waitForObjectNoReturn :" + locator);
     }
     public static void waitForObjectNotPresent(String locator){
         try {

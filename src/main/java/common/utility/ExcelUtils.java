@@ -7,6 +7,7 @@ import org.apache.poi.xssf.usermodel.XSSFDrawing;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
+import java.text.NumberFormat;
 import java.util.List;
 
 public class ExcelUtils {
@@ -54,6 +55,18 @@ public class ExcelUtils {
             Log.error("Method getCellData | Exception desc : " + e.getMessage());
             onTestCaseFail("Method getCellData | Exception desc : " + e.getMessage());
             return "";
+        }
+    }
+    public static double getFormulaValueInCell(int rowNumber, int columnNumber, String sheetName){
+        try {
+            ExcelSheet = ExcelBook.getSheet(sheetName);
+            Cell = ExcelSheet.getRow(rowNumber).getCell(columnNumber);
+            return Cell.getNumericCellValue();
+        } catch (Throwable e) {
+            Log.info("Method getFormulaValueInCell: rowNumber[" + rowNumber+"], columnNumber["+columnNumber+"], sheetName["+sheetName+"]");
+            Log.error("Method getFormulaValueInCell | Exception desc : " + e.getMessage());
+            onTestCaseFail("Method getFormulaValueInCell | Exception desc : " + e.getMessage());
+            return 0;
         }
     }
     public static String getStringValueInCell(int rowNumber, int columnNumber){
@@ -208,7 +221,7 @@ public class ExcelUtils {
             fileOut.close();
             ExcelBook = new XSSFWorkbook(new FileInputStream(path));
         }catch (Exception e){
-            Log.info("Method getRowContains: result[" + result+"], rowNumber["+rowNumber+"], columnNumber["+columnNumber+"], sheetName["+sheetName+"], path["+path+"]");
+            Log.info("Method setCellData: result[" + result+"], rowNumber["+rowNumber+"], columnNumber["+columnNumber+"], sheetName["+sheetName+"], path["+path+"]");
             Log.error("Method setCellData | Exception desc : " + e.getMessage());
             TestScrip.result = Constanst.FAIL;
         }

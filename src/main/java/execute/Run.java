@@ -1,5 +1,6 @@
 package execute;
 
+import com.aspose.cells.DateTime;
 import common.keywords.KeyWordsToActionPocoSDK;
 import common.keywords.KeyWordsToActionToVerify;
 import common.utility.Constanst;
@@ -10,6 +11,7 @@ import org.apache.poi.ss.formula.FormulaParser;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -86,7 +88,9 @@ public class Run {
     }
     @Deprecated
     private static void runDataFlow(int iTestSuit,int iTotalSuite) throws Exception {
+        //System.out.println("Start: "+DateTime.getNow());
         runTestScriptData.run(scopePath,iTestSuit,iTotalSuite);
+        //System.out.println("End: "+DateTime.getNow());
     }
     private static void returnFlowScrip(){
         String flow = ExcelUtils.getStringValueInCell(1,Constanst.FLOW_COLUM,Constanst.PLAN_SHEET);

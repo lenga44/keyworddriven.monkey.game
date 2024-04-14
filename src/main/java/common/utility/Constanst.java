@@ -119,12 +119,19 @@ public class Constanst {
     //region file config
     public static final String DATA_FILE_PATH = "data_file_path";
     public static final String FILE_NAME_REPORT_DATA_FLOW = "file_name_report_data_flow";
+    public static final String LIST_FAIL_PATH_FILE = FileHelpers.getRootFolder()
+            +FileHelpers.convertPath("\\tool_test_game\\config\\report\\list_fail.json");
     //endregion
+
     //region file variable file
     public static final String PATH_GAME_OBJECT = "path";
     public static final String INDEX_GAME_OBJECT = "index";
     public static final String CURRENT_SCENE = "current_scene";
     public static final String VARIABLE_PATH_FILE = FileHelpers.getRootFolder()
             +FileHelpers.convertPath("\\tool_test_game\\config\\data\\variable.json");
+    //endregion
+
+    //region file report file
+    public static final int FAIL_REPORT_COLUM = 9;
     //endregion
 }

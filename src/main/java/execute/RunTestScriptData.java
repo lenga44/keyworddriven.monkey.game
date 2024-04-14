@@ -17,30 +17,34 @@ public class RunTestScriptData extends TestScrip{
 
     @Deprecated
     public static void run(String scopePath, int iTestSuit, int iTotalSuite) throws Exception {
+        try {
+            isDataFlow = true;
 
-        //reset total Pass Fail
-        setPassAndFail(0,0,scopePath);
-        isDataFlow = true;
+            //calculator loop
+            int begin = ExcelUtils.getNumberValueInCell(1, Constanst.BEGIN_INDEX_COLUM, Constanst.PLAN_SHEET);
+            int end = ExcelUtils.getNumberValueInCell(1, Constanst.END_INDEX_COLUM, Constanst.PLAN_SHEET);
+            Log.info("Run data from " + begin + " to " + end);
+            getLevelFolder(1);
 
-        //calculator loop
-        int begin = ExcelUtils.getNumberValueInCell(1, Constanst.BEGIN_INDEX_COLUM,Constanst.PLAN_SHEET);
-        int end = ExcelUtils.getNumberValueInCell(1,Constanst.END_INDEX_COLUM,Constanst.PLAN_SHEET);
-        Log.info("Run data from "+begin+" to "+end);
-        getLevelFolder(1);
+            for (int index = begin; index <= end; index++) {
 
-        for(int index = begin;index<=end;index++){
-
-            //get node need check
-            json = JsonHandle.getObjectInJsonData(index-1);
-            ExcelUtils.setCellData(index,1,Constanst.CURRENT_INDEX_COLUM,Constanst.PLAN_SHEET,scopePath);
-            String key = ExcelUtils.getStringValueInCell(1,Constanst.DATA_PLAN_COLUM,Constanst.PLAN_SHEET);
-            reportName = getDataSet(key);
-            //execute tc
-            execute_suites(scopePath,iTestSuit,iTotalSuite);
-            ExcelUtils.closeFile(reportPath);
-            ExcelUtils.closeFile(tcPath);
+                //get node need check
+                json = JsonHandle.getObjectInJsonData(index - 1);
+                ExcelUtils.setExcelFile(scopePath);
+                ExcelUtils.setCellData(index, 1, Constanst.CURRENT_INDEX_COLUM, Constanst.PLAN_SHEET, scopePath);
+                String key = ExcelUtils.getStringValueInCell(1, Constanst.DATA_PLAN_COLUM, Constanst.PLAN_SHEET);
+                reportName = getDataSet(key);
+                //execute tc
+                execute_suites(scopePath, iTestSuit, iTotalSuite);
+                EndTestScript.saveReportFail(reportPath);
+                ExcelUtils.closeFile(reportPath);
+                ExcelUtils.closeFile(tcPath);
+            }
+            ExcelUtils.closeFile(scopePath);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
-        ExcelUtils.closeFile(scopePath);
     }
     private static void resetKey(Map<Integer,String> map,int collum,String sheetName,String path) throws IOException {
         if(!map.isEmpty()) {
