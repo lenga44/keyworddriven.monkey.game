@@ -1,12 +1,10 @@
 package execute;
 
-import common.keywords.KeyWordsToActionPocoSDK;
 import common.keywords.KeyWordsToActionToVerify;
 import common.utility.*;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -36,7 +34,7 @@ public class RunTestScriptData extends TestScrip{
                 reportName = getDataSet(key);
                 //execute tc
                 execute_suites(scopePath, iTestSuit, iTotalSuite);
-                EndTestScript.saveReportFail(reportPath);
+                EndTestScript.saveReportToFailListFile(reportPath,scopePath);
                 ExcelUtils.closeFile(reportPath);
                 ExcelUtils.closeFile(tcPath);
             }
