@@ -63,8 +63,19 @@ public class FileHelpers {
     public static String setJsonVariable(String key, String value) {
         return '"'+key+'"'+":"+'"'+value+'"'+",";
     }
+    public static void createFile(String path){
+        try {
+            File file = new File(path);
+            if(!file.exists()){
+                file.createNewFile();
+            }
+        } catch (Throwable e) {
+            Log.error(e.getMessage());
+        }
+    }
     public static void writeFile(String variable,String path){
         try {
+            createFile(path);
             FileWriter myObj = new FileWriter (path);
             myObj.write(variable);
             myObj.close();

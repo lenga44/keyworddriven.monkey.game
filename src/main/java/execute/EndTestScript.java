@@ -23,22 +23,37 @@ public class EndTestScript {
             }
             String file = "";
             if (fail>0) {
-                Log.info("Save file fail to file: report\\list_fail.json");
+                Log.info("Save file fail to file: report\\list_fail.txt");
+
                 for (String name : Arrays.stream(tcPath.split("\\\\")).toList()) {
                     if (name.contains(".xlsx")) {
                         file = name.replace(".xlsx", "");
                     }
                 }
-                String content = FileHelpers.readFile(Constanst.LIST_FAIL_PATH_FILE);
+
+                String failPath = Constanst.LIST_FAIL_PATH_FILE+"list_fail.txt";
+                FileHelpers.createFile(failPath);
+                String content = FileHelpers.readFile(failPath);
+
                 if (!content.equals("")) {
-                    content = content + ",\n" + file;
+                    boolean contain = false;
+                    if(content.contains(",")){
+                        if(Arrays.stream(content.split("\\,")).toList().contains(file)){
+                            contain = true;
+                        }
+                    }
+                    if(contain==false) {
+                        content = content + ",\n" + file;
+                    }
                 } else {
                     content = file;
                 }
-                FileHelpers.writeFile(content, Constanst.LIST_FAIL_PATH_FILE);
+                FileHelpers.writeFile(content, failPath);
+
             }else {
                 pass =1;
             }
+
             sumResultToScope(pass,fail,scope);
         }catch (Exception e){
             Log.error(e.getMessage());
