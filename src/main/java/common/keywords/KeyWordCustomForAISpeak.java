@@ -23,7 +23,6 @@ public class KeyWordCustomForAISpeak {
                 result = "false";
             }*/
             if(part.equals("1")){
-                System.out.println("returnChooseTopic");
                 result = Constanst.TRUE;
             }
             String path = TestScrip.reportPath;

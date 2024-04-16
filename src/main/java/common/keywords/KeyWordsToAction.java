@@ -331,7 +331,7 @@ public class KeyWordsToAction {
                 response = request(Constanst.SCENE_URL, "//" + locator);
                 JsonPath json = response.jsonPath();
                 List name = (List)json.get("name");
-                if(!locator.contains(convert(response, "name"))||convert(response,"activeInHierarchy")=="false"){
+                if(!locator.contains(convert(response, "name"))||convert(response,"activeInHierarchy")=="false"||name.size()==0){
                     break;
                 }
                 Thread.sleep(500);
@@ -339,6 +339,33 @@ public class KeyWordsToAction {
             } while (time.compareTo(time1) <= 0);
         }catch (Throwable e){
             exception(e);
+            e.printStackTrace();
+        }
+    }
+    public static void waitForObjectNotPresent(String locator,String second){
+        try {
+            LocalDateTime time = LocalDateTime.now();
+            LocalDateTime time1 = time.plusSeconds(Integer.valueOf(second));
+            Response response = null;
+            System.out.println("waitForObjectNotPresent"+locator);
+            do {
+                response = request(Constanst.SCENE_URL, "//" + locator);
+                JsonPath json = response.jsonPath();
+                List name = (List)json.get("name");
+                if(name.size()!=0){
+                    if(!locator.contains(convert(response, "name"))||convert(response,"activeInHierarchy")=="false"||name.size()==0){
+                        System.out.println("waitForObjectNotPresent"+name.size());
+                        break;
+                    }
+                }else {
+                    break;
+                }
+                Thread.sleep(500);
+                time = LocalDateTime.now();
+            } while (time.compareTo(time1) <= 0);
+        }catch (Throwable e){
+            exception(e);
+            e.printStackTrace();
         }
     }
     public static void waitForObject(String locator,String second){

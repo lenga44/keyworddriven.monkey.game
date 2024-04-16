@@ -31,6 +31,7 @@ public class Run {
 
         ExcelUtils.setExcelFile(scopePath);
         returnFlowScrip();
+        resetSumarryStatus();
 
         int iTotalSuite = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
         Log.info("Total scope : "+iTotalSuite);
@@ -100,7 +101,12 @@ public class Run {
         else if(flow.equals(Constanst.DATA_FLOW))
             isDataFlow = true;
     }
-
+    private static void resetSumarryStatus(){
+        Log.info("Reset pass number");
+        ExcelUtils.setCellData(0,1,Constanst.PASS_PLAN_COLUM,Constanst.PLAN_SHEET,scopePath);
+        Log.info("Reset fail number");
+        ExcelUtils.setCellData(0,1,Constanst.FAIL_PLAN_COLUM,Constanst.PLAN_SHEET,scopePath);
+    }
 
     //region KEY
     public static String scopePath;
