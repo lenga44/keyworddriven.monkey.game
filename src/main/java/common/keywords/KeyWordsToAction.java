@@ -69,6 +69,14 @@ public class KeyWordsToAction {
             exception(e);
         }
     }
+    public static void sleep(float second)  {
+        try {
+            Thread.sleep ((long) (second * 1000));
+            Log.info("Sleep: " +second);
+        }catch (InterruptedException e){
+            exception(e);
+        }
+    }
     public static void sleep()  {
         try {
             Thread.sleep((long) (2 * 1000));
@@ -212,7 +220,10 @@ public class KeyWordsToAction {
         }
     }*/
     public static void drag(String locator1, String locator2){
-        request(Constanst.SIMULATE_URL,Constanst.DRAG_ACTION + "("+locator1+","+locator2+")");
+        for(int i = 0; i<2;i++) {
+            request(Constanst.POINTER_URL, Constanst.DRAG_ACTION + "(" + locator1 + "," + locator2 + ")");
+            sleep("1");
+        }
     }
     public static void swipe(String x1, String x2, String y){
         request(Constanst.SIMULATE_URL,Constanst.DRAG_ACTION + "("+x1+","+y+","+x2+","+y+",0.5)");
@@ -287,7 +298,7 @@ public class KeyWordsToAction {
             } while (time.compareTo(time1) <= 0);
             Assert.assertTrue(locator.contains(convert(response, "name")));
         }catch (Throwable e){
-            exception(e);
+            exception("No such element "+ locator);
         }
         Log.info("waitForObject :" + locator);
     }
@@ -348,7 +359,7 @@ public class KeyWordsToAction {
             } while (time.compareTo(time1) <= 0);
             Assert.assertTrue(locator.contains(convert(response, "name")));
         }catch (Throwable e){
-            exception(e);
+            exception("No such element "+ locator);
         }
         Log.info("waitForObject :" + locator);
     }
@@ -366,7 +377,7 @@ public class KeyWordsToAction {
                     if (json != null && json.toString() != "") {
                         value = convert(response, key);
                         if (value != null) {
-                            if (value.contains(content))
+                            if (value.toLowerCase().contains(content.toLowerCase()))
                                 break;
                         }
                         Thread.sleep(500);
@@ -555,11 +566,29 @@ public class KeyWordsToAction {
             exception(e);
         }
     }
+    public static void checkContain(String actual,String expect){
+        TestScrip.result = Constanst.PASS;
+        TestScrip.error = "";
+        try{
+            if(expect.length()<actual.length()) {
+                assertContain(actual, expect);
+            }else if(expect.length() == actual.length()) {
+                assertEqual(actual,expect);
+            }else {
+                assertContain(expect,actual);
+            }
+        }catch (Throwable e){
+            exception(e);
+        }
+    }
     private static void assertEqual(String actual,String expect){
         Assert.assertEquals(actual,expect);
     }
     private static void assertEqual(String actual, List<String> expect){
         Assert.assertTrue(expect.contains(actual));
+    }
+    private static void assertContain(String actual,String expect){
+        Assert.assertTrue(actual.contains(expect));
     }
     private static String getAbsolutePath(String locator, String index){
         Response response = request(Constanst.SCENE_URL,"//"+locator + "["+Integer.valueOf(index)+"]");
@@ -600,6 +629,11 @@ public class KeyWordsToAction {
 
     public static void exception(Throwable e){
         TestScrip.error = "Exception | " +e.getMessage();
+        Log.error(TestScrip.error);
+        TestScrip.onFail( TestScrip.error);
+    }
+    public static void exception(String message){
+        TestScrip.error = "Exception | " +message;
         Log.error(TestScrip.error);
         TestScrip.onFail( TestScrip.error);
     }
@@ -677,8 +711,8 @@ public class KeyWordsToAction {
     //endregion
 
     //region KeyWordCustomForAISpeak
-    public static void returnChooseTopic(String locator,String sheetName,String from, String to) throws IOException {
-        KeyWordCustomForAISpeak.returnChooseTopic(locator,sheetName,from, to);
+    public static void returnChooseTopic(String sheetName,String from, String to,String part) throws IOException {
+        KeyWordCustomForAISpeak.returnChooseTopic(sheetName,from, to,part);
     }
     public static void deFindModeRunTestCase(String key,String sheetName,String from, String to){
         KeyWordCustomForAISpeak.deFindModeRunTestCase(key,sheetName,from, to );

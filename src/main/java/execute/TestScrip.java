@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static common.keywords.KeyWordsToAction.exception;
@@ -118,7 +119,7 @@ public class TestScrip {
     private static void execute_testcases(int iTotalTestCase) throws IOException {
         Log.info("Total TC: " + iTotalTestCase);
         for(int i =1; i<iTotalTestCase;i++) {
-
+            tcResults = new ArrayList<>();
             ExcelUtils.setCellData("",i,Constanst.TESTCASE_STATUS,Constanst.TESTCASE_SHEET,reportPath);
             String sTestCaseID = ExcelUtils.getStringValueInCell(i, Constanst.TESTCASE_ID, Constanst.TESTCASE_SHEET);
             Log.info("TCID: " + sTestCaseID);
@@ -132,10 +133,14 @@ public class TestScrip {
                 if (result != Constanst.SKIP) {
                     tcResult = Constanst.PASS;
                     execute_steps();
-                    onResultTestcase(tcResult, error, i);
 
                 } else
-                    onResultTestcase(Constanst.SKIP, error, i);
+                    tcResult = Constanst.SKIP;
+                if(tcResults.contains(Constanst.FAIL)||tcResults.contains(Constanst.SKIP)){
+                    onResultTestcase(Constanst.FAIL, error, i);
+                }else {
+                    onResultTestcase(Constanst.PASS, "", i);
+                }
             }
         }
     }
@@ -191,7 +196,6 @@ public class TestScrip {
         String value = null;
         if(key.contains("$")&& !json.equals(null)) {
             value = JsonHandle.getValue(json, key);
-            //FileHelpers.setJsonVariable(key, value);
         }else
             value = key;
         return value;
@@ -243,6 +247,7 @@ public class TestScrip {
         }
         ExcelUtils.setCellData(status, rowNumber, Constanst.RESULT, Constanst.TEST_STEP_SHEET, reportPath);
         ExcelUtils.setCellData(message,  rowNumber, Constanst.ERROR, Constanst.TEST_STEP_SHEET, reportPath);
+        tcResults.add(status);
     }
     private static void execute_action(String data,String sActionKeyword,int row,int colum){
         String testStep = ExcelUtils.getStringValueInCell(iTestStep, Constanst.TEST_STEP, Constanst.TEST_STEP_SHEET);
@@ -263,7 +268,12 @@ public class TestScrip {
                     if (!type.equals("void")) {
                         String actual = (String) method[i].invoke(keyWord, param);
                         Log.info(description);
-                        keyWord.check(actual, expected);
+                        if(expected.contains(Constanst.CHECK_CONTAIN)){
+                            expected = expected.replace(Constanst.CHECK_CONTAIN,"");
+                            KeyWordsToAction.checkContain(actual,expected);
+                        }else {
+                            KeyWordsToAction.check(actual, expected);
+                        }
                     } else {
                         method[i].invoke(keyWord, param);
                     }
@@ -301,7 +311,6 @@ public class TestScrip {
         String ex = ExcelUtils.getStringValueInCell(numberStep,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET);
         if(isDataFlow ==true && ex.contains("$")) {
             String value = JsonHandle.getValue(json, ex);
-            //map_key_expected.put(numberStep, ex);
             ExcelUtils.setCellData(value,numberStep,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET,reportPath);
             return value;
         }
@@ -331,6 +340,7 @@ public class TestScrip {
 
     //region Testcase key
     public static String tcResult = Constanst.PASS;
+    public static List<String> tcResults;
     public static String tcPath;
     public static boolean isDataFlow;
     public static String json;
@@ -357,7 +367,7 @@ public class TestScrip {
 
     //region report key
     public static String levelFolder;
-    public static String reportName;
+    public static String reportName="";
     public static String reportPath;
     //end region
 

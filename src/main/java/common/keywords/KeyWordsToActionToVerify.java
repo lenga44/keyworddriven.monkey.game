@@ -177,6 +177,25 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         Response response = request(Constanst.SCENE_URL,"//" +locator+"."+component);
         return convert(response,"text").trim();
     }
+    public static String getTexts(String locator,String component,String expect){
+        LocalDateTime time = LocalDateTime.now();
+        LocalDateTime time1 = time.plusSeconds(30);
+        try {
+            String text ="";
+            do {
+                waitForObject(locator);
+                Response response = request(Constanst.SCENE_URL, "//" + locator + "." + component);
+                text = text + convert(response, "text").trim();
+                if(text.contains(expect)){
+                    break;
+                }
+                time = LocalDateTime.now();
+            } while (time.compareTo(time1) <= 0);
+            return text;
+        }catch (Exception e){
+            return "";
+        }
+    }
     public static String getTextNoColor(String locator,String component,String... StrSplit){
         Response response = request(Constanst.SCENE_URL,"//" +locator+"."+component);
         String values = convert(response,"text").trim();

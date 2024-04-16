@@ -4,13 +4,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import common.utility.Constanst;
 import common.utility.ExcelUtils;
-import common.utility.FileHelpers;
 import common.utility.JsonHandle;
 import execute.RunTestScriptData;
 import execute.TestScrip;
-import io.basc.framework.lang.Nullable;
-import io.restassured.response.Response;
-import org.apache.commons.lang3.ObjectUtils;
 
 import java.io.IOException;
 import java.util.Map;
@@ -18,20 +14,24 @@ import java.util.Set;
 
 public class KeyWordCustomForAISpeak {
 
-    public static void returnChooseTopic(String locator,String sheetName,String from, String to) throws IOException {
+    public static void returnChooseTopic(String sheetName, String from, String to, String part) throws IOException {
         try {
-            String result = "";
-            try {
+            String result = Constanst.FAIL;
+            /*try {
                 result  = KeyWordsToActionToVerify.isElementDisplay(locator);
             }catch (Throwable e){
                 result = "false";
+            }*/
+            if(part.equals("1")){
+                System.out.println("returnChooseTopic");
+                result = Constanst.TRUE;
             }
             String path = TestScrip.reportPath;
             for (int i = Integer.valueOf(from); i <= Integer.valueOf(to); i++) {
                 if (result.equals(Constanst.TRUE)) {
-                    ExcelUtils.setCellData(Constanst.NO, i, Constanst.RUN_MODE_TEST_CASE, sheetName, TestScrip.reportPath);
-                } else {
                     ExcelUtils.setCellData(Constanst.YES, i, Constanst.RUN_MODE_TEST_CASE, sheetName, TestScrip.reportPath);
+                } else {
+                    ExcelUtils.setCellData(Constanst.NO, i, Constanst.RUN_MODE_TEST_CASE, sheetName, TestScrip.reportPath);
                 }
             }
             ExcelUtils.closeFile(path);

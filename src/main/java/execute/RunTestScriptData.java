@@ -5,6 +5,7 @@ import common.utility.*;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,12 +32,19 @@ public class RunTestScriptData extends TestScrip{
                 ExcelUtils.setExcelFile(scopePath);
                 ExcelUtils.setCellData(index, 1, Constanst.CURRENT_INDEX_COLUM, Constanst.PLAN_SHEET, scopePath);
                 String key = ExcelUtils.getStringValueInCell(1, Constanst.DATA_PLAN_COLUM, Constanst.PLAN_SHEET);
-                reportName = getDataSet(key);
+                if(key.contains(",")){
+                    for (String k: Arrays.stream(key.split(",")).toList()){
+                        reportName += getDataSet(k);
+                    }
+                }else {
+                    reportName = getDataSet(key);
+                }
                 //execute tc
                 execute_suites(scopePath, iTestSuit, iTotalSuite);
                 EndTestScript.saveReportToFailListFile(reportPath,scopePath);
                 ExcelUtils.closeFile(reportPath);
                 ExcelUtils.closeFile(tcPath);
+                reportName ="";
             }
             ExcelUtils.closeFile(scopePath);
         }catch (Exception e){

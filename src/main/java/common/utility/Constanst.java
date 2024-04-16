@@ -17,6 +17,7 @@ public class Constanst {
     public static final String Y = "y";
     public static final String DATA_MODE = "Data";
     public static final int GAME_MODE = 1;
+    public static final String CHECK_CONTAIN = "_boolean_";
     //endregion
 
     //region Scope file
