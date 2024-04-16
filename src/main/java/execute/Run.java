@@ -89,9 +89,9 @@ public class Run {
     }
     @Deprecated
     private static void runDataFlow(int iTestSuit,int iTotalSuite) throws Exception {
-        //System.out.println("Start: "+DateTime.getNow());
+        System.out.println("Start: "+DateTime.getNow());
         runTestScriptData.run(scopePath,iTestSuit,iTotalSuite);
-        //System.out.println("End: "+DateTime.getNow());
+        System.out.println("End: "+DateTime.getNow());
     }
     private static void returnFlowScrip(){
         String flow = ExcelUtils.getStringValueInCell(1,Constanst.FLOW_COLUM,Constanst.PLAN_SHEET);
