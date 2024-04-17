@@ -48,6 +48,8 @@ public class Run {
             runDataFlow(iFirstTestSuit,iLastTestSuit);
         }
         runOneTime(iOnceTimeTearDown);
+        TelegramBot.sendMessTele(FileHelpers.readFile(Constanst.LIST_FAIL_PATH_FILE+"list_fail.txt"));
+        KeyWordsToAction.sleep(1);
         TelegramBot.sendMessTele("End: "+DateTime.getNow());
     }
     private static void runOneTime(int iOnceTime) throws Exception {

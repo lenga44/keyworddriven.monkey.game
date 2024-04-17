@@ -189,8 +189,9 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
                 if(text.contains(expect)){
                     break;
                 }
-                time = LocalDateTime.now();
+                /*time = LocalDateTime.now();*/
             } while (time.compareTo(time1) <= 0);
+            Log.info("getTexts "+text);
             return text;
         }catch (Exception e){
             return "";

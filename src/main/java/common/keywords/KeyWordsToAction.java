@@ -55,7 +55,7 @@ public class KeyWordsToAction {
     //region ACTION
     public static void sleep(String second)  {
         try {
-            Thread.sleep((long) (Float.valueOf(second) * 1000));
+            Thread.sleep((long) (Float.parseFloat(second) * 1000));
             Log.info("Sleep: " +second);
         }catch (InterruptedException e){
             exception(e);
@@ -113,11 +113,9 @@ public class KeyWordsToAction {
         }
     }
     public static void clickDownAndUp(String locator){
-        waitForObject(locator);
         request(Constanst.POINTER_URL,".DownToUp("+getAbsolutePath(locator,"0")+")");
     }
     public static void clickDownAndUp(String locator,String index){
-        waitForObject(locator);
         String absolutePath = getAbsolutePath(locator,"0");
         if(absolutePath.contains(":"))
             absolutePath = absolutePath.replace(":","!_!");
@@ -163,6 +161,7 @@ public class KeyWordsToAction {
                                 break;
                             }
                         }
+                        System.out.println(s);
                     }
                 }
                 if (!path.equals("")) {
@@ -272,10 +271,16 @@ public class KeyWordsToAction {
         sleep("1");
     }
     public static void sendKey(String locator,String component, String property,String name){
+        Log.info("sendKey " +name);
         request(Constanst.SCENE_URL,"//"+locator+"."+component+"."+property+"="+name);
     }
     public static void sendKey(String locator,String component,String name){
+        Log.info("sendKey " +name);
         request(Constanst.SCENE_URL,"//"+locator+"."+component+".text="+name);
+    }
+    public static void sendKey(String locator,String component){
+        Log.info("sendKey trống");
+        Response response = request(Constanst.SCENE_URL,"//"+locator+"."+component+".text=");
     }
     //endregion ACTION
 
@@ -645,6 +650,9 @@ public class KeyWordsToAction {
             return null;
         }
     }
+    public static String convert(Response response,String key,String oldStr,String newStr){
+        return convert(response,key).replace(oldStr,newStr);
+    }
     public static String convert(Response response,String key,int index,String splitStr){
         String result =  String.valueOf(response.getBody().jsonPath().getList(key).get(0));
         String[] a = result.split(splitStr);
@@ -738,11 +746,14 @@ public class KeyWordsToAction {
     //endregion
 
     //region KeyWordCustomForAISpeak
-    public static void returnChooseTopic(String sheetName,String from, String to,String part) throws IOException {
-        KeyWordCustomForAISpeak.returnChooseTopic(sheetName,from, to,part);
+    public static void returnChooseTopic(String sheetName,String from, String to,String exception,String part) throws IOException {
+        KeyWordCustomForAISpeak.returnChooseTopic(sheetName,from, to,exception,part);
     }
     public static void deFindModeRunTestCase(String key,String sheetName,String from, String to){
         KeyWordCustomForAISpeak.deFindModeRunTestCase(key,sheetName,from, to );
+    }
+    public static void returnModeTC(String sheetName,String to,String expected,String part) {
+        KeyWordCustomForAISpeak.returnModeTC(sheetName,to,expected,part);
     }
     //endregion
 

@@ -183,14 +183,19 @@ public class TestScrip {
 
     public static String getDataSet(int row){
         String key = ExcelUtils.getStringValueInCell(row, Constanst.DATA_SET, Constanst.TEST_STEP_SHEET);
-        String value = null;
-        if(key.contains("$")&& !json.equals(null)) {
-            value = JsonHandle.getValue(json, key);
-            FileHelpers.setJsonVariable(key, value);
-            ExcelUtils.setCellData(value,row, Constanst.DATA_SET, Constanst.TEST_STEP_SHEET,reportPath);
-            return value;
-        }else
-            return key;
+        String value = "";
+        try {
+            if (key.contains("$") && !json.equals(null)) {
+                value = JsonHandle.getValue(json, key);
+                FileHelpers.setJsonVariable(key, value);
+                ExcelUtils.setCellData(value, row, Constanst.DATA_SET, Constanst.TEST_STEP_SHEET, reportPath);
+                return value;
+            } else
+                return key;
+        }catch (Exception e){
+            Log.error("getDataSet "+e.getMessage());
+            return "";
+        }
     }
     public static String getDataSet(String key){
         String value = null;
