@@ -745,4 +745,12 @@ public class KeyWordsToAction {
         KeyWordCustomForAISpeak.deFindModeRunTestCase(key,sheetName,from, to );
     }
     //endregion
+
+    //region Send Message telegram
+    public static void sendMessTelegram(String message){
+        request("https://api.telegram.org/bot6113240161:AAHqK7JMEOONJNxFH2ctniwIDmr26HLMRkY/"
+                ,"sendMessage?chat_id=@noti_tes&text="+message);
+        Log.info(message);
+    }
+    //endregion
 }

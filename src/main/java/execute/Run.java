@@ -1,12 +1,10 @@
 package execute;
 
 import com.aspose.cells.DateTime;
+import common.keywords.KeyWordsToAction;
 import common.keywords.KeyWordsToActionPocoSDK;
 import common.keywords.KeyWordsToActionToVerify;
-import common.utility.Constanst;
-import common.utility.ExcelUtils;
-import common.utility.FileHelpers;
-import common.utility.Log;
+import common.utility.*;
 import org.apache.poi.ss.formula.FormulaParser;
 
 import java.io.IOException;
@@ -18,6 +16,8 @@ import java.util.logging.Logger;
 public class Run {
 
     public static void main(String[] args) throws Exception {
+
+        TelegramBot.sendMessTele("Start: "+DateTime.getNow());
 
         keyWord = new KeyWordsToActionToVerify();
         method = keyWord.getClass().getMethods();
@@ -48,6 +48,7 @@ public class Run {
             runDataFlow(iFirstTestSuit,iLastTestSuit);
         }
         runOneTime(iOnceTimeTearDown);
+        TelegramBot.sendMessTele("End: "+DateTime.getNow());
     }
     private static void runOneTime(int iOnceTime) throws Exception {
         Log.info("runOneTime " +iOnceTime);
@@ -89,7 +90,6 @@ public class Run {
     }
     @Deprecated
     private static void runDataFlow(int iTestSuit,int iTotalSuite) throws Exception {
-        System.out.println("Start: "+DateTime.getNow());
         runTestScriptData.run(scopePath,iTestSuit,iTotalSuite);
         System.out.println("End: "+DateTime.getNow());
     }
