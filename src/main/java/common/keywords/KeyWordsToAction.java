@@ -610,7 +610,7 @@ public class KeyWordsToAction {
                 assertContain(expect,actual);
             }
         }catch (Throwable e){
-            exception(e);
+            exception("expect ["+expect+"] but found ["+actual+"]");
         }
     }
     private static void assertEqual(String actual,String expect){

@@ -53,17 +53,22 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
             return "false";
         }
     }
-    public static String isElementDisplay(String locator){
+    public static boolean isElementDisplay(String locator){
         try {
             Response response = request(Constanst.SCENE_URL, "//" + locator);
             ResponseBody body = response.getBody();
-            if(body.jsonPath().getList("activeInHierarchy").size()>0){
-                return "true";
-            }else {
-                return "false";
+            List actvies = convertToList(response,"activeInHierarchy");
+            boolean value = false;
+            if(actvies.size()>0){
+                String result = convert(response,"activeInHierarchy");
+                if(result.equals("true")){
+                    value =true;
+                }
             }
+            return value;
         }catch (Exception e){
-            return "false";
+            Log.info("No Such element " +locator);
+            return false;
         }
     }
     public static String elementDisplay(String locator,String second){
@@ -105,7 +110,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         return value;
     }
     public static String getPropertyValue(String locator, String component, String property,String slipStr,String contain){
-        waitForObject(locator);
+        //waitForObject(locator);
         Response response = request(Constanst.SCENE_URL,"//"+locator+"."+component);
         String result = convert(response,property);
         List<String> list = Arrays.stream(result.split(slipStr)).toList();
@@ -177,23 +182,85 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         Response response = request(Constanst.SCENE_URL,"//" +locator+"."+component);
         return convert(response,"text").trim();
     }
-    public static String getTexts(String locator,String component,String expect){
+    public static String getTextsByTime(String locator,String component,String second,String expect){
         LocalDateTime time = LocalDateTime.now();
-        LocalDateTime time1 = time.plusSeconds(30);
+        LocalDateTime time1 = time.plusSeconds(Integer.valueOf(second));
+        List<String> results = new ArrayList<>();
         try {
             String text ="";
-            do {
-                waitForObject(locator);
+            while (time.compareTo(time1) <= 0) {
                 Response response = request(Constanst.SCENE_URL, "//" + locator + "." + component);
-                text = text + convert(response, "text").trim();
-                if(text.contains(expect)){
-                    break;
+                List texts = convertToList(response,"text");
+                if(texts.size()>0) {
+                    String result = convert(response, "text").trim();
+                    if(!results.contains(result)) {
+                        results.add(result);
+                        if (!result.equals("")) {
+                            if(text.equals("")){
+                                text = text + result.trim();
+                            }else {
+                                text = text + " " + result.trim();
+                            }
+                        }
+                    }
                 }
-                /*time = LocalDateTime.now();*/
-            } while (time.compareTo(time1) <= 0);
-            Log.info("getTexts "+text);
-            return text;
+                System.out.println("getTexts "+text);
+                System.out.println("getTexts "+expect);
+                if (text.contains(expect)) {
+                    System.out.println("getTexts111 "+text);
+                    break;
+                }else {
+                    time = LocalDateTime.now();
+                    sleep(0.2f);
+                }
+            }
+            return text.trim();
         }catch (Exception e){
+            Log.error("getTextsError "+e.getMessage());
+            exception(e.getMessage());
+            return "";
+        }
+    }
+    public static String getTexts(String locator,String component,String expect){
+        return getTextsByTime(locator,component,"15",expect);
+    }
+    public static String getTextsByLocator(String locator,String component,String locator2,String expect){
+        LocalDateTime time = LocalDateTime.now();
+        LocalDateTime time1 = time.plusSeconds(30);
+        List<String> results = new ArrayList<>();
+        boolean stop = false;
+        try {
+            String text ="";
+            while (time.compareTo(time1) <= 0) {
+                Response response = request(Constanst.SCENE_URL, "//" + locator + "." + component);
+                List texts = convertToList(response,"text");
+                if(texts.size()>0) {
+                    String result = convert(response, "text").trim();
+                    if(!results.contains(result)) {
+                        results.add(result);
+                        if (!result.equals("")) {
+                            if(text.equals("")){
+                                text = text + result.trim();
+                            }else {
+                                text = text + " " + result.trim();
+                            }
+                        }
+                    }
+                }
+                System.out.println("getTexts "+text);
+                System.out.println("getTexts "+expect);
+                if (text.contains(expect)||stop==true) {
+                    break;
+                }else {
+                    stop = isElementDisplay(locator2);
+                    time = LocalDateTime.now();
+                    sleep(0.2f);
+                }
+            }
+            return text.trim();
+        }catch (Exception e){
+            Log.error("getTextsError "+e.getMessage());
+            exception(e.getMessage());
             return "";
         }
     }

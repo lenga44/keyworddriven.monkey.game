@@ -136,10 +136,35 @@ public class TestScrip {
 
                 } else
                     tcResult = Constanst.SKIP;
-                if(tcResults.contains(Constanst.FAIL)||tcResults.contains(Constanst.SKIP)){
+                if(tcResults.contains(Constanst.FAIL)){
                     onResultTestcase(Constanst.FAIL, error, i);
                 }else {
                     onResultTestcase(Constanst.PASS, "", i);
+                }
+            }
+        }
+        markFailTest(iTotalTestCase);
+        markSkipTest(iTotalTestCase);
+    }
+    private static void markFailTest(int iTotalTestCase){
+        for(int i =1; i<iTotalTestCase;i++) {
+            String runMode = ExcelUtils.getStringValueInCell(i,Constanst.RUN_MODE_TEST_CASE,Constanst.TESTCASE_SHEET);
+            if(runMode.equals(Constanst.YES)){
+                String tcStatus = ExcelUtils.getStringValueInCell(i, Constanst.TESTCASE_STATUS,Constanst.TESTCASE_SHEET);
+                if(tcStatus.equals("")){
+                    ExcelUtils.setCellData(Constanst.FAIL,i,Constanst.TESTCASE_STATUS,Constanst.TESTCASE_SHEET,reportPath);
+                    ExcelUtils.setCellData("Not run",i,Constanst.TESTCASE_ERROR,Constanst.TESTCASE_SHEET,reportPath);
+                }
+            }
+        }
+    }
+    private static void markSkipTest(int iTotalTestCase){
+        for(int i =1; i<iTotalTestCase;i++) {
+            String runMode = ExcelUtils.getStringValueInCell(i,Constanst.RUN_MODE_TEST_CASE,Constanst.TESTCASE_SHEET);
+            if(runMode.equals(Constanst.NO)){
+                String tcStatus = ExcelUtils.getStringValueInCell(i, Constanst.TESTCASE_STATUS,Constanst.TESTCASE_SHEET);
+                if(tcStatus.equals("")){
+                    ExcelUtils.setCellData(Constanst.SKIP,i,Constanst.TESTCASE_STATUS,Constanst.TESTCASE_SHEET,reportPath);
                 }
             }
         }
@@ -168,11 +193,15 @@ public class TestScrip {
             if(!data.equals("")){
                 objs.add(data);
             }
+            System.out.println(objs);
             return objs.toArray();
         } else {
             return null;
         }
     }
+    /*private static String DataSetActual(String data){
+        String actual = getDataSet(data);
+    }*/
     //endregion
 
     //region TEST STEP
@@ -244,15 +273,15 @@ public class TestScrip {
             tcResult = Constanst.FAIL;
     }
     private static void onResultStep(String status, String message, int rowNumber ){
+        ExcelUtils.setCellData(status, rowNumber, Constanst.RESULT, Constanst.TEST_STEP_SHEET, reportPath);
+        ExcelUtils.setCellData(message,  rowNumber, Constanst.ERROR, Constanst.TEST_STEP_SHEET, reportPath);
+        tcResults.add(status);
         if(status == Constanst.FAIL) {
             byte[] bytes = KeyWordsToAction.takePhoto();
             ExcelUtils.addPictureInCell(rowNumber, bytes, reportPath);
         }else {
             ExcelUtils.setCellData("", rowNumber, Constanst.IMAGE, Constanst.TEST_STEP_SHEET, reportPath);
         }
-        ExcelUtils.setCellData(status, rowNumber, Constanst.RESULT, Constanst.TEST_STEP_SHEET, reportPath);
-        ExcelUtils.setCellData(message,  rowNumber, Constanst.ERROR, Constanst.TEST_STEP_SHEET, reportPath);
-        tcResults.add(status);
     }
     private static void execute_action(String data,String sActionKeyword,int row,int colum){
         String testStep = ExcelUtils.getStringValueInCell(iTestStep, Constanst.TEST_STEP, Constanst.TEST_STEP_SHEET);
@@ -302,7 +331,14 @@ public class TestScrip {
     private static void verifyStep(int numberStep) throws IOException {
         String sActionKeyword = ExcelUtils.getStringValueInCell(numberStep, Constanst.VERIFY_STEP, Constanst.TEST_STEP_SHEET);
         String dataSetActual =ExcelUtils.getStringValueInCell(numberStep, Constanst.DATA_SET_ACTUAL, Constanst.TEST_STEP_SHEET);
-        params = ExcelUtils.getStringValueInCell(numberStep, Constanst.PARAM_VERIFY_STEP, Constanst.TEST_STEP_SHEET)+ dataSetActual ;
+        String data = getDataSet(dataSetActual);
+        if(!data.equals("")) {
+            params = ExcelUtils.getStringValueInCell(numberStep, Constanst.PARAM_VERIFY_STEP, Constanst.TEST_STEP_SHEET) + "," + data;
+        }else {
+            params = ExcelUtils.getStringValueInCell(numberStep, Constanst.PARAM_VERIFY_STEP, Constanst.TEST_STEP_SHEET);
+        }
+        Log.info("Data set actual: "+data);
+        ExcelUtils.setCellData(data,numberStep, Constanst.DATA_SET_ACTUAL, Constanst.TEST_STEP_SHEET,reportPath);
 
         if(!sActionKeyword.equals("")){
             if(result == Constanst.PASS) {
@@ -314,13 +350,16 @@ public class TestScrip {
     }
     private static String getExpectedWithKey(int numberStep){
         String ex = ExcelUtils.getStringValueInCell(numberStep,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET);
+        if(ex.contains(Constanst.CHECK_CONTAIN)){
+            ex = ex.replace(Constanst.CHECK_CONTAIN,"");
+        }
         if(isDataFlow ==true && ex.contains("$")) {
             String value = JsonHandle.getValue(json, ex);
             ExcelUtils.setCellData(value,numberStep,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET,reportPath);
-            return value;
+            return value+Constanst.CHECK_CONTAIN;
         }
         else
-            return ex;
+            return ex+Constanst.CHECK_CONTAIN;
     }
     private static void getActualWithKey(int numberStep,String value){
         if(isDataFlow ==true && params.contains("$")) {

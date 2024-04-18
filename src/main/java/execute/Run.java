@@ -18,6 +18,7 @@ public class Run {
     public static void main(String[] args) throws Exception {
 
         TelegramBot.sendMessTele("Start: "+DateTime.getNow());
+        FileHelpers.writeFile("",Constanst.LIST_FAIL_PATH_FILE+"list_fail.txt");
 
         keyWord = new KeyWordsToActionToVerify();
         method = keyWord.getClass().getMethods();
@@ -48,7 +49,9 @@ public class Run {
             runDataFlow(iFirstTestSuit,iLastTestSuit);
         }
         runOneTime(iOnceTimeTearDown);
-        TelegramBot.sendMessTele(FileHelpers.readFile(Constanst.LIST_FAIL_PATH_FILE+"list_fail.txt"));
+        //Log.info("End script: "+DateTime.getNow());
+        String fail_list = FileHelpers.readFile(Constanst.LIST_FAIL_PATH_FILE+"list_fail.txt");
+        TelegramBot.sendMessTele(fail_list);
         KeyWordsToAction.sleep(1);
         TelegramBot.sendMessTele("End: "+DateTime.getNow());
     }

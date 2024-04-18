@@ -21,7 +21,7 @@ public class TelegramBot {
             // Get the response code
             int responseCode = conn.getResponseCode();
             System.out.println("Response Code: " + responseCode);
-
+            Log.info("sendMessTele: "+message);
             // Read the response
             BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String inputLine;
@@ -36,6 +36,5 @@ public class TelegramBot {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Log.info("sendMessTele: "+message);
     }
 }
