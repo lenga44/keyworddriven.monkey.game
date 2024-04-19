@@ -17,7 +17,8 @@ public class Run {
 
     public static void main(String[] args) throws Exception {
 
-        TelegramBot.sendMessTele("Start: "+DateTime.getNow());
+        String start = DateTime.getNow().toString();
+        TelegramBot.sendMessTele("Start: "+start);
         FileHelpers.writeFile("",Constanst.LIST_FAIL_PATH_FILE+"list_fail.txt");
 
         keyWord = new KeyWordsToActionToVerify();
@@ -50,10 +51,14 @@ public class Run {
         }
         runOneTime(iOnceTimeTearDown);
         //Log.info("End script: "+DateTime.getNow());
-        String fail_list = FileHelpers.readFile(Constanst.LIST_FAIL_PATH_FILE+"list_fail.txt");
+        String end = DateTime.getNow().toString();
+        String fail_list = "";
+        try{
+            fail_list = FileHelpers.readFile(Constanst.LIST_FAIL_PATH_FILE+"list_fail.txt");
+        }catch (Exception e){}
         TelegramBot.sendMessTele(fail_list);
         KeyWordsToAction.sleep(1);
-        TelegramBot.sendMessTele("End: "+DateTime.getNow());
+        TelegramBot.sendMessTele("End: "+end);
     }
     private static void runOneTime(int iOnceTime) throws Exception {
         Log.info("runOneTime " +iOnceTime);
