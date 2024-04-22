@@ -121,7 +121,6 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
                 break;
             }
         }
-        Log.info(value);
         return value;
     }
     public static String getImageName(String locator){
@@ -183,37 +182,43 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         return convert(response,"text").trim();
     }
     public static String getTextsByTime(String locator,String component,String second,String expect){
+        Response response = request(Constanst.SCENE_URL, "//" + locator + "." + component);
+        List texts = convertToList(response,"text");
+        String result= "";
+        if(texts.size()>0){
+            result = convert(response, "text").trim();
+        }
         LocalDateTime time = LocalDateTime.now();
         LocalDateTime time1 = time.plusSeconds(Integer.valueOf(second));
         List<String> results = new ArrayList<>();
         try {
             String text ="";
             while (time.compareTo(time1) <= 0) {
-                Response response = request(Constanst.SCENE_URL, "//" + locator + "." + component);
-                List texts = convertToList(response,"text");
-                if(texts.size()>0) {
-                    String result = convert(response, "text").trim();
-                    if(!results.contains(result)) {
+                if (!result.equals("")) {
+                    if (!results.contains(result)) {
                         results.add(result);
-                        if (!result.equals("")) {
-                            if(text.equals("")){
-                                text = text + result.trim();
-                            }else {
-                                text = text + " " + result.trim();
-                            }
+                        if (text.equals("")) {
+                            text = text + result.trim();
+                        } else {
+                            text = text + " " + result.trim();
                         }
                     }
                 }
-                System.out.println("getTexts "+text);
-                System.out.println("getTexts "+expect);
                 if (text.contains(expect)) {
-                    System.out.println("getTexts111 "+text);
                     break;
-                }else {
+                } else {
                     time = LocalDateTime.now();
-                    sleep(0.2f);
+                }
+                response = request(Constanst.SCENE_URL, "//" + locator + "." + component);
+                texts = convertToList(response,"text");
+                if(texts.size()>0){
+                    result = convert(response, "text").trim();
+                }else {
+                    result = "";
                 }
             }
+            System.out.println("getTexts " + text);
+            System.out.println("getTexts " + expect);
             return text.trim();
         }catch (Exception e){
             Log.error("getTextsError "+e.getMessage());
@@ -224,17 +229,22 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
     public static String getTexts(String locator,String component,String expect){
         return getTextsByTime(locator,component,"15",expect);
     }
+    private static List<String> getListTexts(String locator,String component){
+        Response response = request(Constanst.SCENE_URL, "//" + locator + "." + component);
+        return convertToList(response,"text");
+    }
     public static String getTextsByLocator(String locator,String component,String locator2,String expect){
         LocalDateTime time = LocalDateTime.now();
         LocalDateTime time1 = time.plusSeconds(30);
         List<String> results = new ArrayList<>();
+        List<String > texts = getListTexts(locator,component);
+        Response response = null;
         boolean stop = false;
         try {
             String text ="";
             while (time.compareTo(time1) <= 0) {
-                Response response = request(Constanst.SCENE_URL, "//" + locator + "." + component);
-                List texts = convertToList(response,"text");
                 if(texts.size()>0) {
+                response = request(Constanst.SCENE_URL, "//" + locator + "." + component);
                     String result = convert(response, "text").trim();
                     if(!results.contains(result)) {
                         results.add(result);
@@ -246,6 +256,8 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
                             }
                         }
                     }
+                }else {
+                    texts = getListTexts(locator,component);
                 }
                 System.out.println("getTexts "+text);
                 System.out.println("getTexts "+expect);
@@ -254,7 +266,6 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
                 }else {
                     stop = isElementDisplay(locator2);
                     time = LocalDateTime.now();
-                    sleep(0.2f);
                 }
             }
             return text.trim();
@@ -404,6 +415,15 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
     public static String getVideoUrl(String locator,String strSplit,String contain){
         return getPropertyValue(locator,"VideoPlayer","url",strSplit,contain);
     }
+    public static String getVideoUrl(String locator, String component,String key,String strSplit,String contain,String expected){
+        String url = getPropertyValue(KeyWordsToAction.getPath(locator,component,key,expected),"VideoPlayer","url",strSplit,contain);
+        if(url.equals(expected)){
+            return Constanst.TRUE;
+        }else {
+            Log.info("Found ["+url+"]");
+            return Constanst.FALSE;
+        }
+    }
     public static String getResultByKey(String locator,String component,String key){
         Response response = request(Constanst.SCENE_URL,"//" +locator+"."+component);
         String value = JsonHandle.getValue(response.getBody().asString(),key);
@@ -420,6 +440,20 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
            }else {
                sentence = sentence + text +" ";
            }
+        }
+        return sentence;
+    }
+    public static String getSentenceByText(String locators,String component,String strSplit){
+        String sentence = null;
+        Response response = request(Constanst.SCENE_URL,"//" +locators+"."+component);
+        List<String> list = convertToList(response,"text");
+        for (String text: list) {
+            text = getTextNoColor(locators,component,strSplit);
+            if(text.matches("^[a-z0-9A-Z]{2,25}$")){
+                sentence = sentence + text +" ";
+            }else {
+                sentence = sentence + text +" ";
+            }
         }
         return sentence;
     }

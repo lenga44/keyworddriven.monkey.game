@@ -179,8 +179,6 @@ public class TestScrip {
             params = params.replace("$.path",locator);
             ExcelUtils.setCellData(params,row,colum,Constanst.TEST_STEP_SHEET,reportPath);
         }
-        Log.info("Params: "+params);
-        Log.info("Data: "+data);
         ArrayList<Object> objs = new ArrayList<>();
         if (!params.equals("")&& !params.equals(null)) {
             if (params.contains(",")) {
@@ -193,7 +191,6 @@ public class TestScrip {
             if(!data.equals("")){
                 objs.add(data);
             }
-            System.out.println(objs);
             return objs.toArray();
         } else {
             return null;
@@ -298,7 +295,6 @@ public class TestScrip {
                         param = null;
                     }
                     String type = String.valueOf(method[i].getReturnType());
-                    Log.info("type: "+type);
                     if (!type.equals("void")) {
                         String actual = (String) method[i].invoke(keyWord, param);
                         Log.info(description);
@@ -337,7 +333,6 @@ public class TestScrip {
         }else {
             params = ExcelUtils.getStringValueInCell(numberStep, Constanst.PARAM_VERIFY_STEP, Constanst.TEST_STEP_SHEET);
         }
-        Log.info("Data set actual: "+data);
         ExcelUtils.setCellData(data,numberStep, Constanst.DATA_SET_ACTUAL, Constanst.TEST_STEP_SHEET,reportPath);
 
         if(!sActionKeyword.equals("")){

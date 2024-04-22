@@ -139,9 +139,9 @@ public class KeyWordsToAction {
         //FileHelpers.writeFile(result,Constanst.VARIABLE_PATH_FILE);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
-    public static void returnPathContain(String locator, String component,String key,String expected) throws IOException {
+    public static String getPath(String locator, String component,String key,String expected)  {
+        String path = "";
         try {
-            String path = "";
             Response response = request(Constanst.SCENE_URL, "//" + locator);
             ResponseBody body = response.getBody();
             JsonArray array = JsonHandle.getJsonArray(body.asString());
@@ -153,27 +153,35 @@ public class KeyWordsToAction {
                     ResponseBody body1 = response1.getBody();
                     String json1 = body1.asString();
                     for (JsonElement element : JsonHandle.getJsonArray(json1)) {
-                        path="";
+                        path = "";
                         String s = JsonHandle.getValue(element.toString(), "$." + key);
-                        if(!s.equals("")) {
+                        if (!s.equals("")) {
                             if (s.toLowerCase().contains(expected.toLowerCase())) {
                                 path = name;
                                 break;
                             }
                         }
-                        System.out.println(s);
                     }
                 }
                 if (!path.equals("")) {
                     break;
                 }
             }
-            FileHelpers.writeFile("",Constanst.VARIABLE_PATH_FILE);
-            ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
+        }catch (Exception e){
+            Log.error(e.getMessage());
+            e.printStackTrace();
+        }
+        return path;
+    }
+    public static void returnPathContain(String locator, String component,String key,String expected){
+        try {
+            String path = getPath(locator,component,key,expected);
+/*            FileHelpers.writeFile("",Constanst.VARIABLE_PATH_FILE);
+            ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);*/
             FileHelpers.writeFile("{'path':'"+path+"'}",Constanst.VARIABLE_PATH_FILE);
             ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
         }catch (Exception e){
-            Log.info(e.getMessage());
+            Log.error(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -638,14 +646,12 @@ public class KeyWordsToAction {
     public static String convert(Response response,String key){
         try {
             String result = String.valueOf(response.getBody().jsonPath().getList(key).get(0));
-            Log.info("|convert 2 param |: "+result);
             if(result.contains("\n")) {
                 result = result.replace("\n", "");
             }
-            Log.info("|convert 2 param |: "+result);
             return result;
         }catch (Throwable e){
-            Log.info(response.prettyPrint());
+            Log.error(response.prettyPrint());
             exception(e);
             return null;
         }
