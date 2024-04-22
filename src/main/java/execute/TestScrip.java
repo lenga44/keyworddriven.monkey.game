@@ -28,12 +28,11 @@ public class TestScrip {
 
             ExcelUtils.setCellData("",iTestSuite,Constanst.STATUS_SUITE,Constanst.SCOPE_SHEET,scopePath);
             String sRunMode = ExcelUtils.getStringValueInCell(iTestSuite,Constanst.RUN_MODE_SCOPE,Constanst.SCOPE_SHEET);
-            Log.info("Mode in scope: "+sRunMode);
-
-            tcName = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET);
-            deFindFlowGame(iTestSuite,scopePath);
-
             if(sRunMode.equals(Constanst.YES)) {
+                Log.info("Mode in scope: "+sRunMode);
+
+                tcName = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET);
+                deFindFlowGame(iTestSuite,scopePath);
                 Log.info("TCS name: "+tcName);
                 tcPath = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.TESTCASE_FILE_PATH)+ tcName + ".xlsx";
                 if(isDataFlow==true) {
@@ -121,15 +120,12 @@ public class TestScrip {
         for(int i =1; i<iTotalTestCase;i++) {
             tcResults = new ArrayList<>();
             ExcelUtils.setCellData("",i,Constanst.TESTCASE_STATUS,Constanst.TESTCASE_SHEET,reportPath);
+            String runMode = ExcelUtils.getStringValueInCell(i,Constanst.RUN_MODE_TEST_CASE,Constanst.TESTCASE_SHEET);
+            if(runMode.equals(Constanst.YES)) {
             String sTestCaseID = ExcelUtils.getStringValueInCell(i, Constanst.TESTCASE_ID, Constanst.TESTCASE_SHEET);
             Log.info("TCID: " + sTestCaseID);
-
-            String runMode = ExcelUtils.getStringValueInCell(i,Constanst.RUN_MODE_TEST_CASE,Constanst.TESTCASE_SHEET);
-            Log.info(sTestCaseID+ " - Run mode in TC: " + runMode);
-
-            if(runMode.equals(Constanst.YES)) {
-                rangeStepByTestCase(sTestCaseID);
-                Log.info("result: "+result);
+            rangeStepByTestCase(sTestCaseID);
+            Log.info("result: "+result);
                 if (result != Constanst.SKIP) {
                     tcResult = Constanst.PASS;
                     execute_steps();

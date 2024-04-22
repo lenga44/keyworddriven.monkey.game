@@ -217,8 +217,8 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
                     result = "";
                 }
             }
-            System.out.println("getTexts " + text);
-            System.out.println("getTexts " + expect);
+            /*System.out.println("getTexts " + text);
+            System.out.println("getTexts " + expect);*/
             return text.trim();
         }catch (Exception e){
             Log.error("getTextsError "+e.getMessage());
@@ -259,8 +259,8 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
                 }else {
                     texts = getListTexts(locator,component);
                 }
-                System.out.println("getTexts "+text);
-                System.out.println("getTexts "+expect);
+                /*System.out.println("getTexts "+text);
+                System.out.println("getTexts "+expect);*/
                 if (text.contains(expect)||stop==true) {
                     break;
                 }else {
@@ -415,12 +415,15 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
     public static String getVideoUrl(String locator,String strSplit,String contain){
         return getPropertyValue(locator,"VideoPlayer","url",strSplit,contain);
     }
+    public static String getVideoUrl(String locator, String component,String key,String expected){
+        return getVideoURls(locator,component,key,expected);
+    }
     public static String getVideoUrl(String locator, String component,String key,String strSplit,String contain,String expected){
         String url = getPropertyValue(KeyWordsToAction.getPath(locator,component,key,expected),"VideoPlayer","url",strSplit,contain);
         if(url.equals(expected)){
             return Constanst.TRUE;
         }else {
-            Log.info("Found ["+url+"]");
+            Log.error("Found ["+url+"]");
             return Constanst.FALSE;
         }
     }

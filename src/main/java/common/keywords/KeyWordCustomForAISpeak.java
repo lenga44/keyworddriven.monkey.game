@@ -44,7 +44,63 @@ public class KeyWordCustomForAISpeak {
             e.printStackTrace();
         }
     }
+    public static void returnChooseTopic(String sheetName, String from, String to, String part) throws IOException {
+        try {
+            String result = Constanst.FAIL;
+            /*try {
+                result  = KeyWordsToActionToVerify.isElementDisplay(locator);
+            }catch (Throwable e){
+                result = "false";
+            }*/
+            if(part.equals("1")){
+                result = Constanst.TRUE;
+            }
+            String path = TestScrip.reportPath;
+            for (int i = Integer.valueOf(from); i <= Integer.valueOf(to); i++) {
+                if (result.equals(Constanst.TRUE)) {
+                    ExcelUtils.setCellData(Constanst.YES, i, Constanst.RUN_MODE_TEST_CASE, sheetName, TestScrip.reportPath);
+                } else {
+                    ExcelUtils.setCellData(Constanst.NO, i, Constanst.RUN_MODE_TEST_CASE, sheetName, TestScrip.reportPath);
+                }
+            }
+            ExcelUtils.closeFile(path);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+    }
     public static void deFindModeRunTestCase(String key,String sheetName,String from, String to)  {
+        String result = getDeFind(key);
+        for (int i = Integer.valueOf(from); i <= Integer.valueOf(to); i++) {
+            ExcelUtils.setCellData(result, i, Constanst.RUN_MODE_TEST_CASE, sheetName, TestScrip.reportPath);
+        }
+    }
+    public static void deFindModeRunTestCase(String key,String sheetName,String from, String to,String exception)  {
+        String result = getDeFind(key);
+        if(result.equals(Constanst.YES)){
+            ExcelUtils.setCellData(Constanst.NO, Integer.valueOf(exception), Constanst.RUN_MODE_TEST_CASE, sheetName, TestScrip.reportPath);
+        }else {
+            ExcelUtils.setCellData(Constanst.YES, Integer.valueOf(exception), Constanst.RUN_MODE_TEST_CASE, sheetName, TestScrip.reportPath);
+        }
+        for (int i = Integer.valueOf(from); i <= Integer.valueOf(to); i++) {
+            ExcelUtils.setCellData(result, i, Constanst.RUN_MODE_TEST_CASE, sheetName, TestScrip.reportPath);
+        }
+    }
+    public static void deFindModeRunTestCase(String key,String sheetName,String from, String to,String exception,String... exception1)  {
+        String result = getDeFind(key);
+        if(result.equals(Constanst.YES)){
+            ExcelUtils.setCellData(Constanst.NO, Integer.valueOf(exception), Constanst.RUN_MODE_TEST_CASE, sheetName, TestScrip.reportPath);
+        }else {
+            ExcelUtils.setCellData(Constanst.YES, Integer.valueOf(exception), Constanst.RUN_MODE_TEST_CASE, sheetName, TestScrip.reportPath);
+            for (String ex:exception1) {
+                ExcelUtils.setCellData(Constanst.NO, Integer.valueOf(ex), Constanst.RUN_MODE_TEST_CASE, sheetName, TestScrip.reportPath);
+            }
+        }
+        for (int i = Integer.valueOf(from); i <= Integer.valueOf(to); i++) {
+            ExcelUtils.setCellData(result, i, Constanst.RUN_MODE_TEST_CASE, sheetName, TestScrip.reportPath);
+        }
+    }
+    private static String getDeFind(String key){
         String result = Constanst.NO;
         try {
             JsonObject jsonObject = JsonHandle.getObject(RunTestScriptData.json);
@@ -60,9 +116,7 @@ public class KeyWordCustomForAISpeak {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
-        for (int i = Integer.valueOf(from); i <= Integer.valueOf(to); i++) {
-            ExcelUtils.setCellData(result, i, Constanst.RUN_MODE_TEST_CASE, sheetName, TestScrip.reportPath);
-        }
+        return result;
     }
     public static void returnModeTC(String sheetName, String to, String expected, String part) {
         try {
@@ -95,6 +149,11 @@ public class KeyWordCustomForAISpeak {
         }catch (Exception e){
             System.out.println(e.getMessage());
             e.printStackTrace();
+        }
+    }
+    public static void ignoreScript(String number,String to,String sheetName, String text){
+        if(text.length()<=Integer.valueOf(number)){
+            ExcelUtils.setCellData(Constanst.NO, Integer.parseInt(to), Constanst.RUN_MODE_TEST_CASE, sheetName, TestScrip.reportPath);
         }
     }
 }

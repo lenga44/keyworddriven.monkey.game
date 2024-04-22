@@ -156,7 +156,9 @@ public class KeyWordsToAction {
                         path = "";
                         String s = JsonHandle.getValue(element.toString(), "$." + key);
                         if (!s.equals("")) {
+                            System.out.println("expected1: "+expected);
                             if (s.toLowerCase().contains(expected.toLowerCase())) {
+                                System.out.println("s1: "+s);
                                 path = name;
                                 break;
                             }
@@ -172,6 +174,40 @@ public class KeyWordsToAction {
             e.printStackTrace();
         }
         return path;
+    }
+    public static String getVideoURls(String locator, String component,String key,String expected)  {
+        String path = "";
+        String s = "";
+        boolean match = false;
+        try {
+            Response response1 = request(Constanst.SCENE_URL, "//" + locator + "." + component);
+            ResponseBody body1 = response1.getBody();
+            JsonArray array = JsonHandle.getJsonArray(body1.asString());
+            if(array.size()>0) {
+                for (int i = 0; i < array.size(); i++) {
+                    String json1 = body1.asString();
+                    for (JsonElement element : JsonHandle.getJsonArray(json1)) {
+                        match = false;
+                        s = JsonHandle.getValue(element.toString(), "$." + key);
+                        if (!s.equals("")) {
+                            System.out.println("expected1: " + expected);
+                            if (s.toLowerCase().contains(expected.toLowerCase())) {
+                                System.out.println("s1: " + s);
+                                match =true;
+                                break;
+                            }
+                        }
+                    }
+                    if (match==true) {
+                        break;
+                    }
+                }
+            }
+        }catch (Exception e){
+            Log.error(e.getMessage());
+            e.printStackTrace();
+        }
+        return s;
     }
     public static void returnPathContain(String locator, String component,String key,String expected){
         try {
@@ -755,8 +791,17 @@ public class KeyWordsToAction {
     public static void returnChooseTopic(String sheetName,String from, String to,String exception,String part) throws IOException {
         KeyWordCustomForAISpeak.returnChooseTopic(sheetName,from, to,exception,part);
     }
+    public static void returnChooseTopic(String sheetName,String from, String to,String part) throws IOException {
+        KeyWordCustomForAISpeak.returnChooseTopic(sheetName,from, to,part);
+    }
     public static void deFindModeRunTestCase(String key,String sheetName,String from, String to){
         KeyWordCustomForAISpeak.deFindModeRunTestCase(key,sheetName,from, to );
+    }
+    public static void deFindModeRunTestCase(String key,String sheetName,String from, String to,String expected){
+        KeyWordCustomForAISpeak.deFindModeRunTestCase(key,sheetName,from, to,expected );
+    }
+    public static void deFindModeRunTestCase(String key,String sheetName,String from, String to,String expected,String... expected1){
+        KeyWordCustomForAISpeak.deFindModeRunTestCase(key,sheetName,from, to,expected,expected1 );
     }
     public static void returnModeTC(String sheetName,String to,String expected,String part) {
         KeyWordCustomForAISpeak.returnModeTC(sheetName,to,expected,part);
@@ -768,6 +813,9 @@ public class KeyWordsToAction {
         request("https://api.telegram.org/bot6113240161:AAHqK7JMEOONJNxFH2ctniwIDmr26HLMRkY/"
                 ,"sendMessage?chat_id=@noti_tes&text="+message);
         Log.info(message);
+    }
+    public static void ignoreScript(String number,String to,String sheetName, String text){
+        KeyWordCustomForAISpeak.ignoreScript(number,to,sheetName,text);
     }
     //endregion
 }

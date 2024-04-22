@@ -39,6 +39,7 @@ public class RunTestScriptData extends TestScrip{
                 }else {
                     reportName = getDataSet(key);
                 }
+                System.out.println(reportPath);
                 //execute tc
                 execute_suites(scopePath, iTestSuit, iTotalSuite);
                 EndTestScript.saveReportToFailListFile(reportPath,scopePath);
