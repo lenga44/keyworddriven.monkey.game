@@ -176,9 +176,8 @@ public class KeyWordsToAction {
         return path;
     }
     public static String getVideoURls(String locator, String component,String key,String expected)  {
-        String path = "";
         String s = "";
-        boolean match = false;
+        String path = "";
         try {
             Response response1 = request(Constanst.SCENE_URL, "//" + locator + "." + component);
             ResponseBody body1 = response1.getBody();
@@ -187,18 +186,17 @@ public class KeyWordsToAction {
                 for (int i = 0; i < array.size(); i++) {
                     String json1 = body1.asString();
                     for (JsonElement element : JsonHandle.getJsonArray(json1)) {
-                        match = false;
                         s = JsonHandle.getValue(element.toString(), "$." + key);
                         if (!s.equals("")) {
                             System.out.println("expected1: " + expected);
                             if (s.toLowerCase().contains(expected.toLowerCase())) {
                                 System.out.println("s1: " + s);
-                                match =true;
+                                path =s;
                                 break;
                             }
                         }
                     }
-                    if (match==true) {
+                    if(!path.equals("")){
                         break;
                     }
                 }
@@ -207,7 +205,7 @@ public class KeyWordsToAction {
             Log.error(e.getMessage());
             e.printStackTrace();
         }
-        return s;
+        return path;
     }
     public static void returnPathContain(String locator, String component,String key,String expected){
         try {

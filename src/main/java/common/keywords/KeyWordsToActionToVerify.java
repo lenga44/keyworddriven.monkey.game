@@ -178,47 +178,50 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         return response.jsonPath().get("name").toString().replace("[","").replace("]","");
     }
     public static String getText(String locator,String component){
-        Response response = request(Constanst.SCENE_URL,"//" +locator+"."+component);
-        return convert(response,"text").trim();
+        try {
+            Response response = request(Constanst.SCENE_URL, "//" + locator + "." + component);
+            return convert(response, "text").trim();
+        }catch (Exception e){
+            Log.error("getText "+e.getMessage());
+            return "";
+        }
     }
     public static String getTextsByTime(String locator,String component,String second,String expect){
-        Response response = request(Constanst.SCENE_URL, "//" + locator + "." + component);
-        List texts = convertToList(response,"text");
-        String result= "";
-        if(texts.size()>0){
-            result = convert(response, "text").trim();
-        }
+        String str= getText(locator,component);
         LocalDateTime time = LocalDateTime.now();
         LocalDateTime time1 = time.plusSeconds(Integer.valueOf(second));
         List<String> results = new ArrayList<>();
+        String text ="";
+        if(!str.equals("")){
+            text = str;
+            results.add(text);
+        }
         try {
-            String text ="";
             while (time.compareTo(time1) <= 0) {
-                if (!result.equals("")) {
-                    if (!results.contains(result)) {
-                        results.add(result);
-                        if (text.equals("")) {
-                            text = text + result.trim();
-                        } else {
-                            text = text + " " + result.trim();
+                if(!text.contains(expect)){
+                    Response response = request(Constanst.SCENE_URL, "//" + locator + "." + component);
+                    List<String> texts = getListTexts(locator, component);
+                    if (texts.size() > 0) {
+                        String result = convert(response, "text").trim();
+                        if (!results.contains(result)) {
+                            results.add(result);
+                            if (!result.equals("")) {
+                                if (text.equals("")) {
+                                    text = text + result.trim();
+                                } else {
+                                    text = text + " " + result.trim();
+                                }
+                            }
                         }
                     }
-                }
-                if (text.contains(expect)) {
-                    break;
-                } else {
-                    time = LocalDateTime.now();
-                }
-                response = request(Constanst.SCENE_URL, "//" + locator + "." + component);
-                texts = convertToList(response,"text");
-                if(texts.size()>0){
-                    result = convert(response, "text").trim();
+                    System.out.println("getTexts: " + texts);
+                    System.out.println("getTexts: " + expect);
                 }else {
-                    result = "";
+                    break;
                 }
+                time = LocalDateTime.now();
+                sleep(0.2f);
             }
-            /*System.out.println("getTexts " + text);
-            System.out.println("getTexts " + expect);*/
             return text.trim();
         }catch (Exception e){
             Log.error("getTextsError "+e.getMessage());
