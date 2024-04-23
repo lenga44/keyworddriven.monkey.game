@@ -55,7 +55,9 @@ public class Run {
         String fail_list = "";
         try{
             fail_list = FileHelpers.readFile(Constanst.LIST_FAIL_PATH_FILE+"list_fail.txt");
-        }catch (Exception e){}
+        }catch (Exception e){
+            fail_list =" ALL OF PASS";
+        }
         TelegramBot.sendMessTele(fail_list);
         KeyWordsToAction.sleep(1);
         TelegramBot.sendMessTele("End: "+end);

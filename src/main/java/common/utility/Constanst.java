@@ -126,6 +126,7 @@ public class Constanst {
 
     //region file variable file
     public static final String PATH_GAME_OBJECT = "path";
+    public static final String RUN_MODE_TC_VAR = "mode";
     public static final String INDEX_GAME_OBJECT = "index";
     public static final String CURRENT_SCENE = "current_scene";
     public static final String VARIABLE_PATH_FILE = FileHelpers.getRootFolder()

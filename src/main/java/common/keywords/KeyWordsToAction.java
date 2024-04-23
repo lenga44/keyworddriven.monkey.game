@@ -792,6 +792,9 @@ public class KeyWordsToAction {
     public static void returnChooseTopic(String sheetName,String from, String to,String part) throws IOException {
         KeyWordCustomForAISpeak.returnChooseTopic(sheetName,from, to,part);
     }
+    public static void returnChooseTopic( String part) {
+        KeyWordCustomForAISpeak.returnChooseTopic(part);
+    }
     public static void deFindModeRunTestCase(String key,String sheetName,String from, String to){
         KeyWordCustomForAISpeak.deFindModeRunTestCase(key,sheetName,from, to );
     }
@@ -803,6 +806,9 @@ public class KeyWordsToAction {
     }
     public static void returnModeTC(String sheetName,String to,String expected,String part) {
         KeyWordCustomForAISpeak.returnModeTC(sheetName,to,expected,part);
+    }
+    public static void setRunModeTC(String from, String to,String sheetName) throws IOException{
+        KeyWordCustomForAISpeak.setRunModeTC(from,to,sheetName);
     }
     //endregion
 

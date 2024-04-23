@@ -1,6 +1,7 @@
 package common.utility;
 
 import execute.TestScrip;
+import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
 import org.apache.poi.xssf.usermodel.XSSFDrawing;
@@ -11,10 +12,10 @@ import java.text.NumberFormat;
 import java.util.List;
 
 public class ExcelUtils {
-    private static Sheet ExcelSheet;
-    private static Workbook ExcelBook;
-    private static Cell Cell;
-    private static Row Row;
+    public static Sheet ExcelSheet;
+    public static Workbook ExcelBook;
+    public static Cell Cell;
+    public static Row Row;
 
     public static void setExcelFile(String path) {
         try{

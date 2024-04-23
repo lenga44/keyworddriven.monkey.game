@@ -322,16 +322,15 @@ public class TestScrip {
     // region verify result after each step
     private static void verifyStep(int numberStep) throws IOException {
         String sActionKeyword = ExcelUtils.getStringValueInCell(numberStep, Constanst.VERIFY_STEP, Constanst.TEST_STEP_SHEET);
-        String dataSetActual =ExcelUtils.getStringValueInCell(numberStep, Constanst.DATA_SET_ACTUAL, Constanst.TEST_STEP_SHEET);
-        String data = getDataSet(dataSetActual);
-        if(!data.equals("")) {
-            params = ExcelUtils.getStringValueInCell(numberStep, Constanst.PARAM_VERIFY_STEP, Constanst.TEST_STEP_SHEET) + "," + data;
-        }else {
-            params = ExcelUtils.getStringValueInCell(numberStep, Constanst.PARAM_VERIFY_STEP, Constanst.TEST_STEP_SHEET);
-        }
-        ExcelUtils.setCellData(data,numberStep, Constanst.DATA_SET_ACTUAL, Constanst.TEST_STEP_SHEET,reportPath);
-
-        if(!sActionKeyword.equals("")){
+        if(!sActionKeyword.equals("")) {
+            String dataSetActual = ExcelUtils.getStringValueInCell(numberStep, Constanst.DATA_SET_ACTUAL, Constanst.TEST_STEP_SHEET);
+            String data = getDataSet(dataSetActual);
+            if (!data.equals("")) {
+                params = ExcelUtils.getStringValueInCell(numberStep, Constanst.PARAM_VERIFY_STEP, Constanst.TEST_STEP_SHEET) + "," + data;
+            } else {
+                params = ExcelUtils.getStringValueInCell(numberStep, Constanst.PARAM_VERIFY_STEP, Constanst.TEST_STEP_SHEET);
+            }
+            ExcelUtils.setCellData(data, numberStep, Constanst.DATA_SET_ACTUAL, Constanst.TEST_STEP_SHEET, reportPath);
             if(result == Constanst.PASS) {
                 expected = getExpectedWithKey(numberStep);
                 description = "Check - " +description;
