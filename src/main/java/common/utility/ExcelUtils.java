@@ -123,7 +123,7 @@ public class ExcelUtils {
             int number = ExcelSheet.getLastRowNum() + 1;
             return number;
         }catch (Throwable e){
-            Log.info("Method getRowContains: sTestCaseID[" + sTestCaseID+"], startTestStep["+startTestStep+"], sheetName["+sheetName+"]");
+            Log.info("Method getTestStepCount: sTestCaseID[" + sTestCaseID+"], startTestStep["+startTestStep+"], sheetName["+sheetName+"]");
             Log.error("Method getTestStepCount | Exception desc : " + e.getMessage());
             onTestCaseFail("Method getTestStepCount | Exception desc : " + e.getMessage());
             return 0;
@@ -141,7 +141,7 @@ public class ExcelUtils {
             int number = ExcelSheet.getLastRowNum() + 1;
             return number;
         }catch (Throwable e){
-            Log.info("Method getRowContains: sTestCaseID[" + value+"], startTestStep["+start+"], sheetName["+sheetName+"]");
+            Log.info("Method getValueCount: sTestCaseID[" + value+"], startTestStep["+start+"], sheetName["+sheetName+"]");
             Log.error("Method getTestStepCount | Exception desc : " + e.getMessage());
             onTestCaseFail("Method getTestStepCount | Exception desc : " + e.getMessage());
             return 0;
@@ -159,7 +159,7 @@ public class ExcelUtils {
             int number = ExcelSheet.getLastRowNum() + 1;*/
             return number;
         }catch (Throwable e){
-            Log.info("Method getRowContains: sTestCaseID[" + value+"], startTestStep["+start+"], sheetName["+sheetName+"]");
+            Log.info("Method getLastByContain: sTestCaseID[" + value+"], startTestStep["+start+"], sheetName["+sheetName+"]");
             Log.error("Method getTestStepCount | Exception desc : " + e.getMessage());
             onTestCaseFail("Method getTestStepCount | Exception desc : " + e.getMessage());
             return 0;
@@ -203,7 +203,7 @@ public class ExcelUtils {
             fileOut.close();
             ExcelBook = new XSSFWorkbook(new FileInputStream(path));
         }catch (Exception e){
-            Log.info("Method getRowContains: result[" + result+"], rowNumber["+rowNumber+"], columnNumber["+columnNumber+"], sheetName["+sheetName+"], path["+path+"]");
+            Log.info("Method setCellData: result[" + result+"], rowNumber["+rowNumber+"], columnNumber["+columnNumber+"], sheetName["+sheetName+"], path["+path+"]");
             Log.error("Method setCellData | Exception desc : " + e.getMessage());
             TestScrip.result = Constanst.FAIL;
         }
@@ -267,6 +267,12 @@ public class ExcelUtils {
         BufferedReader br = new BufferedReader(new InputStreamReader(fis));
         br.close();
         fis.close();
+    }
+    public static void saveFile(String path) throws IOException {
+        FileOutputStream fileOut = new FileOutputStream(path);
+        ExcelBook.write(fileOut);
+        fileOut.close();
+        ExcelBook = new XSSFWorkbook(new FileInputStream(path));
     }
     public static void replaceValueInAnyCell(String value,String key) throws IOException {
         ExcelSheet = ExcelBook.getSheet(Constanst.TEST_STEP_SHEET);

@@ -17,10 +17,6 @@ public class Run {
 
     public static void main(String[] args) throws Exception {
 
-        String start = DateTime.getNow().toString();
-        TelegramBot.sendMessTele("Start: "+start);
-        FileHelpers.writeFile("",Constanst.LIST_FAIL_PATH_FILE+"list_fail.txt");
-
         keyWord = new KeyWordsToActionToVerify();
         method = keyWord.getClass().getMethods();
 
@@ -34,6 +30,10 @@ public class Run {
         ExcelUtils.setExcelFile(scopePath);
         returnFlowScrip();
         resetSumarryStatus();
+
+        String start = DateTime.getNow().toString();
+        TelegramBot.sendMessTele("Start: "+start);
+        FileHelpers.writeFile("",Constanst.LIST_FAIL_PATH_FILE+"list_fail.txt");
 
         int iTotalSuite = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
         Log.info("Total scope : "+iTotalSuite);
@@ -52,12 +52,8 @@ public class Run {
         runOneTime(iOnceTimeTearDown);
         //Log.info("End script: "+DateTime.getNow());
         String end = DateTime.getNow().toString();
-        String fail_list = "";
-        try{
-            fail_list = FileHelpers.readFile(Constanst.LIST_FAIL_PATH_FILE+"list_fail.txt");
-        }catch (Exception e){
-            fail_list =" ALL OF PASS";
-        }
+        String fail_list =FileHelpers.readFile(Constanst.LIST_FAIL_PATH_FILE+"list_fail.txt");
+
         TelegramBot.sendMessTele(fail_list);
         KeyWordsToAction.sleep(1);
         TelegramBot.sendMessTele("End: "+end);

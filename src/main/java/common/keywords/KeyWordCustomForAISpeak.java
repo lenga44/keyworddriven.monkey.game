@@ -105,18 +105,29 @@ public class KeyWordCustomForAISpeak {
     public static void deFindModeRunTestCase(String key,String sheetName,String from, String to)  {
         try{
             ExcelUtils.setExcelFile(TestScrip.reportPath);
-            ExecutorService executor = Executors.newFixedThreadPool(Integer.valueOf(to) -Integer.valueOf(from));
+            ExecutorService executor = Executors.newFixedThreadPool(Integer.valueOf(to) - Integer.valueOf(from));
             String result = getDeFind(key);
             for (int i = Integer.valueOf(from); i <= Integer.valueOf(to); i++) {
-                Runnable runnable = new InsertMultiExcel(result, i, Constanst.RUN_MODE_TEST_CASE, sheetName, TestScrip.reportPath);
-                executor.execute(runnable);
+                    Runnable runnable = new InsertMultiExcel(result, i, Constanst.RUN_MODE_TEST_CASE, sheetName, TestScrip.reportPath);
+                    executor.execute(runnable);
             }
             executor.shutdown();
+            ExcelUtils.saveFile(TestScrip.reportPath);
             ExcelUtils.closeFile(TestScrip.reportPath);
         }catch (Exception e){
             Log.error("deFindModeRunTestCase: "+ e.getMessage());
         }
     }
+   /* public static void deFindModeRunTestCase(String key,String sheetName,String from, String to)  {
+        try{
+            String result = getDeFind(key);
+            for (int i = Integer.valueOf(from); i <= Integer.valueOf(to); i++) {
+                ExcelUtils.setCellData(result, i, Constanst.RUN_MODE_TEST_CASE, sheetName, TestScrip.reportPath);
+            }
+        }catch (Exception e){
+            Log.error("deFindModeRunTestCase: "+ e.getMessage());
+        }
+    }*/
     public static void deFindModeRunTestCase(String key,String sheetName,String from, String to,String exception)  {
         String result = getDeFind(key);
         if(result.equals(Constanst.YES)){

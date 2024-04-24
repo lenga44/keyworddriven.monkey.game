@@ -35,13 +35,9 @@ public class InsertMultiExcel implements Runnable{
                 Cell = Row.createCell(columnNumber);
             }
             Cell.setCellValue(result);
-            FileOutputStream fileOut = new FileOutputStream(path);
-            ExcelBook.write(fileOut);
-           /* fileOut.close();
-            ExcelBook = new XSSFWorkbook(new FileInputStream(path));*/
-        }catch (IOException | POIXMLException e) {
-            Log.info("Method getRowContains: result[" + result+"], rowNumber["+rowNumber+"], columnNumber["+columnNumber+"], sheetName["+sheetName+"], path["+path+"]");
-            Log.error("Method setCellData | Exception desc : " + e.getMessage());
+        }catch (Exception e) {
+            Log.info("Method InsertMultiExcel run: result[" + result+"], rowNumber["+rowNumber+"], columnNumber["+columnNumber+"], sheetName["+sheetName+"], path["+path+"]");
+            Log.error("Method InsertMultiExcel run | Exception desc : " + e.getMessage());
         }
     }
 }

@@ -214,8 +214,6 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
                             }
                         }
                     }
-                    System.out.println("getTexts: " + texts);
-                    System.out.println("getTexts: " + expect);
                 }else {
                     break;
                 }
@@ -450,17 +448,20 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         return sentence;
     }
     public static String getSentenceByText(String locators,String component,String strSplit){
-        String sentence = null;
-        Response response = request(Constanst.SCENE_URL,"//" +locators+"."+component);
-        List<String> list = convertToList(response,"text");
-        for (String text: list) {
-            text = getTextNoColor(locators,component,strSplit);
-            if(text.matches("^[a-z0-9A-Z]{2,25}$")){
-                sentence = sentence + text +" ";
-            }else {
-                sentence = sentence + text +" ";
+        String sentence = "";
+        try {
+            Response response = request(Constanst.SCENE_URL, "//" + locators + "." + component);
+            List<String> list = convertToList(response, "text");
+            for (String text : list) {
+                String str = text;
+                if (str.contains(strSplit)) {
+                    str = str.replace(strSplit, "");
+                }
+                sentence = (sentence.equals("")) ? sentence + str : sentence + " " + str;
             }
+        }catch (Exception e){
+            exception("|getSentenceByText| "+e.getMessage());
         }
-        return sentence;
+        return sentence.trim();
     }
 }

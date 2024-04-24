@@ -50,38 +50,36 @@ public class KeyWordsToAction {
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         return driver;
     }
-
-
     //region ACTION
     public static void sleep(String second)  {
         try {
-            Thread.sleep((long) (Float.parseFloat(second) * 1000));
+            Thread.sleep((Integer.parseInt(second) * 1000L));
             Log.info("Sleep: " +second);
-        }catch (InterruptedException e){
-            exception(e);
+        }catch (Exception e){
+            exception("|sleep String| "+e.getMessage());
         }
     }
     public static void sleep(int second)  {
         try {
-            Thread.sleep (second * 1000);
+            Thread.sleep (second * 1000L);
             Log.info("Sleep: " +second);
-        }catch (InterruptedException e){
-            exception(e);
+        }catch (Exception e){
+            exception("|sleep int| "+e.getMessage());
         }
     }
     public static void sleep(float second)  {
         try {
             Thread.sleep ((long) (second * 1000));
             Log.info("Sleep: " +second);
-        }catch (InterruptedException e){
-            exception(e);
+        }catch (Exception e){
+            exception("|sleep float| "+e.getMessage());
         }
     }
     public static void sleep()  {
         try {
             Thread.sleep((long) (2 * 1000));
-        }catch (InterruptedException e){
-            exception(e);
+        }catch (Exception e){
+            exception("|sleep| "+e.getMessage());
         }
     }
     public static void click(String locator, String property){

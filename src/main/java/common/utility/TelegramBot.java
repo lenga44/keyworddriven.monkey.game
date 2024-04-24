@@ -11,6 +11,7 @@ public class TelegramBot {
     public static void sendMessTele(String message){
         try {
             if (Run.isDataFlow == true) {
+                System.out.println("sendMessTele "+ Run.isDataFlow);
                 // Create URL object
                 URL url = new URL("https://api.telegram.org/bot6113240161:AAHqK7JMEOONJNxFH2ctniwIDmr26HLMRkY" +
                         "/sendMessage?chat_id=@noti_tes&text=" + message);
