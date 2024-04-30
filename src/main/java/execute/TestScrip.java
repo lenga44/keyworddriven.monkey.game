@@ -28,11 +28,12 @@ public class TestScrip {
 
             ExcelUtils.setCellData("",iTestSuite,Constanst.STATUS_SUITE,Constanst.SCOPE_SHEET,scopePath);
             String sRunMode = ExcelUtils.getStringValueInCell(iTestSuite,Constanst.RUN_MODE_SCOPE,Constanst.SCOPE_SHEET);
+            Scope.genFlowLesson(json);
             if(sRunMode.equals(Constanst.YES)) {
                 Log.info("Mode in scope: "+sRunMode);
 
                 tcName = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET);
-                deFindFlowGame(iTestSuite,scopePath);
+                Scope.deFindFlowGame(iTestSuite,scopePath);
                 Log.info("TCS name: "+tcName);
                 tcPath = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.TESTCASE_FILE_PATH)+ tcName + ".xlsx";
                 if(isDataFlow==true) {
@@ -54,40 +55,6 @@ public class TestScrip {
                 ExcelUtils.setExcelFile(scopePath);
                 ExcelUtils.setCellData(tcResult, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
             }
-        }
-    }
-    private static void deFindFlowGame(int row, String path){
-        if(tcName.equals(Constanst.TEST_CASE_GAME_NAME_IN_FLOW))
-        {
-            KeyWordsToAction.sleep("1");
-            returnGame(row,path);
-        }
-    }
-    private static String deFindGame(int row){
-        String course = ExcelUtils.getStringValueInCell(row,Constanst.COURSE_PLAN_COLUM,Constanst.PLAN_SHEET);
-        String game = null;
-        if(course.equals(Constanst.AI_COURSE)){
-            game = KeyWordsToActionToVerify.getAllScene();
-        }else if (course.equals(Constanst.EE_COURSE)){
-            game = KeyWordsToActionToVerify.getCurrentScene();
-        }
-        return game;
-    }
-    private static void returnGame(int row,String path){
-        String games = deFindGame(row);
-        boolean exits = false;
-        for (String game: games.split(",")) {
-            tcName = "Report_" + game;
-            tcPath = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.TESTCASE_FILE_PATH)+ tcName + ".xlsx";
-            if(new File(tcPath).exists()){
-                exits = true;
-                ExcelUtils.setCellData(tcName, row, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET, path);
-                break;
-            }
-        }
-        if (exits == false){
-            tcResult = Constanst.SKIP;
-            ExcelUtils.setCellData(Constanst.NO,row,Constanst.RUN_MODE_SCOPE,Constanst.SCOPE_SHEET,path);
         }
     }
     public static String openScopeFile(String fileName) throws IOException{
@@ -351,16 +318,12 @@ public class TestScrip {
         else
             return ex+Constanst.CHECK_CONTAIN;
     }
-    private static void getActualWithKey(int numberStep,String value){
-        if(isDataFlow ==true && params.contains("$")) {
-            map_key_actual.put(numberStep, value);
-        }
-    }
 
     // endregion verify result after each step
     public static void getLevelFolder(int row)throws IOException{
         String courseFolder = FileHelpers.getRootFolder() + Constanst.REPORT_FILE_PATH;
-        levelFolder = courseFolder +"//" + ExcelUtils.getStringValueInCell(row,Constanst.LEVEL_COLUM,Constanst.PLAN_SHEET);
+        String level = ExcelUtils.getStringValueInCell(row,Constanst.LEVEL_COLUM,Constanst.PLAN_SHEET);
+        levelFolder =(level.contains("$."))? courseFolder +"//" +JsonHandle.getValue(json,level): courseFolder +"//" + level;
         Log.info("levelFolder: "+levelFolder);
         Log.info("Folder path report course: " + FileHelpers.convertPath(levelFolder));
 

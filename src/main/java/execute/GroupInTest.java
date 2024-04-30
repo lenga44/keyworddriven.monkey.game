@@ -12,10 +12,11 @@ public class GroupInTest {
 
     //region COPY TESTCASES
     public static void genTestCaseWhichGroupContain(String json, String reportPath) throws Exception {
+        ExcelUtils.setExcelFile(reportPath);
         ArrayList<String> groups = getGroup();
         int totalGroup = ExcelUtils.getRowCount(Constanst.GROUP_SHEET);
         Map<String,String> mapGroupValue = getValueGroups(json,groups);
-        Map<String,ArrayList<Integer>> mapGroupRange = getRangeGroups(groups);
+        Map<String,ArrayList<Integer>> mapGroupRange = getRangeGroups(groups,Constanst.GROUP_COLLUM_IN_TC_SHEET,Constanst.TESTCASE_SHEET);
         int totalCellInRow = ExcelUtils.getRow(Constanst.TESTCASE_SHEET,1);
         if(totalGroup>0) {
             for (int level : getListLevel(totalGroup)) {
@@ -69,7 +70,7 @@ public class GroupInTest {
         return list;
     }
 
-    private static void copyTestCasesWithGroup(ArrayList<Integer> ranges, int loop, String reportPath,int totalCell) throws Exception {
+    public static void copyTestCasesWithGroup(ArrayList<Integer> ranges, int loop, String reportPath,int totalCell) throws Exception {
         int first = ranges.get(0);
         int last = ranges.get(1) + 1;
         int countRow = last - first;
@@ -87,7 +88,7 @@ public class GroupInTest {
             last = first + countRow;
         }
     }
-    private static void copyTestCasesWithGroupSubLevel(ArrayList<Integer> ranges, int loop, String reportPath,int totalCell) throws Exception {
+    public static void copyTestCasesWithGroupSubLevel(ArrayList<Integer> ranges, int loop, String reportPath,int totalCell) throws Exception {
         int first = ranges.get(0);
         int last = ranges.get(1) + 1;
         int countRow = last - first;
@@ -207,7 +208,7 @@ public class GroupInTest {
         }
         return map;
     }
-    private static ArrayList<Integer> getListLevel(int totalGroup){
+    public static ArrayList<Integer> getListLevel(int totalGroup){
         Map<String,Integer> map = mapGroupLevel(totalGroup);
         ArrayList<Integer> list = new ArrayList<>();
         for (String group: map.keySet()) {
@@ -218,7 +219,7 @@ public class GroupInTest {
         Collections.sort(list);
         return list;
     }
-    private static ArrayList<String> getGroupWithLeve(int totalGroup,int level){
+    public static ArrayList<String> getGroupWithLeve(int totalGroup,int level){
         Map<String,Integer> map = mapGroupLevel(totalGroup);
         ArrayList<String > list = new ArrayList<>();
         for (String group: map.keySet()) {
@@ -227,12 +228,12 @@ public class GroupInTest {
         }
         return list;
     }
-    private static Map<String,ArrayList<Integer>> getRangeGroups(ArrayList<String> groups){
+    public static Map<String,ArrayList<Integer>> getRangeGroups(ArrayList<String> groups,int colum,String sheetName){
         Map<String,ArrayList<Integer>> map = new HashMap<>();
         if(groups.size()>0){
             for (String group:groups) {
-                int first = ExcelUtils.getRowContains(group,Constanst.GROUP_COLLUM_IN_TC_SHEET,Constanst.TESTCASE_SHEET);
-                int last = ExcelUtils.getLastByContain(Constanst.TESTCASE_SHEET,group,first,Constanst.GROUP_COLLUM_IN_TC_SHEET);
+                int first = ExcelUtils.getRowContains(group,colum,sheetName);
+                int last = ExcelUtils.getLastByContain(sheetName,group,first,colum);
                 ArrayList<Integer> list = new ArrayList<>();
                 list.add(first);
                 list.add(last);
@@ -242,17 +243,7 @@ public class GroupInTest {
         }
         return map;
     }
-    private static ArrayList<Integer> getRangeByGroup(ArrayList<String> groups, String group){
-        Map<String,ArrayList<Integer>> map = getRangeGroups(groups);
-        ArrayList<Integer> list = new ArrayList<>();
-        for (String name: map.keySet()) {
-            if(name.equals(group)){
-                list=map.get(name);
-            }
-        }
-        return list;
-    }
-    private static Map<String,String> getValueGroups(String json,ArrayList<String> groups){
+    public static Map<String,String> getValueGroups(String json,ArrayList<String> groups){
         Map<String,String> map = new HashMap<>();
         for(int i =0;i<groups.size();i++){
             map.put(groups.get(i), JsonHandle.getValue(json,ExcelUtils.getStringValueInCell(i+1,Constanst.GROUP_VALUE_COLLUM,Constanst.GROUP_SHEET)));
