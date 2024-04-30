@@ -142,6 +142,11 @@ public class TestScrip {
             params = params.replace("$.path",locator);
             ExcelUtils.setCellData(params,row,colum,Constanst.TEST_STEP_SHEET,reportPath);
         }
+        if(params.contains("$.index")){
+            String index = FileHelpers.getValueVariableFile("index");
+            params = params.replace("$.index",index);
+            ExcelUtils.setCellData(params,row,colum,Constanst.TEST_STEP_SHEET,reportPath);
+        }
         ArrayList<Object> objs = new ArrayList<>();
         if (!params.equals("")&& !params.equals(null)) {
             if (params.contains(",")) {
@@ -311,6 +316,10 @@ public class TestScrip {
             ex = ex.replace(Constanst.CHECK_CONTAIN,"");
         }
         if(isDataFlow ==true && ex.contains("$")) {
+            if(ex.contains("$.index")){
+                String index = FileHelpers.getValueVariableFile("index");
+                ExcelUtils.setCellData(ex.replace("$.index",index),numberStep,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET,reportPath);
+            }
             String value = JsonHandle.getValue(json, ex);
             ExcelUtils.setCellData(value,numberStep,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET,reportPath);
             return value+Constanst.CHECK_CONTAIN;

@@ -223,7 +223,7 @@ public class KeyWordsToAction {
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.PATH_GAME_OBJECT,locator+index+plusStr);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
-    public static void returnIndex(String locator, String component,String key,String expected) throws IOException {
+    public static void setIndexVariableFile(String locator, String component,String key,String expected) throws IOException {
         waitForObject(locator);
         int index = 0;
         Response response = request(Constanst.SCENE_URL,"//"+locator+"."+component);
@@ -239,6 +239,14 @@ public class KeyWordsToAction {
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,value);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
+    public static void setIndexVariableFile(int value) throws IOException {
+        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,String.valueOf(value));
+    }
+    public static void addIndexVariableFile(int add) throws IOException {
+        String  value = JsonHandle.getValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"$.index").toString();
+        String index = String.valueOf(Integer.valueOf(value)+add);
+        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,index);
+    }
     public static void press(String locator){
         request(Constanst.POINTER_URL,".Press("+getAbsolutePath(locator,"0")+")");
     }
@@ -253,11 +261,6 @@ public class KeyWordsToAction {
             absolutePath = absolutePath.replace(":","!_!");
         request(Constanst.POINTER_URL,".Press("+absolutePath+","+index+")");
     }
-    /*public static void swipeToLeft(String number){
-        for(int i = 0; i<Integer.valueOf(number);i++){
-            request(Constanst.SIMULATE_URL,Constanst.DRAG_ACTION + "(1000,500,100,500,0.5)");
-        }
-    }*/
     public static void drag(String locator1, String locator2){
         for(int i = 0; i<2;i++) {
             request(Constanst.POINTER_URL, Constanst.DRAG_ACTION + "(" + locator1 + "," + locator2 + ")");

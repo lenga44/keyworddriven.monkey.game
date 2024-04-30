@@ -47,7 +47,7 @@ public class Constanst {
     public static final int PASS_PLAN_COLUM = 8;
     public static final int FAIL_PLAN_COLUM = 9;
     public static final int DATA_PLAN_COLUM = 6;
-    public static final int COURSE_PLAN_COLUM = 8;
+    public static final int COURSE_PLAN_COLUM = 7;
     public static final String EE_COURSE = "EE";
     public static final String LRC_COURSE = "LRC";
     public static final String AI_COURSE = "AI_Speak";

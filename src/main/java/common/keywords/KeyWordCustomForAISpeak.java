@@ -209,4 +209,8 @@ public class KeyWordCustomForAISpeak {
             ExcelUtils.setCellData(Constanst.NO, Integer.parseInt(to), Constanst.RUN_MODE_TEST_CASE, sheetName, TestScrip.reportPath);
         }
     }
+
+    public static String getGame() {
+        return "Report_";
+    }
 }
