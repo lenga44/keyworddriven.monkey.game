@@ -49,6 +49,12 @@ public class JsonHandle {
         jsonObject.addProperty(key,property);
         FileHelpers.writeFile(jsonObject.toString(),path);
     }
+    public static void setValueInJsonObject(String path,String key,int property) throws IOException{
+        String json = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
+        JsonObject jsonObject = JsonParser.parseString(json).getAsJsonObject();
+        jsonObject.addProperty(key,property);
+        FileHelpers.writeFile(jsonObject.toString(),path);
+    }
 
     public static JsonObject getJsonObject(String path) throws IOException{
         String json = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);

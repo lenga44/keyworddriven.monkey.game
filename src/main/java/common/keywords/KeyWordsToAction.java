@@ -448,15 +448,17 @@ public class KeyWordsToAction {
             do {
                 response = request(Constanst.SCENE_URL, "//" + locator);
                 if(response!=null) {
-                    JsonPath json = response.jsonPath();
-                    if (json != null && json.toString() != "") {
-                        value = convert(response, key);
-                        if (value != null) {
-                            if (value.toLowerCase().contains(content.toLowerCase()))
-                                break;
+                    if (convert(response, "activeInHierarchy") == "true") {
+                        JsonPath json = response.jsonPath();
+                        if (json != null && json.toString() != "") {
+                            value = convert(response, key);
+                            if (value != null) {
+                                if (value.toLowerCase().contains(content.toLowerCase()))
+                                    break;
+                            }
                         }
-                        Thread.sleep(500);
                     }
+                Thread.sleep(500);
                 }
                 time = LocalDateTime.now();
             } while (time.compareTo(time1) <= 0);

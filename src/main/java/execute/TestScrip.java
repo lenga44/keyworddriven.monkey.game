@@ -316,10 +316,8 @@ public class TestScrip {
             ex = ex.replace(Constanst.CHECK_CONTAIN,"");
         }
         if(isDataFlow ==true && ex.contains("$")) {
-            if(ex.contains("$.index")){
-                String index = FileHelpers.getValueVariableFile("index");
-                ExcelUtils.setCellData(ex.replace("$.index",index),numberStep,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET,reportPath);
-            }
+            ex = getVariableValue(ex,"$.index",numberStep);
+            ex = getVariableValue(ex,"$.activity",numberStep);
             String value = JsonHandle.getValue(json, ex);
             ExcelUtils.setCellData(value,numberStep,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET,reportPath);
             return value+Constanst.CHECK_CONTAIN;
@@ -327,7 +325,14 @@ public class TestScrip {
         else
             return ex+Constanst.CHECK_CONTAIN;
     }
-
+    private static String getVariableValue(String ex, String key,int row){
+        if(ex.contains(key)){
+            String index = JsonHandle.getValue(ex,key);
+            ex = ex.replace(key,index);
+            ExcelUtils.setCellData(ex,row,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET,reportPath);
+        }
+        return ex;
+    }
     // endregion verify result after each step
     public static void getLevelFolder(int row)throws IOException{
         String courseFolder = FileHelpers.getRootFolder() + Constanst.REPORT_FILE_PATH;

@@ -101,6 +101,7 @@ public class Scope {
                 ExcelUtils.setCellData(stt+1,from,Constanst.STT_COLUM,Constanst.SCOPE_SHEET,Constanst.SCOPE_FILE_PATH);
                 ExcelUtils.closeFile(Constanst.SCOPE_FILE_PATH);
             }
+            JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"activity",i);
             first = last;
             last = first + countRow;
         }
@@ -119,6 +120,7 @@ public class Scope {
                 ExcelUtils.setCellData(stt+1,from,Constanst.STT_COLUM,Constanst.SCOPE_SHEET,Constanst.SCOPE_FILE_PATH);
                 ExcelUtils.closeFile(Constanst.SCOPE_FILE_PATH);
             }
+            JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"activity",i);
             first = last;
             last = first + countRow;
         }
