@@ -52,9 +52,9 @@ public class ExcelUtils {
             String cellData = Cell.getStringCellValue();
             return cellData;
         } catch (Throwable e) {
-            Log.info("Method getCellData: rowNumber[" + rowNumber+"], columnNumber["+columnNumber+"], sheetName["+sheetName+"]");
-            Log.error("Method getCellData | Exception desc : " + e.getMessage());
-            onTestCaseFail("Method getCellData | Exception desc : " + e.getMessage());
+            Log.info("Method getStringValueInCell: rowNumber[" + rowNumber+"], columnNumber["+columnNumber+"], sheetName["+sheetName+"]");
+            Log.error("Method getStringValueInCell | Exception desc : " + e.getMessage());
+            onTestCaseFail("Method getStringValueInCell | Exception desc : " + e.getMessage());
             return "";
         }
     }

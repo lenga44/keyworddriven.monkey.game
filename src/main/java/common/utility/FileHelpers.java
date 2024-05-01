@@ -84,7 +84,7 @@ public class FileHelpers {
         }
     }
     public static String readFile(String path){
-        String json = null;
+        String json = "";
         try {
             File file = new File(path);
             FileInputStream fis = new FileInputStream(file);

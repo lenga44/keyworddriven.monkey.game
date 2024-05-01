@@ -32,7 +32,7 @@ public class Run {
         resetSumarryStatus();
 
         String start = DateTime.getNow().toString();
-        TelegramBot.sendMessTele("Start: "+start);
+        //TelegramBot.sendMessTele("Start: "+start);
         FileHelpers.writeFile("",Constanst.LIST_FAIL_PATH_FILE+"list_fail.txt");
 
         int iTotalSuite = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
@@ -54,9 +54,9 @@ public class Run {
         String end = DateTime.getNow().toString();
         String fail_list =FileHelpers.readFile(Constanst.LIST_FAIL_PATH_FILE+"list_fail.txt");
 
-        TelegramBot.sendMessTele(fail_list);
+        //TelegramBot.sendMessTele(fail_list);
         KeyWordsToAction.sleep(1);
-        TelegramBot.sendMessTele("End: "+end);
+        //TelegramBot.sendMessTele("End: "+end);
     }
     private static void runOneTime(int iOnceTime) throws Exception {
         Log.info("runOneTime " +iOnceTime);

@@ -1,13 +1,11 @@
 package execute;
 
-import common.keywords.KeyWordCustomForAISpeak;
 import common.keywords.KeyWordsToAction;
 import common.keywords.KeyWordsToActionToVerify;
 import common.utility.*;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +21,7 @@ public class Scope {
     }
     private static String deFindGame(int row){
         String course = ExcelUtils.getStringValueInCell(row,Constanst.COURSE_PLAN_COLUM,Constanst.PLAN_SHEET);
+        System.out.println("Course___ "+course);
         String game = null;
         if(course.equals(Constanst.AI_COURSE)){
             game = KeyWordsToActionToVerify.getAllScene();
@@ -32,9 +31,9 @@ public class Scope {
         return game;
     }
     private static void returnGame(int row,String path){
-        String games = deFindGame(row);
         boolean exits = false;
-        for (String game: games.split(",")) {
+        String games = deFindGame(row).replace("[","").replace("]","");
+        for (String game: games.split(", ")) {
             TestScrip.tcName = "Report_" + game;
             TestScrip.tcPath = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.TESTCASE_FILE_PATH)+ TestScrip.tcName + ".xlsx";
             if(new File(TestScrip.tcPath).exists()){
@@ -48,44 +47,47 @@ public class Scope {
             ExcelUtils.setCellData(Constanst.NO,row,Constanst.RUN_MODE_SCOPE,Constanst.SCOPE_SHEET,path);
         }
     }
-    public static void genFlowLesson(String json) throws Exception {
-        ExcelUtils.setExcelFile(Constanst.SCOPE_FILE_PATH);
-        try {
-            ArrayList<String> groups = getGroup();
-            int totalGroup = ExcelUtils.getRowCount(Constanst.GROUP_SHEET);
-            Map<String, String> mapGroupValue = getValueGroups(json, groups);
-            Map<String, ArrayList<Integer>> mapGroupRange = getRangeGroups(groups,Constanst.GROUP_COLLUM_IN_SCOPE_SHEET,Constanst.SCOPE_SHEET);
-            if (totalGroup > 0) {
-                for (int level : getListLevel(totalGroup)) {
-                    for (String groupName : getGroupWithLeve(totalGroup, level)) {
-                        ArrayList<Integer> ranges = mapGroupRange.get(groupName);
-                        if (level > 1) {
-                            List<Integer> list = LogicHandle.convertToArrayListInt(mapGroupValue.get(groupName));
-                            int rowInsert = 0;
-                            if (!list.equals(null)) {
-                                for (int i = 0; i < list.size(); i++) {
-                                    int loop = list.get(i);
-                                    if (loop > 10) {
-                                        loop = 10;
+    public static void genFlowLesson(int row,String json) throws Exception {
+        ExcelUtils.setExcelFile(FileHelpers.getRootFolder()+FileHelpers.getValueConfig(Constanst.SCOPE_FILE_PATH));
+        if(!ExcelUtils.getStringValueInCell(row,Constanst.GROUP_COLUM_IN_SCOPE_SHEET,Constanst.SCOPE_SHEET).equals("")) {
+            try {
+                ArrayList<String> groups = getGroup();
+                int totalGroup = ExcelUtils.getRowCount(Constanst.GROUP_SHEET);
+                Map<String, String> mapGroupValue = getValueGroups(json, groups);
+                Map<String, ArrayList<Integer>> mapGroupRange = getRangeGroups(groups, Constanst.GROUP_COLUM_IN_SCOPE_SHEET, Constanst.SCOPE_SHEET);
+                if (totalGroup > 0) {
+                    for (int level : getListLevel(totalGroup)) {
+                        for (String groupName : getGroupWithLeve(totalGroup, level)) {
+                            ArrayList<Integer> ranges = mapGroupRange.get(groupName);
+                            if (level > 1) {
+                                List<Integer> list = LogicHandle.convertToArrayListInt(mapGroupValue.get(groupName));
+                                int rowInsert = 0;
+                                if (!list.equals(null)) {
+                                    for (int i = 0; i < list.size(); i++) {
+                                        int loop = list.get(i);
+                                        if (loop > 10) {
+                                            loop = 10;
+                                        }
+                                        ArrayList<Integer> listRange = getListRangeByGroup(rowInsert, groupName, ranges);
+                                        copyTestSuiteWithGroupSubLevel(listRange, loop, Constanst.TOTAL_CELL_SCOPE_SHEET);
+                                        rowInsert = listRange.get(0) + loop + 1;
                                     }
-                                    ArrayList<Integer> listRange = getListRangeByGroup(rowInsert, groupName, ranges);
-                                    copyTestSuiteWithGroupSubLevel(listRange, loop, Constanst.TOTAL_CELL_SCOPE_SHEET);
-                                    rowInsert = listRange.get(0) + loop + 1;
                                 }
+                            } else {
+                                int loop = Integer.valueOf(mapGroupValue.get(groupName));
+                                copyTestSuiteWithGroup(ranges, loop, Constanst.TOTAL_CELL_SCOPE_SHEET);
+                                int totalRow = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
+                                //ExcelUtils.deleteRow(totalRow - 1, Constanst.SCOPE_SHEET);
                             }
-                        } else {
-                            int loop = Integer.valueOf(mapGroupValue.get(groupName));
-                            copyTestSuiteWithGroup(ranges, loop, Constanst.TOTAL_CELL_SCOPE_SHEET);
-                            int totalRow = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
-                            ExcelUtils.deleteRow(totalRow - 1, Constanst.TESTCASE_SHEET);
                         }
                     }
                 }
+            } catch (Exception e) {
+                Log.error("|genFlowLesson| " + e.getMessage());
+                e.printStackTrace();
             }
-            ExcelUtils.closeFile(Constanst.SCOPE_FILE_PATH);
-        }catch (Exception e){
-            Log.error("|genFlowLesson| "+e.getMessage());
         }
+        ExcelUtils.closeFile(FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.SCOPE_FILE_PATH));
     }
     public static void copyTestSuiteWithGroup(ArrayList<Integer> ranges, int loop,int totalCell) throws Exception {
         int first = ranges.get(0);

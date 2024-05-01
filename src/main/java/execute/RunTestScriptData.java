@@ -23,12 +23,12 @@ public class RunTestScriptData extends TestScrip{
             int begin = ExcelUtils.getNumberValueInCell(1, Constanst.BEGIN_INDEX_COLUM, Constanst.PLAN_SHEET);
             int end = ExcelUtils.getNumberValueInCell(1, Constanst.END_INDEX_COLUM, Constanst.PLAN_SHEET);
             Log.info("Run data from " + begin + " to " + end);
-            getLevelFolder(1);
 
             for (int index = begin; index <= end; index++) {
 
                 //get node need check
                 json = JsonHandle.getObjectInJsonData(index - 1);
+                getLevelFolder(1);
                 ExcelUtils.setExcelFile(scopePath);
                 ExcelUtils.setCellData(index, 1, Constanst.CURRENT_INDEX_COLUM, Constanst.PLAN_SHEET, scopePath);
                 String key = ExcelUtils.getStringValueInCell(1, Constanst.DATA_PLAN_COLUM, Constanst.PLAN_SHEET);
@@ -39,7 +39,6 @@ public class RunTestScriptData extends TestScrip{
                 }else {
                     reportName = getDataSet(key);
                 }
-                System.out.println(reportPath);
                 //execute tc
                 execute_suites(scopePath, iTestSuit, iTotalSuite);
                 EndTestScript.saveReportToFailListFile(reportPath,scopePath);

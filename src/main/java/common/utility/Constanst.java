@@ -34,12 +34,12 @@ public class Constanst {
     public static final String TESTCASE_FILE_PATH = "testcase_path";
     public static final String LOG_FILE_PATH = "\\tool_test_game\\config\\logging.txt";
     public static final String CONFIG_FILE_PATH = "\\tool_test_game\\config\\config.json";
-    public static final String REPORT_FILE_PATH = "\\tool_test_game\\config\\report\\";
+    public static final String REPORT_FILE_PATH = "\\tool_test_game\\config\\report";
     public static final String ONCE_TIME_KEY = "OnceTime";
     public static final int TOTAL_CELL_SCOPE_SHEET = 5;
     public static final int STT_COLUM = 0;
-    public static final int GROUP_COLLUM_IN_SCOPE_SHEET = 4;
-    public static final int INDEX_COLUM_SCOPE_SHEET = 5;
+    public static final int GROUP_COLUM_IN_SCOPE_SHEET = 4;
+    public static final int GROUP_ID_COLUM_IN_SCOPE = 5;
 
     //region PLAN
     public static final String MODULE_FLOW = "Module";
@@ -140,4 +140,6 @@ public class Constanst {
     //region file report file
     public static final int FAIL_REPORT_COLUM = 9;
     //endregion
+    public static final String PAUSE_PROGRAM_URL = ".pause()";
+    public static final String RESUME_PROGRAM_URL = ".resume()";
 }

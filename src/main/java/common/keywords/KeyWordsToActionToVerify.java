@@ -169,13 +169,13 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         RequestSpecification request = given();
         request.baseUri(Constanst.STATUS_URL);
         Response response = request.get();
-        return response.jsonPath().get("Scene");
+        return convert(response,"Scene");
     }
     public static String getAllScene(){
         RequestSpecification request = given();
         request.baseUri(Constanst.ALL_SCENE);
         Response response = request.get();
-        return response.jsonPath().get("name").toString().replace("[","").replace("]","");
+        return convert(response,"name");
     }
     public static String getText(String locator,String component){
         try {

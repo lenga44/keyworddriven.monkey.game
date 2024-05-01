@@ -120,7 +120,7 @@ public class GroupInTest {
                 totalRowTestStep = ExcelUtils.getRowCount(Constanst.TEST_STEP_SHEET);
                 copyRowByTC(map, tcID, path,totalRowTestStep);
             }
-            ExcelUtils.deleteRow(ExcelUtils.getRowCount(Constanst.TEST_STEP_SHEET),Constanst.TEST_STEP_SHEET);
+            //ExcelUtils.deleteRow(ExcelUtils.getRowCount(Constanst.TEST_STEP_SHEET),Constanst.TEST_STEP_SHEET);
             ExcelUtils.closeFile(path);
         }catch (Exception e){
             e.printStackTrace();

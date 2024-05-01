@@ -5,8 +5,12 @@ import com.google.gson.JsonObject;
 import common.utility.*;
 import execute.RunTestScriptData;
 import execute.TestScrip;
+import io.restassured.response.Response;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -212,5 +216,69 @@ public class KeyWordCustomForAISpeak {
 
     public static String getGame() {
         return "Report_";
+    }
+    public static void changeModeTC(String methodName,String locator, String component,String tcRow,String expect) throws InvocationTargetException, IllegalAccessException {
+        String level = runMethod(methodName,locator,component);
+        String expected = expect;
+        if(expected.contains("$.")) {
+            expected = JsonHandle.getValue(RunTestScriptData.json, expect);
+        }
+        if(level.toLowerCase().equals(expected.toLowerCase())){
+            ExcelUtils.setCellData(Constanst.NO,Integer.valueOf(tcRow),Constanst.RUN_MODE_TEST_CASE, Constanst.TESTCASE_SHEET, TestScrip.reportPath);
+        }else {
+            ExcelUtils.setCellData(Constanst.YES,Integer.valueOf(tcRow),Constanst.RUN_MODE_TEST_CASE, Constanst.TESTCASE_SHEET, TestScrip.reportPath);
+        }
+    }
+    public static void changeModeTCSetTrue(String actual,String tcRow,String expect) {
+        String expected = JsonHandle.getValue(RunTestScriptData.json,expect);
+        String actual1 = actual;
+        if(actual1.contains("$.")) {
+            if (actual1.contains("$.index")) {
+                actual1 = FileHelpers.getValueVariableFile("$.index");
+            } else {
+                actual1 = JsonHandle.getValue(RunTestScriptData.json,actual);
+            }
+        }
+        if(actual1.toLowerCase().equals(expected.toLowerCase())){
+            ExcelUtils.setCellData(Constanst.YES,Integer.valueOf(tcRow),Constanst.RUN_MODE_TEST_CASE, Constanst.TESTCASE_SHEET, TestScrip.reportPath);
+        }else {
+            ExcelUtils.setCellData(Constanst.NO,Integer.valueOf(tcRow),Constanst.RUN_MODE_TEST_CASE, Constanst.TESTCASE_SHEET, TestScrip.reportPath);
+        }
+    }
+    public static void changeModeTCSetFAIL(String actual,String tcRow,String expect) {
+        String expected = JsonHandle.getValue(RunTestScriptData.json,expect);
+        String actual1 = actual;
+        if(actual1.contains("$.")) {
+            if (actual1.contains("$.index")) {
+                actual1 = FileHelpers.getValueVariableFile("$.index");
+            } else {
+                actual1 = JsonHandle.getValue(RunTestScriptData.json,actual);
+            }
+        }
+        if(actual1.toLowerCase().equals(expected.toLowerCase())){
+            ExcelUtils.setCellData(Constanst.NO,Integer.valueOf(tcRow),Constanst.RUN_MODE_TEST_CASE, Constanst.TESTCASE_SHEET, TestScrip.reportPath);
+        }else {
+            ExcelUtils.setCellData(Constanst.TRUE,Integer.valueOf(tcRow),Constanst.RUN_MODE_TEST_CASE, Constanst.TESTCASE_SHEET, TestScrip.reportPath);
+        }
+    }
+    private static String runMethod(String methodName,String locator, String component) throws InvocationTargetException, IllegalAccessException {
+        String result = "";
+        ArrayList<Object> objs = new ArrayList<>();
+        objs.add(locator);
+        objs.add(component);
+        Method method[];
+        KeyWordsToActionToVerify keyWord = new KeyWordsToActionToVerify();
+        method = keyWord.getClass().getMethods();
+        for (int i = 0; i < method.length; i++) {
+            if(method[i].getName().equals(methodName)){
+                if(method[i].getReturnType().equals("String")) {
+                    result = (String) method[i].invoke(keyWord, objs);
+                }else {
+                    method[i].invoke(keyWord, objs);
+                }
+                break;
+            }
+        }
+        return result;
     }
 }

@@ -23,18 +23,18 @@ public class TestScrip {
     //region SCOPE
     public static void execute_suites(String scopePath,int iTestSuite, int iTotalSuite) throws Exception {
         Log.info("execute_suites");
+        List<String> flow = new ArrayList<>();
+        List<String> reports = new ArrayList<>();
         ExcelUtils.setExcelFile(scopePath);
         for (;iTestSuite<=iTotalSuite;iTestSuite++){
-
             ExcelUtils.setCellData("",iTestSuite,Constanst.STATUS_SUITE,Constanst.SCOPE_SHEET,scopePath);
             String sRunMode = ExcelUtils.getStringValueInCell(iTestSuite,Constanst.RUN_MODE_SCOPE,Constanst.SCOPE_SHEET);
-            Scope.genFlowLesson(json);
+            tcName = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET);
+            System.out.println("TC name: "+tcName);
+            Scope.genFlowLesson(iTestSuite,json);
             if(sRunMode.equals(Constanst.YES)) {
-                Log.info("Mode in scope: "+sRunMode);
-
-                tcName = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET);
-                Scope.deFindFlowGame(iTestSuite,scopePath);
-                Log.info("TCS name: "+tcName);
+                Scope.deFindFlowGame(1,scopePath);
+                flow.add(tcName);
                 tcPath = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.TESTCASE_FILE_PATH)+ tcName + ".xlsx";
                 if(isDataFlow==true) {
                     reportPath = GenerateReport.genTCReport(levelFolder, reportName);
@@ -46,16 +46,20 @@ public class TestScrip {
                 if(isDataFlow ==true) {
                     int group = GroupInTest.getGroup().size();
                     if (group > 0) {
+                        KeyWordsToAction.pause();
                         ExcelUtils.createRowLastest(iTotalTestCase, Constanst.TESTCASE_SHEET, reportPath);
                         GroupInTest.genTestCaseWhichGroupContain(json, reportPath);
                         GroupInTest.genTestStepFollowTestCase(reportPath);
+                        KeyWordsToAction.resume();
                     }
                 }
+                reports.add(reportPath);
                 execute_testcases(iTotalTestCase);
                 ExcelUtils.setExcelFile(scopePath);
                 ExcelUtils.setCellData(tcResult, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
             }
         }
+        FileHelpers.writeFile(flow.toString(),RunTestScriptData.reportPath.replace(".xlsx",".txt"));
     }
     public static String openScopeFile(String fileName) throws IOException{
         Log.info("fileName "+fileName);
@@ -192,7 +196,7 @@ public class TestScrip {
         }
     }
     public static String getDataSet(String key){
-        String value = null;
+        String value = "";
         if(key.contains("$")&& !json.equals(null)) {
             value = JsonHandle.getValue(json, key);
         }else

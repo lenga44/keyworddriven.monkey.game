@@ -3,6 +3,7 @@ package common.keywords;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import common.utility.*;
+import execute.Run;
 import execute.TestScrip;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
@@ -14,6 +15,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -239,8 +241,8 @@ public class KeyWordsToAction {
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,value);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
-    public static void setIndexVariableFile(int value) throws IOException {
-        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,String.valueOf(value));
+    public static void setIndexVariableFile(String value) throws IOException {
+        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,value);
     }
     public static void addIndexVariableFile(int add) throws IOException {
         String  value = JsonHandle.getValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"$.index").toString();
@@ -813,6 +815,22 @@ public class KeyWordsToAction {
     public static void setRunModeTC(String from, String to,String sheetName) throws IOException{
         KeyWordCustomForAISpeak.setRunModeTC(from,to,sheetName);
     }
+    public static void changeTCModeYes(String tsRow,String tcRow){
+        String result = ExcelUtils.getStringValueInCell(Integer.valueOf(tsRow),Constanst.RESULT,Constanst.TEST_STEP_SHEET);
+        if(result.equals(Constanst.PASS)){
+            ExcelUtils.setCellData(Constanst.YES,Integer.valueOf(tcRow),Constanst.TESTCASE_STATUS,Constanst.TESTCASE_SHEET, TestScrip.reportPath);
+        }else {
+            ExcelUtils.setCellData(Constanst.NO,Integer.valueOf(tcRow),Constanst.TESTCASE_STATUS,Constanst.TESTCASE_SHEET, TestScrip.reportPath);
+        }
+    }
+    public static void changeTCModeNo(String tsRow,String tcRow){
+        String result = ExcelUtils.getStringValueInCell(Integer.valueOf(tsRow),Constanst.RESULT,Constanst.TEST_STEP_SHEET);
+        if(result.equals(Constanst.PASS)){
+            ExcelUtils.setCellData(Constanst.NO,Integer.valueOf(tcRow),Constanst.TESTCASE_STATUS,Constanst.TESTCASE_SHEET, TestScrip.reportPath);
+        }else {
+            ExcelUtils.setCellData(Constanst.YES,Integer.valueOf(tcRow),Constanst.TESTCASE_STATUS,Constanst.TESTCASE_SHEET, TestScrip.reportPath);
+        }
+    }
     //endregion
 
     //region Send Message telegram
@@ -824,5 +842,20 @@ public class KeyWordsToAction {
     public static void ignoreScript(String number,String to,String sheetName, String text){
         KeyWordCustomForAISpeak.ignoreScript(number,to,sheetName,text);
     }
+    public static void changeModeTC(String methodName,String locator, String component,String tcRow,String expect) throws InvocationTargetException, IllegalAccessException {
+        KeyWordCustomForAISpeak.changeModeTC(methodName,locator,component,tcRow,expect);
+    }
+    public static void changeModeTCSetFail(String actual,String tcRow,String expect) {
+        KeyWordCustomForAISpeak.changeModeTCSetFAIL(actual,tcRow,expect);
+    }
+    public static void changeModeTCSetTrue(String actual,String tcRow,String expect) {
+        KeyWordCustomForAISpeak.changeModeTCSetTrue(actual,tcRow,expect);
+    }
     //endregion
+    public static void pause(){
+        request(Constanst.POINTER_URL,Constanst.PAUSE_PROGRAM_URL);
+    }
+    public static void resume(){
+        request(Constanst.POINTER_URL,Constanst.RESUME_PROGRAM_URL);
+    }
 }
