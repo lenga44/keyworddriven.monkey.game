@@ -32,7 +32,7 @@ public class Run {
         resetSumarryStatus();
 
         String start = DateTime.getNow().toString();
-        //TelegramBot.sendMessTele("Start: "+start);
+        TelegramBot.sendMessTele("Start: "+start);
         FileHelpers.writeFile("",Constanst.LIST_FAIL_PATH_FILE+"list_fail.txt");
 
         int iTotalSuite = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
@@ -52,11 +52,11 @@ public class Run {
         runOneTime(iOnceTimeTearDown);
         //Log.info("End script: "+DateTime.getNow());
         String end = DateTime.getNow().toString();
-        String fail_list =FileHelpers.readFile(Constanst.LIST_FAIL_PATH_FILE+"list_fail.txt");
-
-        //TelegramBot.sendMessTele(fail_list);
+        String fail_list =FileHelpers.readFile(Constanst.LIST_FAIL_PATH_FILE+"list_fail.txt","PASS");
+        System.out.println(fail_list);
+        TelegramBot.sendMessTele(fail_list);
         KeyWordsToAction.sleep(1);
-        //TelegramBot.sendMessTele("End: "+end);
+        TelegramBot.sendMessTele("End: "+end);
     }
     private static void runOneTime(int iOnceTime) throws Exception {
         Log.info("runOneTime " +iOnceTime);
@@ -94,11 +94,11 @@ public class Run {
         Log.info("iLastTestSuit: "+iLastTestSuit);
     }
     private static void runModuleFlow(int iTestSuit,int iTotalSuite) throws Exception {
-        runTestScriptModule.run(scopePath,iTestSuit,iTotalSuite);
+        RunTestScriptModule.run(scopePath,iTestSuit,iTotalSuite);
     }
     @Deprecated
     private static void runDataFlow(int iTestSuit,int iTotalSuite) throws Exception {
-        runTestScriptData.run(scopePath,iTestSuit,iTotalSuite);
+        RunTestScriptData.run(scopePath,iTestSuit,iTotalSuite);
     }
     private static void returnFlowScrip(){
         String flow = ExcelUtils.getStringValueInCell(1,Constanst.FLOW_COLUM,Constanst.PLAN_SHEET);

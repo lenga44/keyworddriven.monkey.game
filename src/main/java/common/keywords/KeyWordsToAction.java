@@ -242,11 +242,12 @@ public class KeyWordsToAction {
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
     public static void setIndexVariableFile(String value) throws IOException {
-        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,value);
+        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,Integer.parseInt(value));
     }
-    public static void addIndexVariableFile(int add) throws IOException {
-        String  value = JsonHandle.getValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"$.index").toString();
-        String index = String.valueOf(Integer.valueOf(value)+add);
+    public static void addIndexVariableFile(String add) throws IOException {
+        Log.info("addIndexVariableFile");
+        String  value = JsonHandle.getValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"index").toString();
+        int index = Integer.parseInt(value)+Integer.parseInt(add);
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,index);
     }
     public static void press(String locator){

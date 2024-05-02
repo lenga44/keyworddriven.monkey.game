@@ -42,6 +42,7 @@ public class RunTestScriptData extends TestScrip{
                 //execute tc
                 execute_suites(scopePath, iTestSuit, iTotalSuite);
                 EndTestScript.saveReportToFailListFile(reportPath,scopePath);
+                /*EndTestScript.saveReportToFailListFile(Constanst.REPORT_FILE_PATH+"/"+,scopePath);*/
                 ExcelUtils.closeFile(reportPath);
                 ExcelUtils.closeFile(tcPath);
                 reportName ="";

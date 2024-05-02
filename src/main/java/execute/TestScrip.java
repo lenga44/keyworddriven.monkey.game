@@ -1,15 +1,14 @@
 package execute;
 
 import common.keywords.KeyWordsToAction;
-import common.keywords.KeyWordsToActionPocoSDK;
 import common.keywords.KeyWordsToActionToVerify;
 import common.utility.*;
 import report.GenerateReport;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -27,33 +26,40 @@ public class TestScrip {
         List<String> reports = new ArrayList<>();
         ExcelUtils.setExcelFile(scopePath);
         for (;iTestSuite<=iTotalSuite;iTestSuite++){
+            System.out.println("============= "+iTotalSuite);
             ExcelUtils.setCellData("",iTestSuite,Constanst.STATUS_SUITE,Constanst.SCOPE_SHEET,scopePath);
             String sRunMode = ExcelUtils.getStringValueInCell(iTestSuite,Constanst.RUN_MODE_SCOPE,Constanst.SCOPE_SHEET);
             tcName = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET);
             System.out.println("TC name: "+tcName);
             Scope.genFlowLesson(iTestSuite,json);
+            iTotalSuite = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
             if(sRunMode.equals(Constanst.YES)) {
-                Scope.deFindFlowGame(1,scopePath);
+                Scope.deFindFlowGame(iTestSuite,scopePath);
                 flow.add(tcName);
                 tcPath = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.TESTCASE_FILE_PATH)+ tcName + ".xlsx";
-                if(isDataFlow==true) {
+                if(isDataFlow) {
                     reportPath = GenerateReport.genTCReport(levelFolder, reportName);
                 }else {
                     reportPath = GenerateReport.genTCReport(levelFolder, "");
                 }
                 ExcelUtils.setExcelFile(reportPath);
                 int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
-                if(isDataFlow ==true) {
+                System.out.println(iTotalTestCase);
+                if(isDataFlow) {
                     int group = GroupInTest.getGroup().size();
                     if (group > 0) {
                         KeyWordsToAction.pause();
-                        ExcelUtils.createRowLastest(iTotalTestCase, Constanst.TESTCASE_SHEET, reportPath);
-                        GroupInTest.genTestCaseWhichGroupContain(json, reportPath);
-                        GroupInTest.genTestStepFollowTestCase(reportPath);
+                        try {
+                            ExcelUtils.createRowLastest(iTotalTestCase, Constanst.TESTCASE_SHEET, reportPath);
+                            GroupInTest.genTestCaseWhichGroupContain(json, reportPath);
+                            GroupInTest.genTestStepFollowTestCase(reportPath);
+                        }catch (Exception ignored){
+                        }
                         KeyWordsToAction.resume();
                     }
                 }
                 reports.add(reportPath);
+                iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
                 execute_testcases(iTotalTestCase);
                 ExcelUtils.setExcelFile(scopePath);
                 ExcelUtils.setCellData(tcResult, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
@@ -97,7 +103,7 @@ public class TestScrip {
             Log.info("TCID: " + sTestCaseID);
             rangeStepByTestCase(sTestCaseID);
             Log.info("result: "+result);
-                if (result != Constanst.SKIP) {
+                if (!result.equals(Constanst.SKIP)) {
                     tcResult = Constanst.PASS;
                     execute_steps();
 
@@ -112,6 +118,7 @@ public class TestScrip {
         }
         markFailTest(iTotalTestCase);
         markSkipTest(iTotalTestCase);
+        System.out.println("============ "+tcResult);
     }
     private static void markFailTest(int iTotalTestCase){
         for(int i =1; i<iTotalTestCase;i++) {
@@ -151,19 +158,17 @@ public class TestScrip {
             params = params.replace("$.index",index);
             ExcelUtils.setCellData(params,row,colum,Constanst.TEST_STEP_SHEET,reportPath);
         }
-        ArrayList<Object> objs = new ArrayList<>();
-        if (!params.equals("")&& !params.equals(null)) {
+        List<Object> list = new ArrayList<>();
+        if (!params.equals("")) {
             if (params.contains(",")) {
-                for (String value : params.split(",")) {
-                    objs.add(value);
-                }
+                list.addAll(Arrays.asList(params.split(",")));
             } else {
-                objs.add(params);
+                list.add(params);
             }
             if(!data.equals("")){
-                objs.add(data);
+                list.add(data);
             }
-            return objs.toArray();
+            return list.toArray();
         } else {
             return null;
         }
@@ -260,7 +265,8 @@ public class TestScrip {
             param = getParam(params,data,row,colum);
             int paramCount = (param == null) ? 0: param.length;
             for (int i = 0; i < method.length; i++) {
-                if (method[i].getName().equals(sActionKeyword) && method[i].getParameterCount() == paramCount) {
+                String a = method[i].getName();
+                if (a.equals(sActionKeyword) && method[i].getParameterCount() == paramCount) {
                     name = method[i].getName();
                     Log.info(testStep +":  "+description);
                     if (paramCount == 0) {
@@ -331,7 +337,8 @@ public class TestScrip {
     }
     private static String getVariableValue(String ex, String key,int row){
         if(ex.contains(key)){
-            String index = JsonHandle.getValue(ex,key);
+            String variable = FileHelpers.readFile(Constanst.VARIABLE_PATH_FILE);
+            String index = JsonHandle.getValue(variable,key);
             ex = ex.replace(key,index);
             ExcelUtils.setCellData(ex,row,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET,reportPath);
         }
@@ -340,7 +347,8 @@ public class TestScrip {
     // endregion verify result after each step
     public static void getLevelFolder(int row)throws IOException{
         String courseFolder = FileHelpers.getRootFolder() + Constanst.REPORT_FILE_PATH;
-        String level = ExcelUtils.getStringValueInCell(row,Constanst.LEVEL_COLUM,Constanst.PLAN_SHEET);
+        String level = ExcelUtils.getStringValueInCell(1,Constanst.LEVEL_COLUM,Constanst.PLAN_SHEET);
+        System.out.println(level);
         levelFolder =(level.contains("$."))? courseFolder +"//" +JsonHandle.getValue(json,level): courseFolder +"//" + level;
         Log.info("levelFolder: "+levelFolder);
         Log.info("Folder path report course: " + FileHelpers.convertPath(levelFolder));

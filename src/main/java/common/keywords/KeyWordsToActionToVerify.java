@@ -105,7 +105,10 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
     public static String getPropertyValue(String locator, String component, String property,String slipStr){
         waitForObject(locator);
         Response response = request(Constanst.SCENE_URL,"//"+locator+"."+component);
-        String value = Arrays.stream(convert(response,property).split(slipStr)).toList().get(0).trim();
+        String value = Arrays.stream(Objects.requireNonNull(convert(response, property)).split(slipStr)).toList().get(0).trim();
+        if(value.contains("(")){
+            value = value.replace("(","").trim();
+        }
         Log.info(value);
         return value;
     }
@@ -310,7 +313,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
     }
     public static String getAudioSource(String locator){
         Log.info("|getAudioSource |");
-        return getPropertyValue(locator,"AudioSource","clip"," (UnityEngine.AudioClip)");
+        return getPropertyValue(locator,"AudioSource","clip","(UnityEngine.AudioClip)")+".mp3";
     }
     public static String getListAudioSource(String locator,String count) {
         String audio = null;

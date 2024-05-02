@@ -1,14 +1,8 @@
 package common.utility;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
-import io.restassured.response.Response;
-import io.restassured.response.ResponseBody;
-import io.restassured.specification.RequestSpecification;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.simple.parser.ParseException;
@@ -29,8 +23,12 @@ public class JsonHandle {
     public static String getValue(String json,String jsonPath){
         //$.Page[0].Id
         Object document = Configuration.defaultConfiguration().jsonProvider().parse(json);
-        String id = JsonPath.read(document, jsonPath).toString();
-        return id;
+        Object result = JsonPath.read(document, jsonPath);
+        Gson gson = new Gson();
+        //JsonObject jsonObject = gson.toJsonTree(result).getAsString();
+
+        // Print the JsonObject
+        return gson.toJsonTree(result).getAsString();
     }
     @Deprecated
     public static String getObjectInJsonData(int index) throws IOException, ParseException {
@@ -39,18 +37,18 @@ public class JsonHandle {
         return jsonArr.getJSONObject(index).toString();
     }
     public static Object getValueInJsonObject(String path,String key) throws IOException{
-        String json = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
+        String json = Files.readString(Paths.get(path));
         JsonObject jsonObject = JsonParser.parseString(json).getAsJsonObject();
         return jsonObject.get(key);
     }
     public static void setValueInJsonObject(String path,String key,String property) throws IOException{
-        String json = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
+        String json = Files.readString(Paths.get(path));
         JsonObject jsonObject = JsonParser.parseString(json).getAsJsonObject();
         jsonObject.addProperty(key,property);
         FileHelpers.writeFile(jsonObject.toString(),path);
     }
     public static void setValueInJsonObject(String path,String key,int property) throws IOException{
-        String json = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
+        String json = Files.readString(Paths.get(path));
         JsonObject jsonObject = JsonParser.parseString(json).getAsJsonObject();
         jsonObject.addProperty(key,property);
         FileHelpers.writeFile(jsonObject.toString(),path);

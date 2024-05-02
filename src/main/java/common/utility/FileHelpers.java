@@ -97,4 +97,16 @@ public class FileHelpers {
         }
         return json;
     }
+    public static String readFile(String path,String pass){
+        try {
+            File file = new File(path);
+            FileInputStream fis = new FileInputStream(file);
+            byte[] data = new byte[(int) file.length()];
+            fis.read(data);
+            fis.close();
+            return new String(data, StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            return pass;
+        }
+    }
 }

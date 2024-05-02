@@ -19,8 +19,8 @@ public class Scope {
             returnGame(row,path);
         }
     }
-    private static String deFindGame(int row){
-        String course = ExcelUtils.getStringValueInCell(row,Constanst.COURSE_PLAN_COLUM,Constanst.PLAN_SHEET);
+    private static String deFindGame(){
+        String course = ExcelUtils.getStringValueInCell(1,Constanst.COURSE_PLAN_COLUM,Constanst.PLAN_SHEET);
         System.out.println("Course___ "+course);
         String game = null;
         if(course.equals(Constanst.AI_COURSE)){
@@ -32,7 +32,7 @@ public class Scope {
     }
     private static void returnGame(int row,String path){
         boolean exits = false;
-        String games = deFindGame(row).replace("[","").replace("]","");
+        String games = deFindGame().replace("[","").replace("]","");
         for (String game: games.split(", ")) {
             TestScrip.tcName = "Report_" + game;
             TestScrip.tcPath = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.TESTCASE_FILE_PATH)+ TestScrip.tcName + ".xlsx";
@@ -77,7 +77,7 @@ public class Scope {
                                 int loop = Integer.valueOf(mapGroupValue.get(groupName));
                                 copyTestSuiteWithGroup(ranges, loop, Constanst.TOTAL_CELL_SCOPE_SHEET);
                                 int totalRow = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
-                                //ExcelUtils.deleteRow(totalRow - 1, Constanst.SCOPE_SHEET);
+                                ExcelUtils.deleteRow(totalRow - 1, Constanst.SCOPE_SHEET);
                             }
                         }
                     }
