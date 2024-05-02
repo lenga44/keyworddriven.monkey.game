@@ -1,9 +1,8 @@
 package execute;
 
-import common.utility.Constanst;
-import common.utility.ExcelUtils;
-import common.utility.FileHelpers;
-import common.utility.Log;
+import com.aspose.cells.DateTime;
+import common.keywords.KeyWordsToAction;
+import common.utility.*;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -73,5 +72,21 @@ public class EndTestScript {
         ExcelUtils.setCellData(scopePass,1,Constanst.PASS_PLAN_COLUM,Constanst.PLAN_SHEET,path);
         ExcelUtils.setCellData(scopeFail,1,Constanst.FAIL_PLAN_COLUM,Constanst.PLAN_SHEET,path);
         ExcelUtils.closeFile(path);
+    }
+
+    public static void summary(){
+
+    }
+    public static void sendMessTelegramEndScrip(){
+        String end = DateTime.getNow().toString();
+        String fail_list = "PASS";
+        try {
+            fail_list = FileHelpers.readFile(Constanst.LIST_FAIL_PATH_FILE + "list_fail.txt", "PASS");
+            TelegramBot.sendMessTele(fail_list);
+        }catch (Exception e){
+            TelegramBot.sendMessTele("PASS");
+        }
+        KeyWordsToAction.sleep(1);
+        TelegramBot.sendMessTele("End: "+end);
     }
 }

@@ -71,6 +71,27 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
             return false;
         }
     }
+    public static boolean isElementDisplay(String strSplit, String locator){
+        try {
+            if(locator.contains(strSplit)){
+                locator = Arrays.stream(locator.split(strSplit)).toList().get(0);
+            }
+            Response response = request(Constanst.SCENE_URL, "//" + locator);
+            ResponseBody body = response.getBody();
+            List actvies = convertToList(response,"activeInHierarchy");
+            boolean value = false;
+            if(actvies.size()>0){
+                String result = convert(response,"activeInHierarchy");
+                if(result.equals("true")){
+                    value =true;
+                }
+            }
+            return value;
+        }catch (Exception e){
+            Log.info("No Such element " +locator);
+            return false;
+        }
+    }
     public static String elementDisplay(String locator,String second){
         try {
             waitForObject(locator,second);

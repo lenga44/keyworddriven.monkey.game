@@ -51,12 +51,7 @@ public class Run {
         }
         runOneTime(iOnceTimeTearDown);
         //Log.info("End script: "+DateTime.getNow());
-        String end = DateTime.getNow().toString();
-        String fail_list =FileHelpers.readFile(Constanst.LIST_FAIL_PATH_FILE+"list_fail.txt","PASS");
-        System.out.println(fail_list);
-        TelegramBot.sendMessTele(fail_list);
-        KeyWordsToAction.sleep(1);
-        TelegramBot.sendMessTele("End: "+end);
+        EndTestScript.sendMessTelegramEndScrip();
     }
     private static void runOneTime(int iOnceTime) throws Exception {
         Log.info("runOneTime " +iOnceTime);

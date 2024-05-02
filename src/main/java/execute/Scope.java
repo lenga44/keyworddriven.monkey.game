@@ -127,4 +127,7 @@ public class Scope {
             last = first + countRow;
         }
     }
+    public static void copyFileScope(String source,String des){
+        FileHelpers.copyFile(source,des);
+    }
 }

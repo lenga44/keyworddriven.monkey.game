@@ -40,6 +40,7 @@ public class Constanst {
     public static final int STT_COLUM = 0;
     public static final int GROUP_COLUM_IN_SCOPE_SHEET = 4;
     public static final int GROUP_ID_COLUM_IN_SCOPE = 5;
+    public static final String SCOPE_COPY_SHEET = "Scope copy";
 
     //region PLAN
     public static final String MODULE_FLOW = "Module";

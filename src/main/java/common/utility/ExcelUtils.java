@@ -392,6 +392,42 @@ public class ExcelUtils {
         }
         return null;
     }
+    public static void copySheet(String sourceName, String destinationName){
+        Sheet source = ExcelBook.getSheet(sourceName);
+        if(ExcelBook.getSheetIndex(destinationName)<0){
+            createSheet(destinationName);
+        }
+        Sheet destination = ExcelBook.getSheet(destinationName);
+        for (int i = 0; i <= source.getLastRowNum(); i++) {
+            Row sourceRow = source.getRow(i);
+            if (sourceRow != null) {
+                Row destinationRow = destination.createRow(i);
+                for (int j = 0; j < sourceRow.getLastCellNum(); j++) {
+                    Cell sourceCell = sourceRow.getCell(j);
+                    if (sourceCell != null) {
+                        Cell destinationCell = destinationRow.createCell(j);
+                        destinationCell.setCellType(sourceCell.getCellType());
+                        switch (sourceCell.getCellType()) {
+                            case STRING:
+                                destinationCell.setCellValue(sourceCell.getStringCellValue());
+                                break;
+                            case NUMERIC:
+                                destinationCell.setCellValue(sourceCell.getNumericCellValue());
+                                break;
+                            case BOOLEAN:
+                                destinationCell.setCellValue(sourceCell.getBooleanCellValue());
+                                break;
+                            case FORMULA:
+                                destinationCell.setCellFormula(sourceCell.getCellFormula());
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+    }
     public static void deleteSheet(String sheetName,String path){
         try {
             ExcelBook.removeSheetAt(ExcelBook.getSheetIndex(sheetName));

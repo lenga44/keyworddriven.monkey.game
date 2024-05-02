@@ -18,18 +18,17 @@ public class RunTestScriptData extends TestScrip{
     public static void run(String scopePath, int iTestSuit, int iTotalSuite) throws Exception {
         try {
             isDataFlow = true;
-
             //calculator loop
             int begin = ExcelUtils.getNumberValueInCell(1, Constanst.BEGIN_INDEX_COLUM, Constanst.PLAN_SHEET);
             int end = ExcelUtils.getNumberValueInCell(1, Constanst.END_INDEX_COLUM, Constanst.PLAN_SHEET);
             Log.info("Run data from " + begin + " to " + end);
 
             for (int index = begin; index <= end; index++) {
-
                 //get node need check
                 json = JsonHandle.getObjectInJsonData(index - 1);
                 getLevelFolder(1);
                 ExcelUtils.setExcelFile(scopePath);
+                ExcelUtils.copySheet(Constanst.SCOPE_SHEET,Constanst.SCOPE_COPY_SHEET);
                 ExcelUtils.setCellData(index, 1, Constanst.CURRENT_INDEX_COLUM, Constanst.PLAN_SHEET, scopePath);
                 String key = ExcelUtils.getStringValueInCell(1, Constanst.DATA_PLAN_COLUM, Constanst.PLAN_SHEET);
                 if(key.contains(",")){
@@ -42,10 +41,11 @@ public class RunTestScriptData extends TestScrip{
                 //execute tc
                 execute_suites(scopePath, iTestSuit, iTotalSuite);
                 EndTestScript.saveReportToFailListFile(reportPath,scopePath);
-                /*EndTestScript.saveReportToFailListFile(Constanst.REPORT_FILE_PATH+"/"+,scopePath);*/
+                ExcelUtils.deleteSheet(Constanst.SCOPE_COPY_SHEET,scopePath);
                 ExcelUtils.closeFile(reportPath);
                 ExcelUtils.closeFile(tcPath);
                 reportName ="";
+                ExcelUtils.copySheet(Constanst.SCOPE_COPY_SHEET,Constanst.SCOPE_SHEET);
             }
             ExcelUtils.closeFile(scopePath);
         }catch (Exception e){

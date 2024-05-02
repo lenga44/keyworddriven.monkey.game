@@ -2,13 +2,12 @@ package common.utility;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import io.basc.framework.io.FileUtils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
@@ -107,6 +106,21 @@ public class FileHelpers {
             return new String(data, StandardCharsets.UTF_8);
         } catch (Exception e) {
             return pass;
+        }
+    }
+    public static void copyFile(String sourceFile, String destFile){
+        try (InputStream in = new FileInputStream(sourceFile);
+             OutputStream out = new FileOutputStream(destFile)) {
+
+            byte[] buffer = new byte[1024];
+            int length;
+
+            while ((length = in.read(buffer)) > 0) {
+                out.write(buffer, 0, length);
+            }
+            Log.info(" copy Scope success!!!");
+        } catch (IOException e) {
+            System.err.println("An error occurred while copying the file: " + e.getMessage());
         }
     }
 }
