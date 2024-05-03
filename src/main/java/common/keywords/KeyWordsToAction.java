@@ -670,8 +670,12 @@ public class KeyWordsToAction {
         TestScrip.result = Constanst.PASS;
         TestScrip.error = "";
         try{
-            if(expect.contains("[")){
-                assertEqual(actual, List.of(expect.replace("[", "").replace("]", "").split(",")));
+            if(expect.contains("[")||actual.contains("[")) {
+                if (expect.contains("[")) {
+                    assertEqual(actual, LogicHandle.convertStringToList(expect));
+                }else {
+                    assertEqual(expect,LogicHandle.convertStringToList(actual));
+                }
             }else {
                 assertEqual(actual, expect);
             }

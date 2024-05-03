@@ -42,15 +42,15 @@ public class RunTestScriptData extends TestScrip{
                     //execute tc
                     execute_suites(scopePath, iTestSuit, iTotalSuite);
                     EndTestScript.saveReportToFailListFile(reportPath, scopePath);
+                    ExcelUtils.copySheet(Constanst.SCOPE_COPY_SHEET,Constanst.SCOPE_SHEET);
                     ExcelUtils.deleteSheet(Constanst.SCOPE_COPY_SHEET, scopePath);
                     ExcelUtils.closeFile(reportPath);
                     ExcelUtils.closeFile(tcPath);
                 }catch (Exception e){
                     Log.error("|run| "+e.getMessage());
+                    e.printStackTrace();
                 }
                 reportName ="";
-                ExcelUtils.setExcelFile(scopePath);
-                ExcelUtils.copySheet(Constanst.SCOPE_COPY_SHEET,Constanst.SCOPE_SHEET);
             }
             ExcelUtils.closeFile(scopePath);
         }catch (Exception e){

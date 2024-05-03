@@ -1,5 +1,8 @@
 package common.utility;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Constanst {
 
     public static final String PROJECT_PATH = System.getProperty("user.dir");
@@ -143,4 +146,8 @@ public class Constanst {
     //endregion
     public static final String PAUSE_PROGRAM_URL = ".pause()";
     public static final String RESUME_PROGRAM_URL = ".resume()";
+
+    //region logicHandle
+    public static final List<String> splits = Arrays.asList("\\|", "\\;","\\,");
+    //endregion
 }

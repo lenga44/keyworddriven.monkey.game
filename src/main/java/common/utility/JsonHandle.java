@@ -25,10 +25,11 @@ public class JsonHandle {
         Object document = Configuration.defaultConfiguration().jsonProvider().parse(json);
         Object result = JsonPath.read(document, jsonPath);
         Gson gson = new Gson();
-        //JsonObject jsonObject = gson.toJsonTree(result).getAsString();
-
-        // Print the JsonObject
-        return gson.toJsonTree(result).getAsString();
+        try {
+            return gson.toJsonTree(result).getAsString();
+        }catch (Exception e){
+            return result.toString();
+        }
     }
     @Deprecated
     public static String getObjectInJsonData(int index) throws IOException, ParseException {

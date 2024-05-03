@@ -449,6 +449,9 @@ public class ExcelUtils {
                                 case FORMULA:
                                     destinationCell.setCellFormula(sourceCell.getCellFormula());
                                     break;
+                                case BLANK:
+                                    destinationCell.setBlank();
+                                    break;
                                 default:
                                     break;
                             }

@@ -60,11 +60,6 @@ public class TestScrip {
                 reports.add(reportPath);
                 iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
                 execute_testcases(iTotalTestCase);
-                /*if(tcResults.contains(Constanst.FAIL)){
-                    onResultTestcase(Constanst.FAIL, error, iTestSuite);
-                }else {
-                    onResultTestcase(Constanst.PASS, "", iTestSuite);
-                }*/
                 ExcelUtils.setExcelFile(scopePath);
                 ExcelUtils.setCellData(tcResult, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
             }
