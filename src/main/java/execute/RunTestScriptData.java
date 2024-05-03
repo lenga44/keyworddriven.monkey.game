@@ -29,22 +29,27 @@ public class RunTestScriptData extends TestScrip{
                 getLevelFolder(1);
                 ExcelUtils.setExcelFile(scopePath);
                 ExcelUtils.copySheet(Constanst.SCOPE_SHEET,Constanst.SCOPE_COPY_SHEET);
-                ExcelUtils.setCellData(index, 1, Constanst.CURRENT_INDEX_COLUM, Constanst.PLAN_SHEET, scopePath);
-                String key = ExcelUtils.getStringValueInCell(1, Constanst.DATA_PLAN_COLUM, Constanst.PLAN_SHEET);
-                if(key.contains(",")){
-                    for (String k: Arrays.stream(key.split(",")).toList()){
-                        reportName += getDataSet(k);
+                try {
+                    ExcelUtils.setCellData(index, 1, Constanst.CURRENT_INDEX_COLUM, Constanst.PLAN_SHEET, scopePath);
+                    String key = ExcelUtils.getStringValueInCell(1, Constanst.DATA_PLAN_COLUM, Constanst.PLAN_SHEET);
+                    if (key.contains(",")) {
+                        for (String k : Arrays.stream(key.split(",")).toList()) {
+                            reportName += getDataSet(k);
+                        }
+                    } else {
+                        reportName = getDataSet(key);
                     }
-                }else {
-                    reportName = getDataSet(key);
+                    //execute tc
+                    execute_suites(scopePath, iTestSuit, iTotalSuite);
+                    EndTestScript.saveReportToFailListFile(reportPath, scopePath);
+                    ExcelUtils.deleteSheet(Constanst.SCOPE_COPY_SHEET, scopePath);
+                    ExcelUtils.closeFile(reportPath);
+                    ExcelUtils.closeFile(tcPath);
+                }catch (Exception e){
+                    Log.error("|run| "+e.getMessage());
                 }
-                //execute tc
-                execute_suites(scopePath, iTestSuit, iTotalSuite);
-                EndTestScript.saveReportToFailListFile(reportPath,scopePath);
-                ExcelUtils.deleteSheet(Constanst.SCOPE_COPY_SHEET,scopePath);
-                ExcelUtils.closeFile(reportPath);
-                ExcelUtils.closeFile(tcPath);
                 reportName ="";
+                ExcelUtils.setExcelFile(scopePath);
                 ExcelUtils.copySheet(Constanst.SCOPE_COPY_SHEET,Constanst.SCOPE_SHEET);
             }
             ExcelUtils.closeFile(scopePath);

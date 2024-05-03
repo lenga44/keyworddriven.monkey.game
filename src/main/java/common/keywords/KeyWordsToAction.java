@@ -243,6 +243,7 @@ public class KeyWordsToAction {
     }
     public static void setIndexVariableFile(String value) throws IOException {
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,Integer.parseInt(value));
+        Log.info("setIndexVariableFile "+value);
     }
     public static void addIndexVariableFile(String add) throws IOException {
         Log.info("addIndexVariableFile");
@@ -255,6 +256,9 @@ public class KeyWordsToAction {
     }
     public static void pressWithTag(String tagNew,String tagOld){
         request(Constanst.POINTER_URL,".PressWithTag("+tagNew +","+tagOld+")");
+    }
+    public static void addTagForObject(String locator,String tag){
+        request(Constanst.SCENE_URL,"//"+locator+".tag="+tag);
     }
 
     public static void press(String locator,String index){
@@ -344,6 +348,31 @@ public class KeyWordsToAction {
                         if(convert(response,"activeInHierarchy")=="true")
                         break;
                     }
+                Thread.sleep(500);
+                time = LocalDateTime.now();
+            } while (time.compareTo(time1) <= 0);
+            Assert.assertTrue(locator.contains(convert(response, "name")));
+        }catch (Throwable e){
+            exception("No such element "+ locator);
+        }
+        Log.info("waitForObject :" + locator);
+    }
+    public static void waitForObject(String second,String splitStr,String locator){
+        try {
+            if(locator.contains(splitStr)){
+                locator = locator.replace(splitStr,"");
+            }
+            LocalDateTime time = LocalDateTime.now();
+            LocalDateTime time1 = time.plusSeconds(Integer.parseInt(second));
+            Response response = null;
+            do {
+                response = request(Constanst.SCENE_URL, "//" + locator);
+                JsonPath json = response.jsonPath();
+                List name = (List)json.get("name");
+                if (json != null && !name.isEmpty()) {
+                    if(convert(response,"activeInHierarchy")=="true")
+                        break;
+                }
                 Thread.sleep(500);
                 time = LocalDateTime.now();
             } while (time.compareTo(time1) <= 0);
@@ -479,11 +508,13 @@ public class KeyWordsToAction {
             do {
                 response = request(Constanst.SCENE_URL, "//" + locator+"."+component);
                 if(response!=null) {
-                    if (convert(response, "activeInHierarchy") == "true") {
+                    if (!convertToList(response, property).isEmpty()) {
                         JsonPath json = response.jsonPath();
                         if (json != null && json.toString() != "") {
                             value = convert(response, property);
                             if (value != null) {
+                                System.out.println(value);
+                                System.out.println(content);
                                 if (value.contains(content))
                                     break;
                             }
@@ -508,12 +539,14 @@ public class KeyWordsToAction {
             do {
                 response = request(Constanst.SCENE_URL, "//" + locator+"."+component);
                 if(response!=null) {
-                    if (convert(response, "activeInHierarchy") == "true") {
+                    if (!convertToList(response, property).isEmpty()) {
                         JsonPath json = response.jsonPath();
                         if (json != null && json.toString() != "") {
                             value = convert(response, property);
                             if (value != null) {
                                 if (!value.contains(content))
+                                    System.out.println(value);
+                                System.out.println(content);
                                     break;
                             }
                             Thread.sleep(500);
@@ -643,7 +676,7 @@ public class KeyWordsToAction {
                 assertEqual(actual, expect);
             }
         }catch (Throwable e){
-            exception(e);
+            exception("expect ["+expect.toString()+"] but found ["+actual+"]");
         }
     }
     public static void checkContain(String actual,String expect){

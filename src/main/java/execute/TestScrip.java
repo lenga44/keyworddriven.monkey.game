@@ -25,13 +25,12 @@ public class TestScrip {
         List<String> flow = new ArrayList<>();
         List<String> reports = new ArrayList<>();
         ExcelUtils.setExcelFile(scopePath);
+        Scope.genFlowLesson(json);
         for (;iTestSuite<=iTotalSuite;iTestSuite++){
-            System.out.println("============= "+iTotalSuite);
             ExcelUtils.setCellData("",iTestSuite,Constanst.STATUS_SUITE,Constanst.SCOPE_SHEET,scopePath);
             String sRunMode = ExcelUtils.getStringValueInCell(iTestSuite,Constanst.RUN_MODE_SCOPE,Constanst.SCOPE_SHEET);
             tcName = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET);
             System.out.println("TC name: "+tcName);
-            Scope.genFlowLesson(iTestSuite,json);
             iTotalSuite = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
             if(sRunMode.equals(Constanst.YES)) {
                 Scope.deFindFlowGame(iTestSuite,scopePath);
@@ -44,10 +43,10 @@ public class TestScrip {
                 }
                 ExcelUtils.setExcelFile(reportPath);
                 int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
-                System.out.println(iTotalTestCase);
                 if(isDataFlow) {
                     int group = GroupInTest.getGroup().size();
                     if (group > 0) {
+                        ExcelUtils.setExcelFile(scopePath);
                         KeyWordsToAction.pause();
                         try {
                             ExcelUtils.createRowLastest(iTotalTestCase, Constanst.TESTCASE_SHEET, reportPath);
@@ -61,6 +60,11 @@ public class TestScrip {
                 reports.add(reportPath);
                 iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
                 execute_testcases(iTotalTestCase);
+                /*if(tcResults.contains(Constanst.FAIL)){
+                    onResultTestcase(Constanst.FAIL, error, iTestSuite);
+                }else {
+                    onResultTestcase(Constanst.PASS, "", iTestSuite);
+                }*/
                 ExcelUtils.setExcelFile(scopePath);
                 ExcelUtils.setCellData(tcResult, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
             }

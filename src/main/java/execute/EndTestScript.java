@@ -79,12 +79,9 @@ public class EndTestScript {
     }
     public static void sendMessTelegramEndScrip(){
         String end = DateTime.getNow().toString();
-        String fail_list = "PASS";
-        try {
-            fail_list = FileHelpers.readFile(Constanst.LIST_FAIL_PATH_FILE + "list_fail.txt", "PASS");
+        String fail_list =  FileHelpers.readFile(Constanst.LIST_FAIL_PATH_FILE + "list_fail.txt", "PASS");
+        if(!fail_list.isEmpty()){
             TelegramBot.sendMessTele(fail_list);
-        }catch (Exception e){
-            TelegramBot.sendMessTele("PASS");
         }
         KeyWordsToAction.sleep(1);
         TelegramBot.sendMessTele("End: "+end);

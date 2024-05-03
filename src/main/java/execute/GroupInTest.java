@@ -16,6 +16,7 @@ public class GroupInTest {
         ArrayList<String> groups = getGroup();
         int totalGroup = ExcelUtils.getRowCount(Constanst.GROUP_SHEET);
         Map<String,String> mapGroupValue = getValueGroups(json,groups);
+        System.out.println(mapGroupValue);
         Map<String,ArrayList<Integer>> mapGroupRange = getRangeGroups(groups,Constanst.GROUP_COLLUM_IN_TC_SHEET,Constanst.TESTCASE_SHEET);
         int totalCellInRow = ExcelUtils.getRow(Constanst.TESTCASE_SHEET,1);
         if(totalGroup>0) {

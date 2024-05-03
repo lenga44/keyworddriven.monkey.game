@@ -27,7 +27,9 @@ public class ExcelUtils {
             onTestCaseFail("Method setExcelFile | Exception desc : " + e.getMessage());
         }
     }
-
+    public static int getIndexSheet(String sheetName){
+         return ExcelBook.getSheetIndex(sheetName);
+    }
     public static int getRowCount(String sheetName){
         int iMumber = 0;
         try{
@@ -55,6 +57,33 @@ public class ExcelUtils {
             Log.info("Method getStringValueInCell: rowNumber[" + rowNumber+"], columnNumber["+columnNumber+"], sheetName["+sheetName+"]");
             Log.error("Method getStringValueInCell | Exception desc : " + e.getMessage());
             onTestCaseFail("Method getStringValueInCell | Exception desc : " + e.getMessage());
+            return "";
+        }
+    }
+    public static String getValueInCell(int rowNumber, int columnNumber, String sheetName){
+        try {
+            ExcelSheet = ExcelBook.getSheet(sheetName);
+            Cell = ExcelSheet.getRow(rowNumber).getCell(columnNumber);
+            String result = "";
+            switch (Cell.getCellType()) {
+                case STRING:
+                    result = Cell.getStringCellValue();
+                    break;
+                case NUMERIC:
+                    result = String.valueOf(Cell.getNumericCellValue());
+                    break;
+                case BOOLEAN:
+                    result = String.valueOf(Cell.getBooleanCellValue());
+                    break;
+                case FORMULA:
+                    result = String.valueOf(Cell.getCellFormula());
+                    break;
+                default:
+                    result = "";
+                    break;
+            }
+            return result;
+        } catch (Throwable e) {
             return "";
         }
     }
@@ -188,7 +217,6 @@ public class ExcelUtils {
         }
     }
 
-    @SuppressWarnings("static-access")
     public static void setCellData(String result, int rowNumber, int columnNumber, String sheetName,String path) {
         try{
             ExcelSheet = ExcelBook.getSheet(sheetName);
@@ -332,7 +360,7 @@ public class ExcelUtils {
             ExcelSheet = ExcelBook.getSheet(sheetName);
             insertRow(to);
             for(int i =1;i<=totalCellInRow;i++) {
-                String value = getStringValueInCell(from,i-1,sheetName);
+                String value = getValueInCell(from,i-1,sheetName);
                 setCellData(value,to,i-1,sheetName,path);
             }
             FileOutputStream outFile = new FileOutputStream(new File(path));
@@ -393,39 +421,44 @@ public class ExcelUtils {
         return null;
     }
     public static void copySheet(String sourceName, String destinationName){
-        Sheet source = ExcelBook.getSheet(sourceName);
-        if(ExcelBook.getSheetIndex(destinationName)<0){
-            createSheet(destinationName);
-        }
-        Sheet destination = ExcelBook.getSheet(destinationName);
-        for (int i = 0; i <= source.getLastRowNum(); i++) {
-            Row sourceRow = source.getRow(i);
-            if (sourceRow != null) {
-                Row destinationRow = destination.createRow(i);
-                for (int j = 0; j < sourceRow.getLastCellNum(); j++) {
-                    Cell sourceCell = sourceRow.getCell(j);
-                    if (sourceCell != null) {
-                        Cell destinationCell = destinationRow.createCell(j);
-                        destinationCell.setCellType(sourceCell.getCellType());
-                        switch (sourceCell.getCellType()) {
-                            case STRING:
-                                destinationCell.setCellValue(sourceCell.getStringCellValue());
-                                break;
-                            case NUMERIC:
-                                destinationCell.setCellValue(sourceCell.getNumericCellValue());
-                                break;
-                            case BOOLEAN:
-                                destinationCell.setCellValue(sourceCell.getBooleanCellValue());
-                                break;
-                            case FORMULA:
-                                destinationCell.setCellFormula(sourceCell.getCellFormula());
-                                break;
-                            default:
-                                break;
+        try {
+            Sheet source = ExcelBook.getSheet(sourceName);
+            if (ExcelBook.getSheetIndex(destinationName) < 0) {
+                createSheet(destinationName);
+            }
+            Sheet destination = ExcelBook.getSheet(destinationName);
+            for (int i = 0; i <= source.getLastRowNum(); i++) {
+                Row sourceRow = source.getRow(i);
+                if (sourceRow != null) {
+                    Row destinationRow = destination.createRow(i);
+                    for (int j = 0; j < sourceRow.getLastCellNum(); j++) {
+                        Cell sourceCell = sourceRow.getCell(j);
+                        if (sourceCell != null) {
+                            Cell destinationCell = destinationRow.createCell(j);
+                            destinationCell.setCellType(sourceCell.getCellType());
+                            switch (sourceCell.getCellType()) {
+                                case STRING:
+                                    destinationCell.setCellValue(sourceCell.getStringCellValue());
+                                    break;
+                                case NUMERIC:
+                                    destinationCell.setCellValue(sourceCell.getNumericCellValue());
+                                    break;
+                                case BOOLEAN:
+                                    destinationCell.setCellValue(sourceCell.getBooleanCellValue());
+                                    break;
+                                case FORMULA:
+                                    destinationCell.setCellFormula(sourceCell.getCellFormula());
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
                     }
                 }
             }
+            Log.info("Copy sheet success " +destinationName);
+        }catch (Exception e){
+            Log.error("|copySheet| "+e.getMessage());
         }
     }
     public static void deleteSheet(String sheetName,String path){
