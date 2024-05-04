@@ -72,6 +72,16 @@ public class FileHelpers {
             Log.error(e.getMessage());
         }
     }
+    public static void deleteFile(String path){
+        try {
+            File file = new File(path);
+            if(file.exists()){
+                file.delete();
+            }
+        } catch (Throwable e) {
+            Log.error(e.getMessage());
+        }
+    }
     public static void writeFile(String variable,String path){
         try {
             createFile(path);
@@ -109,6 +119,7 @@ public class FileHelpers {
         }
     }
     public static void copyFile(String sourceFile, String destFile){
+        createFile(destFile);
         try (InputStream in = new FileInputStream(sourceFile);
              OutputStream out = new FileOutputStream(destFile)) {
 

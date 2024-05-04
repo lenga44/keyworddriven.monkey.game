@@ -11,19 +11,19 @@ import java.util.List;
 import java.util.Map;
 
 import static execute.GroupInTest.*;
+import static execute.TestScrip.*;
 
 public class Scope {
     public static void deFindFlowGame(int row, String path){
-        KeyWordsToAction.pause();
-        try {
-            if (TestScrip.tcName.equals(Constanst.TEST_CASE_GAME_NAME_IN_FLOW)) {
-                KeyWordsToAction.sleep("1");
+        if (TestScrip.tcName.equals(Constanst.TEST_CASE_GAME_NAME_IN_FLOW)) {
+            KeyWordsToAction.pause();
+            try {
                 returnGame(row, path);
+            } catch (Exception e) {
+                Log.error("|deFindFlowGame| " + e.getMessage());
             }
-        }catch (Exception e){
-            Log.error("|deFindFlowGame| "+e.getMessage());
+            KeyWordsToAction.resume();
         }
-        KeyWordsToAction.resume();
     }
     private static String deFindGame(){
         String course = ExcelUtils.getStringValueInCell(1,Constanst.COURSE_PLAN_COLUM,Constanst.PLAN_SHEET);
@@ -54,17 +54,17 @@ public class Scope {
             Log.error("TEST CASE IS NOT EXIT!!!");
         }
     }
-    public static void genFlowLesson(String json) throws Exception {
+    public static void genFlowLesson(String json,String path) throws Exception {
         ExcelUtils.setExcelFile(FileHelpers.getRootFolder()+FileHelpers.getValueConfig(Constanst.SCOPE_FILE_PATH));
         KeyWordsToAction.pause();
         try {
             ArrayList<String> groups = getGroup();
             int totalGroup = ExcelUtils.getRowCount(Constanst.GROUP_SHEET);;
-            Map<String, String> mapGroupValue = getValueGroups(json, groups);
-            Map<String, ArrayList<Integer>> mapGroupRange = getRangeGroups(groups, Constanst.GROUP_COLUM_IN_SCOPE_SHEET, Constanst.SCOPE_SHEET);
+            Map<String, String> mapGroupValue = getValueGroups(json, groups,path);
             if (totalGroup > 0) {
                 for (int level : getListLevel(totalGroup)) {
                     for (String groupName : getGroupWithLeve(totalGroup, level)) {
+                        Map<String, ArrayList<Integer>> mapGroupRange = getRangeGroups(groupName, Constanst.GROUP_COLUM_IN_SCOPE_SHEET, Constanst.SCOPE_SHEET);
                         ArrayList<Integer> ranges = mapGroupRange.get(groupName);
                         if (level > 1) {
                             List<Integer> list = LogicHandle.convertToArrayListInt(mapGroupValue.get(groupName));
@@ -137,5 +137,27 @@ public class Scope {
     }
     public static void copyFileScope(String source,String des){
         FileHelpers.copyFile(source,des);
+    }
+    public static void ResetScopeFile(String sourceFile,String copyFile,String scopeReport,int index){
+        FileHelpers.copyFile(sourceFile,scopeReport+index+".xlsx");
+        FileHelpers.copyFile(copyFile,sourceFile);
+        FileHelpers.deleteFile(copyFile);
+    }
+    public static String genReportName(String key){
+        String report ="";
+        int i = 0;
+        if (key.contains(",")) {
+            for (String k : Arrays.stream(key.split(",")).toList()) {
+                String sub = getDataSet(k);
+                if(i==0){
+                    levelFolder = levelFolder +"/"+sub.replaceAll("[^a-zA-Z]", "")+"/";
+                }
+                report += sub;
+                i++;
+            }
+        } else {
+            report = getDataSet(key);
+        }
+        return report;
     }
 }

@@ -34,6 +34,8 @@ public class Constanst {
     public static final int CURRENT_INDEX_COLUM = 5;
     public static final String PLAN_SHEET = "Plan";
     public static final String SCOPE_FILE_PATH = "scope_path";
+    public static final String SCOPE_COPY_FILE_PATH = "scope_copy_path";
+    public static final String SCOPE_REPORT_FILE_PATH = "scope_report";
     public static final String TESTCASE_FILE_PATH = "testcase_path";
     public static final String LOG_FILE_PATH = "\\tool_test_game\\config\\logging.txt";
     public static final String CONFIG_FILE_PATH = "\\tool_test_game\\config\\config.json";
@@ -87,9 +89,10 @@ public class Constanst {
 
     //region Group-Turn sheet
     public static final String GROUP_SHEET = "Group-Turn";
-    public static final int GROUP_NAME_COLLUM = 0;
-    public static final int GROUP_LEVEL_COLLUM = 2;
-    public static final int GROUP_VALUE_COLLUM = 1;
+    public static final int GROUP_NAME_COLUM = 0;
+    public static final int GROUP_LEVEL_COLUM = 2;
+    public static final int GROUP_LOOP_COLUM = 1;
+    public static final int GROUP_VALUE_COLUM = 3;
     //region TC_TS sheet
     public static final String TC_TS_SHEET = "TC_TS";
     //endregion

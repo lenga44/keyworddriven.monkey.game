@@ -25,7 +25,7 @@ public class TestScrip {
         List<String> flow = new ArrayList<>();
         List<String> reports = new ArrayList<>();
         ExcelUtils.setExcelFile(scopePath);
-        Scope.genFlowLesson(json);
+        Scope.genFlowLesson(json,scopePath);
         for (;iTestSuite<=iTotalSuite;iTestSuite++){
             ExcelUtils.setCellData("",iTestSuite,Constanst.STATUS_SUITE,Constanst.SCOPE_SHEET,scopePath);
             String sRunMode = ExcelUtils.getStringValueInCell(iTestSuite,Constanst.RUN_MODE_SCOPE,Constanst.SCOPE_SHEET);
@@ -35,36 +35,45 @@ public class TestScrip {
             if(sRunMode.equals(Constanst.YES)) {
                 Scope.deFindFlowGame(iTestSuite,scopePath);
                 flow.add(tcName);
-                tcPath = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.TESTCASE_FILE_PATH)+ tcName + ".xlsx";
-                if(isDataFlow) {
-                    reportPath = GenerateReport.genTCReport(levelFolder, reportName);
-                }else {
-                    reportPath = GenerateReport.genTCReport(levelFolder, "");
-                }
-                ExcelUtils.setExcelFile(reportPath);
-                int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
-                if(isDataFlow) {
-                    int group = GroupInTest.getGroup().size();
-                    if (group > 0) {
-                        ExcelUtils.setExcelFile(scopePath);
-                        KeyWordsToAction.pause();
-                        try {
-                            ExcelUtils.createRowLastest(iTotalTestCase, Constanst.TESTCASE_SHEET, reportPath);
-                            GroupInTest.genTestCaseWhichGroupContain(json, reportPath);
-                            GroupInTest.genTestStepFollowTestCase(reportPath);
-                        }catch (Exception ignored){
-                        }
-                        KeyWordsToAction.resume();
-                    }
-                }
+                genTestcaseReport();
+                genTestCaseWithGroup(/*scopePath*/);
                 reports.add(reportPath);
-                iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
+                int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
                 execute_testcases(iTotalTestCase);
                 ExcelUtils.setExcelFile(scopePath);
                 ExcelUtils.setCellData(tcResult, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
             }
         }
         FileHelpers.writeFile(flow.toString(),RunTestScriptData.reportPath.replace(".xlsx",".txt"));
+    }
+    private static void genTestcaseReport() throws IOException {
+        tcPath = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.TESTCASE_FILE_PATH)+ tcName + ".xlsx";
+        if(isDataFlow) {
+            System.out.println(levelFolder);
+            System.out.println(reportName);
+            reportPath = GenerateReport.genTCReport(levelFolder, reportName);
+        }else {
+            reportPath = GenerateReport.genTCReport(levelFolder, "");
+        }
+        ExcelUtils.setExcelFile(reportPath);
+    }
+    private static void genTestCaseWithGroup(){
+        ExcelUtils.setExcelFile(reportPath);
+        int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
+        if(isDataFlow) {
+            int group = GroupInTest.getGroup().size();
+            if (group > 0) {
+                //ExcelUtils.setExcelFile(path);
+                KeyWordsToAction.pause();
+                try {
+                    ExcelUtils.createRowLastest(iTotalTestCase, Constanst.TESTCASE_SHEET, reportPath);
+                    GroupInTest.genTestCaseWhichGroupContain(json, reportPath);
+                    GroupInTest.genTestStepFollowTestCase(reportPath);
+                }catch (Exception ignored){
+                }
+                KeyWordsToAction.resume();
+            }
+        }
     }
     public static String openScopeFile(String fileName) throws IOException{
         Log.info("fileName "+fileName);

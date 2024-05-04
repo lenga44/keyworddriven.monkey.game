@@ -1,9 +1,6 @@
 package execute;
 
 import common.utility.*;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
 
 import java.io.IOException;
 import java.util.*;
@@ -15,13 +12,12 @@ public class GroupInTest {
         ExcelUtils.setExcelFile(reportPath);
         ArrayList<String> groups = getGroup();
         int totalGroup = ExcelUtils.getRowCount(Constanst.GROUP_SHEET);
-        Map<String,String> mapGroupValue = getValueGroups(json,groups);
-        System.out.println(mapGroupValue);
-        Map<String,ArrayList<Integer>> mapGroupRange = getRangeGroups(groups,Constanst.GROUP_COLLUM_IN_TC_SHEET,Constanst.TESTCASE_SHEET);
+        Map<String,String> mapGroupValue = getValueGroups(json,groups,reportPath);
         int totalCellInRow = ExcelUtils.getRow(Constanst.TESTCASE_SHEET,1);
         if(totalGroup>0) {
             for (int level : getListLevel(totalGroup)) {
                 for (String groupName : getGroupWithLeve(totalGroup, level)) {
+                    Map<String,ArrayList<Integer>> mapGroupRange = getRangeGroups(groupName,Constanst.GROUP_COLLUM_IN_TC_SHEET,Constanst.TESTCASE_SHEET);
                     ArrayList<Integer> ranges = mapGroupRange.get(groupName);
                     if(level >1) {
                         List<Integer> list = LogicHandle.convertToArrayListInt(mapGroupValue.get(groupName));
@@ -115,10 +111,9 @@ public class GroupInTest {
             ExcelUtils.setExcelFile(path);
             List<String> listTestCases = getTestCaseIDs(Constanst.TESTCASE_SHEET);
             int totalCellInRow = ExcelUtils.getRow(Constanst.TEST_STEP_SHEET, 1);
-            int totalRowTestStep = 0;
             Map<String, ArrayList<List<String>>> map = mapTestCaseWithTestSteps(totalCellInRow);
             for (String tcID : listTestCases) {
-                totalRowTestStep = ExcelUtils.getRowCount(Constanst.TEST_STEP_SHEET);
+                int totalRowTestStep = ExcelUtils.getRowCount(Constanst.TEST_STEP_SHEET);
                 copyRowByTC(map, tcID, path,totalRowTestStep);
             }
             ExcelUtils.deleteRow(ExcelUtils.getRowCount(Constanst.TEST_STEP_SHEET)-1,Constanst.TEST_STEP_SHEET);
@@ -195,7 +190,7 @@ public class GroupInTest {
         ArrayList<String> list = new ArrayList<>();
         int totalGroup = ExcelUtils.getRowCount(Constanst.GROUP_SHEET);
         for(int i=1;i<totalGroup;i++){
-            String name = ExcelUtils.getStringValueInCell(i,Constanst.GROUP_NAME_COLLUM,Constanst.GROUP_SHEET);
+            String name = ExcelUtils.getStringValueInCell(i,Constanst.GROUP_NAME_COLUM,Constanst.GROUP_SHEET);
             if(!name.equals(""))
                 list.add(name);
         }
@@ -204,8 +199,8 @@ public class GroupInTest {
     private static Map<String,Integer> mapGroupLevel(int totalGroup){
         Map<String,Integer> map = new HashMap<>();
         for(int i=1;i<totalGroup;i++){
-            map.put(ExcelUtils.getStringValueInCell(i,Constanst.GROUP_NAME_COLLUM,Constanst.GROUP_SHEET)
-                    ,ExcelUtils.getNumberValueInCell(i,Constanst.GROUP_LEVEL_COLLUM,Constanst.GROUP_SHEET));
+            map.put(ExcelUtils.getStringValueInCell(i,Constanst.GROUP_NAME_COLUM,Constanst.GROUP_SHEET)
+                    ,ExcelUtils.getNumberValueInCell(i,Constanst.GROUP_LEVEL_COLUM,Constanst.GROUP_SHEET));
         }
         return map;
     }
@@ -229,25 +224,24 @@ public class GroupInTest {
         }
         return list;
     }
-    public static Map<String,ArrayList<Integer>> getRangeGroups(ArrayList<String> groups,int colum,String sheetName){
+    public static Map<String,ArrayList<Integer>> getRangeGroups(String group,int colum,String sheetName){
         Map<String,ArrayList<Integer>> map = new HashMap<>();
-        if(groups.size()>0){
-            for (String group:groups) {
-                int first = ExcelUtils.getRowContains(group,colum,sheetName);
-                int last = ExcelUtils.getLastByContain(sheetName,group,first,colum);
-                ArrayList<Integer> list = new ArrayList<>();
-                list.add(first);
-                list.add(last);
-                if(list.size()>0)
-                    map.put(group,list);
-            }
-        }
+        int first = ExcelUtils.getRowContains(group,colum,sheetName);
+        int last = ExcelUtils.getLastByContain(sheetName,group,first,colum);
+        ArrayList<Integer> list = new ArrayList<>();
+        list.add(first);
+        list.add(last);
+        if(list.size()>0)
+            map.put(group,list);
+
         return map;
     }
-    public static Map<String,String> getValueGroups(String json,ArrayList<String> groups){
+    public static Map<String,String> getValueGroups(String json,ArrayList<String> groups,String path){
         Map<String,String> map = new HashMap<>();
         for(int i =0;i<groups.size();i++){
-            map.put(groups.get(i), JsonHandle.getValue(json,ExcelUtils.getStringValueInCell(i+1,Constanst.GROUP_VALUE_COLLUM,Constanst.GROUP_SHEET)));
+            String value = JsonHandle.getValue(json,ExcelUtils.getStringValueInCell(i+1,Constanst.GROUP_LOOP_COLUM,Constanst.GROUP_SHEET));
+            map.put(groups.get(i), value);
+            ExcelUtils.setCellData(value,i+1,Constanst.GROUP_VALUE_COLUM,Constanst.GROUP_SHEET,path);
         }
         return map;
     }
