@@ -166,14 +166,7 @@ public class KeyWordsToAction {
     public static void returnPath(String locator,String index) throws IOException {
         waitForObject(locator);
         Response response = request(Constanst.SCENE_URL,"//"+locator);
-        String name = convertToList(response,"name").get(Integer.valueOf(index));
-        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"path",name);
-        ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
-    }
-    public static void returnPath(String locator,int index) throws IOException {
-        waitForObject(locator);
-        Response response = request(Constanst.SCENE_URL,"//"+locator);
-        String name = convertToList(response,"path").get(index);
+        String name = convertToList(response,"path").get(Integer.valueOf(index));
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"path",name);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
