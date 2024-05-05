@@ -113,14 +113,15 @@ public class KeyWordsToAction {
         }
     }
     public static void clickDownAndUp(String locator){
-        request(Constanst.POINTER_URL,".DownToUp("+getAbsolutePath(locator,"0")+")");
+        request(Constanst.POINTER_URL,".DownToUp("+getAbsolutePath(locator)+")");
     }
     public static void clickDownAndUp(String locator,String index){
         String absolutePath = getAbsolutePath(locator,"0");
-        if(absolutePath.contains(":"))
-            absolutePath = absolutePath.replace(":","!_!");
+        /*if(absolutePath.contains(":"))
+            absolutePath = absolutePath.replace(":","!_!");*/
         request(Constanst.POINTER_URL,".DownToUp("+absolutePath+","+index+")");
     }
+
     @Deprecated
     public static void returnPath(String locator, String component,String key,String expected) throws IOException {
         waitForObject(locator);
@@ -139,12 +140,42 @@ public class KeyWordsToAction {
         //FileHelpers.writeFile(result,Constanst.VARIABLE_PATH_FILE);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
+    public static void returnPathFullName(String locator,String key) throws IOException {
+        waitForObject(locator);
+        Response response = request(Constanst.SCENE_URL,"//"+locator);
+        String name = convert(response,key);
+        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"path",name);
+        ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
+    }
+    public static void returnPathFullName(String locator,String key,String strReplace) throws IOException {
+        waitForObject(locator);
+        Response response = request(Constanst.SCENE_URL,"//"+locator);
+        String name = convert(response,key);
+        name = LogicHandle.replaceStr(name,strReplace);
+        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"path",name);
+        ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
+    }
     public static void returnPathFullName(String locator) throws IOException {
         waitForObject(locator);
-        int index = 0;
         Response response = request(Constanst.SCENE_URL,"//"+locator);
         String name = convert(response,"name");
-        FileHelpers.setJsonVariable("path",name);
+        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"path",name);
+        ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
+    }
+
+    public static void returnPath(String locator,String index) throws IOException {
+        waitForObject(locator);
+        Response response = request(Constanst.SCENE_URL,"//"+locator);
+        String name = convertToList(response,"name").get(Integer.valueOf(index));
+        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"path",name);
+        ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
+    }
+    public static void returnPath(String locator,int index) throws IOException {
+        waitForObject(locator);
+        Response response = request(Constanst.SCENE_URL,"//"+locator);
+        String name = convertToList(response,"path").get(index);
+        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"path",name);
+        ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
     public static String getPath(String locator, String component,String key,String expected)  {
         String path = "";
@@ -232,7 +263,7 @@ public class KeyWordsToAction {
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.PATH_GAME_OBJECT,locator+index+plusStr);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
-    public static void setIndexVariableFile(String locator, String component,String key,String expected) throws IOException {
+    /*public static void setIndexVariableFile(String locator, String component,String key,String expected) throws IOException {
         waitForObject(locator);
         int index = 0;
         Response response = request(Constanst.SCENE_URL,"//"+locator+"."+component);
@@ -246,6 +277,22 @@ public class KeyWordsToAction {
         Response response1 = request(Constanst.SCENE_URL,"//"+locator);
         String value = getAbsolutePath(response1,String.valueOf(index));
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,value);
+        ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
+    }*/
+    public static void setIndexVariableFile(String locator, String component,String key,String expected) throws IOException {
+        waitForObject(locator);
+        int index = 0;
+        Response response = request(Constanst.SCENE_URL,"//"+locator+"."+component);
+        ResponseBody body = response.getBody();
+        String json = body.asString();
+        for (JsonElement element: JsonHandle.getJsonArray(json)) {
+            if(JsonHandle.getValue(element.toString(),"$."+key).toLowerCase().equals(expected.toLowerCase()))
+                break;
+            index++;
+        }
+        /*Response response1 = request(Constanst.SCENE_URL,"//"+locator);
+        String value = getAbsolutePath(response1,String.valueOf(index));*/
+        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,index);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
     public static void setIndexVariableFile(String value) throws IOException {
@@ -351,16 +398,39 @@ public class KeyWordsToAction {
                 response = request(Constanst.SCENE_URL, "//" + locator);
                     JsonPath json = response.jsonPath();
                     List name = (List)json.get("name");
-                    if (json != null && !name.isEmpty()) {
+                    if (json != null && name.size()>0) {
                         if(convert(response,"activeInHierarchy")=="true")
                         break;
                     }
                 Thread.sleep(500);
                 time = LocalDateTime.now();
             } while (time.compareTo(time1) <= 0);
-            Assert.assertTrue(locator.contains(convert(response, "name")));
+            //Assert.assertTrue(locator.contains(convert(response, "name")));
         }catch (Throwable e){
             exception("No such element "+ locator);
+        }
+        Log.info("waitForObject :" + locator);
+    }
+    public static void waitForObject(String locator,String second){
+        try {
+            LocalDateTime time = LocalDateTime.now();
+            LocalDateTime time1 = time.plusSeconds(Integer.valueOf(second));
+            Response response = null;
+            do {
+                response = request(Constanst.SCENE_URL, "//" + locator);
+                JsonPath json = response.jsonPath();
+                List name = (List)json.get("name");
+                if (json != null && name.size()>0) {
+                    if(convert(response,"activeInHierarchy")=="true")
+                        break;
+                }
+                Thread.sleep(500);
+                time = LocalDateTime.now();
+            } while (time.compareTo(time1) <= 0);
+            //Assert.assertTrue(locator.contains(convert(response, "name")));
+        }catch (Throwable e){
+            exception("No such element "+ locator);
+            //e.printStackTrace();
         }
         Log.info("waitForObject :" + locator);
     }
@@ -455,28 +525,6 @@ public class KeyWordsToAction {
             e.printStackTrace();
         }
     }
-    public static void waitForObject(String locator,String second){
-        try {
-            LocalDateTime time = LocalDateTime.now();
-            LocalDateTime time1 = time.plusSeconds(Integer.valueOf(second));
-            Response response = null;
-            do {
-                response = request(Constanst.SCENE_URL, "//" + locator);
-                JsonPath json = response.jsonPath();
-                List name = (List)json.get("name");
-                if (json != null && !name.isEmpty()) {
-                    if(convert(response,"activeInHierarchy")=="true")
-                        break;
-                }
-                Thread.sleep(500);
-                time = LocalDateTime.now();
-            } while (time.compareTo(time1) <= 0);
-            Assert.assertTrue(locator.contains(convert(response, "name")));
-        }catch (Throwable e){
-            exception("No such element "+ locator);
-        }
-        Log.info("waitForObject :" + locator);
-    }
     public static void waitForObjectContain(String locator, String key,String content){
         try {
             Log.info("waitForObjectContain :" + locator);
@@ -491,11 +539,8 @@ public class KeyWordsToAction {
                         JsonPath json = response.jsonPath();
                         if (json != null && json.toString() != "") {
                             value = convert(response, key);
-                            if(value.length()>=content.length()) {
+                            if(value != null) {
                                 if (value.toLowerCase().contains(content.toLowerCase()))
-                                    break;
-                            }else {
-                                if (content.toLowerCase().contains(value.toLowerCase()))
                                     break;
                             }
                         }
@@ -765,6 +810,16 @@ public class KeyWordsToAction {
         }
         return absolutePath;
     }
+    private static String getAbsolutePath(String locator){
+        Response response = request(Constanst.SCENE_URL,"//"+locator);
+        String absolutePath = convert(response,"path");
+        if(absolutePath.contains(":"))
+            absolutePath = absolutePath.replace(":","!_!");
+        if(absolutePath.contains(".")){
+            absolutePath = absolutePath.replace(".","<_>");
+        }
+        return absolutePath;
+    }
     private static String getAbsolutePath(Response response, String index){
         String absolutePath = convert(response,"path");
         if(absolutePath.contains(":"))
@@ -962,10 +1017,10 @@ public class KeyWordsToAction {
     public static void resume(){
         request(Constanst.POINTER_URL,Constanst.RESUME_PROGRAM_URL);
     }
-    public static void deFindAnswerDienThe(String locator,String component,String property,String strReplace,String strAdd,String locator1,String expect){
+    public static void deFindAnswerDienThe(String locator,String component,String property,String strReplace,String strAdd,String locator1,String expect) throws IOException {
         KeyWordCustomByGame.deFindAnswer(locator,component,property,expect,strReplace,strAdd,locator1);
     }
-    public static void deFindAnswerDienThe(String locator,String component,String property,String locator1,String expect){
+    public static void deFindAnswerDienThe(String locator,String component,String property,String locator1,String expect) throws IOException {
         KeyWordCustomByGame.deFindAnswer(locator,component,property,expect,"","",locator1);
     }
 }

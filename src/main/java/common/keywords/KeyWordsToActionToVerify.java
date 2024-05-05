@@ -68,7 +68,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
             return false;
         }
     }
-    public static boolean isElementDisplay(String strSplit, String locator){
+    public static String isElementDisplay(String strSplit, String locator){
         try {
             if(locator.contains(strSplit)){
                 locator = Arrays.stream(locator.split(strSplit)).toList().get(0);
@@ -83,11 +83,35 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
                     value =true;
                 }
             }
-            return value;
+            return String.valueOf(value);
         }catch (Exception e){
             Log.info("No Such element " +locator);
-            return false;
+            return String.valueOf(false);
         }
+    }
+    public static String isElementsDisplay(String strSplit, String locator) throws InterruptedException {
+        return isElementsDisplay("5",strSplit,locator);
+    }
+    public static String isElementsDisplay(String second,String strSplit, String locator) throws InterruptedException {
+        boolean enable = false;
+        LocalDateTime time = LocalDateTime.now();
+        LocalDateTime time1 = time.plusSeconds(Integer.valueOf(second));
+        while (time.compareTo(time1) <= 0) {
+            if (locator.contains("[") && locator.contains(",")) {
+                locator = LogicHandle.replaceStr(locator, "[");
+                locator = LogicHandle.replaceStr(locator, "]");
+                List<String> locators = LogicHandle.convertStringToList(locator);
+                for (String item : locators) {
+                    enable = isElementDisplay(LogicHandle.replaceStr(item, strSplit));
+                    if (enable == true) {
+                        break;
+                    }
+                }
+            }
+            Thread.sleep(500);
+            time = LocalDateTime.now();
+        }
+        return String.valueOf(enable);
     }
     public static String elementDisplay(String locator,String second){
         try {
@@ -148,25 +172,25 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         String result =  getPropertyValue(locator,"Image","sprite");
         if(result.contains("(UnityEngine.Sprite)"))
             result = result.replace("(UnityEngine.Sprite)","");
-        return result.trim();
+        return result.trim()+".png";
     }
     public static String getImageName(String locator,String component){
         String result =  getPropertyValue(locator,component,"sprite");
         if(result.contains("(UnityEngine.Sprite)"))
             result = result.replace("(UnityEngine.Sprite)","");
-        return result.trim();
+        return result.trim()+".png";
     }
     public static String getImageNameVariable(String generate,String locator,String key){
         String result =  getPropertyValue(FileHelpers.getValueConfig(Constanst.VARIABLE_PATH_FILE,key)+generate+locator,"Image","sprite");
         if(result.contains("(UnityEngine.Sprite)"))
             result = result.replace("(UnityEngine.Sprite)","");
-        return result.trim();
+        return result.trim()+".png";
     }
     public static String getImageNameVariable(String generate,String locator,String component,String key){
         String result =  getPropertyValue(FileHelpers.getValueConfig(Constanst.VARIABLE_PATH_FILE,key)+generate+locator,component,"sprite");
         if(result.contains("(UnityEngine.Sprite)"))
             result = result.replace("(UnityEngine.Sprite)","");
-        return result.trim();
+        return result.trim()+".png";
     }
     public static String getImageColor(String locator){
         String result =  getPropertyValue(locator,"Image","color");
@@ -494,7 +518,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         Log.info("getAudiosSourceByTime");
         return LogicHandle.replaceStr(LogicHandle.getProValuesByTime(locator,"AudioSource","clip",second,expect,".mp3"),"(UnityEngine.AudioClip)").trim()+".mp3";
     }
-    public static String getAudiosSource(String locator,String second,String expect){
+    public static String getAudiosSource(String locator,String expect){
         Log.info("getAudiosSourceByTime");
         return LogicHandle.replaceStr(LogicHandle.getProValues(locator,"AudioSource","clip",expect,".mp3"),"(UnityEngine.AudioClip)").trim()+".mp3";
     }
@@ -503,15 +527,20 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         return LogicHandle.replaceStr(LogicHandle.getProValueByLocator(locator,"AudioSource","clip",locator2,expect,".mp3"),"(UnityEngine.AudioClip)").trim()+".mp3";
     }
     public static String getElementDisplayInScene(String strAdd,String expect){
-        List<String> list = getListScene();
-        List<String> expects = LogicHandle.convertStringToList(expect);
         String result = null;
-        for (String item:list) {
-            result = item.trim()+strAdd;
-            if(expects.contains(result)){
-                break;
+        try {
+            List<String> list = getListScene();
+            List<String> expects = LogicHandle.convertStringToList(expect);
+            for (String item : list) {
+                result = item.trim() + strAdd;
+                if (expects.contains(result)) {
+                    break;
+                }
             }
+        }catch (Exception e){
+            exception("getElementDisplayInScene " +e.getMessage());
         }
         return result;
     }
+
 }

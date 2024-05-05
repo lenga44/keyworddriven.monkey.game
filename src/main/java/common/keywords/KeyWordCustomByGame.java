@@ -1,13 +1,13 @@
 package common.keywords;
 
-import common.utility.Constanst;
-import common.utility.FileHelpers;
-import common.utility.Log;
+import common.utility.*;
 import io.restassured.response.Response;
+
+import java.io.IOException;
 
 public class KeyWordCustomByGame {
     //region Dien the
-    public static void deFindAnswer(String locator,String component,String property,String expect,String strReplace,String strAdd,String locator1){
+    public static void deFindAnswer(String locator,String component,String property,String expect,String strReplace,String strAdd,String locator1) throws IOException {
         Log.info("Dien the choose image or text");
         Response response = KeyWordsToAction.request(Constanst.SCENE_URL,"//"+locator+"."+component);
         String value = KeyWordsToAction.convertNotNull(response,property);
@@ -20,13 +20,13 @@ public class KeyWordCustomByGame {
             value = value+strAdd;
         }
         if(expect.contains(value)&& !value.equals("")){
-            FileHelpers.setJsonVariable("path",locator);
-            FileHelpers.setJsonVariable("type_dien_the","image");
+            JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"path_type_dien_the",locator);
+            JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"type_dien_the","image");
         }else{
-            FileHelpers.setJsonVariable("path",locator1);
-            FileHelpers.setJsonVariable("type_dien_the","text");
+            JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"path_type_dien_the",locator1);
+            JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"type_dien_the","text");
         }
-
+        ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
 
     //endregion
