@@ -229,6 +229,16 @@ public class KeyWordCustomForAISpeak {
             ExcelUtils.setCellData(Constanst.YES,Integer.valueOf(tcRow),Constanst.RUN_MODE_TEST_CASE, Constanst.TESTCASE_SHEET, TestScrip.reportPath);
         }
     }
+    public static void changeModeTC(String variableKey,String tcNotExpRow,String tcExpRow,String expect) {
+        String value = FileHelpers.getValueVariableFile(variableKey);
+        if(value.equals(expect)){
+            ExcelUtils.setCellData(Constanst.NO,Integer.valueOf(tcNotExpRow),Constanst.RUN_MODE_TEST_CASE, Constanst.TESTCASE_SHEET, TestScrip.reportPath);
+            ExcelUtils.setCellData(Constanst.YES,Integer.valueOf(tcExpRow),Constanst.RUN_MODE_TEST_CASE, Constanst.TESTCASE_SHEET, TestScrip.reportPath);
+        }else {
+            ExcelUtils.setCellData(Constanst.YES,Integer.valueOf(tcNotExpRow),Constanst.RUN_MODE_TEST_CASE, Constanst.TESTCASE_SHEET, TestScrip.reportPath);
+            ExcelUtils.setCellData(Constanst.NO,Integer.valueOf(tcExpRow),Constanst.RUN_MODE_TEST_CASE, Constanst.TESTCASE_SHEET, TestScrip.reportPath);
+        }
+    }
     public static void changeModeTCSetTrue(String actual,String tcRow,String expect) {
         String expected = JsonHandle.getValue(RunTestScriptData.json,expect);
         String actual1 = actual;

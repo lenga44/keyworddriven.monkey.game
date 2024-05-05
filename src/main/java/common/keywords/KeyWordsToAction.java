@@ -139,6 +139,13 @@ public class KeyWordsToAction {
         //FileHelpers.writeFile(result,Constanst.VARIABLE_PATH_FILE);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
+    public static void returnPathFullName(String locator) throws IOException {
+        waitForObject(locator);
+        int index = 0;
+        Response response = request(Constanst.SCENE_URL,"//"+locator);
+        String name = convert(response,"name");
+        FileHelpers.setJsonVariable("path",name);
+    }
     public static String getPath(String locator, String component,String key,String expected)  {
         String path = "";
         try {
@@ -484,13 +491,48 @@ public class KeyWordsToAction {
                         JsonPath json = response.jsonPath();
                         if (json != null && json.toString() != "") {
                             value = convert(response, key);
-                            if (value != null) {
+                            if(value.length()>=content.length()) {
                                 if (value.toLowerCase().contains(content.toLowerCase()))
+                                    break;
+                            }else {
+                                if (content.toLowerCase().contains(value.toLowerCase()))
                                     break;
                             }
                         }
                     }
                 Thread.sleep(500);
+                }
+                time = LocalDateTime.now();
+            } while (time.compareTo(time1) <= 0);
+            Assert.assertTrue(value.contains(content));
+        }catch (Throwable e){
+            exception(e);
+        }
+    }
+    public static void waitForObjectContain(String locator, String key,String strAdd,String second,String content){
+        try {
+            Log.info("waitForObjectContain :" + locator);
+            LocalDateTime time = LocalDateTime.now();
+            LocalDateTime time1 = time.plusSeconds(Integer.valueOf(second));
+            Response response = null;
+            String value= null;
+            do {
+                response = request(Constanst.SCENE_URL, "//" + locator);
+                if(response!=null) {
+                    if (convert(response, "activeInHierarchy") == "true") {
+                        JsonPath json = response.jsonPath();
+                        if (json != null && json.toString() != "") {
+                            value = convert(response, key).trim()+strAdd;
+                            if(value.length()>=content.length()) {
+                                if (value.toLowerCase().contains(content.toLowerCase()))
+                                    break;
+                            }else {
+                                if (content.toLowerCase().contains(value.toLowerCase()))
+                                    break;
+                            }
+                        }
+                    }
+                    Thread.sleep(500);
                 }
                 time = LocalDateTime.now();
             } while (time.compareTo(time1) <= 0);
@@ -670,6 +712,9 @@ public class KeyWordsToAction {
         TestScrip.result = Constanst.PASS;
         TestScrip.error = "";
         try{
+            if(expect.contains("[")&&actual.contains("[")) {
+                assertEqual(LogicHandle.convertStringToList(actual), LogicHandle.convertStringToList(expect));
+            }
             if(expect.contains("[")||actual.contains("[")) {
                 if (expect.contains("[")) {
                     assertEqual(actual, LogicHandle.convertStringToList(expect));
@@ -701,6 +746,9 @@ public class KeyWordsToAction {
     private static void assertEqual(String actual,String expect){
         Assert.assertEquals(actual,expect);
     }
+    private static void assertEqual(List<String> actual,List<String> expect){
+        Assert.assertEquals(actual,expect);
+    }
     private static void assertEqual(String actual, List<String> expect){
         Assert.assertTrue(expect.contains(actual));
     }
@@ -712,6 +760,9 @@ public class KeyWordsToAction {
         String absolutePath = convert(response,"path");
         if(absolutePath.contains(":"))
             absolutePath = absolutePath.replace(":","!_!");
+        if(absolutePath.contains(".")){
+            absolutePath = absolutePath.replace(".","<_>");
+        }
         return absolutePath;
     }
     private static String getAbsolutePath(Response response, String index){
@@ -732,6 +783,18 @@ public class KeyWordsToAction {
             exception(e);
             return null;
         }
+    }
+    public static String convertNotNull(Response response,String key){
+        String result = "";
+        try {
+            result = String.valueOf(response.getBody().jsonPath().getList(key).get(0));
+            if(result.contains("\n")) {
+                result = result.replace("\n", "");
+            }
+            return result;
+        }catch (Throwable e){
+        }
+        return result;
     }
     public static String convert(Response response,String key,String oldStr,String newStr){
         return convert(response,key).replace(oldStr,newStr);
@@ -883,6 +946,9 @@ public class KeyWordsToAction {
     public static void changeModeTC(String methodName,String locator, String component,String tcRow,String expect) throws InvocationTargetException, IllegalAccessException {
         KeyWordCustomForAISpeak.changeModeTC(methodName,locator,component,tcRow,expect);
     }
+    public static void changeModeTC(String variableKey,String runYes,String runNo,String expect){
+        KeyWordCustomForAISpeak.changeModeTC(variableKey,runYes,runNo,expect);
+    }
     public static void changeModeTCSetFail(String actual,String tcRow,String expect) {
         KeyWordCustomForAISpeak.changeModeTCSetFAIL(actual,tcRow,expect);
     }
@@ -895,5 +961,11 @@ public class KeyWordsToAction {
     }
     public static void resume(){
         request(Constanst.POINTER_URL,Constanst.RESUME_PROGRAM_URL);
+    }
+    public static void deFindAnswerDienThe(String locator,String component,String property,String strReplace,String strAdd,String locator1,String expect){
+        KeyWordCustomByGame.deFindAnswer(locator,component,property,expect,strReplace,strAdd,locator1);
+    }
+    public static void deFindAnswerDienThe(String locator,String component,String property,String locator1,String expect){
+        KeyWordCustomByGame.deFindAnswer(locator,component,property,expect,"","",locator1);
     }
 }

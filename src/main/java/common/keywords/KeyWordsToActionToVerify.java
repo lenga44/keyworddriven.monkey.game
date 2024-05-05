@@ -198,6 +198,12 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         Response response = request.get();
         return convert(response,"name");
     }
+    public static List<String> getListScene(){
+        RequestSpecification request = given();
+        request.baseUri(Constanst.ALL_SCENE);
+        Response response = request.get();
+        return convertToList(response,"name");
+    }
     public static String getText(String locator,String component){
         try {
             Response response = request(Constanst.SCENE_URL, "//" + locator + "." + component);
@@ -495,5 +501,17 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
     public static String getAudiosSourceByLocator(String locator,String locator2,String expect){
         Log.info("getAudiosSourceByTime");
         return LogicHandle.replaceStr(LogicHandle.getProValueByLocator(locator,"AudioSource","clip",locator2,expect,".mp3"),"(UnityEngine.AudioClip)").trim()+".mp3";
+    }
+    public static String getElementDisplayInScene(String strAdd,String expect){
+        List<String> list = getListScene();
+        List<String> expects = LogicHandle.convertStringToList(expect);
+        String result = null;
+        for (String item:list) {
+            result = item.trim()+strAdd;
+            if(expects.contains(result)){
+                break;
+            }
+        }
+        return result;
     }
 }
