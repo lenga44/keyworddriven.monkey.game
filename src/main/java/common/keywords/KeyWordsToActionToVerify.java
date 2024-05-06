@@ -93,20 +93,32 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         return isElementsDisplay("5",strSplit,locator);
     }
     public static String isElementsDisplay(String second,String strSplit, String locator) throws InterruptedException {
+        System.out.println(locator);
         boolean enable = false;
         LocalDateTime time = LocalDateTime.now();
-        LocalDateTime time1 = time.plusSeconds(Integer.valueOf(second));
-        while (time.compareTo(time1) <= 0) {
+        LocalDateTime time1 = time.plusSeconds(Integer.parseInt(second));
+        while (!time.isAfter(time1)) {
             if (locator.contains("[") && locator.contains(",")) {
                 locator = LogicHandle.replaceStr(locator, "[");
                 locator = LogicHandle.replaceStr(locator, "]");
                 List<String> locators = LogicHandle.convertStringToList(locator);
                 for (String item : locators) {
+                    System.out.println(item);
                     enable = isElementDisplay(LogicHandle.replaceStr(item, strSplit));
-                    if (enable == true) {
+                    if (enable) {
+                        //System.out.println(item);
                         break;
                     }
                 }
+            }else {
+                enable = isElementDisplay(LogicHandle.replaceStr(locator, strSplit));
+                if (enable) {
+                    //System.out.println(item);
+                    break;
+                }
+            }
+            if (enable){
+                break;
             }
             Thread.sleep(500);
             time = LocalDateTime.now();

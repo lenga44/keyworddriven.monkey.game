@@ -162,6 +162,13 @@ public class KeyWordsToAction {
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"path",name);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
+    public static void returnPathFullPath(String locator) throws IOException {
+        waitForObject(locator);
+        Response response = request(Constanst.SCENE_URL,"//"+locator);
+        String name = convert(response,"path");
+        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"path",name);
+        ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
+    }
 
     public static void returnPath(String locator,String index) throws IOException {
         waitForObject(locator);
@@ -773,7 +780,7 @@ public class KeyWordsToAction {
             if(expect.length()<actual.length()) {
                 assertContain(actual, expect);
             }else if(expect.length() == actual.length()) {
-                assertEqual(actual,expect);
+                assertEqual(expect,actual);
             }else {
                 assertContain(expect,actual);
             }
