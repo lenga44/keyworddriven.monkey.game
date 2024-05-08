@@ -16,42 +16,41 @@ import java.util.logging.Logger;
 public class Run {
 
     public static void main(String[] args) throws Exception {
+            keyWord = new KeyWordsToActionToVerify();
+            method = keyWord.getClass().getMethods();
 
-        keyWord = new KeyWordsToActionToVerify();
-        method = keyWord.getClass().getMethods();
+            Logger formulaParserLogger = Logger.getLogger(FormulaParser.class.getName());
+            formulaParserLogger.setLevel(Level.OFF);
+            Log.resetFileLog();
 
-        Logger formulaParserLogger = Logger.getLogger(FormulaParser.class.getName());
-        formulaParserLogger.setLevel(Level.OFF);
-        Log.resetFileLog();
+            scopePath = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.SCOPE_FILE_PATH);
+            Log.info("SCOPE_PATH: " + scopePath);
 
-        scopePath = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.SCOPE_FILE_PATH);
-        Log.info("SCOPE_PATH: "+scopePath);
+            ExcelUtils.setExcelFile(scopePath);
+            returnFlowScrip();
+            resetSumarryStatus();
 
-        ExcelUtils.setExcelFile(scopePath);
-        returnFlowScrip();
-        resetSumarryStatus();
+            String start = DateTime.getNow().toString();
+            TelegramBot.sendMessTele("Start: " + start);
+            FileHelpers.writeFile("", Constanst.LIST_FAIL_PATH_FILE + "list_fail.txt");
 
-        String start = DateTime.getNow().toString();
-        TelegramBot.sendMessTele("Start: "+start);
-        FileHelpers.writeFile("",Constanst.LIST_FAIL_PATH_FILE+"list_fail.txt");
+            int iTotalSuite = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
+            Log.info("Total scope : " + iTotalSuite);
 
-        int iTotalSuite = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
-        Log.info("Total scope : "+iTotalSuite);
+            returnSizeTestSuit(iTotalSuite - 1);
 
-        returnSizeTestSuit(iTotalSuite-1);
-
-        runOneTime(iOnceTimeSetUp);
-        if (isModuleFlow == true) {
-            runTestScriptModule = new RunTestScriptModule(keyWord, method);
-            runModuleFlow(iFirstTestSuit,iLastTestSuit);
-        }
-        if(isDataFlow == true){
-            runTestScriptData = new RunTestScriptData(keyWord,method);
-            runDataFlow(iFirstTestSuit,iLastTestSuit);
-        }
-        runOneTime(iOnceTimeTearDown);
-        //Log.info("End script: "+DateTime.getNow());
-        EndTestScript.sendMessTelegramEndScrip();
+            runOneTime(iOnceTimeSetUp);
+            if (isModuleFlow == true) {
+                runTestScriptModule = new RunTestScriptModule(keyWord, method);
+                runModuleFlow(iFirstTestSuit, iLastTestSuit);
+            }
+            if (isDataFlow == true) {
+                runTestScriptData = new RunTestScriptData(keyWord, method);
+                runDataFlow(iFirstTestSuit, iLastTestSuit);
+            }
+            runOneTime(iOnceTimeTearDown);
+            //Log.info("End script: "+DateTime.getNow());
+            EndTestScript.sendMessTelegramEndScrip();
     }
     private static void runOneTime(int iOnceTime) throws Exception {
         Log.info("runOneTime " +iOnceTime);

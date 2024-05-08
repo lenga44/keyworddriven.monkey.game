@@ -140,6 +140,11 @@ public class KeyWordsToAction {
         //FileHelpers.writeFile(result,Constanst.VARIABLE_PATH_FILE);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
+    public static void returnPathReplaceVariable(String replaceStr,String expect) throws IOException {
+        String value = expect.replace(replaceStr,"");
+        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.PATH_GAME_OBJECT,value);
+        ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
+    }
     public static void returnPathFullName(String locator,String key) throws IOException {
         waitForObject(locator);
         Response response = request(Constanst.SCENE_URL,"//"+locator);
@@ -298,6 +303,14 @@ public class KeyWordsToAction {
     public static void setIndexVariableFile(String value) throws IOException {
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,Integer.parseInt(value));
         Log.info("setIndexVariableFile "+value);
+    }
+    public static void setIndexVariableFile(int value) throws IOException {
+        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,value);
+        Log.info("setIndexVariableFile "+value);
+    }
+    public static void setIndexVariableFile() throws IOException {
+        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,0);
+        Log.info("setIndexVariableFile ");
     }
     public static void addIndexVariableFile(String add) throws IOException {
         Log.info("addIndexVariableFile");
@@ -1022,5 +1035,9 @@ public class KeyWordsToAction {
     }
     public static void deFindAnswerDienThe(String locator,String component,String property,String locator1,String expect) throws IOException {
         KeyWordCustomByGame.deFindAnswer(locator,component,property,expect,"","",locator1);
+    }
+    public static void swipeMap(String locator,String component, String property,String key,String expect){
+        String level = FileHelpers.getValueVariableFile("index");
+        KeyWordCustomForAISpeak.swipeMap(locator,component,property,key,level,expect);
     }
 }

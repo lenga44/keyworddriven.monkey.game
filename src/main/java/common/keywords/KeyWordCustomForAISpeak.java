@@ -10,11 +10,11 @@ import io.restassured.response.Response;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import static common.keywords.KeyWordsToAction.*;
 
 public class KeyWordCustomForAISpeak {
 
@@ -224,11 +224,12 @@ public class KeyWordCustomForAISpeak {
             expected = JsonHandle.getValue(RunTestScriptData.json, expect);
         }
         if(level.toLowerCase().equals(expected.toLowerCase())){
-            ExcelUtils.setCellData(Constanst.NO,Integer.valueOf(tcRow),Constanst.RUN_MODE_TEST_CASE, Constanst.TESTCASE_SHEET, TestScrip.reportPath);
+            ExcelUtils.setCellData(Constanst.NO,Integer.parseInt(tcRow),Constanst.RUN_MODE_TEST_CASE, Constanst.TESTCASE_SHEET, TestScrip.reportPath);
         }else {
-            ExcelUtils.setCellData(Constanst.YES,Integer.valueOf(tcRow),Constanst.RUN_MODE_TEST_CASE, Constanst.TESTCASE_SHEET, TestScrip.reportPath);
+            ExcelUtils.setCellData(Constanst.YES,Integer.parseInt(tcRow),Constanst.RUN_MODE_TEST_CASE, Constanst.TESTCASE_SHEET, TestScrip.reportPath);
         }
     }
+
     public static void changeModeTC(String variableKey,String tcNotExpRow,String tcExpRow,String expect) {
         String value = FileHelpers.getValueVariableFile(variableKey);
         if(value.equals(expect)){
@@ -272,23 +273,40 @@ public class KeyWordCustomForAISpeak {
         }
     }
     private static String runMethod(String methodName,String locator, String component) throws InvocationTargetException, IllegalAccessException {
-        String result = "";
-        ArrayList<Object> objs = new ArrayList<>();
-        objs.add(locator);
-        objs.add(component);
+        Object result = new Object();
         Method method[];
         KeyWordsToActionToVerify keyWord = new KeyWordsToActionToVerify();
         method = keyWord.getClass().getMethods();
         for (int i = 0; i < method.length; i++) {
             if(method[i].getName().equals(methodName)){
-                if(method[i].getReturnType().equals("String")) {
-                    result = (String) method[i].invoke(keyWord, objs);
+                String type = method[i].getReturnType().getName();
+                System.out.println(type);
+                if(type.equals("java.lang.String")) {
+                    result = method[i].invoke(keyWord, locator,component);
                 }else {
-                    method[i].invoke(keyWord, objs);
+                    continue;
                 }
                 break;
             }
         }
-        return result;
+        System.out.println(result);
+        return result.toString();
+    }
+    public static void swipeMap(String locator,String component, String property,String key,String level,String expect){
+        Response response = request(locator,component);
+        if(response !=null) {
+            String value = convert(response, property);
+            String json = FileHelpers.readFile(FileHelpers.getRootFolder() + FileHelpers.getValueConfig(key));
+            List<Object> topic =JsonHandle.getJsonArray(json,"$.lvs[?(@.level=='"+level+"')].category[*].topic[*].name").toList();
+            if(topic.contains((Object) value)){
+                int actualIndex = LogicHandle.getIndexInList(topic,value);
+                int expectIndex = LogicHandle.getIndexInList(topic,expect);
+                if(actualIndex>expectIndex){
+                    swipe("195","270","500",String.valueOf(actualIndex-expectIndex));
+                }else {
+                    swipe("270","195","500",String.valueOf(expectIndex-actualIndex));
+                }
+            }
+        }
     }
 }

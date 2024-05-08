@@ -80,5 +80,8 @@ public class JsonHandle {
                 .collect(Collectors.toCollection(ArrayList::new));
         return keys;
     }
-
+    public static JSONArray getJsonArray(String json,String jsonPath){
+        String array = getValue(json,jsonPath);
+        return new JSONArray(array);
+    }
 }
