@@ -50,7 +50,7 @@ public class ExcelUtils {
     public static String getStringValueInCell(int rowNumber, int columnNumber, String sheetName){
         try {
             ExcelSheet = ExcelBook.getSheet(sheetName);
-            Cell = ExcelSheet.getRow(rowNumber).getCell(columnNumber);
+            Cell = ExcelSheet.getRow(rowNumber).getCell(columnNumber,org.apache.poi.ss.usermodel.Row.MissingCellPolicy.CREATE_NULL_AS_BLANK );
             String cellData = Cell.getStringCellValue();
             return cellData;
         } catch (Throwable e) {
@@ -63,7 +63,7 @@ public class ExcelUtils {
     public static String getValueInCell(int rowNumber, int columnNumber, String sheetName){
         try {
             ExcelSheet = ExcelBook.getSheet(sheetName);
-            Cell = ExcelSheet.getRow(rowNumber).getCell(columnNumber);
+            Cell = ExcelSheet.getRow(rowNumber).getCell(columnNumber,org.apache.poi.ss.usermodel.Row.MissingCellPolicy.CREATE_NULL_AS_BLANK );
             String result = "";
             switch (Cell.getCellType()) {
                 case STRING:
@@ -221,7 +221,7 @@ public class ExcelUtils {
         try{
             ExcelSheet = ExcelBook.getSheet(sheetName);
             Row = ExcelSheet.getRow(rowNumber);
-            Cell = Row.getCell(columnNumber, org.apache.poi.ss.usermodel.Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
+            Cell = Row.getCell(columnNumber, org.apache.poi.ss.usermodel.Row.MissingCellPolicy.CREATE_NULL_AS_BLANK );
             if(Cell == null){
                 Cell = Row.createCell(columnNumber);
             }
@@ -240,7 +240,7 @@ public class ExcelUtils {
         try{
             ExcelSheet = ExcelBook.getSheet(sheetName);
             Row = ExcelSheet.getRow(rowNumber);
-            Cell = Row.getCell(columnNumber, org.apache.poi.ss.usermodel.Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
+            Cell = Row.getCell(columnNumber, org.apache.poi.ss.usermodel.Row.MissingCellPolicy.CREATE_NULL_AS_BLANK );
             if(Cell == null){
                 Cell = Row.createCell(columnNumber);
             }

@@ -304,6 +304,10 @@ public class KeyWordsToAction {
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,Integer.parseInt(value));
         Log.info("setIndexVariableFile "+value);
     }
+    public static void setVariableFile(String key,String value) throws IOException {
+        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,key,Integer.parseInt(value));
+        Log.info("setIndexVariableFile "+value);
+    }
     public static void setIndexVariableFile(int value) throws IOException {
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,value);
         Log.info("setIndexVariableFile "+value);

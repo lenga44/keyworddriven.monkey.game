@@ -26,22 +26,29 @@ public class TestScrip {
         List<String> reports = new ArrayList<>();
         ExcelUtils.setExcelFile(scopePath);
         Scope.genFlowLesson(json,scopePath);
+        iTotalSuite = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
         for (;iTestSuite<=iTotalSuite;iTestSuite++){
-            ExcelUtils.setCellData("",iTestSuite,Constanst.STATUS_SUITE,Constanst.SCOPE_SHEET,scopePath);
-            String sRunMode = ExcelUtils.getStringValueInCell(iTestSuite,Constanst.RUN_MODE_SCOPE,Constanst.SCOPE_SHEET);
-            tcName = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET);
-            System.out.println("TC name: "+tcName);
-            iTotalSuite = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
-            if(sRunMode.equals(Constanst.YES)) {
-                Scope.deFindFlowGame(iTestSuite,scopePath);
-                flow.add(tcName);
-                genTestcaseReport();
-                genTestCaseWithGroup(/*scopePath*/);
-                reports.add(reportPath);
-                int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
-                execute_testcases(iTotalTestCase);
-                ExcelUtils.setExcelFile(scopePath);
-                ExcelUtils.setCellData(tcResult, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
+            tcResult =Constanst.PASS;
+            try {
+                ExcelUtils.setCellData("", iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
+                String sRunMode = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.RUN_MODE_SCOPE, Constanst.SCOPE_SHEET);
+                tcName = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET);
+                if (!tcName.equals("")) {
+                    System.out.println("TC name: " + tcName);
+                    if (sRunMode.equals(Constanst.YES)) {
+                        Scope.deFindFlowGame(iTestSuite, scopePath);
+                        flow.add(tcName);
+                        genTestcaseReport();
+                        genTestCaseWithGroup(/*scopePath*/);
+                        reports.add(reportPath);
+                        int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
+                        execute_testcases(iTotalTestCase);
+                        ExcelUtils.setExcelFile(scopePath);
+                        ExcelUtils.setCellData(tcResult, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
+                    }
+                }
+            }catch (Exception e){
+
             }
         }
         FileHelpers.writeFile(flow.toString(),RunTestScriptData.reportPath.replace(".xlsx",".txt"));
@@ -209,11 +216,24 @@ public class TestScrip {
         }
     }
     public static String getDataSet(String key){
+        key = getValueInVariableFile(key);
         String value = "";
         if(key.contains("$")&& !json.equals(null)) {
             value = JsonHandle.getValue(json, key);
         }else
             value = key;
+        return value;
+    }
+    private static String getValueInVariableFile(String key){
+        String value = key;
+        if(key.contains("$.path")){
+            String locator = FileHelpers.getValueVariableFile("path");
+            value = value.replace("$.path",locator);
+        }
+        if(key.contains("$.index")){
+            String index = FileHelpers.getValueVariableFile("index");
+            value = value.replace("$.index",index);
+        }
         return value;
     }
     public static String getDataSet(String key,int rowNumber, int columnNumber){

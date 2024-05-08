@@ -26,8 +26,8 @@ public class RunTestScriptData extends TestScrip{
             for (int index = begin; index <= end; index++) {
                 //get node need check
                 json = JsonHandle.getObjectInJsonData(index - 1);
-                getLevelFolder(1);
                 ExcelUtils.setExcelFile(scopePath);
+                getLevelFolder(1);
                 FileHelpers.copyFile(scopePath,copyFile);
                 try {
                     ExcelUtils.setCellData(index, 1, Constanst.CURRENT_INDEX_COLUM, Constanst.PLAN_SHEET, scopePath);

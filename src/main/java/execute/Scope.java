@@ -83,7 +83,9 @@ public class Scope {
                             }
                         } else {
                             int loop = Integer.parseInt(mapGroupValue.get(groupName));
-                            copyTestSuiteWithGroup(ranges, loop, Constanst.TOTAL_CELL_SCOPE_SHEET);
+                            if(loop>1) {
+                                copyTestSuiteWithGroup(ranges, loop, Constanst.TOTAL_CELL_SCOPE_SHEET);
+                            }
                         }
                     }
                 }
@@ -143,7 +145,7 @@ public class Scope {
         FileHelpers.copyFile(copyFile,sourceFile);
         FileHelpers.deleteFile(copyFile);
     }
-    public static String genReportName(String key){
+    public static String genReportName(String key){;
         String report ="";
         int i = 0;
         if (key.contains(",")) {
