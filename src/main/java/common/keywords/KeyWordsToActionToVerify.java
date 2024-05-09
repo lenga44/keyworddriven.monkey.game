@@ -249,6 +249,14 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
             return "";
         }
     }
+    public static String getTextAlphabet(String locator,String component){
+        Log.info("getTextAlphabet");
+        String text = getText(locator,component);
+        if(text.matches("^[ A-Za-z]+$")) {
+            text = text.replaceAll("^[ A-Za-z]+$", "");
+        }
+        return text;
+    }
     public static String getTextsByTime(String locator,String component,String second,String expect){
         String str= getText(locator,component);
         LocalDateTime time = LocalDateTime.now();

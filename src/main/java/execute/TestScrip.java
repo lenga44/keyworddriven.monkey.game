@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import static common.keywords.KeyWordsToAction.exception;
+import static execute.Scope.genReportName;
 
 public class TestScrip {
     public TestScrip(KeyWordsToActionToVerify keyWord, Method method[]){
@@ -27,28 +28,24 @@ public class TestScrip {
         ExcelUtils.setExcelFile(scopePath);
         Scope.genFlowLesson(json,scopePath);
         iTotalSuite = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
-        for (;iTestSuite<=iTotalSuite;iTestSuite++){
+        for (;iTestSuite<=iTotalSuite-1;iTestSuite++){
             tcResult =Constanst.PASS;
-            try {
-                ExcelUtils.setCellData("", iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
-                String sRunMode = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.RUN_MODE_SCOPE, Constanst.SCOPE_SHEET);
-                tcName = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET);
-                if (!tcName.equals("")) {
-                    System.out.println("TC name: " + tcName);
-                    if (sRunMode.equals(Constanst.YES)) {
-                        Scope.deFindFlowGame(iTestSuite, scopePath);
-                        flow.add(tcName);
-                        genTestcaseReport();
-                        genTestCaseWithGroup(/*scopePath*/);
-                        reports.add(reportPath);
-                        int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
-                        execute_testcases(iTotalTestCase);
-                        ExcelUtils.setExcelFile(scopePath);
-                        ExcelUtils.setCellData(tcResult, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
-                    }
+            tcName = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET);
+            System.out.println("TC name: " + tcName);
+            if (!tcName.equals("")) {
+            ExcelUtils.setCellData("", iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
+            String sRunMode = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.RUN_MODE_SCOPE, Constanst.SCOPE_SHEET);
+                if (sRunMode.equals(Constanst.YES)) {
+                    Scope.deFindFlowGame(iTestSuite, scopePath);
+                    flow.add(tcName);
+                    genTestcaseReport();
+                    genTestCaseWithGroup(scopePath);
+                    reports.add(reportPath);
+                    int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
+                    execute_testcases(iTotalTestCase);
+                    ExcelUtils.setExcelFile(scopePath);
+                    ExcelUtils.setCellData(tcResult, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
                 }
-            }catch (Exception e){
-
             }
         }
         FileHelpers.writeFile(flow.toString(),RunTestScriptData.reportPath.replace(".xlsx",".txt"));
@@ -56,21 +53,20 @@ public class TestScrip {
     private static void genTestcaseReport() throws IOException {
         tcPath = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.TESTCASE_FILE_PATH)+ tcName + ".xlsx";
         if(isDataFlow) {
-            System.out.println(levelFolder);
-            System.out.println(reportName);
             reportPath = GenerateReport.genTCReport(levelFolder, reportName);
         }else {
             reportPath = GenerateReport.genTCReport(levelFolder, "");
         }
         ExcelUtils.setExcelFile(reportPath);
     }
-    private static void genTestCaseWithGroup(){
+    private static void genTestCaseWithGroup(String path){
         ExcelUtils.setExcelFile(reportPath);
         int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
+        System.out.println("========================= "+iTotalTestCase);
         if(isDataFlow) {
             int group = GroupInTest.getGroup().size();
             if (group > 0) {
-                //ExcelUtils.setExcelFile(path);
+                ExcelUtils.setExcelFile(path);
                 KeyWordsToAction.pause();
                 try {
                     ExcelUtils.createRowLastest(iTotalTestCase, Constanst.TESTCASE_SHEET, reportPath);
@@ -376,8 +372,10 @@ public class TestScrip {
     public static void getLevelFolder(int row)throws IOException{
         String courseFolder = FileHelpers.getRootFolder() + Constanst.REPORT_FILE_PATH;
         String level = ExcelUtils.getStringValueInCell(1,Constanst.LEVEL_COLUM,Constanst.PLAN_SHEET);
-        System.out.println(level);
+        String subfolder = ExcelUtils.getStringValueInCell(1,Constanst.DATA_PLAN_COLUM,Constanst.PLAN_SHEET);
+        subfolder = genReportName(subfolder);
         levelFolder =(level.contains("$."))? courseFolder +"//" +JsonHandle.getValue(json,level): courseFolder +"//" + level;
+        levelFolder += "//"+subfolder;
         Log.info("levelFolder: "+levelFolder);
         Log.info("Folder path report course: " + FileHelpers.convertPath(levelFolder));
 
