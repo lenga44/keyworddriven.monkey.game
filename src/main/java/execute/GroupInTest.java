@@ -108,7 +108,6 @@ public class GroupInTest {
     //region COPY TEST STEP
     public static void genTestStepFollowTestCase(String path){
         try {
-            ExcelUtils.setExcelFile(path);
             List<String> listTestCases = getTestCaseIDs(Constanst.TESTCASE_SHEET);
             int totalCellInRow = ExcelUtils.getRow(Constanst.TEST_STEP_SHEET, 1);
             Map<String, ArrayList<List<String>>> map = mapTestCaseWithTestSteps(totalCellInRow);
@@ -116,13 +115,14 @@ public class GroupInTest {
                 int totalRowTestStep = ExcelUtils.getRowCount(Constanst.TEST_STEP_SHEET);
                 copyRowByTC(map, tcID, path,totalRowTestStep);
             }
-            ExcelUtils.deleteRow(ExcelUtils.getRowCount(Constanst.TEST_STEP_SHEET)-1,Constanst.TEST_STEP_SHEET);
+            //ExcelUtils.deleteRow(ExcelUtils.getRowCount(Constanst.TEST_STEP_SHEET)-1,Constanst.TEST_STEP_SHEET);
             ExcelUtils.closeFile(path);
         }catch (Exception e){
             e.printStackTrace();
         }
     }
     private static void copyRowByTC(Map<String, ArrayList<List<String>>> map,String tcID,String path,int totalTestStep) throws IOException {
+        ExcelUtils.setExcelFile(path);
         String id = tcID;
         if(id.contains(".")){
             id = Arrays.asList(id.split("\\.")).get(0);
@@ -132,6 +132,8 @@ public class GroupInTest {
         }
         for (String str: map.keySet()) {
             if(id.equals(str)){
+                System.out.println(str);
+                System.out.println(index);
                 for(int i = 0;i<map.get(str).size();i++) {
                     if (index >= totalTestStep-1) {
                         ExcelUtils.insertRow(index, Constanst.TEST_STEP_SHEET);
@@ -250,6 +252,6 @@ public class GroupInTest {
     //region KEY
     private static int iStartTestStep;
     private static int iEndTestStep;
-    private static  int index=1;
+    public static int index = 1;
     //endregion
 }

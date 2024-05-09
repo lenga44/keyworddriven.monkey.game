@@ -50,7 +50,7 @@ public class ExcelUtils {
     public static String getStringValueInCell(int rowNumber, int columnNumber, String sheetName){
         try {
             ExcelSheet = ExcelBook.getSheet(sheetName);
-            Cell = ExcelSheet.getRow(rowNumber).getCell(columnNumber,org.apache.poi.ss.usermodel.Row.MissingCellPolicy.CREATE_NULL_AS_BLANK );
+            Cell = ExcelSheet.getRow(rowNumber).getCell(columnNumber,org.apache.poi.ss.usermodel.Row.MissingCellPolicy.RETURN_NULL_AND_BLANK );
             String cellData = Cell.getStringCellValue();
             return cellData;
         } catch (Throwable e) {
@@ -221,6 +221,9 @@ public class ExcelUtils {
         try{
             ExcelSheet = ExcelBook.getSheet(sheetName);
             Row = ExcelSheet.getRow(rowNumber);
+            if(Row==null){
+                Row = ExcelSheet.createRow(rowNumber);
+            }
             Cell = Row.getCell(columnNumber, org.apache.poi.ss.usermodel.Row.MissingCellPolicy.CREATE_NULL_AS_BLANK );
             if(Cell == null){
                 Cell = Row.createCell(columnNumber);

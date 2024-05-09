@@ -29,7 +29,6 @@ public class TestScrip {
         Scope.genFlowLesson(json,scopePath);
         iTotalSuite = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
         for (;iTestSuite<=iTotalSuite-1;iTestSuite++){
-            tcResult =Constanst.PASS;
             tcName = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET);
             System.out.println("TC name: " + tcName);
             if (!tcName.equals("")) {
@@ -39,7 +38,7 @@ public class TestScrip {
                     Scope.deFindFlowGame(iTestSuite, scopePath);
                     flow.add(tcName);
                     genTestcaseReport();
-                    genTestCaseWithGroup(scopePath);
+                    genTestCaseWithGroup();
                     reports.add(reportPath);
                     int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
                     execute_testcases(iTotalTestCase);
@@ -47,6 +46,7 @@ public class TestScrip {
                     ExcelUtils.setCellData(tcResult, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
                 }
             }
+            GroupInTest.index =1;
         }
         FileHelpers.writeFile(flow.toString(),RunTestScriptData.reportPath.replace(".xlsx",".txt"));
     }
@@ -59,14 +59,13 @@ public class TestScrip {
         }
         ExcelUtils.setExcelFile(reportPath);
     }
-    private static void genTestCaseWithGroup(String path){
+    private static void genTestCaseWithGroup(){
         ExcelUtils.setExcelFile(reportPath);
         int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
-        System.out.println("========================= "+iTotalTestCase);
         if(isDataFlow) {
             int group = GroupInTest.getGroup().size();
             if (group > 0) {
-                ExcelUtils.setExcelFile(path);
+                ExcelUtils.setExcelFile(reportPath);
                 KeyWordsToAction.pause();
                 try {
                     ExcelUtils.createRowLastest(iTotalTestCase, Constanst.TESTCASE_SHEET, reportPath);
@@ -104,32 +103,36 @@ public class TestScrip {
         return 0;
     }
     private static void execute_testcases(int iTotalTestCase) throws IOException {
-        Log.info("Total TC: " + iTotalTestCase);
-        for(int i =1; i<iTotalTestCase;i++) {
-            tcResults = new ArrayList<>();
-            ExcelUtils.setCellData("",i,Constanst.TESTCASE_STATUS,Constanst.TESTCASE_SHEET,reportPath);
-            String runMode = ExcelUtils.getStringValueInCell(i,Constanst.RUN_MODE_TEST_CASE,Constanst.TESTCASE_SHEET);
-            if(runMode.equals(Constanst.YES)) {
-            String sTestCaseID = ExcelUtils.getStringValueInCell(i, Constanst.TESTCASE_ID, Constanst.TESTCASE_SHEET);
-            Log.info("TCID: " + sTestCaseID);
-            rangeStepByTestCase(sTestCaseID);
-            Log.info("result: "+result);
-                if (!result.equals(Constanst.SKIP)) {
-                    tcResult = Constanst.PASS;
-                    execute_steps();
+        try {
+            Log.info("Total TC: " + iTotalTestCase);
+            for (int i = 1; i < iTotalTestCase; i++) {
+                tcResults = new ArrayList<>();
+                ExcelUtils.setCellData("", i, Constanst.TESTCASE_STATUS, Constanst.TESTCASE_SHEET, reportPath);
+                String runMode = ExcelUtils.getStringValueInCell(i, Constanst.RUN_MODE_TEST_CASE, Constanst.TESTCASE_SHEET);
+                if (runMode.equals(Constanst.YES)) {
+                    String sTestCaseID = ExcelUtils.getStringValueInCell(i, Constanst.TESTCASE_ID, Constanst.TESTCASE_SHEET);
+                    Log.info("TCID: " + sTestCaseID);
+                    rangeStepByTestCase(sTestCaseID);
+                    Log.info("result: " + result);
+                    if (!result.equals(Constanst.SKIP)) {
+                        tcResult = Constanst.PASS;
+                        execute_steps();
 
-                } else
-                    tcResult = Constanst.SKIP;
-                if(tcResults.contains(Constanst.FAIL)){
-                    onResultTestcase(Constanst.FAIL, error, i);
-                }else {
-                    onResultTestcase(Constanst.PASS, "", i);
+                    } else
+                        tcResult = Constanst.SKIP;
+                    if (tcResults.contains(Constanst.FAIL)) {
+                        onResultTestcase(Constanst.FAIL, error, i);
+                    } else {
+                        onResultTestcase(Constanst.PASS, "", i);
+                    }
                 }
             }
+            markFailTest(iTotalTestCase);
+            markSkipTest(iTotalTestCase);
+            System.out.println("============ " + tcResult);
+        }catch (Exception e){
+            Log.info("|execute_testcases | " + e.getMessage());
         }
-        markFailTest(iTotalTestCase);
-        markSkipTest(iTotalTestCase);
-        System.out.println("============ "+tcResult);
     }
     private static void markFailTest(int iTotalTestCase){
         for(int i =1; i<iTotalTestCase;i++) {
