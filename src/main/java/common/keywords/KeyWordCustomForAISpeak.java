@@ -293,7 +293,7 @@ public class KeyWordCustomForAISpeak {
         return result.toString();
     }
     public static void swipeMap(String locator,String component, String property,String key,String level,String expect){
-        Response response = request(locator,component);
+        Response response = request(Constanst.SCENE_URL,"//"+locator+"."+component);
         if(response !=null) {
             String value = convert(response, property);
             String json = FileHelpers.readFile(FileHelpers.getRootFolder() + FileHelpers.getValueConfig(key));
@@ -302,8 +302,10 @@ public class KeyWordCustomForAISpeak {
                 int actualIndex = LogicHandle.getIndexInList(topic,value);
                 int expectIndex = LogicHandle.getIndexInList(topic,expect);
                 if(actualIndex>expectIndex){
+                    Log.info("swipe from right to left (1)");
                     swipe("195","270","500",String.valueOf(actualIndex-expectIndex));
                 }else {
+                    Log.info("swipe from left to right (-1)");
                     swipe("270","195","500",String.valueOf(expectIndex-actualIndex));
                 }
             }

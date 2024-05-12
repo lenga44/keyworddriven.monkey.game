@@ -55,7 +55,7 @@ public class Run {
     private static void runOneTime(int iOnceTime) throws Exception {
         Log.info("runOneTime " +iOnceTime);
         if(iOnceTime>0){
-            TestScrip.execute_suites(scopePath,iOnceTime,iOnceTime);
+            TestScrip.execute_suites(scopePath,iOnceTime);
         }
     }
     private static void returnSizeTestSuit(int iTotalSuite) throws IOException {

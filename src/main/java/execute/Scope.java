@@ -54,7 +54,7 @@ public class Scope {
             Log.error("TEST CASE IS NOT EXIT!!!");
         }
     }
-    public static void genFlowLesson(String json,String path) throws Exception {
+    public static void genFlowLesson(String json,int total,String path) throws Exception {
         ExcelUtils.setExcelFile(FileHelpers.getRootFolder()+FileHelpers.getValueConfig(Constanst.SCOPE_FILE_PATH));
         KeyWordsToAction.pause();
         try {
@@ -62,6 +62,7 @@ public class Scope {
             int totalGroup = ExcelUtils.getRowCount(Constanst.GROUP_SHEET);;
             Map<String, String> mapGroupValue = getValueGroups(json, groups,path);
             if (totalGroup > 0) {
+                ExcelUtils.createRowLastest(total,Constanst.SCOPE_SHEET,path);
                 for (int level : getListLevel(totalGroup)) {
                     for (String groupName : getGroupWithLeve(totalGroup, level)) {
                         Map<String, ArrayList<Integer>> mapGroupRange = getRangeGroups(groupName, Constanst.GROUP_COLUM_IN_SCOPE_SHEET, Constanst.SCOPE_SHEET);
@@ -76,7 +77,6 @@ public class Scope {
                                         loop = 10;
                                     }
                                     ArrayList<Integer> listRange = getListRangeByGroup(rowInsert, groupName, ranges);
-
                                     copyTestSuiteWithGroupSubLevel(listRange, loop, Constanst.TOTAL_CELL_SCOPE_SHEET);
                                     rowInsert = listRange.get(0) + loop + 1;
                                 }
@@ -94,8 +94,6 @@ public class Scope {
             Log.error("|genFlowLesson| " + e.getMessage());
             e.printStackTrace();
         }
-        int totalRow = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
-        ExcelUtils.deleteRow(totalRow - 1, Constanst.SCOPE_SHEET);
         ExcelUtils.closeFile(FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.SCOPE_FILE_PATH));
         KeyWordsToAction.resume();
     }

@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class GroupInTest {
-
+    private static int loop;
     //region COPY TESTCASES
     public static void genTestCaseWhichGroupContain(String json, String reportPath) throws Exception {
         ExcelUtils.setExcelFile(reportPath);
@@ -24,7 +24,7 @@ public class GroupInTest {
                         int rowInsert =0;
                         if(!list.equals(null)){
                             for(int i = 0;i<list.size();i++){
-                                int loop = list.get(i);
+                                loop = list.get(i);
                                 if(loop>10){
                                     loop = 10;
                                 }
@@ -34,10 +34,8 @@ public class GroupInTest {
                             }
                         }
                     }else {
-                        int loop = Integer.valueOf(mapGroupValue.get(groupName));
+                        loop = Integer.valueOf(mapGroupValue.get(groupName));
                         copyTestCasesWithGroup(ranges,loop,reportPath,totalCellInRow);
-                        int totalRow = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
-                        ExcelUtils.deleteRow(totalRow-1,Constanst.TESTCASE_SHEET);
                     }
                 }
             }
@@ -55,7 +53,7 @@ public class GroupInTest {
         int last = ranges.get(1)+1;
         ArrayList<Integer> list = new ArrayList<>();
         for (; i<totalTestSuites;i++){
-            if(ExcelUtils.getStringValueInCell(i,Constanst.GROUP_COLLUM_IN_TC_SHEET,Constanst.TESTCASE_SHEET).equals(group)){
+            if(ExcelUtils.getStringValueInCell(i,Constanst.GROUP_COLLUM_IN_TC_SHEET,Constanst.TESTCASE_SHEET,"getListRangeByGroup").equals(group)){
                 if(i!=last) {
                     last = i +countRow;
                     list.add(i);
@@ -77,7 +75,7 @@ public class GroupInTest {
                 int to = last + j;
                 ExcelUtils.copyRow(reportPath, Constanst.TESTCASE_SHEET, from, to,totalCell);
                 ExcelUtils.setExcelFile(reportPath);
-                String id = ExcelUtils.getStringValueInCell(ranges.get(0) + j, Constanst.TESTCASE_ID, Constanst.TESTCASE_SHEET) + "_" + (i + 1);
+                String id = ExcelUtils.getStringValueInCell(ranges.get(0) + j, Constanst.TESTCASE_ID, Constanst.TESTCASE_SHEET,"copyTestCasesWithGroup") + "_" + (i + 1);
                 genTestcaseID(id, to, reportPath);
                 ExcelUtils.closeFile(reportPath);
             }
@@ -95,7 +93,7 @@ public class GroupInTest {
                 int to = last + j;
                 ExcelUtils.copyRow(reportPath, Constanst.TESTCASE_SHEET, from, to,totalCell);
                 ExcelUtils.setExcelFile(reportPath);
-                String id = ExcelUtils.getStringValueInCell(ranges.get(0) + j, Constanst.TESTCASE_ID, Constanst.TESTCASE_SHEET) + "." + (i + 1);
+                String id = ExcelUtils.getStringValueInCell(ranges.get(0) + j, Constanst.TESTCASE_ID, Constanst.TESTCASE_SHEET,"copyTestCasesWithGroupSubLevel") + "." + (i + 1);
                 genTestcaseID(id, to, reportPath);
                 ExcelUtils.closeFile(reportPath);
             }
@@ -115,7 +113,6 @@ public class GroupInTest {
                 int totalRowTestStep = ExcelUtils.getRowCount(Constanst.TEST_STEP_SHEET);
                 copyRowByTC(map, tcID, path,totalRowTestStep);
             }
-            //ExcelUtils.deleteRow(ExcelUtils.getRowCount(Constanst.TEST_STEP_SHEET)-1,Constanst.TEST_STEP_SHEET);
             ExcelUtils.closeFile(path);
         }catch (Exception e){
             e.printStackTrace();
@@ -132,8 +129,6 @@ public class GroupInTest {
         }
         for (String str: map.keySet()) {
             if(id.equals(str)){
-                System.out.println(str);
-                System.out.println(index);
                 for(int i = 0;i<map.get(str).size();i++) {
                     if (index >= totalTestStep-1) {
                         ExcelUtils.insertRow(index, Constanst.TEST_STEP_SHEET);
@@ -148,9 +143,9 @@ public class GroupInTest {
     }
     private static List<String> getTestCaseIDs(String sheetName){
         List<String> testCaseIDs = new ArrayList<>();
-        int totalTestCase = ExcelUtils.getRowCount(sheetName)-1;
+        int totalTestCase = ExcelUtils.getRowCount(sheetName)-loop+1;
         for (int i =1;i<=totalTestCase;i++){
-            String id = ExcelUtils.getStringValueInCell(i,Constanst.TESTCASE_ID,sheetName);
+            String id = ExcelUtils.getStringValueInCell(i,Constanst.TESTCASE_ID,sheetName,"getTestCaseIDs");
             if(!testCaseIDs.contains(id)) {
                 testCaseIDs.add(id);
             }
@@ -169,11 +164,11 @@ public class GroupInTest {
                 rangeStepByTestCase(id);
                 ArrayList<List<String>> testSteps = new ArrayList<>();
                 for (int i =iStartTestStep-1;i<=iEndTestStep;i++){
-                    String tc = ExcelUtils.getStringValueInCell(i,Constanst.TESTCASE_ID,Constanst.TEST_STEP_SHEET);
+                    String tc = ExcelUtils.getStringValueInCell(i,Constanst.TESTCASE_ID,Constanst.TEST_STEP_SHEET,"mapTestCaseWithTestSteps");
                     ArrayList<String> values = new ArrayList<>();
                     if(tc.equals(id)) {
                         for (int j = 0; j < totalCell; j++) {
-                            String value = ExcelUtils.getStringValueInCell(i, j, Constanst.TEST_STEP_SHEET);
+                            String value = ExcelUtils.getStringValueInCell(i, j, Constanst.TEST_STEP_SHEET,"mapTestCaseWithTestSteps");
                             values.add(value);
                         }
                         testSteps.add(values);
@@ -192,7 +187,7 @@ public class GroupInTest {
         ArrayList<String> list = new ArrayList<>();
         int totalGroup = ExcelUtils.getRowCount(Constanst.GROUP_SHEET);
         for(int i=1;i<totalGroup;i++){
-            String name = ExcelUtils.getStringValueInCell(i,Constanst.GROUP_NAME_COLUM,Constanst.GROUP_SHEET);
+            String name = ExcelUtils.getStringValueInCell(i,Constanst.GROUP_NAME_COLUM,Constanst.GROUP_SHEET,"getGroup");
             if(!name.equals(""))
                 list.add(name);
         }
@@ -201,7 +196,7 @@ public class GroupInTest {
     private static Map<String,Integer> mapGroupLevel(int totalGroup){
         Map<String,Integer> map = new HashMap<>();
         for(int i=1;i<totalGroup;i++){
-            map.put(ExcelUtils.getStringValueInCell(i,Constanst.GROUP_NAME_COLUM,Constanst.GROUP_SHEET)
+            map.put(ExcelUtils.getStringValueInCell(i,Constanst.GROUP_NAME_COLUM,Constanst.GROUP_SHEET,"mapGroupLevel")
                     ,ExcelUtils.getNumberValueInCell(i,Constanst.GROUP_LEVEL_COLUM,Constanst.GROUP_SHEET));
         }
         return map;
@@ -241,7 +236,7 @@ public class GroupInTest {
     public static Map<String,String> getValueGroups(String json,ArrayList<String> groups,String path){
         Map<String,String> map = new HashMap<>();
         for(int i =0;i<groups.size();i++){
-            String value = JsonHandle.getValue(json,ExcelUtils.getStringValueInCell(i+1,Constanst.GROUP_LOOP_COLUM,Constanst.GROUP_SHEET));
+            String value = JsonHandle.getValue(json,ExcelUtils.getStringValueInCell(i+1,Constanst.GROUP_LOOP_COLUM,Constanst.GROUP_SHEET,"getValueGroups"));
             map.put(groups.get(i), value);
             ExcelUtils.setCellData(value,i+1,Constanst.GROUP_VALUE_COLUM,Constanst.GROUP_SHEET,path);
         }

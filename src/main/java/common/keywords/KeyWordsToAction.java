@@ -268,22 +268,6 @@ public class KeyWordsToAction {
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.PATH_GAME_OBJECT,locator+index+plusStr);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
-    /*public static void setIndexVariableFile(String locator, String component,String key,String expected) throws IOException {
-        waitForObject(locator);
-        int index = 0;
-        Response response = request(Constanst.SCENE_URL,"//"+locator+"."+component);
-        ResponseBody body = response.getBody();
-        String json = body.asString();
-        for (JsonElement element: JsonHandle.getJsonArray(json)) {
-            if(JsonHandle.getValue(element.toString(),"$."+key).toLowerCase().equals(expected.toLowerCase()))
-                break;
-            index++;
-        }
-        Response response1 = request(Constanst.SCENE_URL,"//"+locator);
-        String value = getAbsolutePath(response1,String.valueOf(index));
-        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,value);
-        ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
-    }*/
     public static void setIndexVariableFile(String locator, String component,String key,String expected) throws IOException {
         waitForObject(locator);
         int index = 0;
@@ -291,12 +275,10 @@ public class KeyWordsToAction {
         ResponseBody body = response.getBody();
         String json = body.asString();
         for (JsonElement element: JsonHandle.getJsonArray(json)) {
-            if(JsonHandle.getValue(element.toString(),"$."+key).toLowerCase().equals(expected.toLowerCase()))
+            if(JsonHandle.getValue(element.toString(),"$."+key).toLowerCase().contains(expected.toLowerCase()))
                 break;
             index++;
         }
-        /*Response response1 = request(Constanst.SCENE_URL,"//"+locator);
-        String value = getAbsolutePath(response1,String.valueOf(index));*/
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,index);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
@@ -571,7 +553,7 @@ public class KeyWordsToAction {
             exception(e);
         }
     }
-    public static void waitForObjectContain(String locator, String key,String strAdd,String second,String content){
+    public static void waitForObjectContainAddStr(String locator, String key,String strAdd,String second,String content){
         try {
             Log.info("waitForObjectContain :" + locator);
             LocalDateTime time = LocalDateTime.now();
@@ -604,9 +586,12 @@ public class KeyWordsToAction {
         }
     }
     public static void waitForObjectContain(String locator,String component, String property,String content){
+       waitForObjectContain(locator,component,property,"30",content);
+    }
+    public static void waitForObjectContain(String locator,String component, String property,String second,String content){
         try {
             LocalDateTime time = LocalDateTime.now();
-            LocalDateTime time1 = time.plusSeconds(30);
+            LocalDateTime time1 = time.plusSeconds(Integer.valueOf(second));
             Response response = null;
             String value = null;
             do {

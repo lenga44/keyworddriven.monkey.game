@@ -34,7 +34,7 @@ public class RunTestScriptData extends TestScrip{
                     String key = ExcelUtils.getStringValueInCell(1, Constanst.DATA_PLAN_COLUM, Constanst.PLAN_SHEET);
                     reportName = Scope.genReportName(key);
                     //execute tc
-                    execute_suites(scopePath, iTestSuit, iTotalSuite);
+                    execute_suites(scopePath, iTestSuit);
                     EndTestScript.saveReportToFailListFile(reportPath, scopePath);
                     Scope.ResetScopeFile(scopePath,copyFile,scopeReport,index);
                     ExcelUtils.closeFile(reportPath);

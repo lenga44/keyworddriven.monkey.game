@@ -60,6 +60,19 @@ public class ExcelUtils {
             return "";
         }
     }
+    public static String getStringValueInCell(int rowNumber, int columnNumber, String sheetName,String methodName){
+        try {
+            ExcelSheet = ExcelBook.getSheet(sheetName);
+            Cell = ExcelSheet.getRow(rowNumber).getCell(columnNumber,org.apache.poi.ss.usermodel.Row.MissingCellPolicy.RETURN_NULL_AND_BLANK );
+            String cellData = Cell.getStringCellValue();
+            return cellData;
+        } catch (Throwable e) {
+            Log.info("Method getStringValueInCell: rowNumber[" + rowNumber+"], columnNumber["+columnNumber+"], sheetName["+sheetName+"]");
+            Log.error("Method getStringValueInCell_"+methodName+" | Exception desc : " + e.getMessage());
+            onTestCaseFail("Method getStringValueInCell | Exception desc : " + e.getMessage());
+            return "";
+        }
+    }
     public static String getValueInCell(int rowNumber, int columnNumber, String sheetName){
         try {
             ExcelSheet = ExcelBook.getSheet(sheetName);
@@ -94,7 +107,7 @@ public class ExcelUtils {
             return Cell.getNumericCellValue();
         } catch (Throwable e) {
             Log.info("Method getFormulaValueInCell: rowNumber[" + rowNumber+"], columnNumber["+columnNumber+"], sheetName["+sheetName+"]");
-            Log.error("Method getFormulaValueInCell | Exception desc : " + e.getMessage());
+            Log.error("Method getFormulaValueInCell_"+sheetName+" | Exception desc : " + e.getMessage());
             onTestCaseFail("Method getFormulaValueInCell | Exception desc : " + e.getMessage());
             return 0;
         }
@@ -320,7 +333,6 @@ public class ExcelUtils {
             com.aspose.cells.Workbook workbook = new com.aspose.cells.Workbook(path);
             com.aspose.cells.Worksheet worksheet = workbook.getWorksheets().get(sheetName);
             worksheet.getCells().insertRows(number,1);
-            worksheet.getCells().get(number,0).setValue("END");
             deleteDefaultSheetAspose(workbook,path);
             closeFile(path);
             setExcelFile(path);

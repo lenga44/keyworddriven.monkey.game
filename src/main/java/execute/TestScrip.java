@@ -21,12 +21,13 @@ public class TestScrip {
         this.method = method;
     }
     //region SCOPE
-    public static void execute_suites(String scopePath,int iTestSuite, int iTotalSuite) throws Exception {
+    public static void execute_suites(String scopePath,int iTestSuite) throws Exception {
         Log.info("execute_suites");
         List<String> flow = new ArrayList<>();
         List<String> reports = new ArrayList<>();
         ExcelUtils.setExcelFile(scopePath);
-        Scope.genFlowLesson(json,scopePath);
+        int iTotalSuite =ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
+        Scope.genFlowLesson(json,iTotalSuite,scopePath);
         iTotalSuite = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
         for (;iTestSuite<=iTotalSuite-1;iTestSuite++){
             tcName = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET);
@@ -59,7 +60,7 @@ public class TestScrip {
         }
         ExcelUtils.setExcelFile(reportPath);
     }
-    private static void genTestCaseWithGroup(){
+    private static void genTestCaseWithGroup() throws Exception {
         ExcelUtils.setExcelFile(reportPath);
         int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
         if(isDataFlow) {
@@ -67,12 +68,9 @@ public class TestScrip {
             if (group > 0) {
                 ExcelUtils.setExcelFile(reportPath);
                 KeyWordsToAction.pause();
-                try {
-                    ExcelUtils.createRowLastest(iTotalTestCase, Constanst.TESTCASE_SHEET, reportPath);
-                    GroupInTest.genTestCaseWhichGroupContain(json, reportPath);
-                    GroupInTest.genTestStepFollowTestCase(reportPath);
-                }catch (Exception ignored){
-                }
+                ExcelUtils.createRowLastest(iTotalTestCase, Constanst.TESTCASE_SHEET, reportPath);
+                GroupInTest.genTestCaseWhichGroupContain(json, reportPath);
+                GroupInTest.genTestStepFollowTestCase(reportPath);
                 KeyWordsToAction.resume();
             }
         }

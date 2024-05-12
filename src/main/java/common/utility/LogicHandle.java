@@ -178,4 +178,10 @@ public class LogicHandle {
     public static int getIndexInList(List<Object> list,String item){
         return list.indexOf(item);
     }
+    public static String getTextAlphabet(String text){
+        if (!Character.isLetter(text.charAt(text.length() - 1))) {
+            text = text.substring(0, text.length() - 1);
+        }
+        return text;
+    }
 }
