@@ -187,6 +187,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         }
     }
     public static String getTextsByTime(String locator,String component,String second,String expect){
+        Log.info("getTextsByTime");
         String str= getText(locator,component);
         LocalDateTime time = LocalDateTime.now();
         LocalDateTime time1 = time.plusSeconds(Integer.valueOf(second));
@@ -217,6 +218,8 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
                 }else {
                     break;
                 }
+                System.out.println(text);
+                System.out.println(expect);
                 time = LocalDateTime.now();
                 sleep(0.2f);
             }
