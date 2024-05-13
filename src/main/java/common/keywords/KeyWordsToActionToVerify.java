@@ -220,8 +220,6 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
                     isMatch = true;
                     break;
                 }
-                System.out.println(text);
-                System.out.println(expect);
                 time = LocalDateTime.now();
                 sleep(0.2f);
             }
