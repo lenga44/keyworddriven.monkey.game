@@ -154,9 +154,8 @@ public class KeyWordsToAction {
                         path = "";
                         String s = JsonHandle.getValue(element.toString(), "$." + key);
                         if (!s.equals("")) {
-                            System.out.println("expected1: "+expected);
+                            System.out.println("full name: "+name);
                             if (s.toLowerCase().contains(expected.toLowerCase())) {
-                                System.out.println("s1: "+s);
                                 path = name;
                                 break;
                             }
@@ -186,6 +185,7 @@ public class KeyWordsToAction {
                     for (JsonElement element : JsonHandle.getJsonArray(json1)) {
                         s = JsonHandle.getValue(element.toString(), "$." + key);
                         if (!s.equals("")) {
+                            System.out.println("s1: " + s);
                             System.out.println("expected1: " + expected);
                             if (s.toLowerCase().contains(expected.toLowerCase())) {
                                 System.out.println("s1: " + s);

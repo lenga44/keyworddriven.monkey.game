@@ -188,6 +188,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
     }
     public static String getTextsByTime(String locator,String component,String second,String expect){
         Log.info("getTextsByTime");
+        boolean isMatch = false;
         String str= getText(locator,component);
         LocalDateTime time = LocalDateTime.now();
         LocalDateTime time1 = time.plusSeconds(Integer.valueOf(second));
@@ -216,6 +217,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
                         }
                     }
                 }else {
+                    isMatch = true;
                     break;
                 }
                 System.out.println(text);
@@ -223,12 +225,11 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
                 time = LocalDateTime.now();
                 sleep(0.2f);
             }
-            return text.trim();
         }catch (Exception e){
             Log.error("getTextsError "+e.getMessage());
             exception(e.getMessage());
-            return "";
         }
+        return String.valueOf(isMatch);
     }
     public static String getTexts(String locator,String component,String expect){
         return getTextsByTime(locator,component,"15",expect);
@@ -420,11 +421,21 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         return getPropertyValue(locator,"VideoPlayer","url",strSplit,contain);
     }
     public static String getVideoUrl(String locator, String component,String key,String expected){
-        return getVideoURls(locator,component,key,expected);
+        String url =  getVideoURls(locator,component,key,expected);
+        System.out.println(url);
+        System.out.println(expected);
+        if(url.contains(expected)&& !url.equals("")){
+            return Constanst.TRUE;
+        }else {
+            Log.error("Found ["+url+"]");
+            return Constanst.FALSE;
+        }
     }
     public static String getVideoUrl(String locator, String component,String key,String strSplit,String contain,String expected){
         String url = getPropertyValue(KeyWordsToAction.getPath(locator,component,key,expected),"VideoPlayer","url",strSplit,contain);
-        if(url.equals(expected)){
+        System.out.println(url);
+        System.out.println(expected);
+        if(url.equals(expected)&& !url.equals("")){
             return Constanst.TRUE;
         }else {
             Log.error("Found ["+url+"]");
