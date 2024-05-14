@@ -8,6 +8,8 @@ public class KeyWordsToComPair extends KeyWordsToActionToVerify{
         boolean correct = false;
         boolean show = isElementDisplay(locator);
         if(!expect.equals("[]") && show){
+            System.out.println(getImageName(locator));
+            System.out.println(expect);
             correct = getImageName(locator).equals(expect);
         }
         if (expect.equals("[]") && !show){

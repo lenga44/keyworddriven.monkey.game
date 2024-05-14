@@ -30,11 +30,11 @@ public class EndTestScript {
                     }
                 }
 
-                String failPath = Constanst.LIST_FAIL_PATH_FILE+"list_fail.txt";
+                /*String failPath = Constanst.LIST_FAIL_PATH_FILE+"list_fail.txt";
                 FileHelpers.createFile(failPath);
-                String content = FileHelpers.readFile(failPath);
+                String content = FileHelpers.readFile(failPath);*/
 
-                if (!content.equals("")) {
+                /*if (!content.equals("")) {
                     boolean contain = false;
                     if(content.contains(",")){
                         if(Arrays.stream(content.split("\\,")).toList().contains(file)){
@@ -46,8 +46,8 @@ public class EndTestScript {
                     }
                 } else {
                     content = file;
-                }
-                FileHelpers.writeFile(content, failPath);
+                }*/
+                //FileHelpers.writeFile(content, failPath);
 
             }else {
                 pass =1;

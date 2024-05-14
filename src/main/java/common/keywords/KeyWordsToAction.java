@@ -1029,4 +1029,7 @@ public class KeyWordsToAction {
         String level = FileHelpers.getValueVariableFile("index");
         KeyWordCustomForAISpeak.swipeMap(locator,component,property,key,level,expect);
     }
+    public static void skipLesson(String locator){
+        KeyWordCustomForAISpeak.skipLesson(locator);
+    }
 }

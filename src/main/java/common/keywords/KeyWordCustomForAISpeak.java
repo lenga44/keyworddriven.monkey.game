@@ -311,4 +311,10 @@ public class KeyWordCustomForAISpeak {
             }
         }
     }
+    public static void skipLesson(String locator){
+        if(KeyWordsToActionToVerify.isElementDisplay(locator)==true){
+            KeyWordsToAction.click(locator,"Button","onClick()");
+            TestScrip.onFail("BẠN VẪN Ở TRONG LUỒNG LESSON");
+        }
+    }
 }

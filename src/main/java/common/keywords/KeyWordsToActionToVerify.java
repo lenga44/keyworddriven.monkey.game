@@ -151,7 +151,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         }
     }
     public static String getPropertyValue(String locator, String component, String property){
-        waitForObject(locator);
+        //waitForObject(locator);
         Response response = request(Constanst.SCENE_URL,"//"+locator+"."+component);
         return convert(response,property);
     }
@@ -533,11 +533,13 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
     }
     public static String getAudiosSourceByTime(String locator,String second,String expect){
         Log.info("getAudiosSourceByTime");
-        return LogicHandle.replaceStr(LogicHandle.getProValuesByTime(locator,"AudioSource","clip",second,expect,".mp3"),"(UnityEngine.AudioClip)").trim()+".mp3";
+        String actual =LogicHandle.replaceStr(LogicHandle.getProValuesByTime(locator,"AudioSource","clip",second,expect,".mp3"),"(UnityEngine.AudioClip)").trim()+".mp3";
+        return actual;
     }
     public static String getAudiosSource(String locator,String expect){
         Log.info("getAudiosSourceByTime");
-        return LogicHandle.replaceStr(LogicHandle.getProValues(locator,"AudioSource","clip",expect,".mp3"),"(UnityEngine.AudioClip)").trim()+".mp3";
+        String actual =LogicHandle.replaceStr(LogicHandle.getProValues(locator,"AudioSource","clip",expect,".mp3"),"(UnityEngine.AudioClip)").trim()+".mp3";
+        return actual;
     }
     public static String getAudiosSourceByLocator(String locator,String locator2,String expect){
         Log.info("getAudiosSourceByTime");
