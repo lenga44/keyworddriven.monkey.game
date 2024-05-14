@@ -9,9 +9,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class GenerateReport{
     //region REPORT
@@ -44,11 +41,11 @@ public class GenerateReport{
         FileHelpers.genFolderReport(FileHelpers.convertPath(folderName));
         return genTCReportFile(FileHelpers.convertPath(folderName),folderName,reportName);
     }
-    public static void genReport(int row,String folderName,String reportName)throws IOException{
+    /*public static void genReport(int row,String folderName,String reportName)throws IOException{
         FileHelpers.genFolderReport(FileHelpers.convertPath(folderName));
         genTCReportFile(FileHelpers.convertPath(folderName),folderName,reportName);
         ExcelUtils.setCellData(Constanst.YES, row, Constanst.RUN_MODE_SCOPE, Constanst.SCOPE_SHEET, Run.scopePath);
-    }
+    }*/
     public static void countResultPlan(String path,int totalSuite){
         try {
             ExcelUtils.setExcelFile(path);

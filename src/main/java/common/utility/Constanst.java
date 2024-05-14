@@ -51,10 +51,11 @@ public class Constanst {
     public static final String MODULE_FLOW = "Module";
     public static final String DATA_FLOW = "Data";
     public static final int FLOW_COLUM = 0;
-    public static final int PASS_PLAN_COLUM = 8;
-    public static final int FAIL_PLAN_COLUM = 9;
-    public static final int DATA_PLAN_COLUM = 6;
-    public static final int COURSE_PLAN_COLUM = 7;
+    public static final int PASS_PLAN_COLUM = 9;
+    public static final int FAIL_PLAN_COLUM = 10;
+    public static final int LESSON_PLAN_COLUM = 6;
+    public static final int TOPIC_PLAN_COLUM = 7;
+    public static final int COURSE_PLAN_COLUM = 8;
     public static final String EE_COURSE = "EE";
     public static final String LRC_COURSE = "LRC";
     public static final String AI_COURSE = "AI_Speak";

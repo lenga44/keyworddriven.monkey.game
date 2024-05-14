@@ -790,7 +790,7 @@ public class KeyWordsToAction {
             exception("expect ["+expect+"] but found ["+actual+"]");
         }
     }
-    private static void assertEqual(String actual,String expect){
+    public static void assertEqual(String actual,String expect){
         Assert.assertEquals(actual,expect);
     }
     private static void assertEqual(List<String> actual,List<String> expect){

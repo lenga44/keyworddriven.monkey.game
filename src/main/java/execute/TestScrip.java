@@ -1,7 +1,7 @@
 package execute;
 
 import common.keywords.KeyWordsToAction;
-import common.keywords.KeyWordsToActionToVerify;
+import common.keywords.KeyWordsToComPair;
 import common.utility.*;
 import report.GenerateReport;
 
@@ -16,7 +16,7 @@ import static common.keywords.KeyWordsToAction.exception;
 import static execute.Scope.genReportName;
 
 public class TestScrip {
-    public TestScrip(KeyWordsToActionToVerify keyWord, Method method[]){
+    public TestScrip(KeyWordsToComPair keyWord, Method method[]){
         this.keyWord = keyWord;
         this.method = method;
     }
@@ -31,7 +31,6 @@ public class TestScrip {
         iTotalSuite = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
         for (;iTestSuite<=iTotalSuite-1;iTestSuite++){
             tcName = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET);
-            System.out.println("TC name: " + tcName);
             if (!tcName.equals("")) {
             ExcelUtils.setCellData("", iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
             String sRunMode = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.RUN_MODE_SCOPE, Constanst.SCOPE_SHEET);
@@ -127,6 +126,9 @@ public class TestScrip {
             }
             markFailTest(iTotalTestCase);
             markSkipTest(iTotalTestCase);
+            if(tcResult.equals(Constanst.FAIL)) {
+                EndTestScript.saveListFail(Constanst.LIST_FAIL_PATH_FILE + "list_fail.txt", topic+"_"+reportName+"_"+tcName+".xlsx");
+            }
             System.out.println("============ " + tcResult);
         }catch (Exception e){
             Log.info("|execute_testcases | " + e.getMessage());
@@ -204,18 +206,17 @@ public class TestScrip {
                 value = JsonHandle.getValue(json, key);
                 FileHelpers.setJsonVariable(key, value);
                 ExcelUtils.setCellData(value, row, Constanst.DATA_SET, Constanst.TEST_STEP_SHEET, reportPath);
-                return value;
             } else
                 return key;
         }catch (Exception e){
             Log.error("getDataSet "+e.getMessage());
-            return "";
         }
+        return value;
     }
     public static String getDataSet(String key){
         key = getValueInVariableFile(key);
         String value = "";
-        if(key.contains("$")&& !json.equals(null)) {
+        if(key.contains("$")&& json != null) {
             value = JsonHandle.getValue(json, key);
         }else
             value = key;
@@ -332,6 +333,7 @@ public class TestScrip {
         if(!sActionKeyword.equals("")) {
             String dataSetActual = ExcelUtils.getStringValueInCell(numberStep, Constanst.DATA_SET_ACTUAL, Constanst.TEST_STEP_SHEET);
             String data = getDataSet(dataSetActual);
+            System.out.println("dataSetActual "+data);
             if (!data.equals("")) {
                 params = ExcelUtils.getStringValueInCell(numberStep, Constanst.PARAM_VERIFY_STEP, Constanst.TEST_STEP_SHEET) + "," + data;
             } else {
@@ -372,16 +374,26 @@ public class TestScrip {
     // endregion verify result after each step
     public static void getLevelFolder(int row)throws IOException{
         String courseFolder = FileHelpers.getRootFolder() + Constanst.REPORT_FILE_PATH;
+
         String level = ExcelUtils.getStringValueInCell(1,Constanst.LEVEL_COLUM,Constanst.PLAN_SHEET);
-        String subfolder = ExcelUtils.getStringValueInCell(1,Constanst.DATA_PLAN_COLUM,Constanst.PLAN_SHEET);
-        subfolder = genReportName(subfolder);
         levelFolder =(level.contains("$."))? courseFolder +"//" +JsonHandle.getValue(json,level): courseFolder +"//" + level;
-        levelFolder += "//"+subfolder;
+
+        topic = ExcelUtils.getStringValueInCell(1,Constanst.TOPIC_PLAN_COLUM,Constanst.PLAN_SHEET);
+        String subfolder2 = ExcelUtils.getStringValueInCell(1,Constanst.LESSON_PLAN_COLUM,Constanst.PLAN_SHEET);
+        if(!topic.isEmpty()){
+            topic = LogicHandle.getTextAlphabet(genReportName(topic));
+            levelFolder += "//"+topic;
+        }
+        if(!subfolder2.isEmpty()) {
+            subfolder2 = LogicHandle.getTextAlphabet(genReportName(subfolder2));
+            levelFolder += "//"+subfolder2;
+        }
+
         Log.info("levelFolder: "+levelFolder);
-        Log.info("Folder path report course: " + FileHelpers.convertPath(levelFolder));
+        Log.info("Folder path report course: " + levelFolder);
 
         FileHelpers.genFolderReport(courseFolder);
-        Log.info("Folder path report level: " + FileHelpers.convertPath(levelFolder));
+        Log.info("Folder path report level: " + courseFolder);
     }
     //endregion
 
@@ -408,7 +420,7 @@ public class TestScrip {
     public static String description;
     public static Object[]  param;
     private static Method method[];
-    protected static KeyWordsToAction keyWord;
+    protected static KeyWordsToComPair keyWord;
     protected static String expected;
     protected static Map<Integer, String> map_key_expected;
     protected static Map<Integer, String> map_key_actual;
@@ -419,6 +431,7 @@ public class TestScrip {
     public static String levelFolder;
     public static String reportName="";
     public static String reportPath;
+    public static String topic;
     //end region
 
     //endregion

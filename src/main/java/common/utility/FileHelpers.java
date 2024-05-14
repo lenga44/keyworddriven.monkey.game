@@ -92,6 +92,17 @@ public class FileHelpers {
             Log.error(e.getMessage());
         }
     }
+    public static void writeNewLine(String filePath,String data){
+        try {
+            FileWriter fileWriter = new FileWriter(filePath, true);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.write(data);
+            bufferedWriter.newLine();
+            bufferedWriter.close();
+        } catch (IOException e) {
+            Log.error("An error occurred:"+e.getMessage());
+        }
+    }
     public static String readFile(String path){
         String json = "";
         try {

@@ -4,6 +4,7 @@ import com.aspose.cells.DateTime;
 import common.keywords.KeyWordsToAction;
 import common.keywords.KeyWordsToActionPocoSDK;
 import common.keywords.KeyWordsToActionToVerify;
+import common.keywords.KeyWordsToComPair;
 import common.utility.*;
 import org.apache.poi.ss.formula.FormulaParser;
 
@@ -16,7 +17,7 @@ import java.util.logging.Logger;
 public class Run {
 
     public static void main(String[] args) throws Exception {
-            keyWord = new KeyWordsToActionToVerify();
+            keyWord = new KeyWordsToComPair();
             method = keyWord.getClass().getMethods();
 
             Logger formulaParserLogger = Logger.getLogger(FormulaParser.class.getName());
@@ -111,7 +112,7 @@ public class Run {
 
     //region KEY
     public static String scopePath;
-    private static KeyWordsToActionToVerify keyWord;
+    private static KeyWordsToComPair keyWord;
     private static Method method[];
     private static RunTestScriptModule runTestScriptModule;
     private static RunTestScriptData runTestScriptData;

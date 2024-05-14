@@ -1,6 +1,6 @@
 package execute;
 
-import common.keywords.KeyWordsToActionToVerify;
+import common.keywords.KeyWordsToComPair;
 import common.utility.*;
 
 import java.io.IOException;
@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class RunTestScriptData extends TestScrip{
-    public RunTestScriptData(KeyWordsToActionToVerify keyWord, Method method[]){
+    public RunTestScriptData(KeyWordsToComPair keyWord, Method method[]){
         super(keyWord, method);
     }
 
@@ -31,8 +31,8 @@ public class RunTestScriptData extends TestScrip{
                 FileHelpers.copyFile(scopePath,copyFile);
                 try {
                     ExcelUtils.setCellData(index, 1, Constanst.CURRENT_INDEX_COLUM, Constanst.PLAN_SHEET, scopePath);
-                    String key = ExcelUtils.getStringValueInCell(1, Constanst.DATA_PLAN_COLUM, Constanst.PLAN_SHEET);
-                    reportName = Scope.genReportName(key);
+                    String key = ExcelUtils.getStringValueInCell(1, Constanst.LESSON_PLAN_COLUM, Constanst.PLAN_SHEET);
+                    reportName = LogicHandle.getTextAlphabet(Scope.genReportName(key));
                     //execute tc
                     execute_suites(scopePath, iTestSuit);
                     EndTestScript.saveReportToFailListFile(reportPath, scopePath);

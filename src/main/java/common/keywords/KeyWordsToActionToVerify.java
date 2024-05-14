@@ -2,7 +2,6 @@ package common.keywords;
 
 import common.utility.*;
 import groovyjarjarantlr4.v4.runtime.misc.NotNull;
-import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
 import io.restassured.specification.RequestSpecification;
@@ -252,7 +251,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
     public static String getTextAlphabet(String locator,String component){
         Log.info("getTextAlphabet");
         String text = getText(locator,component);
-        text = LogicHandle.getTextAlphabet(text);
+        text = LogicHandle.getEndWithTextAlphabet(text);
         return text;
     }
     public static String getTextsByTime(String locator,String component,String second,String expect){

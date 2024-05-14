@@ -73,9 +73,8 @@ public class EndTestScript {
         ExcelUtils.setCellData(scopeFail,1,Constanst.FAIL_PLAN_COLUM,Constanst.PLAN_SHEET,path);
         ExcelUtils.closeFile(path);
     }
-
-    public static void summary(){
-
+    public static void saveListFail(String path,String data){
+        FileHelpers.writeNewLine(path,data);
     }
     public static void sendMessTelegramEndScrip(){
         String end = DateTime.getNow().toString();

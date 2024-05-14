@@ -303,10 +303,10 @@ public class KeyWordCustomForAISpeak {
                 int expectIndex = LogicHandle.getIndexInList(topic,expect);
                 if(actualIndex>expectIndex){
                     Log.info("swipe from right to left (1)");
-                    swipe("195","270","500",String.valueOf(actualIndex-expectIndex));
+                    swipe("255","270","500",String.valueOf(actualIndex-expectIndex));
                 }else {
                     Log.info("swipe from left to right (-1)");
-                    swipe("270","195","500",String.valueOf(expectIndex-actualIndex));
+                    swipe("270","255","500",String.valueOf(expectIndex-actualIndex));
                 }
             }
         }
