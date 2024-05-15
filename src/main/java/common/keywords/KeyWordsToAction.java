@@ -443,17 +443,17 @@ public class KeyWordsToAction {
             if(locator.contains(splitStr)){
                 locator = locator.replace(splitStr,"");
             }
+            Response response = request(Constanst.SCENE_URL, "//" + locator);
             LocalDateTime time = LocalDateTime.now();
             LocalDateTime time1 = time.plusSeconds(Integer.parseInt(second));
-            Response response = null;
             do {
-                response = request(Constanst.SCENE_URL, "//" + locator);
                 JsonPath json = response.jsonPath();
                 List name = (List)json.get("name");
                 if (json != null && !name.isEmpty()) {
                     if(convert(response,"activeInHierarchy")=="true")
                         break;
                 }
+                response = request(Constanst.SCENE_URL, "//" + locator);
                 Thread.sleep(500);
                 time = LocalDateTime.now();
             } while (time.compareTo(time1) <= 0);
