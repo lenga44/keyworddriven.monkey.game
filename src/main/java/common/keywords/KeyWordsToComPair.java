@@ -17,5 +17,18 @@ public class KeyWordsToComPair extends KeyWordsToActionToVerify{
         }
         return String.valueOf(correct);
     }
-
+    public static String comPairWordHasImage(String locator,String expect){
+        Log.info("comPairImage " +locator+ "_"+expect);
+        boolean correct = false;
+        boolean show = isElementDisplay(locator);
+        if(!expect.equals("[]")){
+            System.out.println(getImageName(locator));
+            System.out.println(expect);
+            correct = getImageName(locator).equals(expect);
+        }
+        if (expect.equals("[]")){
+            correct=true;
+        }
+        return String.valueOf(correct);
+    }
 }

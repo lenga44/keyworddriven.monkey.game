@@ -231,6 +231,7 @@ public class KeyWordCustomForAISpeak {
     }
 
     public static void changeModeTC(String variableKey,String tcNotExpRow,String tcExpRow,String expect) {
+
         String value = FileHelpers.getValueVariableFile(variableKey);
         if(value.equals(expect)){
             ExcelUtils.setCellData(Constanst.NO,Integer.valueOf(tcNotExpRow),Constanst.RUN_MODE_TEST_CASE, Constanst.TESTCASE_SHEET, TestScrip.reportPath);
