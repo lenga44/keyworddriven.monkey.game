@@ -21,7 +21,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import static io.restassured.RestAssured.given;
 
@@ -49,7 +48,7 @@ public class KeyWordsToAction {
         if(url == null)
             throw new RuntimeException("Can't conect to server url @http://127.0.0.1:4723");
         driver = new AndroidDriver(url,caps);
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        //driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         return driver;
     }
     //region ACTION
@@ -303,6 +302,12 @@ public class KeyWordsToAction {
         String  value = JsonHandle.getValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"index").toString();
         int index = Integer.parseInt(value)+Integer.parseInt(add);
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,index);
+    }
+    public static void addVariableFile(String key,String add) throws IOException {
+        Log.info("addIndexVariableFile");
+        String  value = JsonHandle.getValueInJsonObject(Constanst.VARIABLE_PATH_FILE,key).toString();
+        int index = Integer.parseInt(value)+Integer.parseInt(add);
+        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,key,index);
     }
     public static void press(String locator){
         request(Constanst.POINTER_URL,".Press("+getAbsolutePath(locator,"0")+")");

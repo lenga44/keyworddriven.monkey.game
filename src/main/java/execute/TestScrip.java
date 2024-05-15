@@ -161,6 +161,13 @@ public class TestScrip {
         ExcelUtils.setCellData(status, rowNumber, Constanst.TESTCASE_STATUS, Constanst.TESTCASE_SHEET, reportPath);
         ExcelUtils.setCellData(message,  rowNumber, Constanst.TESTCASE_ERROR, Constanst.TESTCASE_SHEET, reportPath);
     }
+    private static String getValueVariable(String value,String key){
+        if(value.contains("$."+key)){
+            String locator = FileHelpers.getValueVariableFile(key);
+            value = value.replace("$."+key,locator);
+        }
+        return value;
+    }
     private static Object[] getParam(String params, String data,int row,int colum)  {
         if(params.contains("$.path")){
             String locator = FileHelpers.getValueVariableFile("path");
@@ -170,6 +177,11 @@ public class TestScrip {
         if(params.contains("$.index")){
             String index = FileHelpers.getValueVariableFile("index");
             params = params.replace("$.index",index);
+            ExcelUtils.setCellData(params,row,colum,Constanst.TEST_STEP_SHEET,reportPath);
+        }
+        if(params.contains("$.order")){
+            String locator = FileHelpers.getValueVariableFile("order");
+            params = params.replace("$.order",locator);
             ExcelUtils.setCellData(params,row,colum,Constanst.TEST_STEP_SHEET,reportPath);
         }
         List<Object> list = new ArrayList<>();
@@ -232,6 +244,7 @@ public class TestScrip {
             String index = FileHelpers.getValueVariableFile("index");
             value = value.replace("$.index",index);
         }
+        value = getValueVariable(value,"order");
         return value;
     }
     public static String getDataSet(String key,int rowNumber, int columnNumber){
@@ -355,6 +368,7 @@ public class TestScrip {
         if(isDataFlow ==true && ex.contains("$")) {
             ex = getVariableValue(ex,"$.index",numberStep);
             ex = getVariableValue(ex,"$.activity",numberStep);
+            ex = getVariableValue(ex,"$.order",numberStep);
             String value = JsonHandle.getValue(json, ex);
             ExcelUtils.setCellData(value,numberStep,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET,reportPath);
             return value+Constanst.CHECK_CONTAIN;
