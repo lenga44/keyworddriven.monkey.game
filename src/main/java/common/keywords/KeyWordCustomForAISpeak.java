@@ -7,6 +7,7 @@ import execute.RunTestScriptData;
 import execute.TestScrip;
 
 import java.io.IOException;
+import java.security.Key;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -24,11 +25,8 @@ public class KeyWordCustomForAISpeak {
             }*/
             if(part.equals("1")){
                 result = Constanst.TRUE;
-            }
-            String path = TestScrip.reportPath;
-            if (result.equals(Constanst.TRUE)) {
                 ExcelUtils.setCellData(Constanst.NO, Integer.valueOf(exception), Constanst.RUN_MODE_TEST_CASE, sheetName, TestScrip.reportPath);
-            } else {
+            }else {
                 ExcelUtils.setCellData(Constanst.YES, Integer.valueOf(exception), Constanst.RUN_MODE_TEST_CASE, sheetName, TestScrip.reportPath);
             }
             for (int i = Integer.valueOf(from); i <= Integer.valueOf(to); i++) {
@@ -38,7 +36,7 @@ public class KeyWordCustomForAISpeak {
                     ExcelUtils.setCellData(Constanst.NO, i, Constanst.RUN_MODE_TEST_CASE, sheetName, TestScrip.reportPath);
                 }
             }
-            ExcelUtils.closeFile(path);
+            ExcelUtils.closeFile(TestScrip.reportPath);
         }catch (Exception e){
             System.out.println(e.getMessage());
             e.printStackTrace();

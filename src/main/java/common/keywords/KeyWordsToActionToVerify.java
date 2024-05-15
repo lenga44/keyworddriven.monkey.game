@@ -23,7 +23,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         String x = isScaleByCoordinate(response,second,expect,"x");
         String y = isScaleByCoordinate(response,second,expect,"y");
         String z = isScaleByCoordinate(response,second,expect,"z");
-        result = (x=="true" && y=="true" && z=="true")?true:false;
+        result = x.equals("true") && y.equals("true") && z.equals("true");
         return String.valueOf(result);
     }
     public static String isScale(String locator,String component,String property,String second,String expect){
@@ -419,9 +419,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         return getPropertyValue(locator,"VideoPlayer","url",strSplit,contain);
     }
     public static String getVideoUrl(String locator, String component,String key,String expected){
-        String url =  getVideoURls(locator,component,key,expected);
-        System.out.println(url);
-        System.out.println(expected);
+        String url =  getVideoURls(locator,component,key,".mp4",expected);
         if(url.contains(expected)&& !url.equals("")){
             return Constanst.TRUE;
         }else {

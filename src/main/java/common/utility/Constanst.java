@@ -18,6 +18,8 @@ public class Constanst {
     public static final String DATA_MODE = "Data";
     public static final int GAME_MODE = 1;
     public static final String CHECK_CONTAIN = "_boolean_";
+    public static final String PAUSE_PROGRAM_URL = ".pause()";
+    public static final String RESUME_PROGRAM_URL = ".resume()";
     //endregion
 
     //region Scope file

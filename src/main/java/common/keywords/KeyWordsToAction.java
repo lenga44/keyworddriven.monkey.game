@@ -173,6 +173,9 @@ public class KeyWordsToAction {
         return path;
     }
     public static String getVideoURls(String locator, String component,String key,String expected)  {
+        return getVideoURls(locator,component,key,"",expected);
+    }
+    public static String getVideoURls(String locator, String component,String key,String add,String expected)  {
         String s = "";
         String path = "";
         try {
@@ -183,18 +186,20 @@ public class KeyWordsToAction {
                 for (int i = 0; i < array.size(); i++) {
                     String json1 = body1.asString();
                     for (JsonElement element : JsonHandle.getJsonArray(json1)) {
-                        s = JsonHandle.getValue(element.toString(), "$." + key);
-                        if (!s.equals("")) {
-                            System.out.println("s1: " + s);
-                            System.out.println("expected1: " + expected);
-                            if (s.toLowerCase().contains(expected.toLowerCase())) {
-                                System.out.println("s1: " + s);
-                                path =s;
-                                break;
-                            }
+                        try {
+                            s = JsonHandle.getValue(element.toString(), "$." + key);
+                        }catch (Exception e){
+                            Log.error("getVideoURls "+e.getMessage());
+                        }
+                        s=s+add;
+                        System.out.println(expected);
+                        System.out.println(path);
+                        if (s.toLowerCase().contains(expected.toLowerCase())) {
+                            path =s;
+                            break;
                         }
                     }
-                    if(!path.equals("")){
+                    if(!path.isEmpty()){
                         break;
                     }
                 }
@@ -204,6 +209,14 @@ public class KeyWordsToAction {
             e.printStackTrace();
         }
         return path;
+    }
+    public static void pause(){
+        Log.info("pause");
+        request(Constanst.POINTER_URL,Constanst.PAUSE_PROGRAM_URL);
+    }
+    public static void resume(){
+        Log.info("resume");
+        request(Constanst.POINTER_URL,Constanst.RESUME_PROGRAM_URL);
     }
     public static void returnPathContain(String locator, String component,String key,String expected){
         try {
@@ -785,28 +798,44 @@ public class KeyWordsToAction {
 
     //region KeyWordCustomForAISpeak
     public static void returnChooseTopic(String sheetName,String from, String to,String exception,String part) throws IOException {
+        pause();
         KeyWordCustomForAISpeak.returnChooseTopic(sheetName,from, to,exception,part);
+        resume();
     }
     public static void returnChooseTopic(String sheetName,String from, String to,String part) throws IOException {
+        pause();
         KeyWordCustomForAISpeak.returnChooseTopic(sheetName,from, to,part);
+        resume();
     }
     public static void returnChooseTopic( String part) {
+        pause();
         KeyWordCustomForAISpeak.returnChooseTopic(part);
+        resume();
     }
     public static void deFindModeRunTestCase(String key,String sheetName,String from, String to){
+        pause();
         KeyWordCustomForAISpeak.deFindModeRunTestCase(key,sheetName,from, to );
+        resume();
     }
     public static void deFindModeRunTestCase(String key,String sheetName,String from, String to,String expected){
+        pause();
         KeyWordCustomForAISpeak.deFindModeRunTestCase(key,sheetName,from, to,expected );
+        resume();
     }
     public static void deFindModeRunTestCase(String key,String sheetName,String from, String to,String expected,String... expected1){
+        pause();
         KeyWordCustomForAISpeak.deFindModeRunTestCase(key,sheetName,from, to,expected,expected1 );
+        resume();
     }
     public static void returnModeTC(String sheetName,String to,String expected,String part) {
+        pause();
         KeyWordCustomForAISpeak.returnModeTC(sheetName,to,expected,part);
+        resume();
     }
     public static void setRunModeTC(String from, String to,String sheetName) throws IOException{
+        pause();
         KeyWordCustomForAISpeak.setRunModeTC(from,to,sheetName);
+        resume();
     }
     //endregion
 
@@ -817,7 +846,9 @@ public class KeyWordsToAction {
         Log.info(message);
     }
     public static void ignoreScript(String number,String to,String sheetName, String text){
+        pause();
         KeyWordCustomForAISpeak.ignoreScript(number,to,sheetName,text);
+        resume();
     }
     //endregion
 }
