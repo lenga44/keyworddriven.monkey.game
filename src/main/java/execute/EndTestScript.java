@@ -6,11 +6,12 @@ import common.utility.*;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
-import static execute.TestScrip.topic;
+import static execute.TestScrip.*;
 
 public class EndTestScript {
-    public static void saveReportToFailListFile(String tcPath,String scope){
+    /*public static void saveReportToFailListFile(String tcPath,String scope){
         try {
             ExcelUtils.setExcelFile(tcPath);
             int fail =0;
@@ -43,24 +44,22 @@ public class EndTestScript {
                         }
                     }
                     if(contain==false) {
-                        System.out.println("topic" +topic);
                         content = content + ",\n" +topic+"_"+ file;
                     }
                 } else {
-                    content = file;
+                    content = topic+"_"+ file;
                 }
                 FileHelpers.writeFile(content, failPath);
 
             }else {
                 pass =1;
             }
-
             sumResultToScope(pass,fail,scope);
         }catch (Exception e){
             Log.error(e.getMessage());
             e.printStackTrace();
         }
-    }
+    }*/
     public static void sumResultToScope(int pass,int fail,String path) throws IOException {
         ExcelUtils.setExcelFile(path);
         int scopePass =ExcelUtils.getNumberValueInCell(1,Constanst.PASS_PLAN_COLUM,Constanst.PLAN_SHEET);
@@ -75,12 +74,14 @@ public class EndTestScript {
         ExcelUtils.setCellData(scopeFail,1,Constanst.FAIL_PLAN_COLUM,Constanst.PLAN_SHEET,path);
         ExcelUtils.closeFile(path);
     }
-    public static void saveListFail(String path,String data){
-        FileHelpers.writeNewLine(path,data);
+    public static void saveListFail(List<String> status, String data){
+        if(status.contains(Constanst.FAIL) || status.contains(Constanst.SKIP)) {
+            FileHelpers.writeNewLine(Constanst.LIST_FAIL_PATH_FILE, data);
+        }
     }
     public static void sendMessTelegramEndScrip(){
         String end = DateTime.getNow().toString();
-        String fail_list =  FileHelpers.readFile(Constanst.LIST_FAIL_PATH_FILE + "list_fail.txt", "PASS");
+        String fail_list =  FileHelpers.readFile(Constanst.LIST_FAIL_PATH_FILE,"PASS");
         if(!fail_list.isEmpty()){
             TelegramBot.sendMessTele(fail_list);
         }

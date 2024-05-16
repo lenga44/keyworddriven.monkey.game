@@ -49,7 +49,6 @@ public class Scope {
             }
         }
         if (exits == false){
-            TestScrip.tcResult = Constanst.SKIP;
             ExcelUtils.setCellData(Constanst.NO,row,Constanst.RUN_MODE_SCOPE,Constanst.SCOPE_SHEET,path);
             Log.error("TEST CASE IS NOT EXIT!!!");
         }

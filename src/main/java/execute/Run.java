@@ -32,8 +32,8 @@ public class Run {
             resetSumarryStatus();
 
             String start = DateTime.getNow().toString();
-            TelegramBot.sendMessTele("Start: " + start);
-            FileHelpers.writeFile("", Constanst.LIST_FAIL_PATH_FILE + "list_fail.txt");
+            //TelegramBot.sendMessTele("Start: " + start);
+            FileHelpers.writeFile("", Constanst.LIST_FAIL_PATH_FILE );
 
             int iTotalSuite = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
             Log.info("Total scope : " + iTotalSuite);
@@ -51,7 +51,7 @@ public class Run {
             }
             runOneTime(iOnceTimeTearDown);
             //Log.info("End script: "+DateTime.getNow());
-            EndTestScript.sendMessTelegramEndScrip();
+            //EndTestScript.sendMessTelegramEndScrip();
     }
     private static void runOneTime(int iOnceTime) throws Exception {
         Log.info("runOneTime " +iOnceTime);

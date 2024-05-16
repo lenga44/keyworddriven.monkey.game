@@ -35,7 +35,6 @@ public class RunTestScriptData extends TestScrip{
                     reportName = LogicHandle.getTextAlphabet(Scope.genReportName(key));
                     //execute tc
                     execute_suites(scopePath, iTestSuit);
-                    EndTestScript.saveReportToFailListFile(reportPath, scopePath);
                     Scope.ResetScopeFile(scopePath,copyFile,scopeReport,index);
                     ExcelUtils.closeFile(reportPath);
                     ExcelUtils.closeFile(tcPath);
