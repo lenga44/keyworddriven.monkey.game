@@ -47,13 +47,11 @@ public class TestScrip {
                 }
             }
             GroupInTest.index =1;
-            if(tcResult.equals(Constanst.FAIL)) {
-                EndTestScript.saveListFail(Constanst.LIST_FAIL_PATH_FILE + "list_fail.txt", topic+"_"+reportName+"_"+tcName+".xlsx");
-            }
         }
         FileHelpers.writeFile(flow.toString(),RunTestScriptData.reportPath.replace(".xlsx",".txt"));
     }
     private static void genTestcaseReport() throws IOException {
+        FileHelpers.deleteAllFileInFolder(levelFolder);
         tcPath = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.TESTCASE_FILE_PATH)+ tcName + ".xlsx";
         if(isDataFlow) {
             reportPath = GenerateReport.genTCReport(levelFolder, reportName);

@@ -51,10 +51,33 @@ public class FileHelpers {
     }
     public static void genFolderReport(String folderName) throws IOException {
         File f = new File(folderName);
-        if (!f.exists())
+        if (!f.exists()) {
             f.mkdirs();
+        }
     }
-
+    public static void deleteAllFileInFolder(String folderPath){
+        try {
+            File folder = new File(folderPath);
+            if (folder.isDirectory()) {
+                File[] files = folder.listFiles();
+                if (files != null) {
+                    for (File file : files) {
+                        if (!file.isDirectory()) { // Make sure it's not a directory
+                            boolean deleted = file.delete();
+                            if (deleted) {
+                                Log.info("Deleted file: " + file.getAbsolutePath());
+                            } else {
+                                Log.info("Failed to delete file: " + file.getAbsolutePath());
+                            }
+                        }
+                    }
+                }
+            }
+        }catch (Exception e)
+        {
+            Log.error("The specified path is not a directory.");
+        }
+    }
     public static String getAllData(String key) throws IOException {
         Log.info(getRootFolder() + getValueConfig(key));
         return new String(Files.readAllBytes(Paths.get(getRootFolder() + getValueConfig(key))), StandardCharsets.UTF_8);

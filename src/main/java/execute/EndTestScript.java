@@ -7,6 +7,8 @@ import common.utility.*;
 import java.io.IOException;
 import java.util.Arrays;
 
+import static execute.TestScrip.topic;
+
 public class EndTestScript {
     public static void saveReportToFailListFile(String tcPath,String scope){
         try {
@@ -29,11 +31,11 @@ public class EndTestScript {
                         file = name.replace(".xlsx", "");
                     }
                 }
-                /*String failPath = Constanst.LIST_FAIL_PATH_FILE+"list_fail.txt";
+                String failPath = Constanst.LIST_FAIL_PATH_FILE+"list_fail.txt";
                 FileHelpers.createFile(failPath);
-                String content = FileHelpers.readFile(failPath);*/
+                String content = FileHelpers.readFile(failPath);
 
-                /*if (!content.equals("")) {
+                if (!content.equals("")) {
                     boolean contain = false;
                     if(content.contains(",")){
                         if(Arrays.stream(content.split("\\,")).toList().contains(file)){
@@ -41,12 +43,13 @@ public class EndTestScript {
                         }
                     }
                     if(contain==false) {
-                        content = content + ",\n" + file;
+                        System.out.println("topic" +topic);
+                        content = content + ",\n" +topic+"_"+ file;
                     }
                 } else {
                     content = file;
-                }*/
-                //FileHelpers.writeFile(content, failPath);
+                }
+                FileHelpers.writeFile(content, failPath);
 
             }else {
                 pass =1;
