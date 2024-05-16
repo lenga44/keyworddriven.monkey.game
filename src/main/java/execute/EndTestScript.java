@@ -29,7 +29,6 @@ public class EndTestScript {
                         file = name.replace(".xlsx", "");
                     }
                 }
-
                 /*String failPath = Constanst.LIST_FAIL_PATH_FILE+"list_fail.txt";
                 FileHelpers.createFile(failPath);
                 String content = FileHelpers.readFile(failPath);*/

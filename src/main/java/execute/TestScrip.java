@@ -47,6 +47,9 @@ public class TestScrip {
                 }
             }
             GroupInTest.index =1;
+            if(tcResult.equals(Constanst.FAIL)) {
+                EndTestScript.saveListFail(Constanst.LIST_FAIL_PATH_FILE + "list_fail.txt", topic+"_"+reportName+"_"+tcName+".xlsx");
+            }
         }
         FileHelpers.writeFile(flow.toString(),RunTestScriptData.reportPath.replace(".xlsx",".txt"));
     }
@@ -126,9 +129,6 @@ public class TestScrip {
             }
             markFailTest(iTotalTestCase);
             markSkipTest(iTotalTestCase);
-            if(tcResult.equals(Constanst.FAIL)) {
-                EndTestScript.saveListFail(Constanst.LIST_FAIL_PATH_FILE + "list_fail.txt", topic+"_"+reportName+"_"+tcName+".xlsx");
-            }
             System.out.println("============ " + tcResult);
         }catch (Exception e){
             Log.info("|execute_testcases | " + e.getMessage());
