@@ -29,6 +29,7 @@ public class TestScrip {
         Scope.genFlowLesson(json,iTotalSuite,scopePath);
         iTotalSuite = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
         for (;iTestSuite<=iTotalSuite-1;iTestSuite++){
+            scopeResult = new ArrayList<>();
             tcName = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET);
             if (!tcName.equals("")) {
             ExcelUtils.setCellData("", iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
@@ -41,7 +42,7 @@ public class TestScrip {
                     int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
                     execute_testcases(iTotalTestCase);
                     ExcelUtils.setExcelFile(scopePath);
-                    if(tcResults.contains(Constanst.FAIL)) {
+                    if(scopeResult.contains(Constanst.FAIL)) {
                         ExcelUtils.setCellData(Constanst.FAIL, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
                     }else {
                         ExcelUtils.setCellData(Constanst.PASS, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
@@ -49,6 +50,7 @@ public class TestScrip {
                 }
             }
             GroupInTest.index =1;
+            EndTestScript.saveListFail(scopeResult,"L"+level+"_"+topic+"_"+lesson+"_"+tcName);
         }
         //FileHelpers.deleteAllFileInFolder(reports,levelFolder);
     }
@@ -123,7 +125,6 @@ public class TestScrip {
                     error = "Step fail: "+ e.getMessage();
                 }
                 onResultTestcase(error, i);
-                EndTestScript.saveListFail(tcResults,"L"+level+"_"+topic+"_"+lesson+"_"+tcName);
             }
             markFailTest(iTotalTestCase);
             markSkipTest(iTotalTestCase);
@@ -156,6 +157,7 @@ public class TestScrip {
     }
     private static void onResultTestcase(String message, int rowNumber) {
         if(tcResults.contains(Constanst.FAIL) ||tcResults.contains(Constanst.SKIP)) {
+            scopeResult.add(Constanst.FAIL);
             ExcelUtils.setCellData(Constanst.FAIL, rowNumber, Constanst.TESTCASE_STATUS, Constanst.TESTCASE_SHEET, reportPath);
             ExcelUtils.setCellData(message,  rowNumber, Constanst.TESTCASE_ERROR, Constanst.TESTCASE_SHEET, reportPath);
         }else {
@@ -417,6 +419,7 @@ public class TestScrip {
     //region Testcase key
     //public static String tcResult = Constanst.PASS;
     public static List<String> tcResults;
+    public static List<String> scopeResult;
     public static String tcPath;
     public static boolean isDataFlow;
     public static String json;
