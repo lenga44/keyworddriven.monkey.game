@@ -1,4 +1,4 @@
-package common.keywords.ui;
+package common.keywords.app;
 
 import common.utility.*;
 import groovyjarjarantlr4.v4.runtime.misc.NotNull;
@@ -520,10 +520,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
             Response response = request(Constanst.SCENE_URL, "//" + locators + "." + component);
             List<String> list = convertToList(response, "text");
             for (String text : list) {
-                String str = text;
-                if (str.contains(strSplit)) {
-                    str = str.replace(strSplit, "");
-                }
+                String str = LogicHandle.replaceStr(text,strSplit);
                 sentence = (sentence.equals("")) ? sentence + str : sentence + " " + str;
             }
         }catch (Exception e){

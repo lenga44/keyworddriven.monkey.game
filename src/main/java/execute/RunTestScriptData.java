@@ -1,6 +1,6 @@
 package execute;
 
-import common.keywords.ui.KeyWordsToComPair;
+import common.keywords.app.KeyWordsToComPair;
 import common.utility.*;
 
 import java.io.IOException;

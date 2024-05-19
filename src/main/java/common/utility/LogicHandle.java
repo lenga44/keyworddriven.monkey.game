@@ -1,7 +1,7 @@
 package common.utility;
 
-import common.keywords.ui.KeyWordsToAction;
-import common.keywords.ui.KeyWordsToActionToVerify;
+import common.keywords.app.KeyWordsToAction;
+import common.keywords.app.KeyWordsToActionToVerify;
 import io.restassured.response.Response;
 
 import java.time.LocalDateTime;
@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static common.keywords.ui.KeyWordsToAction.*;
-import static common.keywords.ui.KeyWordsToActionToVerify.isElementDisplay;
+import static common.keywords.app.KeyWordsToAction.*;
+import static common.keywords.app.KeyWordsToActionToVerify.isElementDisplay;
 
 public class LogicHandle {
     public static List<Integer> convertToArrayListInt(String str) {
