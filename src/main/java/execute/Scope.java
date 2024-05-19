@@ -1,7 +1,7 @@
 package execute;
 
-import common.keywords.KeyWordsToAction;
-import common.keywords.KeyWordsToActionToVerify;
+import common.keywords.ui.KeyWordsToAction;
+import common.keywords.ui.KeyWordsToActionToVerify;
 import common.utility.*;
 
 import java.io.File;
@@ -49,7 +49,6 @@ public class Scope {
             }
         }
         if (exits == false){
-            TestScrip.tcResult = Constanst.SKIP;
             ExcelUtils.setCellData(Constanst.NO,row,Constanst.RUN_MODE_SCOPE,Constanst.SCOPE_SHEET,path);
             Log.error("TEST CASE IS NOT EXIT!!!");
         }

@@ -1,4 +1,4 @@
-package common.keywords;
+package common.keywords.ui;
 
 import common.utility.Log;
 

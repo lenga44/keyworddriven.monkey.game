@@ -1,7 +1,7 @@
 package execute;
 
-import common.keywords.KeyWordsToAction;
-import common.keywords.KeyWordsToComPair;
+import common.keywords.ui.KeyWordsToAction;
+import common.keywords.ui.KeyWordsToComPair;
 import common.utility.*;
 import report.GenerateReport;
 
@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static common.keywords.KeyWordsToAction.exception;
+import static common.keywords.ui.KeyWordsToAction.exception;
 import static execute.Scope.genReportName;
 
 public class TestScrip {
@@ -23,35 +23,36 @@ public class TestScrip {
     //region SCOPE
     public static void execute_suites(String scopePath,int iTestSuite) throws Exception {
         Log.info("execute_suites");
-        List<String> flow = new ArrayList<>();
         List<String> reports = new ArrayList<>();
         ExcelUtils.setExcelFile(scopePath);
         int iTotalSuite =ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
         Scope.genFlowLesson(json,iTotalSuite,scopePath);
         iTotalSuite = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
         for (;iTestSuite<=iTotalSuite-1;iTestSuite++){
+            scopeResult = new ArrayList<>();
             tcName = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET);
             if (!tcName.equals("")) {
             ExcelUtils.setCellData("", iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
             String sRunMode = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.RUN_MODE_SCOPE, Constanst.SCOPE_SHEET);
                 if (sRunMode.equals(Constanst.YES)) {
-                    Scope.deFindFlowGame(iTestSuite, scopePath);
-                    flow.add(tcName);
-                    genTestcaseReport();
-                    genTestCaseWithGroup();
                     reports.add(reportPath);
+                    Scope.deFindFlowGame(iTestSuite, scopePath);
+                    genTestcaseReport();
+                    genTestCaseWithGroup();;
                     int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
                     execute_testcases(iTotalTestCase);
                     ExcelUtils.setExcelFile(scopePath);
-                    ExcelUtils.setCellData(tcResult, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
+                    if(scopeResult.contains(Constanst.FAIL)) {
+                        ExcelUtils.setCellData(Constanst.FAIL, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
+                    }else {
+                        ExcelUtils.setCellData(Constanst.PASS, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
+                    }
                 }
             }
             GroupInTest.index =1;
-            if(tcResult.equals(Constanst.FAIL)) {
-                EndTestScript.saveListFail(Constanst.LIST_FAIL_PATH_FILE + "list_fail.txt", topic+"_"+reportName+"_"+tcName+".xlsx");
-            }
+            EndTestScript.saveListFail(scopeResult,"L"+level+"_"+topic+"_"+lesson+"_"+tcName);
         }
-        FileHelpers.writeFile(flow.toString(),RunTestScriptData.reportPath.replace(".xlsx",".txt"));
+        //FileHelpers.deleteAllFileInFolder(reports,levelFolder);
     }
     private static void genTestcaseReport() throws IOException {
         tcPath = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.TESTCASE_FILE_PATH)+ tcName + ".xlsx";
@@ -107,29 +108,26 @@ public class TestScrip {
             Log.info("Total TC: " + iTotalTestCase);
             for (int i = 1; i < iTotalTestCase; i++) {
                 tcResults = new ArrayList<>();
-                ExcelUtils.setCellData("", i, Constanst.TESTCASE_STATUS, Constanst.TESTCASE_SHEET, reportPath);
-                String runMode = ExcelUtils.getStringValueInCell(i, Constanst.RUN_MODE_TEST_CASE, Constanst.TESTCASE_SHEET);
-                if (runMode.equals(Constanst.YES)) {
-                    String sTestCaseID = ExcelUtils.getStringValueInCell(i, Constanst.TESTCASE_ID, Constanst.TESTCASE_SHEET);
-                    Log.info("TCID: " + sTestCaseID);
-                    rangeStepByTestCase(sTestCaseID);
-                    Log.info("result: " + result);
-                    if (!result.equals(Constanst.SKIP)) {
-                        tcResult = Constanst.PASS;
+                try {
+                    ExcelUtils.setCellData("", i, Constanst.TESTCASE_STATUS, Constanst.TESTCASE_SHEET, reportPath);
+                    String runMode = ExcelUtils.getStringValueInCell(i, Constanst.RUN_MODE_TEST_CASE, Constanst.TESTCASE_SHEET);
+                    if (runMode.equals(Constanst.YES)) {
+                        String sTestCaseID = ExcelUtils.getStringValueInCell(i, Constanst.TESTCASE_ID, Constanst.TESTCASE_SHEET);
+                        Log.info("TC ID: " + sTestCaseID);
+                        rangeStepByTestCase(sTestCaseID);
+                        Log.info("result: " + result);
                         execute_steps();
-
-                    } else
-                        tcResult = Constanst.SKIP;
-                    if (tcResults.contains(Constanst.FAIL)) {
-                        onResultTestcase(Constanst.FAIL, error, i);
-                    } else {
-                        onResultTestcase(Constanst.PASS, "", i);
+                    }else {
+                        result =Constanst.PASS;
+                        error = "";
                     }
+                }catch (Exception e){
+                    error = "Step fail: "+ e.getMessage();
                 }
+                onResultTestcase(error, i);
             }
             markFailTest(iTotalTestCase);
             markSkipTest(iTotalTestCase);
-            System.out.println("============ " + tcResult);
         }catch (Exception e){
             Log.info("|execute_testcases | " + e.getMessage());
         }
@@ -157,9 +155,15 @@ public class TestScrip {
             }
         }
     }
-    private static void onResultTestcase(String status, String message, int rowNumber) {
-        ExcelUtils.setCellData(status, rowNumber, Constanst.TESTCASE_STATUS, Constanst.TESTCASE_SHEET, reportPath);
-        ExcelUtils.setCellData(message,  rowNumber, Constanst.TESTCASE_ERROR, Constanst.TESTCASE_SHEET, reportPath);
+    private static void onResultTestcase(String message, int rowNumber) {
+        if(tcResults.contains(Constanst.FAIL) ||tcResults.contains(Constanst.SKIP)) {
+            scopeResult.add(Constanst.FAIL);
+            ExcelUtils.setCellData(Constanst.FAIL, rowNumber, Constanst.TESTCASE_STATUS, Constanst.TESTCASE_SHEET, reportPath);
+            ExcelUtils.setCellData(message,  rowNumber, Constanst.TESTCASE_ERROR, Constanst.TESTCASE_SHEET, reportPath);
+        }else {
+            ExcelUtils.setCellData(Constanst.PASS, rowNumber, Constanst.TESTCASE_STATUS, Constanst.TESTCASE_SHEET, reportPath);
+        }
+        //ExcelUtils.setCellData(message,  rowNumber, Constanst.TESTCASE_ERROR, Constanst.TESTCASE_SHEET, reportPath);
     }
     private static String getValueVariable(String value,String key){
         if(value.contains("$."+key)){
@@ -282,14 +286,12 @@ public class TestScrip {
 
             }
         }
-        if (result == Constanst.FAIL)
-            tcResult = Constanst.FAIL;
     }
     private static void onResultStep(String status, String message, int rowNumber ){
         ExcelUtils.setCellData(status, rowNumber, Constanst.RESULT, Constanst.TEST_STEP_SHEET, reportPath);
         ExcelUtils.setCellData(message,  rowNumber, Constanst.ERROR, Constanst.TEST_STEP_SHEET, reportPath);
-        tcResults.add(status);
         if(status == Constanst.FAIL) {
+            tcResults.add(status);
             byte[] bytes = KeyWordsToAction.takePhoto();
             ExcelUtils.addPictureInCell(rowNumber, bytes, reportPath);
         }else {
@@ -331,7 +333,7 @@ public class TestScrip {
             Log.error(name);
             onFail(e.getMessage());
         }
-        //onResultStep(result,error,numberStep);
+        //onResultStep(result,error,row);
     }
 
     public static void onFail(String message) {
@@ -389,18 +391,18 @@ public class TestScrip {
     public static void getLevelFolder(int row)throws IOException{
         String courseFolder = FileHelpers.getRootFolder() + Constanst.REPORT_FILE_PATH;
 
-        String level = ExcelUtils.getStringValueInCell(1,Constanst.LEVEL_COLUM,Constanst.PLAN_SHEET);
-        levelFolder =(level.contains("$."))? courseFolder +"//" +JsonHandle.getValue(json,level): courseFolder +"//" + level;
+        level = JsonHandle.getValue(json,ExcelUtils.getStringValueInCell(1,Constanst.LEVEL_COLUM,Constanst.PLAN_SHEET));
+        levelFolder =courseFolder +"//" + level;
 
         topic = ExcelUtils.getStringValueInCell(1,Constanst.TOPIC_PLAN_COLUM,Constanst.PLAN_SHEET);
-        String subfolder2 = ExcelUtils.getStringValueInCell(1,Constanst.LESSON_PLAN_COLUM,Constanst.PLAN_SHEET);
+        lesson = ExcelUtils.getStringValueInCell(1,Constanst.LESSON_PLAN_COLUM,Constanst.PLAN_SHEET);
         if(!topic.isEmpty()){
             topic = LogicHandle.getTextAlphabet(genReportName(topic));
             levelFolder += "//"+topic;
         }
-        if(!subfolder2.isEmpty()) {
-            subfolder2 = LogicHandle.getTextAlphabet(genReportName(subfolder2));
-            levelFolder += "//"+subfolder2;
+        if(!lesson.isEmpty()) {
+            lesson = LogicHandle.getTextAlphabet(genReportName(lesson));
+            levelFolder += "//"+lesson;
         }
 
         Log.info("levelFolder: "+levelFolder);
@@ -415,8 +417,9 @@ public class TestScrip {
     //region KEY
 
     //region Testcase key
-    public static String tcResult = Constanst.PASS;
+    //public static String tcResult = Constanst.PASS;
     public static List<String> tcResults;
+    public static List<String> scopeResult;
     public static String tcPath;
     public static boolean isDataFlow;
     public static String json;
@@ -446,6 +449,8 @@ public class TestScrip {
     public static String reportName="";
     public static String reportPath;
     public static String topic;
+    public static String level;
+    public static String lesson;
     //end region
 
     //endregion
