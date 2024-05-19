@@ -1,11 +1,8 @@
 package execute;
 
-import common.keywords.KeyWordsToActionPocoSDK;
-import common.keywords.KeyWordsToActionToVerify;
-import common.keywords.KeyWordsToComPair;
+import common.keywords.ui.KeyWordsToComPair;
 import report.GenerateReport;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 
 public class RunTestScriptModule extends TestScrip{

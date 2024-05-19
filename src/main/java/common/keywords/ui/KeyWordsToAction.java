@@ -1,9 +1,8 @@
-package common.keywords;
+package common.keywords.ui;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import common.utility.*;
-import execute.Run;
 import execute.TestScrip;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;

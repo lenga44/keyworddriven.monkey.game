@@ -1,14 +1,11 @@
 package execute;
 
 import com.aspose.cells.DateTime;
-import common.keywords.KeyWordsToAction;
+import common.keywords.ui.KeyWordsToAction;
 import common.utility.*;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
-
-import static execute.TestScrip.*;
 
 public class EndTestScript {
     /*public static void saveReportToFailListFile(String tcPath,String scope){

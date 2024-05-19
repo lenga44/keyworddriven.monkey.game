@@ -1,4 +1,4 @@
-package common.keywords;
+package common.keywords.ui;
 
 import common.utility.*;
 import groovyjarjarantlr4.v4.runtime.misc.NotNull;

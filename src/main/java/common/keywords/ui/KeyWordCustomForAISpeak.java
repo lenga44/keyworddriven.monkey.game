@@ -1,4 +1,4 @@
-package common.keywords;
+package common.keywords.ui;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static common.keywords.KeyWordsToAction.*;
+import static common.keywords.ui.KeyWordsToAction.*;
 
 public class KeyWordCustomForAISpeak {
 
