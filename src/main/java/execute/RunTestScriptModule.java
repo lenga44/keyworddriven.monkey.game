@@ -1,6 +1,6 @@
 package execute;
 
-import common.keywords.ui.KeyWordsToComPair;
+import common.keywords.app.KeyWordsToComPair;
 import report.GenerateReport;
 
 import java.lang.reflect.Method;

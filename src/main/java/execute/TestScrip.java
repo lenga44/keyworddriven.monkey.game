@@ -1,7 +1,7 @@
 package execute;
 
-import common.keywords.ui.KeyWordsToAction;
-import common.keywords.ui.KeyWordsToComPair;
+import common.keywords.app.KeyWordsToAction;
+import common.keywords.app.KeyWordsToComPair;
 import common.utility.*;
 import report.GenerateReport;
 
@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static common.keywords.ui.KeyWordsToAction.exception;
+import static common.keywords.app.KeyWordsToAction.exception;
 import static execute.Scope.genReportName;
 
 public class TestScrip {

@@ -1,7 +1,7 @@
 package execute;
 
-import common.keywords.ui.KeyWordsToAction;
-import common.keywords.ui.KeyWordsToActionToVerify;
+import common.keywords.app.KeyWordsToAction;
+import common.keywords.app.KeyWordsToActionToVerify;
 import common.utility.*;
 
 import java.io.File;
