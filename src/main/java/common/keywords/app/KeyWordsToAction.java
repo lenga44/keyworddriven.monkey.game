@@ -1,4 +1,4 @@
-package common.keywords.ui;
+package common.keywords.app;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;

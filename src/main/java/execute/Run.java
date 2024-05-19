@@ -1,53 +1,40 @@
 package execute;
 
-import com.aspose.cells.DateTime;
-import common.keywords.ui.KeyWordsToComPair;
 import common.utility.*;
-import org.apache.poi.ss.formula.FormulaParser;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Run {
 
     public static void main(String[] args) throws Exception {
-            keyWord = new KeyWordsToComPair();
-            method = keyWord.getClass().getMethods();
+        StartTestScript.logging();
+        //StartTestScript.sendMessageStartTest();
 
-            Logger formulaParserLogger = Logger.getLogger(FormulaParser.class.getName());
-            formulaParserLogger.setLevel(Level.OFF);
-            Log.resetFileLog();
+        scopePath = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.SCOPE_FILE_PATH);
+        Log.info("SCOPE_PATH: " + scopePath);
 
-            scopePath = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.SCOPE_FILE_PATH);
-            Log.info("SCOPE_PATH: " + scopePath);
+        ExcelUtils.setExcelFile(scopePath);
+        method = StartTestScript.getMethods();
 
-            ExcelUtils.setExcelFile(scopePath);
-            returnFlowScrip();
-            resetSumarryStatus();
+        returnFlowScrip();
 
-            String start = DateTime.getNow().toString();
-            //TelegramBot.sendMessTele("Start: " + start);
-            FileHelpers.writeFile("", Constanst.LIST_FAIL_PATH_FILE );
+        int iTotalSuite = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
+        Log.info("Total scope : " + iTotalSuite);
 
-            int iTotalSuite = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
-            Log.info("Total scope : " + iTotalSuite);
+        returnSizeTestSuit(iTotalSuite - 1);
 
-            returnSizeTestSuit(iTotalSuite - 1);
-
-            runOneTime(iOnceTimeSetUp);
-            if (isModuleFlow == true) {
-                runTestScriptModule = new RunTestScriptModule(keyWord, method);
-                runModuleFlow(iFirstTestSuit, iLastTestSuit);
-            }
-            if (isDataFlow == true) {
-                runTestScriptData = new RunTestScriptData(keyWord, method);
-                runDataFlow(iFirstTestSuit, iLastTestSuit);
-            }
-            runOneTime(iOnceTimeTearDown);
-            //Log.info("End script: "+DateTime.getNow());
-            //EndTestScript.sendMessTelegramEndScrip();
+        runOneTime(iOnceTimeSetUp);
+        if (isModuleFlow == true) {
+            runTestScriptModule = new RunTestScriptModule(keyWord, method);
+            runModuleFlow(iFirstTestSuit, iLastTestSuit);
+        }
+        if (isDataFlow == true) {
+            runTestScriptData = new RunTestScriptData(keyWord, method);
+            runDataFlow(iFirstTestSuit, iLastTestSuit);
+        }
+        runOneTime(iOnceTimeTearDown);
+        //EndTestScript.sendMessTelegramEndScrip();
     }
     private static void runOneTime(int iOnceTime) throws Exception {
         Log.info("runOneTime " +iOnceTime);
@@ -99,16 +86,11 @@ public class Run {
         else if(flow.equals(Constanst.DATA_FLOW))
             isDataFlow = true;
     }
-    private static void resetSumarryStatus(){
-        Log.info("Reset pass number");
-        ExcelUtils.setCellData(0,1,Constanst.PASS_PLAN_COLUM,Constanst.PLAN_SHEET,scopePath);
-        Log.info("Reset fail number");
-        ExcelUtils.setCellData(0,1,Constanst.FAIL_PLAN_COLUM,Constanst.PLAN_SHEET,scopePath);
-    }
 
     //region KEY
     public static String scopePath;
-    private static KeyWordsToComPair keyWord;
+    private static Class<?> keyWord;
+    private static Type type;
     private static Method method[];
     private static RunTestScriptModule runTestScriptModule;
     private static RunTestScriptData runTestScriptData;

@@ -1,6 +1,5 @@
 package execute;
 
-import common.keywords.ui.KeyWordsToComPair;
 import common.utility.*;
 
 import java.io.IOException;
@@ -9,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class RunTestScriptData extends TestScrip{
-    public RunTestScriptData(KeyWordsToComPair keyWord, Method method[]){
+    public RunTestScriptData(Class<?> keyWord, Method method[]){
         super(keyWord, method);
     }
 

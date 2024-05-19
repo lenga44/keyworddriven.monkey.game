@@ -1,7 +1,6 @@
 package execute;
 
-import common.keywords.ui.KeyWordsToAction;
-import common.keywords.ui.KeyWordsToComPair;
+import common.keywords.app.KeyWordsToAction;
 import common.utility.*;
 import report.GenerateReport;
 
@@ -12,11 +11,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static common.keywords.ui.KeyWordsToAction.exception;
+import static common.keywords.app.KeyWordsToAction.exception;
 import static execute.Scope.genReportName;
 
 public class TestScrip {
-    public TestScrip(KeyWordsToComPair keyWord, Method method[]){
+    public TestScrip(Class<?> keyWord, Method method[]){
         this.keyWord = keyWord;
         this.method = method;
     }
@@ -52,7 +51,6 @@ public class TestScrip {
             GroupInTest.index =1;
             EndTestScript.saveListFail(scopeResult,"L"+level+"_"+topic+"_"+lesson+"_"+tcName);
         }
-        //FileHelpers.deleteAllFileInFolder(reports,levelFolder);
     }
     private static void genTestcaseReport() throws IOException {
         tcPath = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.TESTCASE_FILE_PATH)+ tcName + ".xlsx";
@@ -437,7 +435,7 @@ public class TestScrip {
     public static String description;
     public static Object[]  param;
     private static Method method[];
-    protected static KeyWordsToComPair keyWord;
+    protected static Class<?> keyWord;
     protected static String expected;
     protected static Map<Integer, String> map_key_expected;
     protected static Map<Integer, String> map_key_actual;

@@ -1,12 +1,11 @@
 package execute;
 
-import common.keywords.ui.KeyWordsToComPair;
 import report.GenerateReport;
 
 import java.lang.reflect.Method;
 
 public class RunTestScriptModule extends TestScrip{
-    public RunTestScriptModule(KeyWordsToComPair keyWord, Method method[]){
+    public RunTestScriptModule(Class keyWord, Method method[]){
         super(keyWord, method);
     }
     public static void run(String scopePath,int iTestSuit,int iTotalSuite) throws Exception {

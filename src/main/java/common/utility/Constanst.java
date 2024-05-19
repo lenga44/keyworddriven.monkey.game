@@ -59,6 +59,7 @@ public class Constanst {
     public static final String EE_COURSE = "EE";
     public static final String LRC_COURSE = "LRC";
     public static final String AI_COURSE = "AI_Speak";
+    public static final int TYPE_SCRIPT_COLUM = 9;
     //endregion
 
     //endregion

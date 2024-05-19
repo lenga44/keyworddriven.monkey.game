@@ -1,4 +1,4 @@
 package common.keywords.api;
 
-public class KeyWordsApiToActionToVerify {
+public class KeyWordsApiToActionToVerify extends KeyWordsApiToAction{
 }

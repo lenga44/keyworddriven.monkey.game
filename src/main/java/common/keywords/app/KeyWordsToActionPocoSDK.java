@@ -1,4 +1,4 @@
-package common.keywords.ui;
+package common.keywords.app;
 
 import common.utility.FileHelpers;
 
