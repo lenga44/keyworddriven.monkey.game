@@ -26,11 +26,11 @@ public class Run {
 
         runOneTime(iOnceTimeSetUp);
         if (isModuleFlow == true) {
-            runTestScriptModule = new RunTestScriptModule(keyWord, method);
+            runTestScriptModule = new RunTestScriptModule(method);
             runModuleFlow(iFirstTestSuit, iLastTestSuit);
         }
         if (isDataFlow == true) {
-            runTestScriptData = new RunTestScriptData(keyWord, method);
+            runTestScriptData = new RunTestScriptData(method);
             runDataFlow(iFirstTestSuit, iLastTestSuit);
         }
         runOneTime(iOnceTimeTearDown);
@@ -89,8 +89,6 @@ public class Run {
 
     //region KEY
     public static String scopePath;
-    private static Class<?> keyWord;
-    private static Type type;
     private static Method method[];
     private static RunTestScriptModule runTestScriptModule;
     private static RunTestScriptData runTestScriptData;

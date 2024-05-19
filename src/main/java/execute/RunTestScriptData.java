@@ -8,8 +8,8 @@ import java.util.Map;
 import java.util.Set;
 
 public class RunTestScriptData extends TestScrip{
-    public RunTestScriptData(Class<?> keyWord, Method method[]){
-        super(keyWord, method);
+    public RunTestScriptData( Method method[]){
+        super(method);
     }
 
     @Deprecated

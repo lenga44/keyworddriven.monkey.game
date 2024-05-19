@@ -15,8 +15,7 @@ import static common.keywords.app.KeyWordsToAction.exception;
 import static execute.Scope.genReportName;
 
 public class TestScrip {
-    public TestScrip(Class<?> keyWord, Method method[]){
-        this.keyWord = keyWord;
+    public TestScrip( Method method[]){
         this.method = method;
     }
     //region SCOPE

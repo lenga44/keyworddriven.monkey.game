@@ -5,8 +5,8 @@ import report.GenerateReport;
 import java.lang.reflect.Method;
 
 public class RunTestScriptModule extends TestScrip{
-    public RunTestScriptModule(Class keyWord, Method method[]){
-        super(keyWord, method);
+    public RunTestScriptModule( Method method[]){
+        super(method);
     }
     public static void run(String scopePath,int iTestSuit,int iTotalSuite) throws Exception {
         getLevelFolder(1);

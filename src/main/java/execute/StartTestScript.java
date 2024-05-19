@@ -25,20 +25,18 @@ public class StartTestScript {
     }
     public static Method[] getMethods() throws IOException {
         String typeName = ExcelUtils.getStringValueInCell(1,Constanst.TYPE_SCRIPT_COLUM,Constanst.PLAN_SHEET);
-        String className;
+        Class<?> keyWord;
         switch (typeName){
             case "app":
-                className = new KeyWordsToComPair().getClass().getName();
+                keyWord = new KeyWordsToComPair().getClass();
                 break;
             case "api":
-                className = new KeyWordsApiToAction().getClass().getName();
+                keyWord = new KeyWordsApiToAction().getClass();
                 break;
             default:
                 throw new RuntimeException("get methods is null");
         }
-        Log.info("KEYWORD IS "+className);
-        Type type = new Type(typeName,className);
-        Class<?> keyWord = type.genType();
-        return keyWord.getClass().getMethods();
+        Log.info("KEYWORD IS "+keyWord.getName());
+        return keyWord.getMethods();
     }
 }
