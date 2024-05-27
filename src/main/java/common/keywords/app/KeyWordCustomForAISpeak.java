@@ -223,7 +223,7 @@ public class KeyWordCustomForAISpeak {
         if(expected.contains("$.")) {
             expected = JsonHandle.getValue(RunTestScriptData.json, expect);
         }
-        if(level.toLowerCase().equals(expected.toLowerCase())){
+        if(level.toLowerCase().contains(expected.toLowerCase())){
             ExcelUtils.setCellData(Constanst.NO,Integer.parseInt(tcRow),Constanst.RUN_MODE_TEST_CASE, Constanst.TESTCASE_SHEET, TestScrip.reportPath);
         }else {
             ExcelUtils.setCellData(Constanst.YES,Integer.parseInt(tcRow),Constanst.RUN_MODE_TEST_CASE, Constanst.TESTCASE_SHEET, TestScrip.reportPath);
@@ -233,7 +233,7 @@ public class KeyWordCustomForAISpeak {
     public static void changeModeTC(String variableKey,String tcNotExpRow,String tcExpRow,String expect) {
 
         String value = FileHelpers.getValueVariableFile(variableKey);
-        if(value.equals(expect)){
+        if(value.contains(expect)){
             ExcelUtils.setCellData(Constanst.NO,Integer.valueOf(tcNotExpRow),Constanst.RUN_MODE_TEST_CASE, Constanst.TESTCASE_SHEET, TestScrip.reportPath);
             ExcelUtils.setCellData(Constanst.YES,Integer.valueOf(tcExpRow),Constanst.RUN_MODE_TEST_CASE, Constanst.TESTCASE_SHEET, TestScrip.reportPath);
         }else {
