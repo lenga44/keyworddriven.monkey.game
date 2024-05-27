@@ -513,7 +513,8 @@ public class KeyWordsToAction {
                 JsonPath json = response.jsonPath();
                 List name = (List)json.get("name");
                 if(name.size()!=0){
-                    if(!locator.contains(convert(response, "name"))||convert(response,"activeInHierarchy")=="false"||name.size()==0){
+                    List activeInHierarchy = (List)json.get("activeInHierarchy");
+                    if(activeInHierarchy.contains("false")){
                         System.out.println("waitForObjectNotPresent"+name.size());
                         break;
                     }
