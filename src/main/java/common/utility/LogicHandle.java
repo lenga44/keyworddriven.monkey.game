@@ -48,7 +48,7 @@ public class LogicHandle {
             List<String> myList = new ArrayList();
             for (String text: replace.split("\\,")){
                 myList.add(text);
-            }
+        }
             return myList;
         }
         return null;

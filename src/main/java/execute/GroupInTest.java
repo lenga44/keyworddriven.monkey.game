@@ -1,6 +1,8 @@
 package execute;
 
+import common.keywords.app.KeyWordsToAction;
 import common.utility.*;
+import org.json.JSONArray;
 
 import java.io.IOException;
 import java.util.*;
@@ -233,10 +235,12 @@ public class GroupInTest {
 
         return map;
     }
-    public static Map<String,String> getValueGroups(String json,ArrayList<String> groups,String path){
+    public static Map<String,String> getValueGroups(String json,ArrayList<String> groups,String path) throws IOException {
         Map<String,String> map = new HashMap<>();
         for(int i =0;i<groups.size();i++){
-            String value = JsonHandle.getValue(json,ExcelUtils.getStringValueInCell(i+1,Constanst.GROUP_LOOP_COLUM,Constanst.GROUP_SHEET,"getValueGroups"));
+            JSONArray array = JsonHandle.getJsonArray(json,ExcelUtils.getStringValueInCell(i+1,Constanst.GROUP_LOOP_COLUM,Constanst.GROUP_SHEET,"getValueGroups"));
+            KeyWordsToAction.setVariableFile("flow",array);
+            String value = String.valueOf(array.length());
             map.put(groups.get(i), value);
             ExcelUtils.setCellData(value,i+1,Constanst.GROUP_VALUE_COLUM,Constanst.GROUP_SHEET,path);
         }
