@@ -10,6 +10,7 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
 import io.restassured.specification.RequestSpecification;
+import org.json.JSONArray;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
 
@@ -286,6 +287,10 @@ public class KeyWordsToAction {
     }
     public static void setVariableFile(String key,String value) throws IOException {
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,key,Integer.parseInt(value));
+        Log.info("setIndexVariableFile "+value);
+    }
+    public static void setVariableFile(String key, JSONArray value) throws IOException {
+        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,key,value);
         Log.info("setIndexVariableFile "+value);
     }
     public static void setIndexVariableFile(int value) throws IOException {
