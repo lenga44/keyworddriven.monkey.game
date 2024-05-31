@@ -54,12 +54,9 @@ public class Scope {
                     }
                 }
             }
-            if(exits){
-                break;
-            }
             Thread.sleep(500);
             time = LocalDateTime.now();
-        }while (time.compareTo(time1) <= 0);
+        }while (!time.isAfter(time1) && !exits);
         if (!exits){
             ExcelUtils.setCellData(Constanst.NO,row,Constanst.RUN_MODE_SCOPE,Constanst.SCOPE_SHEET,path);
             Log.error("TEST CASE IS NOT EXIT!!!");
