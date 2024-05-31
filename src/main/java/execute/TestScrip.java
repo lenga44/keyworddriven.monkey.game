@@ -331,6 +331,7 @@ public class TestScrip {
             }
         }catch (Throwable e) {
             Log.error(name);
+            Log.error(params);
             onFail(e.getMessage());
         }
         //onResultStep(result,error,row);

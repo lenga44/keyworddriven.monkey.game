@@ -54,6 +54,14 @@ public class KeyWordsToAction {
     //region ACTION
     public static void sleep(String second)  {
         try {
+            Thread.sleep((Integer.parseInt(second) * 1000));
+            Log.info("Sleep: " +second);
+        }catch (Exception e){
+            exception("|sleep String| "+e.getMessage());
+        }
+    }
+    public static void sleep(String text,String second)  {
+        try {
             Thread.sleep((Integer.parseInt(second) * 1000L));
             Log.info("Sleep: " +second);
         }catch (Exception e){
