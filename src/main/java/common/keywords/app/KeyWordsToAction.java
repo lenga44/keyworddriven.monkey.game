@@ -297,6 +297,13 @@ public class KeyWordsToAction {
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,key,Integer.parseInt(value));
         Log.info("setIndexVariableFile "+value);
     }
+    public static void setVariableFile(Object key,Object value) throws IOException {
+        setVariableFile(String.valueOf(key),String.valueOf(value));
+    }
+    public static void setVariableFile(String key,int value) throws IOException {
+        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,key,value);
+        Log.info("setIndexVariableFile "+value);
+    }
     public static void setVariableFile(String key, JSONArray value) throws IOException {
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,key,value);
         Log.info("setIndexVariableFile "+value);

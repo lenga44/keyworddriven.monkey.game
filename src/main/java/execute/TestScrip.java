@@ -223,11 +223,14 @@ public class TestScrip {
                 FileHelpers.setJsonVariable(key, value);
                 ExcelUtils.setCellData(value, row, Constanst.DATA_SET, Constanst.TEST_STEP_SHEET, reportPath);
             } else
-                return key;
+                value=key;
+            System.out.println("22222222222222 "+ value);
+            return value;
         }catch (Exception e){
             Log.error("getDataSet "+e.getMessage());
+            e.printStackTrace();
+            return "";
         }
-        return value;
     }
     public static String getDataSet(String key){
         key = getValueInVariableFile(key);
@@ -271,6 +274,7 @@ public class TestScrip {
 
                 params = ExcelUtils.getStringValueInCell(iTestStep, Constanst.PARAMS, Constanst.TEST_STEP_SHEET);
                 String dataSet = getDataSet(iTestStep);
+                System.out.println("dât set "+dataSet);
 
                 description = ExcelUtils.getStringValueInCell(iTestStep, Constanst.DESCRIPTION, Constanst.TEST_STEP_SHEET);
                 Log.info(description);
