@@ -194,6 +194,7 @@ public class LogicHandle {
         }
         return str;
     }
+
     public static int getIndexInList(List<Object> list,String item){
         return list.indexOf(item);
     }

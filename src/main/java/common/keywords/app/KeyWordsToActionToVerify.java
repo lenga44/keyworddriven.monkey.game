@@ -239,10 +239,11 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         Response response = request.get();
         return convertToList(response,"name");
     }
+    ma
     public static String getText(String locator,String component){
         try {
             Response response = request(Constanst.SCENE_URL, "//" + locator + "." + component);
-            return LogicHandle.replaceStr(convert(response, "text").trim(),"\n");
+            return LogicHandle.replaceStr(convert(response, "text").trim(),"\\n");
         }catch (Exception e){
             Log.error("getText "+e.getMessage());
             return "";

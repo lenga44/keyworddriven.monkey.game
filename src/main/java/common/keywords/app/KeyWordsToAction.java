@@ -92,11 +92,11 @@ public class KeyWordsToAction {
         }
     }
     public static void click(String locator, String property){
-        waitForObject(locator);
+        //waitForObject(locator);
         request(Constanst.SCENE_URL,"//"+locator+"."+property);
     }
     public static void click(String locator,String component, String property){
-        waitForObject(locator);
+        //waitForObject(locator);
         request(Constanst.SCENE_URL,"//"+locator+"."+component+"."+property);
     }
     public static void click(String locator,String component, String property,String index){
@@ -368,7 +368,7 @@ public class KeyWordsToAction {
         Response response = request(Constanst.SCENE_URL,"//"+locator+".RectTransform");
         String x = convert(response,"position.x",0,"\\.");
         String y = convert(response,"position.y",0,"\\.");
-        request(Constanst.SIMULATE_URL,".click("+x+","+y+")");
+        Response request = request(Constanst.SIMULATE_URL, ".click(" + x + "," + y + ")");
     }
     public static void swipeToDown(String number){
         for(int i = 0; i<Integer.valueOf(number);i++){
