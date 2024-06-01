@@ -59,6 +59,14 @@ public class KeyWordsToAction {
             exception("|sleep String| "+e.getMessage());
         }
     }
+    public static void sleep(Object second)  {
+        try {
+            Thread.sleep((Integer.parseInt((String) second) * 1000L));
+            Log.info("Sleep: " +second);
+        }catch (Exception e){
+            exception("|sleep String| "+e.getMessage());
+        }
+    }
     public static void sleep(int second)  {
         try {
             Thread.sleep (second * 1000L);
@@ -138,6 +146,39 @@ public class KeyWordsToAction {
         //FileHelpers.writeFile(result,Constanst.VARIABLE_PATH_FILE);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
+    private static String returnPath(String locator, String component,String key,String index,String expected) throws IOException {
+        waitForObject(locator);
+        Response response = request(Constanst.SCENE_URL,"//"+locator+"."+component);
+        ResponseBody body = response.getBody();
+        String json = body.asString();
+        String path = null;
+        int i =0;
+        int j =0;
+        for (JsonElement element: JsonHandle.getJsonArray(json)) {
+            if(JsonHandle.getValue(element.toString(),"$."+key).toLowerCase().equals(expected.toLowerCase()))
+            {
+                if(Integer.valueOf(index)==i){
+                    Response response1 = request(Constanst.SCENE_URL,"//"+locator);
+                    path = convertToList(response1,"path").get(j);
+                    break;
+                }else {
+                    i++;
+                }
+            }
+            j++;
+        }
+       return path;
+    }
+    public static void getPathStartWith(String startWith,String locator, String component,String key,String index,String expected) throws IOException {
+        String paths = returnPath(locator,component,key,index,expected);
+        for (String path: paths.split("/")) {
+            if(path.startsWith(startWith)){
+                JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.PATH_GAME_OBJECT,path);
+                ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
+                break;
+            }
+        }
+    }
     public static void returnPathReplaceVariable(String replaceStr,String expect) throws IOException {
         String value = expect.replace(replaceStr,"");
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.PATH_GAME_OBJECT,value);
@@ -197,9 +238,7 @@ public class KeyWordsToAction {
                         path = "";
                         String s = JsonHandle.getValue(element.toString(), "$." + key);
                         if (!s.equals("")) {
-                            System.out.println("expected1: "+expected);
                             if (s.toLowerCase().contains(expected.toLowerCase())) {
-                                System.out.println("s1: "+s);
                                 path = name;
                                 break;
                             }
@@ -285,8 +324,20 @@ public class KeyWordsToAction {
         Log.info("setIndexVariableFile "+value);
     }
     public static void setVariableFile(String key,String value) throws IOException {
-        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,key,Integer.parseInt(value));
-        Log.info("setIndexVariableFile "+value);
+        try {
+            JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key, Integer.parseInt(value));
+            Log.info("setIndexVariableFile " + value);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    public static void setVariableTypeOfStringFile(String key,String value) throws IOException {
+        try {
+            JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key, value);
+            Log.info("setVariableTypeOfStringFile " + value);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
     public static void setIndexVariableFile(int value) throws IOException {
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,value);
