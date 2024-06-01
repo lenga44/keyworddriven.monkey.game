@@ -391,7 +391,7 @@ public class TestScrip {
     public static void getLevelFolder(int row)throws IOException{
         String courseFolder = FileHelpers.getRootFolder() + Constanst.REPORT_FILE_PATH;
 
-        level = JsonHandle.getValue(json,ExcelUtils.getStringValueInCell(1,Constanst.LEVEL_COLUM,Constanst.PLAN_SHEET));
+        level = getDataSet(ExcelUtils.getStringValueInCell(1,Constanst.LEVEL_COLUM,Constanst.PLAN_SHEET));
         levelFolder =courseFolder +"//" + level;
 
         topic = ExcelUtils.getStringValueInCell(1,Constanst.TOPIC_PLAN_COLUM,Constanst.PLAN_SHEET);
