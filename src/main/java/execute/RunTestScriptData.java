@@ -2,17 +2,19 @@ package execute;
 
 import common.keywords.app.KeyWordsToComPair;
 import common.utility.*;
+import report.GenerateReport;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Set;
 
+import static execute.Run.iOnceTimeSetUp;
+
 public class RunTestScriptData extends TestScrip{
     public RunTestScriptData(KeyWordsToComPair keyWord, Method method[]){
         super(keyWord, method);
     }
-
     @Deprecated
     public static void run(String scopePath, int iTestSuit, int iTotalSuite) throws Exception {
         try {
@@ -44,6 +46,38 @@ public class RunTestScriptData extends TestScrip{
                 }
                 reportName ="";
             }
+            ExcelUtils.closeFile(scopePath);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    public static void runOnceTime(String scopePath, int iTestSuit) throws Exception {
+        try {
+            isDataFlow = true;
+            //calculator loop
+            Log.info("Run data from " + iTestSuit + " to " + iTestSuit);
+            String copyFile = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.SCOPE_COPY_FILE_PATH);
+            String scopeReport = FileHelpers.getRootFolder()+FileHelpers.getValueConfig(Constanst.SCOPE_REPORT_FILE_PATH)+"Scope";
+                //get node need check
+                json = JsonHandle.getObjectInJsonData(iTestSuit - 1);
+                ExcelUtils.setExcelFile(scopePath);
+                levelFolder = FileHelpers.getRootFolder() +Constanst.REPORT_FILE_PATH;
+                FileHelpers.copyFile(scopePath,copyFile);
+                try {
+                    ExcelUtils.setCellData(iTestSuit, 1, Constanst.CURRENT_INDEX_COLUM, Constanst.PLAN_SHEET, scopePath);
+                    String key = ExcelUtils.getStringValueInCell(1, Constanst.LESSON_PLAN_COLUM, Constanst.PLAN_SHEET);
+                    reportName = LogicHandle.getTextAlphabet(Scope.genReportName(key));
+                    //execute tc
+                    execute_suite(scopePath, iTestSuit);
+                    Scope.ResetScopeFile(scopePath,copyFile,scopeReport,iTestSuit);
+                    ExcelUtils.closeFile(reportPath);
+                    ExcelUtils.closeFile(tcPath);
+                }catch (Exception e){
+                    Log.error("|run| "+e.getMessage());
+                    e.printStackTrace();
+                }
+                reportName ="";
             ExcelUtils.closeFile(scopePath);
         }catch (Exception e){
             System.out.println(e.getMessage());

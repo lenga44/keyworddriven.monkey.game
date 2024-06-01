@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import static common.keywords.app.KeyWordsToAction.exception;
+import static execute.Run.iOnceTimeTearDown;
 import static execute.Scope.genReportName;
 
 public class TestScrip {
@@ -20,14 +21,21 @@ public class TestScrip {
         this.keyWord = keyWord;
         this.method = method;
     }
+    private static int getTotalTestSuit(int total){
+        System.out.println(iOnceTimeTearDown);
+        if(iOnceTimeTearDown>0){
+            total = total -1;
+        }
+        return total;
+    }
     //region SCOPE
     public static void execute_suites(String scopePath,int iTestSuite) throws Exception {
         Log.info("execute_suites");
         List<String> reports = new ArrayList<>();
         ExcelUtils.setExcelFile(scopePath);
-        int iTotalSuite =ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
+        int iTotalSuite =getTotalTestSuit(ExcelUtils.getRowCount(Constanst.SCOPE_SHEET));
         Scope.genFlowLesson(json,iTotalSuite,scopePath);
-        iTotalSuite = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
+        iTotalSuite = getTotalTestSuit(ExcelUtils.getRowCount(Constanst.SCOPE_SHEET));
         for (;iTestSuite<=iTotalSuite-1;iTestSuite++){
             scopeResult = new ArrayList<>();
             tcName = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET);
@@ -49,6 +57,36 @@ public class TestScrip {
                     }
                 }
             }
+            GroupInTest.index =1;
+            EndTestScript.saveListFail(scopeResult,"L"+level+"_"+topic+"_"+lesson+"_"+tcName);
+        }
+        //FileHelpers.deleteAllFileInFolder(reports,levelFolder);
+    }
+    public static void execute_suite(String scopePath,int iTestSuite) throws Exception {
+        Log.info("execute_suites");
+        List<String> reports = new ArrayList<>();
+        ExcelUtils.setExcelFile(scopePath);
+        int iTotalSuite =ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
+        Scope.genFlowLesson(json,iTotalSuite,scopePath);
+            scopeResult = new ArrayList<>();
+            tcName = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET);
+            if (!tcName.equals("")) {
+                ExcelUtils.setCellData("", iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
+                String sRunMode = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.RUN_MODE_SCOPE, Constanst.SCOPE_SHEET);
+                if (sRunMode.equals(Constanst.YES)) {
+                    reports.add(reportPath);
+                    Scope.deFindFlowGame(iTestSuite, scopePath);
+                    genTestcaseReport();
+                    genTestCaseWithGroup();;
+                    int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
+                    execute_testcases(iTotalTestCase);
+                    ExcelUtils.setExcelFile(scopePath);
+                    if(scopeResult.contains(Constanst.FAIL)) {
+                        ExcelUtils.setCellData(Constanst.FAIL, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
+                    }else {
+                        ExcelUtils.setCellData(Constanst.PASS, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
+                    }
+                }
             GroupInTest.index =1;
             EndTestScript.saveListFail(scopeResult,"L"+level+"_"+topic+"_"+lesson+"_"+tcName);
         }

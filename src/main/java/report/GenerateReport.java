@@ -21,6 +21,9 @@ public class GenerateReport{
                 ExcelUtils.setExcelFile(Run.scopePath);
                 int number = ExcelUtils.getNumberValueInCell(1,Constanst.CURRENT_INDEX_COLUM,Constanst.PLAN_SHEET);
                 String tcCopyPath = subFolder + FileHelpers.convertPath("\\"+TestScrip.tcName+"_"+reportName+"_"+number+".xlsx");
+                if(TestScrip.tcName.equals(null)){
+                    tcCopyPath = FileHelpers.convertPath("\\"+TestScrip.tcName+"_"+reportName+"_"+number+".xlsx");
+                }
                 Log.info("Path report TC current: " + tcCopyPath);
                 dest = new File(tcCopyPath);
                 if(dest.exists()) {

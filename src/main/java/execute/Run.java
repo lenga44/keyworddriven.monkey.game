@@ -4,6 +4,7 @@ import com.aspose.cells.DateTime;
 import common.keywords.app.KeyWordsToComPair;
 import common.utility.*;
 import org.apache.poi.ss.formula.FormulaParser;
+import org.apache.poi.xwpf.usermodel.IRunBody;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -13,46 +14,57 @@ import java.util.logging.Logger;
 public class Run {
 
     public static void main(String[] args) throws Exception {
-            keyWord = new KeyWordsToComPair();
-            method = keyWord.getClass().getMethods();
+        keyWord = new KeyWordsToComPair();
+        method = keyWord.getClass().getMethods();
 
-            Logger formulaParserLogger = Logger.getLogger(FormulaParser.class.getName());
-            formulaParserLogger.setLevel(Level.OFF);
-            Log.resetFileLog();
+        Logger formulaParserLogger = Logger.getLogger(FormulaParser.class.getName());
+        formulaParserLogger.setLevel(Level.OFF);
+        Log.resetFileLog();
 
-            scopePath = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.SCOPE_FILE_PATH);
-            Log.info("SCOPE_PATH: " + scopePath);
+        scopePath = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.SCOPE_FILE_PATH);
+        Log.info("SCOPE_PATH: " + scopePath);
 
-            ExcelUtils.setExcelFile(scopePath);
-            returnFlowScrip();
-            resetSumarryStatus();
+        ExcelUtils.setExcelFile(scopePath);
+        returnFlowScrip();
+        resetSumarryStatus();
 
-            String start = DateTime.getNow().toString();
-            //TelegramBot.sendMessTele("Start: " + start);
-            FileHelpers.writeFile("", Constanst.LIST_FAIL_PATH_FILE );
+        String start = DateTime.getNow().toString();
+        //TelegramBot.sendMessTele("Start: " + start);
+        FileHelpers.writeFile("", Constanst.LIST_FAIL_PATH_FILE );
 
-            int iTotalSuite = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
-            Log.info("Total scope : " + iTotalSuite);
+        int iTotalSuite = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
+        Log.info("Total scope : " + iTotalSuite);
 
-            returnSizeTestSuit(iTotalSuite - 1);
+        returnSizeTestSuit(iTotalSuite - 1);
 
-            runOneTime(iOnceTimeSetUp);
+        iOnceTimeSetUp = runOneTime(iOnceTimeSetUp);
+        runTest();
+        iOnceTimeTearDown = runOneTime(iOnceTimeTearDown);
+        //Log.info("End script: "+DateTime.getNow());
+        //EndTestScript.sendMessTelegramEndScrip();
+    }
+    private static int runOneTime(int iOnceTime) throws Exception {
+        Log.info("runOneTime " +iOnceTime);
+        if(iOnceTime>0){
             if (isModuleFlow == true) {
                 runTestScriptModule = new RunTestScriptModule(keyWord, method);
-                runModuleFlow(iFirstTestSuit, iLastTestSuit);
+                runModuleFlow(iOnceTime, iOnceTime);
             }
             if (isDataFlow == true) {
                 runTestScriptData = new RunTestScriptData(keyWord, method);
-                runDataFlow(iFirstTestSuit, iLastTestSuit);
+                RunTestScriptData.runOnceTime(scopePath,iOnceTime);
             }
-            runOneTime(iOnceTimeTearDown);
-            //Log.info("End script: "+DateTime.getNow());
-            //EndTestScript.sendMessTelegramEndScrip();
+        }
+        return 0;
     }
-    private static void runOneTime(int iOnceTime) throws Exception {
-        Log.info("runOneTime " +iOnceTime);
-        if(iOnceTime>0){
-            TestScrip.execute_suites(scopePath,iOnceTime);
+    private static void runTest() throws Exception {
+        if (isModuleFlow == true) {
+            runTestScriptModule = new RunTestScriptModule(keyWord, method);
+            runModuleFlow(iFirstTestSuit, iLastTestSuit);
+        }
+        if (isDataFlow == true) {
+            runTestScriptData = new RunTestScriptData(keyWord, method);
+            runDataFlow(iFirstTestSuit, iLastTestSuit);
         }
     }
     private static void returnSizeTestSuit(int iTotalSuite) throws IOException {
@@ -68,6 +80,7 @@ public class Run {
                 Log.info("Run all once time set up and tear down");
                 iFirstTestSuit = 2;
                 iLastTestSuit = iTotalSuite-1;
+                System.out.println(iLastTestSuit);
             }
         }
         if(iOnceTimeSetUp==0){
