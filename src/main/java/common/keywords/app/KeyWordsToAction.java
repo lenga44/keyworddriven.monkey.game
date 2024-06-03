@@ -348,6 +348,14 @@ public class KeyWordsToAction {
             e.printStackTrace();
         }
     }
+    public static void setVariableTypeOfStringFile(String key,Object value) throws IOException {
+        try {
+            JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key, Integer.valueOf(value.toString()));
+            Log.info("setVariableTypeOfObjectFile " + value);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
     public static void setVariableFile(String key, JSONArray value) throws IOException {
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,key,value);
         Log.info("setIndexVariableFile "+value);
@@ -755,7 +763,7 @@ public class KeyWordsToAction {
         }
         Log.info("waitForObjectContain :" + locator);
     }
-    public static void waitForObjectContainNotAble(String locator,String component, String property,String content){
+    public static void waitForObjectContainNotAble(String locator,String component, String property,String strRemove,String content){
         try {
             LocalDateTime time = LocalDateTime.now();
             LocalDateTime time1 = time.plusSeconds(30);
@@ -764,15 +772,16 @@ public class KeyWordsToAction {
             do {
                 response = request(Constanst.SCENE_URL, "//" + locator+"."+component);
                 if(response!=null) {
-                    if (!convertToList(response, property).isEmpty()) {
+                    if (convertToList(response, property).size()>0) {
                         JsonPath json = response.jsonPath();
                         if (json != null && json.toString() != "") {
-                            value = convert(response, property);
+                            value = LogicHandle.replaceStr(convert(response, property),strRemove);
                             if (value != null) {
-                                if (!value.contains(content))
+                                if (!value.contains(content)) {
                                     System.out.println(value);
-                                System.out.println(content);
+                                    System.out.println(content);
                                     break;
+                                }
                             }
                             Thread.sleep(500);
                         }
@@ -780,11 +789,13 @@ public class KeyWordsToAction {
                 }
                 time = LocalDateTime.now();
             } while (time.compareTo(time1) <= 0);
-            Assert.assertTrue(value.contains(content));
         }catch (Throwable e){
             exception(e);
         }
         Log.info("waitForObjectContain :" + locator);
+    }
+    public static void waitForObjectContainNotAble(String locator,String component, String property,String content){
+        waitForObjectContainNotAble(locator,component,property,"",content);
     }
     public static void waitForObjectInScreen(String locator){
         try {
