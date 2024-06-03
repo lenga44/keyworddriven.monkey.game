@@ -117,6 +117,7 @@ public class Constanst {
     public static final String TAKE_PHOTO = "http://localhost:8342/utils/appscreenshot";
     public static final String DRAG_ACTION = ".drag";
     public static final String MOVE_ACTION = ".Move";
+    public static final String MOVE_UP_ACTION = ".MoveUp";
     public static final String MOVE_COORDINATE = ".MoveX";
     //endregion
 

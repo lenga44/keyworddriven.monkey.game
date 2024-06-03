@@ -422,6 +422,14 @@ public class KeyWordsToAction {
         request(Constanst.POINTER_URL, Constanst.MOVE_ACTION + "(" + absolutePath1 + "," + absolutePath2 + ")");
         sleep("1");
     }
+    public static void moveAndUp(String locator1, String locator2){
+        waitForObject(locator1);
+        waitForObject(locator2);
+        String absolutePath1 = getAbsolutePath(locator1,"0");
+        String absolutePath2 = getAbsolutePath(locator2,"0");
+        request(Constanst.POINTER_URL, Constanst.MOVE_UP_ACTION + "(" + absolutePath1 + "," + absolutePath2 + ")");
+        sleep("1");
+    }
     public static void moveByCoordinates(String locator1, String number){
         waitForObject(locator1);
         String absolutePath1 = getAbsolutePath(locator1,"0");
