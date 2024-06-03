@@ -58,7 +58,6 @@ public class FileHelpers {
     }
     public static void deleteAllFileInFolder(List<String> reports,String folderPath){
         try {
-            System.out.println("111111111 "+folderPath);
             System.out.println(reports);
                 File folder = new File(folderPath);
                 if (folder.isDirectory()) {

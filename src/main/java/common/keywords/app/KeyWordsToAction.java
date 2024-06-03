@@ -10,6 +10,7 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
 import io.restassured.specification.RequestSpecification;
+import org.json.JSONArray;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
 
@@ -52,6 +53,14 @@ public class KeyWordsToAction {
     }
     //region ACTION
     public static void sleep(String second)  {
+        try {
+            Thread.sleep((Integer.parseInt(second) * 1000));
+            Log.info("Sleep: " +second);
+        }catch (Exception e){
+            exception("|sleep String| "+e.getMessage());
+        }
+    }
+    public static void sleep(String text,String second)  {
         try {
             Thread.sleep((Integer.parseInt(second) * 1000L));
             Log.info("Sleep: " +second);
@@ -339,6 +348,10 @@ public class KeyWordsToAction {
             e.printStackTrace();
         }
     }
+    public static void setVariableFile(String key, JSONArray value) throws IOException {
+        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,key,value);
+        Log.info("setIndexVariableFile "+value);
+    }
     public static void setIndexVariableFile(int value) throws IOException {
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,value);
         Log.info("setIndexVariableFile "+value);
@@ -497,6 +510,18 @@ public class KeyWordsToAction {
         Log.info("waitForObject :" + locator);
     }
     public static void waitForObject(String second,String splitStr,String locator){
+       try {
+           if(!locator.contains("[")&&!locator.contains("]")){
+               waitForObjectString(second,splitStr,locator);
+           }else{
+               waitForObjectStrings(second,splitStr, LogicHandle.convertToArrayListString(locator, "\"").toArray(new String[0]));
+           }
+       }
+       catch (Exception e){
+           exception("Not exit method wait object " + locator);
+       }
+    }
+    public static void waitForObjectString(String second,String splitStr,String locator){
         try {
             if(locator.contains(splitStr)){
                 locator = locator.replace(splitStr,"");
@@ -521,6 +546,52 @@ public class KeyWordsToAction {
         }
         Log.info("waitForObject :" + locator);
     }
+    public static void waitForObjectStrings(String second, String splitStr, String... locators){
+        try {
+            LocalDateTime time = LocalDateTime.now();
+            LocalDateTime time1 = time.plusSeconds(Integer.parseInt(second));
+            boolean correct = false;
+            do {
+                List<Response> responses = new ArrayList<>();
+                for (String locator : locators) {
+
+                    if (locator.contains(splitStr)) {
+                        locator = locator.replace(splitStr, "");
+                    }
+                    Response response = request(Constanst.SCENE_URL, "//" + locator);
+                    System.out.println(locator);
+                    responses.add(response);
+                }
+                for (Response response : responses  ){
+                    JsonPath json = response.jsonPath();
+                    List names = (List)json.get("name");
+                    System.out.println(names);
+                    if(!names.isEmpty()){
+                        if(convert(response,"activeInHierarchy").equals("true")){
+                            correct = true;
+                            break;
+                        }
+                    }
+                }
+                if (correct == true){
+                    break;
+                }
+                Thread.sleep(500);
+                time = LocalDateTime.now();
+            }while (time.compareTo(time1) <= 0);
+
+        }catch (Throwable e){
+            exception("No such element "+ locators);
+        }
+        Log.info("waitForObject :" + locators);
+
+    }
+
+    /*public static void main(String[] args) {
+        String expected = "[\"o3LzQwkycORfToRiQmDHQ4JB2wD4MUoe\",\"r9HQLsmmG2AYGYZpqY2gfSjprZASh1Fa\"]";
+        String[] itemsList = LogicHandle.convertToArrayListString(expected, "\"").toArray(new String[0]);
+       waitForObject(String.valueOf(15), ".mp3",itemsList);
+    }*/
     public static void waitForObjectNoReturn(String locator,String second){
         try {
             LocalDateTime time = LocalDateTime.now();
@@ -571,8 +642,10 @@ public class KeyWordsToAction {
                 response = request(Constanst.SCENE_URL, "//" + locator);
                 JsonPath json = response.jsonPath();
                 List name = (List)json.get("name");
+                System.out.println(name);
                 if(name.size()!=0){
-                    if(!locator.contains(convert(response, "name"))||convert(response,"activeInHierarchy")=="false"||name.size()==0){
+                    List activeInHierarchy = (List)json.get("activeInHierarchy");
+                    if(activeInHierarchy.contains("false") || activeInHierarchy.size()==0){
                         System.out.println("waitForObjectNotPresent"+name.size());
                         break;
                     }

@@ -5,6 +5,7 @@ import common.keywords.app.KeyWordsToActionToVerify;
 import common.utility.*;
 
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -36,19 +37,27 @@ public class Scope {
         }
         return game;
     }
-    private static void returnGame(int row,String path){
+    private static void returnGame(int row,String path) throws InterruptedException {
         boolean exits = false;
-        String games = deFindGame().replace("[","").replace("]","");
-        for (String game: games.split(", ")) {
-            TestScrip.tcName = "Report_" + game;
-            TestScrip.tcPath = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.TESTCASE_FILE_PATH)+ TestScrip.tcName + ".xlsx";
-            if(new File(TestScrip.tcPath).exists()) {
-                exits = true;
-                ExcelUtils.setCellData(TestScrip.tcName, row, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET, path);
-                break;
+        LocalDateTime time = LocalDateTime.now();
+        LocalDateTime time1 = time.plusSeconds(15);
+        do {
+            String games = deFindGame().replace("[", "").replace("]", "");
+            if (!games.equals("[]")){
+                for (String game : games.split(", ")) {
+                    TestScrip.tcName = "Report_" + game;
+                    TestScrip.tcPath = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.TESTCASE_FILE_PATH) + TestScrip.tcName + ".xlsx";
+                    if (new File(TestScrip.tcPath).exists()) {
+                        exits = true;
+                        ExcelUtils.setCellData(TestScrip.tcName, row, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET, path);
+                        break;
+                    }
+                }
             }
-        }
-        if (exits == false){
+            Thread.sleep(500);
+            time = LocalDateTime.now();
+        }while (!time.isAfter(time1) && !exits);
+        if (!exits){
             ExcelUtils.setCellData(Constanst.NO,row,Constanst.RUN_MODE_SCOPE,Constanst.SCOPE_SHEET,path);
             Log.error("TEST CASE IS NOT EXIT!!!");
         }
