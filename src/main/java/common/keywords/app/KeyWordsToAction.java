@@ -337,6 +337,7 @@ public class KeyWordsToAction {
             JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key, Integer.parseInt(value));
             Log.info("setIndexVariableFile " + value);
         }catch (Exception e){
+            Log.error(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -345,14 +346,25 @@ public class KeyWordsToAction {
             JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key, value);
             Log.info("setVariableTypeOfStringFile " + value);
         }catch (Exception e){
+            Log.error(e.getMessage());
             e.printStackTrace();
         }
     }
     public static void setVariableTypeOfStringFile(String key,Object value) throws IOException {
         try {
-            JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key, Integer.valueOf(value.toString()));
+            JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key, Integer.parseInt(value.toString()));
             Log.info("setVariableTypeOfObjectFile " + value);
         }catch (Exception e){
+            Log.error(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    public static void setVariableTypeOfStringFile(Object key,Object value) throws IOException {
+        try {
+            JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, String.valueOf(key), Integer.parseInt(value.toString()));
+            Log.info("setVariableTypeOfObjectFile " + value);
+        }catch (Exception e){
+            Log.error(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -403,9 +415,16 @@ public class KeyWordsToAction {
             sleep("1");
         }
     }
+    public static void dragUp(String locator1, String locator2){
+        for(int i = 0; i<2;i++) {
+            request(Constanst.POINTER_URL, Constanst.DRAG_UP_ACTION + "(" + locator1 + "," + locator2 + ")");
+            sleep("1");
+        }
+    }
     public static void swipe(String x1, String x2, String y){
         request(Constanst.SIMULATE_URL,Constanst.DRAG_ACTION + "("+x1+","+y+","+x2+","+y+",0.5)");
     }
+
     public static void swipe(String x1, String x2, String y,String number){
         int loop = Integer.valueOf(number);
         if(loop!=0) {

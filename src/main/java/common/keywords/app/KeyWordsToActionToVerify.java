@@ -561,5 +561,33 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         }
         return result;
     }
-
+    public static String getTextChildElement(String locator,String locator2,String component){
+        List<String> texts = new ArrayList<>();
+        Response response = request(Constanst.SCENE_URL,"//" +locator);
+        System.out.println(convert(response,"children"));
+        List<String> childs = LogicHandle.convertStringToList(convert(response,"children"));
+        for(String child: childs){
+            Response response1 = request(Constanst.SCENE_URL,"//" +child);
+            String components = convert(response1,"components");
+            if(components.contains(component)){
+                texts.add(child);
+            }else {
+                texts.add(locator2);
+            }
+        }
+        String result = "";
+        for(String text:texts){
+            String t = getText(text,component);
+            if(!result.equals("")){
+                if(!t.matches("[^\\p{Alpha}\\p{Digit}\\s]")) {
+                    result = result +" "+t;
+                }else {
+                    result+=t;
+                }
+            }else {
+                result+=t;
+            }
+        }
+        return result;
+    }
 }

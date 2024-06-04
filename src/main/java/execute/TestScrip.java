@@ -226,7 +226,7 @@ public class TestScrip {
             params = params.replace("$.order",locator);
             ExcelUtils.setCellData(params,row,colum,Constanst.TEST_STEP_SHEET,reportPath);
         }
-        List<Object> list = new ArrayList<>();
+        List<String> list = new ArrayList<>();
         if (!params.equals("")) {
             if (params.contains(",")) {
                 list.addAll(Arrays.asList(params.split(",")));
@@ -362,6 +362,9 @@ public class TestScrip {
                             KeyWordsToAction.check(actual, expected);
                         }
                     } else {
+                        /*for(int z=0;z<paramCount;z++){
+                            System.out.println(param[z].);
+                        }*/
                         method[i].invoke(keyWord, param);
                     }
                     break;
@@ -370,7 +373,12 @@ public class TestScrip {
         }catch (Throwable e) {
             Log.error(name);
             Log.error(params);
-            onFail(e.getMessage());
+            for (int z=0;z<param.length;z++) {
+                Log.info(param[z].getClass().getTypeName());
+                Log.info(param[z].getClass().getName());
+                Log.error(param[z]);
+            }
+            onFail("action "+e.getMessage());
         }
         //onResultStep(result,error,row);
     }

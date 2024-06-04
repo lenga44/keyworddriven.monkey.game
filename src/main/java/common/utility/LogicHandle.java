@@ -118,7 +118,7 @@ public class LogicHandle {
                     break;
                 }
                 time = LocalDateTime.now();
-                sleep(0.2f);
+                sleep(0.1f);
             }
             return text.trim();
         }catch (Exception e){

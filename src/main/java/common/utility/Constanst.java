@@ -116,6 +116,7 @@ public class Constanst {
     public static final String ALL_SCENE = "http://localhost:8342/q/scene";
     public static final String TAKE_PHOTO = "http://localhost:8342/utils/appscreenshot";
     public static final String DRAG_ACTION = ".drag";
+    public static final String DRAG_UP_ACTION = ".dragUp";
     public static final String MOVE_ACTION = ".Move";
     public static final String MOVE_UP_ACTION = ".MoveUp";
     public static final String MOVE_COORDINATE = ".MoveX";
@@ -153,6 +154,6 @@ public class Constanst {
     public static final String RESUME_PROGRAM_URL = ".resume()";
 
     //region logicHandle
-    public static final List<String> splits = Arrays.asList("\\|", "\\;","\\,");
+    public static final List<String> splits = Arrays.asList("\\|", "\\;","\\,",", ");
     //endregion
 }
