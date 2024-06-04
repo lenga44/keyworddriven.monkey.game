@@ -118,7 +118,7 @@ public class LogicHandle {
                     break;
                 }
                 time = LocalDateTime.now();
-                sleep(0.1f);
+                //sleep(0.1f);
             }
             return text.trim();
         }catch (Exception e){
@@ -196,6 +196,16 @@ public class LogicHandle {
     }
     public static int getIndexInList(List<Object> list,String item){
         return list.indexOf(item);
+    }
+    public static int getIndexInListEndWith(List<Object> list,String item){
+        int index = 0;
+        for (int i =0;i<list.size();i++){
+            if(item.endsWith(list.get(i).toString())){
+                index=i;
+                break;
+            }
+        }
+        return index;
     }
     public static String getEndWithTextAlphabet(String text){
         if (!Character.isLetter(text.charAt(text.length() - 1))) {

@@ -300,18 +300,21 @@ public class KeyWordCustomForAISpeak {
             String value = convert(response, property);
             String json = FileHelpers.readFile(FileHelpers.getRootFolder() + FileHelpers.getValueConfig(key));
             List<Object> topic =JsonHandle.getJsonArray(json,"$.lvs[?(@.level=='"+level+"')].category[*].topic[*].name").toList();
-            if(topic.contains((Object) value)){
-                int actualIndex = LogicHandle.getIndexInList(topic,value);
-                int expectIndex = LogicHandle.getIndexInList(topic,expect);
-                if(actualIndex>expectIndex){
-                    Log.info("swipe from right to left (1)");
-                    swipe("255","270","500",String.valueOf(actualIndex-expectIndex));
-                }else {
-                    Log.info("swipe from left to right (-1)");
-                    swipe("270","255","500",String.valueOf(expectIndex-actualIndex));
-                }
+            System.out.println("ggggggg");
+            System.out.println(topic);
+            System.out.println(value);
+            int actualIndex = LogicHandle.getIndexInListEndWith(topic,value);
+            int expectIndex = LogicHandle.getIndexInListEndWith(topic,expect);
+            System.out.println(actualIndex);
+            System.out.println(expectIndex);
+            if(actualIndex>expectIndex){
+                Log.info("swipe from right to left (1)");
+                swipe("255","270","500",String.valueOf(actualIndex-expectIndex));
+            }else {
+                Log.info("swipe from left to right (-1)");
+                swipe("270","255","500",String.valueOf(expectIndex-actualIndex));
             }
-        }
+            }
     }
     public static void skipLesson(String locator){
         if(KeyWordsToActionToVerify.isElementDisplay(locator)==true){

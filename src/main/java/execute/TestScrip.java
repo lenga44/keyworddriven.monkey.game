@@ -3,6 +3,7 @@ package execute;
 import common.keywords.app.KeyWordsToAction;
 import common.keywords.app.KeyWordsToComPair;
 import common.utility.*;
+import org.checkerframework.checker.units.qual.K;
 import report.GenerateReport;
 
 import java.io.IOException;
@@ -102,19 +103,19 @@ public class TestScrip {
         ExcelUtils.setExcelFile(reportPath);
     }
     private static void genTestCaseWithGroup() throws Exception {
+        KeyWordsToAction.pause();
         ExcelUtils.setExcelFile(reportPath);
         int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
         if(isDataFlow) {
             int group = GroupInTest.getGroup().size();
             if (group > 0) {
                 ExcelUtils.setExcelFile(reportPath);
-                KeyWordsToAction.pause();
                 ExcelUtils.createRowLastest(iTotalTestCase, Constanst.TESTCASE_SHEET, reportPath);
                 GroupInTest.genTestCaseWhichGroupContain(json, reportPath);
                 GroupInTest.genTestStepFollowTestCase(reportPath);
-                KeyWordsToAction.resume();
             }
         }
+        KeyWordsToAction.resume();
     }
     public static String openScopeFile(String fileName) throws IOException{
         Log.info("fileName "+fileName);
@@ -346,30 +347,30 @@ public class TestScrip {
             for (int i = 0; i < method.length; i++) {
                 String a = method[i].getName();
                 if (a.equals(sActionKeyword) && method[i].getParameterCount() == paramCount) {
-                    name = method[i].getName();
-                    Log.info(testStep +":  "+description);
-                    if (paramCount == 0) {
-                        param = null;
-                    }
-                    String type = String.valueOf(method[i].getReturnType());
-                    if (!type.equals("void")) {
-                        String actual = (String) method[i].invoke(keyWord, param);
-                        Log.info(description);
-                        if(expected.contains(Constanst.CHECK_CONTAIN)){
-                            expected = expected.replace(Constanst.CHECK_CONTAIN,"");
-                            KeyWordsToAction.checkContain(actual,expected);
-                        }else {
-                            KeyWordsToAction.check(actual, expected);
+                        name = method[i].getName();
+                        Log.info(testStep + ":  " + description);
+                        if (paramCount == 0) {
+                            param = null;
                         }
-                    } else {
+                        String type = String.valueOf(method[i].getReturnType());
+                        if (!type.equals("void")) {
+                            String actual = (String) method[i].invoke(keyWord, param);
+                            Log.info(description);
+                            if (expected.contains(Constanst.CHECK_CONTAIN)) {
+                                expected = expected.replace(Constanst.CHECK_CONTAIN, "");
+                                KeyWordsToAction.checkContain(actual, expected);
+                            } else {
+                                KeyWordsToAction.check(actual, expected);
+                            }
+                        } else {
                         /*for(int z=0;z<paramCount;z++){
                             System.out.println(param[z].);
                         }*/
-                        method[i].invoke(keyWord, param);
+                            method[i].invoke(keyWord, param);
+                        }
+                        break;
                     }
-                    break;
                 }
-            }
         }catch (Throwable e) {
             Log.error(name);
             Log.error(params);

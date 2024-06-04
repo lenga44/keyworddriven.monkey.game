@@ -16,15 +16,17 @@ import static execute.TestScrip.*;
 
 public class Scope {
     public static void deFindFlowGame(int row, String path){
+        KeyWordsToAction.pause();
         if (TestScrip.tcName.equals(Constanst.TEST_CASE_GAME_NAME_IN_FLOW)) {
-            KeyWordsToAction.pause();
+            //KeyWordsToAction.pause();
             try {
                 returnGame(row, path);
             } catch (Exception e) {
                 Log.error("|deFindFlowGame| " + e.getMessage());
             }
-            KeyWordsToAction.resume();
+            //KeyWordsToAction.resume();
         }
+        KeyWordsToAction.resume();
     }
     private static String deFindGame(){
         String course = ExcelUtils.getStringValueInCell(1,Constanst.COURSE_PLAN_COLUM,Constanst.PLAN_SHEET);

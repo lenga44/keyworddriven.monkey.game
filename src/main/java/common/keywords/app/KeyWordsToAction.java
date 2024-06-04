@@ -332,9 +332,9 @@ public class KeyWordsToAction {
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,Integer.parseInt(value));
         Log.info("setIndexVariableFile "+value);
     }
-    public static void setVariableFile(String key,String value) throws IOException {
+    public static void setVariableFile(Object key,Object value) throws IOException {
         try {
-            JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key, Integer.parseInt(value));
+            JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key.toString(), Integer.parseInt(value.toString()));
             Log.info("setIndexVariableFile " + value);
         }catch (Exception e){
             Log.error(e.getMessage());
@@ -368,10 +368,14 @@ public class KeyWordsToAction {
             e.printStackTrace();
         }
     }
-    public static void setVariableFile(String key, JSONArray value) throws IOException {
+    /*public static void setVariableFile(String key, JSONArray value) throws IOException {
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,key,value);
         Log.info("setIndexVariableFile "+value);
     }
+    public static void setVariableFile(String key, Object value) throws IOException {
+        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,key,value.toString());
+        Log.info("setIndexVariableFile "+value);
+    }*/
     public static void setIndexVariableFile(int value) throws IOException {
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,value);
         Log.info("setIndexVariableFile "+value);
@@ -905,10 +909,10 @@ public class KeyWordsToAction {
     }
     public static Response request(String baseUri,String basePath){
         try {
-            Log.info("request: "+ baseUri+basePath);
             RequestSpecification request = given();
             request.baseUri(baseUri);
             request.basePath(basePath);
+            Log.info("request: "+ baseUri+basePath);
             return request.get();
         }catch (Throwable e){
             TestScrip.onFail("| request | "+ e.getMessage());
