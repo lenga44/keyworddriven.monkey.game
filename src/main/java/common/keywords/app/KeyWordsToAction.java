@@ -332,10 +332,31 @@ public class KeyWordsToAction {
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,Integer.parseInt(value));
         Log.info("setIndexVariableFile "+value);
     }
-    public static void setVariableFile(Object key,Object value) throws IOException {
+    public static void setVariableFile(Object key,Object value)  {
         try {
-            JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key.toString(), Integer.parseInt(value.toString()));
-            Log.info("setIndexVariableFile " + value);
+            String expect = value.toString();
+            if(expect.matches("\\{Digit}")) {
+                JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key.toString(), Integer.parseInt(value.toString()));
+                Log.info("setIndexVariableFile _INT_ " + value);
+            }else {
+                JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key.toString(), value.toString());
+                Log.info("setIndexVariableFile _STRING_ " + value);
+            }
+        }catch (Exception e){
+            Log.error(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    public static void setVariableFile(Object key,Object strSplit,Object value)  {
+        try {
+            String expect = value.toString();
+            if(expect.matches("\\{Digit}")) {
+                JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key.toString(), Integer.parseInt(expect));
+                Log.info("setIndexVariableFile _INT_ " + value);
+            }else {
+                JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key.toString(), LogicHandle.removeString(expect,strSplit.toString()));
+                Log.info("setIndexVariableFile _STRING_ " + value);
+            }
         }catch (Exception e){
             Log.error(e.getMessage());
             e.printStackTrace();

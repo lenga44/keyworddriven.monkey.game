@@ -478,7 +478,16 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         return String.valueOf(z1.equals(z2));
     }
     public static String getVideoName(String locator){
-        return getPropertyValue(locator,"VideoPlayer","clip","(UnityEngine.VideoClip)");
+        return getPropertyValue(locator,"VideoPlayer","clip","(UnityEngine.VideoClip)")+".mp4";
+    }
+    public static String isVideoplay(String locator){
+        String time = getPropertyValue(locator,"VideoPlayer","time");
+        if(Float.parseFloat(time)>0){
+            return String.valueOf(true);
+        }else {
+            Log.info("isVideoplay "+Float.parseFloat(time));
+            return  String.valueOf(false);
+        }
     }
     public static String getVideoName(String locator,String strSplit,String indexSplit){
         return getPropertyValue(locator,"VideoPlayer","clip",strSplit,indexSplit);
