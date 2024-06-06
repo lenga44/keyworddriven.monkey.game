@@ -110,8 +110,10 @@ public class GroupInTest {
         try {
             List<String> listTestCases = getTestCaseIDs(Constanst.TESTCASE_SHEET);
             int totalCellInRow = ExcelUtils.getRow(Constanst.TEST_STEP_SHEET, 1);
+            System.out.println(listTestCases);
             Map<String, ArrayList<List<String>>> map = mapTestCaseWithTestSteps(totalCellInRow);
             for (String tcID : listTestCases) {
+                System.out.println("hhhhhhhhhhh "+tcID);
                 int totalRowTestStep = ExcelUtils.getRowCount(Constanst.TEST_STEP_SHEET);
                 copyRowByTC(map, tcID, path,totalRowTestStep);
             }
@@ -120,7 +122,7 @@ public class GroupInTest {
             e.printStackTrace();
         }
     }
-    private static void copyRowByTC(Map<String, ArrayList<List<String>>> map,String tcID,String path,int totalTestStep) throws IOException {
+    private static void copyRowByTC(Map<String, ArrayList<List<String>>> map,String tcID,String path,int totalTestStep){
         ExcelUtils.setExcelFile(path);
         String id = tcID;
         if(id.contains(".")){
@@ -129,7 +131,9 @@ public class GroupInTest {
         if(id.contains("_")){
             id = Arrays.asList(id.split("\\_")).get(0);
         }
+        System.out.println("hhhmap "+map.keySet());
         for (String str: map.keySet()) {
+            System.out.println(str);
             if(id.equals(str)){
                 for(int i = 0;i<map.get(str).size();i++) {
                     if (index >= totalTestStep-1) {
@@ -145,8 +149,8 @@ public class GroupInTest {
     }
     private static List<String> getTestCaseIDs(String sheetName){
         List<String> testCaseIDs = new ArrayList<>();
-        int totalTestCase = ExcelUtils.getRowCount(sheetName)-loop+1;
-        for (int i =1;i<=totalTestCase;i++){
+        int totalTestCase = ExcelUtils.getRowCount(sheetName);
+        for (int i =1;i<totalTestCase;i++){
             String id = ExcelUtils.getStringValueInCell(i,Constanst.TESTCASE_ID,sheetName,"getTestCaseIDs");
             if(!testCaseIDs.contains(id)) {
                 testCaseIDs.add(id);

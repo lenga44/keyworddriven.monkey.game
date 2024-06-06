@@ -411,11 +411,16 @@ public class KeyWordsToAction {
         int index = Integer.parseInt(value)+Integer.parseInt(add);
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,index);
     }
-    public static void addVariableFile(String key,String add) throws IOException {
-        Log.info("addIndexVariableFile");
-        String  value = JsonHandle.getValueInJsonObject(Constanst.VARIABLE_PATH_FILE,key).toString();
-        int index = Integer.parseInt(value)+Integer.parseInt(add);
-        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,key,index);
+    public static void addVariableFile(String key,Object add) throws IOException {
+        try {
+            Log.info("addIndexVariableFile");
+            String value = JsonHandle.getValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key).toString();
+            int index = Integer.valueOf(LogicHandle.removeString(value,"\"")) + Integer.parseInt(add.toString());
+            JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key, index);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
     }
     public static void press(String locator){
         request(Constanst.POINTER_URL,".Press("+getAbsolutePath(locator,"0")+")");
