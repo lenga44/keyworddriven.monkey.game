@@ -300,7 +300,6 @@ public class KeyWordCustomForAISpeak {
             String value = convert(response, property);
             String json = FileHelpers.readFile(FileHelpers.getRootFolder() + FileHelpers.getValueConfig(key));
             List<Object> topic =JsonHandle.getJsonArray(json,"$.lvs[?(@.level=='"+level+"')].category[*].topic[*].name").toList();
-            System.out.println("ggggggg");
             System.out.println(topic);
             System.out.println(value);
             int actualIndex = LogicHandle.getIndexInListEndWith(topic,value);
