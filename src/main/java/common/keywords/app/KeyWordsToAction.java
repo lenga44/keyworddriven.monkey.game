@@ -413,7 +413,7 @@ public class KeyWordsToAction {
     }
     public static void addVariableFile(String key,Object add) throws IOException {
         try {
-            Log.info("addIndexVariableFile");
+            Log.info("addVariableFile");
             String value = JsonHandle.getValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key).toString();
             int index = Integer.valueOf(LogicHandle.removeString(value,"\"")) + Integer.parseInt(add.toString());
             JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key, index);
