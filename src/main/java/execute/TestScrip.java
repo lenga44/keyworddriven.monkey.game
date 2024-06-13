@@ -354,6 +354,7 @@ public class TestScrip {
                         }
                         String type = String.valueOf(method[i].getReturnType());
                         if (!type.equals("void")) {
+                            result = Constanst.PASS;
                             String actual = (String) method[i].invoke(keyWord, param);
                             Log.info(description);
                             if (expected.contains(Constanst.CHECK_CONTAIN)) {
