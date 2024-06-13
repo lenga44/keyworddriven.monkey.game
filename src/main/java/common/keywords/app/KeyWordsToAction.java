@@ -1179,6 +1179,8 @@ public class KeyWordsToAction {
         KeyWordCustomForAISpeak.changeModeTCSetTrue(actual,tcRow,expect);
     }
     //endregion
+
+    //region CUSTOM
     public static void pause(){
         request(Constanst.POINTER_URL,Constanst.PAUSE_PROGRAM_URL);
     }
@@ -1198,4 +1200,5 @@ public class KeyWordsToAction {
     public static void skipLesson(String locator){
         KeyWordCustomForAISpeak.skipLesson(locator);
     }
+    //endregion
 }
