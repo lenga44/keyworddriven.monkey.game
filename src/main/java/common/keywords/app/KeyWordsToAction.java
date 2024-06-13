@@ -4,19 +4,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import common.utility.*;
 import execute.TestScrip;
-import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.android.AndroidDriver;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
 import io.restassured.specification.RequestSpecification;
-import org.json.JSONArray;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,32 +20,8 @@ import java.util.List;
 import static io.restassured.RestAssured.given;
 
 public class KeyWordsToAction {
-    public static AppiumDriver driver;
     public static String scroll;
 
-    //region KEYWORD_EXCEL
-    public static AppiumDriver openApp(){
-        DesiredCapabilities caps = new DesiredCapabilities();
-        caps.setCapability("appium:udid","7cbc1b6a");
-        caps.setCapability("platformName","android");
-        caps.setCapability("appium:automationName","uiautomator2");
-        caps.setCapability("appium:appPackage","com.earlystart.android.monkeyjunior");
-        caps.setCapability("appium:appActivity","com.earlystart.android.monkeyjunior.MainActivity");
-        caps.setCapability("appium:newCommandTimeout","144000");
-        caps.setCapability("appium:enableMultiWindows","true");
-
-        URL url = null;
-        try {
-            url = new URL("http://127.0.0.1:4723");
-        }catch (Exception e){
-
-        }
-        if(url == null)
-            throw new RuntimeException("Can't conect to server url @http://127.0.0.1:4723");
-        driver = new AndroidDriver(url,caps);
-        //driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        return driver;
-    }
     //region ACTION
     public static void sleep(String second)  {
         try {
@@ -108,7 +79,6 @@ public class KeyWordsToAction {
         request(Constanst.SCENE_URL,"//"+locator+"."+component+"."+property);
     }
     public static void click(String locator,String component, String property,String index){
-        waitForObject(locator);
         request(Constanst.SCENE_URL,"//"+locator+"[" +index+"]"+"."+component+"."+property);
     }
     public static void clickWhichObjectEnable(String locator,String index,String component, String property){

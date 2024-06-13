@@ -1,8 +1,6 @@
 package execute;
 
-import common.keywords.app.KeyWordsToAction;
 import common.utility.*;
-import org.json.JSONArray;
 
 import java.io.IOException;
 import java.util.*;
@@ -243,10 +241,25 @@ public class GroupInTest {
         Map<String,String> map = new HashMap<>();
         for(int i =0;i<groups.size();i++){
             String value = JsonHandle.getValue(json,ExcelUtils.getStringValueInCell(i+1,Constanst.GROUP_LOOP_COLUM,Constanst.GROUP_SHEET,"getValueGroups"));
+            if(isCalculate(i)){
+                value = String.valueOf(LogicHandle.calculate(operator,Integer.parseInt(value), number));
+            }
             map.put(groups.get(i), value);
             ExcelUtils.setCellData(value,i+1,Constanst.GROUP_VALUE_COLUM,Constanst.GROUP_SHEET,path);
         }
         return map;
+    }
+    private static boolean isCalculate(int row){
+        String calculate = ExcelUtils.getStringValueInCell(row,Constanst.CALCULATE_VALUE_COLUM,Constanst.GROUP_SHEET);
+        if(!calculate.isEmpty()){
+            List<String> list = LogicHandle.convertStringToList(calculate);
+            for (String item :list){
+                number = Integer.parseInt(LogicHandle.getNumber(item));
+                operator = LogicHandle.removeString(item,String.valueOf(number));
+            }
+            return true;
+        }
+        return false;
     }
     //endregion
 
@@ -255,4 +268,6 @@ public class GroupInTest {
     private static int iEndTestStep;
     public static int index = 1;
     //endregion
+    private static String operator;
+    private static int number;
 }

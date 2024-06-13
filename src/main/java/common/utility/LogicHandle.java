@@ -217,6 +217,28 @@ public class LogicHandle {
     public static String getTextAlphabet(String text){
         return text.replaceAll("[^\\p{Alpha}\\p{Digit}\\s]", "");
     }
-
-
+    public static String getNumber(String text){
+        return text.replaceAll("[^\\p{Digit}\\s]", "");
+    }
+    public static int calculate(String operator,int value,int number){
+        int result =0;
+        switch (operator){
+            case "/":
+                result = value / number;
+                break;
+            case "*":
+                result = value * number;
+                break;
+            case "-":
+                result = value - number;
+                break;
+            case "+":
+                result = value + number;
+                break;
+            default:
+                result = value;
+                break;
+        }
+        return result;
+    }
 }

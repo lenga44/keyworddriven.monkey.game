@@ -94,6 +94,7 @@ public class Constanst {
     public static final int GROUP_LEVEL_COLUM = 2;
     public static final int GROUP_LOOP_COLUM = 1;
     public static final int GROUP_VALUE_COLUM = 3;
+    public static final int CALCULATE_VALUE_COLUM = 4;
     //region TC_TS sheet
     public static final String TC_TS_SHEET = "TC_TS";
     //endregion
@@ -154,6 +155,6 @@ public class Constanst {
     public static final String RESUME_PROGRAM_URL = ".resume()";
 
     //region logicHandle
-    public static final List<String> splits = Arrays.asList("\\|", "\\;","\\,",", ");
+    public static final List<String> splits = Arrays.asList("\\|", "\\;",",",", ");
     //endregion
 }

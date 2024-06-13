@@ -4,7 +4,6 @@ import com.aspose.cells.DateTime;
 import common.keywords.app.KeyWordsToComPair;
 import common.utility.*;
 import org.apache.poi.ss.formula.FormulaParser;
-import org.apache.poi.xwpf.usermodel.IRunBody;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -29,7 +28,7 @@ public class Run {
         resetSumarryStatus();
 
         String start = DateTime.getNow().toString();
-        //TelegramBot.sendMessTele("Start: " + start);
+        //TelegramBot.sendMessTele("Start__M_GO: " + start);
         FileHelpers.writeFile("", Constanst.LIST_FAIL_PATH_FILE );
 
         int iTotalSuite = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
@@ -40,7 +39,6 @@ public class Run {
         iOnceTimeSetUp = runOneTime(iOnceTimeSetUp);
         runTest();
         iOnceTimeTearDown = runOneTime(iOnceTimeTearDown);
-        //Log.info("End script: "+DateTime.getNow());
         //EndTestScript.sendMessTelegramEndScrip();
     }
     private static int runOneTime(int iOnceTime) throws Exception {
