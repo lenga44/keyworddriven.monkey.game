@@ -1,9 +1,10 @@
 package execute;
 
+import common.facade.Adapter;
 import common.keywords.app.KeyWordsToAction;
 import common.keywords.app.KeyWordsToComPair;
+import common.keywords.app.action.TakePhoto;
 import common.utility.*;
-import org.checkerframework.checker.units.qual.K;
 import report.GenerateReport;
 
 import java.io.IOException;
@@ -307,7 +308,14 @@ public class TestScrip {
             if(process.equals(Constanst.PROCESS_YES)) {
 
                 String sActionKeyword = ExcelUtils.getStringValueInCell(iTestStep, Constanst.KEYWORD, Constanst.TEST_STEP_SHEET);
-
+                Map<Class<?>,Method[]> map = Adapter.callClass();
+                for (Class name: map.keySet()) {
+                    if(sActionKeyword.contains(name.getName())){
+                        System.out.println(name.getName());
+                        method = map.get(name);
+                        break;
+                    }
+                }
                 params = ExcelUtils.getStringValueInCell(iTestStep, Constanst.PARAMS, Constanst.TEST_STEP_SHEET);
                 String dataSet = getDataSet(iTestStep);
 
@@ -331,7 +339,7 @@ public class TestScrip {
         ExcelUtils.setCellData(message,  rowNumber, Constanst.ERROR, Constanst.TEST_STEP_SHEET, reportPath);
         if(status == Constanst.FAIL) {
             tcResults.add(status);
-            byte[] bytes = KeyWordsToAction.takePhoto();
+            byte[] bytes = TakePhoto.takePhoto();
             ExcelUtils.addPictureInCell(rowNumber, bytes, reportPath);
         }else {
             ExcelUtils.setCellData("", rowNumber, Constanst.IMAGE, Constanst.TEST_STEP_SHEET, reportPath);

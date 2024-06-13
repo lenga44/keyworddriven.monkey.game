@@ -2,17 +2,14 @@ package execute;
 
 import common.keywords.app.KeyWordsToComPair;
 import common.utility.*;
-import report.GenerateReport;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Set;
 
-import static execute.Run.iOnceTimeSetUp;
-
 public class RunTestScriptData extends TestScrip{
-    public RunTestScriptData(KeyWordsToComPair keyWord, Method method[]){
+    public RunTestScriptData(KeyWordsToComPair keyWord, Method[] method){
         super(keyWord, method);
     }
     @Deprecated

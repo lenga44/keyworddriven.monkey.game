@@ -49,7 +49,7 @@ public class KeyWordCustomByGame {
                         if (json != null && json.toString() != "") {
                             value = convert(response, property);
                             if (value != null) {
-                                if (value.contains(content))
+                                if (value.contains(frame))
                                     break;
                             }
                             Thread.sleep(500);
@@ -58,7 +58,7 @@ public class KeyWordCustomByGame {
                 }
                 time = LocalDateTime.now();
             } while (time.compareTo(time1) <= 0);
-            Assert.assertTrue(value.contains(content));
+            Assert.assertTrue(value.contains(frame));
         }catch (Throwable e){
             exception(e);
         }

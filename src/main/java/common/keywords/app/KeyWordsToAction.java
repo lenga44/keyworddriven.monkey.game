@@ -1062,10 +1062,6 @@ public class KeyWordsToAction {
     //endregion
 
     //region TAKE PHOTO
-    public static byte[] takePhoto(){
-        Response response = request(Constanst.TAKE_PHOTO,"");
-        return response.asByteArray();
-    }
     public static String getStringConvertFromArrayList(String second,String count,String value){
         ArrayList<String> list = null;
         try {
@@ -1105,12 +1101,6 @@ public class KeyWordsToAction {
     }
     public static void setTagGameObject(String locator,String tagName){
         request(Constanst.SCENE_URL,"//"+locator+".tag="+tagName);
-    }
-    //endregion
-
-    //region KeyWordsToActionPocoSDK
-    public static void swipeInput() throws IOException {
-        KeyWordsToActionPocoSDK.swipeInput();
     }
     //endregion
 
@@ -1158,11 +1148,6 @@ public class KeyWordsToAction {
     //endregion
 
     //region Send Message telegram
-    public static void sendMessTelegram(String message){
-        request("https://api.telegram.org/bot6113240161:AAHqK7JMEOONJNxFH2ctniwIDmr26HLMRkY/"
-                ,"sendMessage?chat_id=@noti_tes&text="+message);
-        Log.info(message);
-    }
     public static void ignoreScript(String number,String to,String sheetName, String text){
         KeyWordCustomForAISpeak.ignoreScript(number,to,sheetName,text);
     }

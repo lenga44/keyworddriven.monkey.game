@@ -1,5 +1,6 @@
 package common.keywords.app;
 
+import common.keywords.app.variable.ReturnPath;
 import common.utility.*;
 import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import io.restassured.response.Response;
@@ -301,7 +302,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
     public static String getTexts(String locator,String component,String expect){
         return getTextsByTime(locator,component,"15",expect);
     }
-    private static List<String> getListTexts(String locator,String component){
+    public static List<String> getListTexts(String locator, String component){
         Response response = request(Constanst.SCENE_URL, "//" + locator + "." + component);
         return convertToList(response,"text");
     }
@@ -499,7 +500,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         return getVideoURls(locator,component,key,expected);
     }
     public static String getVideoUrl(String locator, String component,String key,String strSplit,String contain,String expected){
-        String url = getPropertyValue(KeyWordsToAction.getPath(locator,component,key,expected),"VideoPlayer","url",strSplit,contain);
+        String url = getPropertyValue(ReturnPath.getPath(locator,component,key,expected),"VideoPlayer","url",strSplit,contain);
         if(url.equals(expected)){
             return Constanst.TRUE;
         }else {
