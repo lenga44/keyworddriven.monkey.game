@@ -111,7 +111,6 @@ public class GroupInTest {
             System.out.println(listTestCases);
             Map<String, ArrayList<List<String>>> map = mapTestCaseWithTestSteps(totalCellInRow);
             for (String tcID : listTestCases) {
-                System.out.println("hhhhhhhhhhh "+tcID);
                 int totalRowTestStep = ExcelUtils.getRowCount(Constanst.TEST_STEP_SHEET);
                 copyRowByTC(map, tcID, path,totalRowTestStep);
             }
@@ -129,7 +128,6 @@ public class GroupInTest {
         if(id.contains("_")){
             id = Arrays.asList(id.split("\\_")).get(0);
         }
-        System.out.println("hhhmap "+map.keySet());
         for (String str: map.keySet()) {
             System.out.println(str);
             if(id.equals(str)){
