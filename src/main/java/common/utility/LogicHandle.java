@@ -81,7 +81,7 @@ public class LogicHandle {
         return resultList;
     }
     private static String splitString(String str){
-        String result = null;
+        String result = str;
         if(str.startsWith("[") && str.endsWith("]")){
             result = str.replace("[","").replace("]","");
         }
@@ -218,7 +218,11 @@ public class LogicHandle {
         return text.replaceAll("[^\\p{Alpha}\\p{Digit}\\s]", "");
     }
     public static String getNumber(String text){
-        return text.replaceAll("[^\\p{Digit}\\s]", "");
+        try {
+            return text.replaceAll("[^\\p{Digit}\\s]", "");
+        }catch (Exception e){
+            return "0";
+        }
     }
     public static int calculate(String operator,int value,int number){
         int result =0;
