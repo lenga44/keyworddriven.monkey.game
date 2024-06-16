@@ -18,8 +18,10 @@ public class Adapter {
         final ClassLoader loader = Thread.currentThread().getContextClassLoader();
         List<Class<?>> testsClasses = new ArrayList<>();
         for (ClassPath.ClassInfo info: ClassPath.from(loader).getTopLevelClasses()){
-            if(info.getName().startsWith("keywords.app.")&& !info.getName().contains("KeyWord"))
-                map.put(info.getClass(),info.getClass().getMethods());
+            if(info.getName().startsWith("common.keywords.app")&& !info.getName().contains("KeyWord")){
+                Class<?> clazz = info.load();
+                map.put(clazz, clazz.getDeclaredMethods());
+            }
         }
         return map;
     }

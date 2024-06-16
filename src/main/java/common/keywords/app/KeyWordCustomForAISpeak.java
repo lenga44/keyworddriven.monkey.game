@@ -2,6 +2,8 @@ package common.keywords.app;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import common.keywords.app.action.Click;
+import common.keywords.app.action.Swipe;
 import common.utility.*;
 import execute.RunTestScriptData;
 import execute.TestScrip;
@@ -308,16 +310,16 @@ public class KeyWordCustomForAISpeak {
             System.out.println(expectIndex);
             if(actualIndex>expectIndex){
                 Log.info("swipe from right to left (1)");
-                swipe("255","270","500",String.valueOf(actualIndex-expectIndex));
+                Swipe.swipe("255","270","500",String.valueOf(actualIndex-expectIndex));
             }else {
                 Log.info("swipe from left to right (-1)");
-                swipe("270","255","500",String.valueOf(expectIndex-actualIndex));
+                Swipe.swipe("270","255","500",String.valueOf(expectIndex-actualIndex));
             }
             }
     }
     public static void skipLesson(String locator){
         if(KeyWordsToActionToVerify.isElementDisplay(locator)==true){
-            KeyWordsToAction.click(locator,"Button","onClick()");
+            Click.click(locator,"Button","onClick()");
             TestScrip.onFail("BẠN VẪN Ở TRONG LUỒNG LESSON");
         }
     }

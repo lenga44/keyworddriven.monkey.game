@@ -4,10 +4,11 @@ import common.keywords.app.KeyWordsToComPair;
 import report.GenerateReport;
 
 import java.lang.reflect.Method;
+import java.util.Map;
 
 public class RunTestScriptModule extends TestScrip{
-    public RunTestScriptModule(KeyWordsToComPair keyWord, Method[] method){
-        super(keyWord, method);
+    public RunTestScriptModule(KeyWordsToComPair keyWord, Method[] method, Map<Class<?>,Method[]> classes){
+        super(keyWord, method,classes);
     }
     public static void run(String scopePath,int iTestSuit,int iTotalSuite) throws Exception {
         getLevelFolder(1);

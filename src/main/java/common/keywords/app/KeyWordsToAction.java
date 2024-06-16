@@ -2,6 +2,7 @@ package common.keywords.app;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import common.keywords.app.action.SleepEx;
 import common.utility.*;
 import execute.TestScrip;
 import io.restassured.path.json.JsonPath;
@@ -22,7 +23,7 @@ import static io.restassured.RestAssured.given;
 public class KeyWordsToAction {
     public static String scroll;
 
-    //region ACTION
+    /*//region ACTION
     public static void sleep(String second)  {
         try {
             Thread.sleep((Integer.parseInt(second) * 1000));
@@ -102,8 +103,8 @@ public class KeyWordsToAction {
     }
     public static void clickDownAndUp(String locator,String index){
         String absolutePath = getAbsolutePath(locator,"0");
-        /*if(absolutePath.contains(":"))
-            absolutePath = absolutePath.replace(":","!_!");*/
+        *//*if(absolutePath.contains(":"))
+            absolutePath = absolutePath.replace(":","!_!");*//*
         request(Constanst.POINTER_URL,".DownToUp("+absolutePath+","+index+")");
     }
 
@@ -269,8 +270,8 @@ public class KeyWordsToAction {
     public static void returnPathContain(String locator, String component,String key,String expected){
         try {
             String path = getPath(locator,component,key,expected);
-/*            FileHelpers.writeFile("",Constanst.VARIABLE_PATH_FILE);
-            ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);*/
+*//*            FileHelpers.writeFile("",Constanst.VARIABLE_PATH_FILE);
+            ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);*//*
             FileHelpers.writeFile("{'path':'"+path+"'}",Constanst.VARIABLE_PATH_FILE);
             ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
         }catch (Exception e){
@@ -359,14 +360,14 @@ public class KeyWordsToAction {
             e.printStackTrace();
         }
     }
-    /*public static void setVariableFile(String key, JSONArray value) throws IOException {
+    *//*public static void setVariableFile(String key, JSONArray value) throws IOException {
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,key,value);
         Log.info("setIndexVariableFile "+value);
     }
     public static void setVariableFile(String key, Object value) throws IOException {
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,key,value.toString());
         Log.info("setIndexVariableFile "+value);
-    }*/
+    }*//*
     public static void setIndexVariableFile(int value) throws IOException {
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,value);
         Log.info("setIndexVariableFile "+value);
@@ -433,11 +434,11 @@ public class KeyWordsToAction {
             }
         }
     }
-    /*public static void swipeToRight(String number){
+    *//*public static void swipeToRight(String number){
         for(int i = 0; i<Integer.valueOf(number);i++){
             request(Constanst.SIMULATE_URL,Constanst.DRAG_ACTION + "(500,750,500,800,0.5)");
         }
-    }*/
+    }*//*
     public static void swipeToRight(String x1, String x2, String y){
         request(Constanst.SIMULATE_URL,Constanst.DRAG_ACTION + "("+x2+","+y+","+x1+","+y+",0.5)");
     }
@@ -488,9 +489,9 @@ public class KeyWordsToAction {
         Log.info("sendKey trống");
         Response response = request(Constanst.SCENE_URL,"//"+locator+"."+component+".text=");
     }
-    //endregion ACTION
+    //endregion ACTION*/
 
-    //region WAIT
+    /*//region WAIT
     public static void waitForObject(String locator){
         try {
             LocalDateTime time = LocalDateTime.now();
@@ -614,11 +615,11 @@ public class KeyWordsToAction {
 
     }
 
-    /*public static void main(String[] args) {
+    *//*public static void main(String[] args) {
         String expected = "[\"o3LzQwkycORfToRiQmDHQ4JB2wD4MUoe\",\"r9HQLsmmG2AYGYZpqY2gfSjprZASh1Fa\"]";
         String[] itemsList = LogicHandle.convertToArrayListString(expected, "\"").toArray(new String[0]);
        waitForObject(String.valueOf(15), ".mp3",itemsList);
-    }*/
+    }*//*
     public static void waitForObjectNoReturn(String locator,String second){
         try {
             LocalDateTime time = LocalDateTime.now();
@@ -889,7 +890,7 @@ public class KeyWordsToAction {
         }
         Log.info("waitForObjectNotInScreen :" + locator);
     }
-    //endregion
+    //endregion*/
 
     //endregion KEYWORD_EXCEL
 
@@ -1044,7 +1045,7 @@ public class KeyWordsToAction {
     public static String isMoveType(String locator,String second, String type,String size){
         float x1 = Float.valueOf(KeyWordsToActionToVerify.getPointScreen(locator,type));
         float with = Float.valueOf(KeyWordsToActionToVerify.getSizeScreen(size));
-        sleep(second);
+        SleepEx.sleep(second);
         float x2 = Float.valueOf(KeyWordsToActionToVerify.getPointScreen(locator,type));
         Log.info("|isMoveType| "+type + ": |Before : " +x1 +"| -- |AFTER : " +x2+ " |");
         if(x2<with)
@@ -1053,7 +1054,7 @@ public class KeyWordsToAction {
     }
     public static String isMoveType(String locator, String type){
         float x1 = Float.valueOf(KeyWordsToActionToVerify.getPointScreen(locator,type));
-        sleep("0.5");
+        SleepEx.sleep("0.5");
         float x2 = Float.valueOf(KeyWordsToActionToVerify.getPointScreen(locator,type));
         Log.info("|isMoveType| "+type + ": |Before : " +x1 +"| -- |AFTER : " +x2+ " |");
         return String.valueOf(x1<x2);

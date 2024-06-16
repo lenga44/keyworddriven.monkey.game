@@ -9,8 +9,8 @@ import java.util.Map;
 import java.util.Set;
 
 public class RunTestScriptData extends TestScrip{
-    public RunTestScriptData(KeyWordsToComPair keyWord, Method[] method){
-        super(keyWord, method);
+    public RunTestScriptData(KeyWordsToComPair keyWord, Method[] method,Map<Class<?>,Method[]> classes){
+        super(keyWord, method,classes);
     }
     @Deprecated
     public static void run(String scopePath, int iTestSuit, int iTotalSuite) throws Exception {

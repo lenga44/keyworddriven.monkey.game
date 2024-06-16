@@ -19,9 +19,10 @@ import static execute.Run.iOnceTimeTearDown;
 import static execute.Scope.genReportName;
 
 public class TestScrip {
-    public TestScrip(KeyWordsToComPair keyWord, Method method[]){
+    public TestScrip(KeyWordsToComPair keyWord, Method method[],Map<Class<?>,Method[]> classes){
         this.keyWord = keyWord;
         this.method = method;
+        this.classes = classes;
     }
     private static int getTotalTestSuit(int total){
         System.out.println(iOnceTimeTearDown);
@@ -306,16 +307,8 @@ public class TestScrip {
             String process = ExcelUtils.getStringValueInCell(iTestStep, Constanst.PROCEED, Constanst.TEST_STEP_SHEET);
             Log.info("Process TS: "+process);
             if(process.equals(Constanst.PROCESS_YES)) {
-
                 String sActionKeyword = ExcelUtils.getStringValueInCell(iTestStep, Constanst.KEYWORD, Constanst.TEST_STEP_SHEET);
-                Map<Class<?>,Method[]> map = Adapter.callClass();
-                for (Class name: map.keySet()) {
-                    if(sActionKeyword.contains(name.getName())){
-                        System.out.println(name.getName());
-                        method = map.get(name);
-                        break;
-                    }
-                }
+                getMethods(sActionKeyword);
                 params = ExcelUtils.getStringValueInCell(iTestStep, Constanst.PARAMS, Constanst.TEST_STEP_SHEET);
                 String dataSet = getDataSet(iTestStep);
 
@@ -331,6 +324,21 @@ public class TestScrip {
                 }
                 onResultStep(result, error, iTestStep);
 
+            }
+        }
+    }
+    private static void getMethods(String sActionKeyword){
+        boolean isMethod = false;
+        for (Class name: classes.keySet()) {
+            for (Method m:classes.get(name)) {
+                if(m.getName().equals(sActionKeyword)){
+                    method = classes.get(name);
+                    isMethod = true;
+                    break;
+                }
+            }
+            if (isMethod==true){
+                break;
             }
         }
     }
@@ -404,6 +412,7 @@ public class TestScrip {
         String sActionKeyword = ExcelUtils.getStringValueInCell(numberStep, Constanst.VERIFY_STEP, Constanst.TEST_STEP_SHEET);
         if(!sActionKeyword.equals("")) {
             String dataSetActual = ExcelUtils.getStringValueInCell(numberStep, Constanst.DATA_SET_ACTUAL, Constanst.TEST_STEP_SHEET);
+            getMethods(sActionKeyword);
             String data = getDataSet(dataSetActual);
             System.out.println("dataSetActual "+data);
             if (!data.equals("")) {
@@ -495,6 +504,7 @@ public class TestScrip {
     public static Object[]  param;
     private static Method method[];
     protected static KeyWordsToComPair keyWord;
+    protected static Map<Class<?>,Method[]> classes;
     protected static String expected;
     protected static Map<Integer, String> map_key_expected;
     protected static Map<Integer, String> map_key_actual;

@@ -1,12 +1,14 @@
 package execute;
 
 import com.aspose.cells.DateTime;
+import common.facade.Adapter;
 import common.keywords.app.KeyWordsToComPair;
 import common.utility.*;
 import org.apache.poi.ss.formula.FormulaParser;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,6 +17,7 @@ public class Run {
     public static void main(String[] args) throws Exception {
         keyWord = new KeyWordsToComPair();
         method = keyWord.getClass().getMethods();
+        classes = Adapter.callClass();
 
         Logger formulaParserLogger = Logger.getLogger(FormulaParser.class.getName());
         formulaParserLogger.setLevel(Level.OFF);
@@ -45,11 +48,11 @@ public class Run {
         Log.info("runOneTime " +iOnceTime);
         if(iOnceTime>0){
             if (isModuleFlow == true) {
-                runTestScriptModule = new RunTestScriptModule(keyWord, method);
+                runTestScriptModule = new RunTestScriptModule(keyWord, method,classes);
                 runModuleFlow(iOnceTime, iOnceTime);
             }
             if (isDataFlow == true) {
-                runTestScriptData = new RunTestScriptData(keyWord, method);
+                runTestScriptData = new RunTestScriptData(keyWord, method,classes);
                 RunTestScriptData.runOnceTime(scopePath,iOnceTime);
             }
         }
@@ -57,11 +60,11 @@ public class Run {
     }
     private static void runTest() throws Exception {
         if (isModuleFlow == true) {
-            runTestScriptModule = new RunTestScriptModule(keyWord, method);
+            runTestScriptModule = new RunTestScriptModule(keyWord, method,classes);
             runModuleFlow(iFirstTestSuit, iLastTestSuit);
         }
         if (isDataFlow == true) {
-            runTestScriptData = new RunTestScriptData(keyWord, method);
+            runTestScriptData = new RunTestScriptData(keyWord, method,classes);
             runDataFlow(iFirstTestSuit, iLastTestSuit);
         }
     }
@@ -129,5 +132,6 @@ public class Run {
     public static int iOnceTimeTearDown;
     public static int iFirstTestSuit;
     public static int iLastTestSuit;
+    public static Map<Class<?>,Method[]> classes;
     //endregion
 }

@@ -1,6 +1,9 @@
 package common.keywords.app;
 
+import common.keywords.app.action.SleepEx;
+import common.keywords.app.action.Wait;
 import common.keywords.app.variable.ReturnPath;
+import common.keywords.app.verify.Video;
 import common.utility.*;
 import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import io.restassured.response.Response;
@@ -127,7 +130,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
     }
     public static String elementDisplay(String locator,String second){
         try {
-            waitForObject(locator,second);
+            Wait.waitForObject(locator,second);
             Response response = request(Constanst.SCENE_URL, "//" + locator);
             return convert(response, "activeInHierarchy");
         }catch (Throwable e){
@@ -144,7 +147,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
     }
     public static String elementNotDisplay(String locator,String second){
         try {
-            waitForObject(locator,second);
+            Wait.waitForObject(locator,second);
             Response response = request(Constanst.SCENE_URL, "//" + locator);
             return convert(response, "activeInHierarchy");
         }catch (Throwable e){
@@ -157,7 +160,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         return convert(response,property);
     }
     public static String getPropertyValue(String locator, String component, String property,String slipStr){
-        waitForObject(locator);
+        Wait.waitForObject(locator);
         Response response = request(Constanst.SCENE_URL,"//"+locator+"."+component);
         String value = Arrays.stream(Objects.requireNonNull(convert(response, property)).split(slipStr)).toList().get(0).trim();
         if(value.contains("(")){
@@ -219,7 +222,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         return String.valueOf(response.getBody().jsonPath().getList("name").toArray().length);
     }
     public static String getCurrentScene(String locator){
-        waitForObjectNotPresent(locator);
+        Wait.waitForObjectNotPresent(locator);
         RequestSpecification request = given();
         request.baseUri(Constanst.STATUS_URL);
         Response response = request.get();
@@ -290,7 +293,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
                     break;
                 }
                 time = LocalDateTime.now();
-                sleep(0.2f);
+                SleepEx.sleep(0.2f);
             }
             return LogicHandle.replaceStr(text.trim(),"\n");
         }catch (Exception e){
@@ -362,7 +365,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
     }
     public static String getTextLocatorChild(String locator, String component, String key,String... StrSplit){
         String locatorChild = FileHelpers.getValueConfig(FileHelpers.getRootFolder()+Constanst.VARIABLE_PATH_FILE,key)+"/"+locator;
-        waitForObject(locatorChild);
+        Wait.waitForObject(locatorChild);
         return  LogicHandle.replaceStr(getTextNoColor(locatorChild,component,StrSplit),"\n");
     }
     public static String getTextContain(String locator,String component,String contain){
@@ -473,7 +476,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
     public static String isRotation(String locator,String coordinate){
         Response response = request(Constanst.SCENE_URL,"//"+locator+".RectTransform");
         String z1 = convert(response,"position."+coordinate,0,"\\.");
-        sleep("0.5");
+        SleepEx.sleep("0.5");
         String z2 = convert(response,"position."+coordinate,0,"\\.");
         Log.info("|isRotation|: " + z1+ " --- "+z2);
         return String.valueOf(z1.equals(z2));
@@ -497,7 +500,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         return getPropertyValue(locator,"VideoPlayer","url",strSplit,contain);
     }
     public static String getVideoUrl(String locator, String component,String key,String expected){
-        return getVideoURls(locator,component,key,expected);
+        return Video.getVideoURls(locator,component,key,expected);
     }
     public static String getVideoUrl(String locator, String component,String key,String strSplit,String contain,String expected){
         String url = getPropertyValue(ReturnPath.getPath(locator,component,key,expected),"VideoPlayer","url",strSplit,contain);
