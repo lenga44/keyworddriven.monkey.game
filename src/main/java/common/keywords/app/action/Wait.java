@@ -19,9 +19,7 @@ import java.util.List;
 import static common.keywords.app.KeyWordsToAction.*;
 import static common.keywords.app.KeyWordsToAction.exception;
 
-
 public class Wait {
-    //region WAIT
     public static void waitForObject(String locator){
         try {
             LocalDateTime time = LocalDateTime.now();
@@ -423,35 +421,27 @@ public class Wait {
         Log.info("waitForObjectNotInScreen :" + locator);
     }
 
-    public static void waitForFrameVideo(String locator,String second,String frame){
-        int frameNumber = Integer.parseInt(frame);
-        String property = "frame";
+    public static void waitForNumber(String locator,String component,String prop,String second,String expected){
         try {
             LocalDateTime time = LocalDateTime.now();
             LocalDateTime time1 = time.plusSeconds(Integer.parseInt(second));
+            int number = Integer.parseInt(expected);
             Response response = null;
-            String value = null;
             do {
-                response = RequestEx.request(Constanst.SCENE_URL, "//" + locator+".VideoPlayer");
-                if(response!=null) {
-                    if (!Convert.convertToList(response, property).isEmpty()) {
-                        JsonPath json = response.jsonPath();
-                        if (json != null && json.toString() != "") {
-                            value = convert(response, property);
-                            if (value != null) {
-                                if (value.contains(frame))
-                                    break;
-                            }
-                            Thread.sleep(500);
-                        }
+                response = RequestEx.request(Constanst.SCENE_URL, "//" + locator+"."+component);
+                List list =Convert.convertToList(response,prop);
+                if(list.size()>0){
+                    if(Integer.parseInt(convert(response,prop))>number){
+                        break;
                     }
                 }
+                Thread.sleep(1000);
                 time = LocalDateTime.now();
             } while (time.compareTo(time1) <= 0);
-            Assert.assertTrue(value.contains(frame));
+            //Assert.assertTrue(locator.contains(convert(response, "name")));
         }catch (Throwable e){
-            exception(e);
+            ExceptionEx.exception("Not found number "+ locator);
         }
-        Log.info("waitForObjectContain :" + locator);
+        Log.info("waitForNumber :" + locator);
     }
 }
