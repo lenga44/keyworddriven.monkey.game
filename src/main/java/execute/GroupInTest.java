@@ -239,9 +239,6 @@ public class GroupInTest {
         Map<String,String> map = new HashMap<>();
         for(int i =0;i<groups.size();i++){
             String value = JsonHandle.getValue(json,ExcelUtils.getStringValueInCell(i+1,Constanst.GROUP_LOOP_COLUM,Constanst.GROUP_SHEET,"getValueGroups"));
-            if(isCalculate(i)){
-                value = String.valueOf(LogicHandle.calculate(operator,Integer.parseInt(value), number));
-            }
             map.put(groups.get(i), value);
             ExcelUtils.setCellData(value,i+1,Constanst.GROUP_VALUE_COLUM,Constanst.GROUP_SHEET,path);
         }
