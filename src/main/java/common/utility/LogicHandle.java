@@ -81,7 +81,7 @@ public class LogicHandle {
         return resultList;
     }
     private static String splitString(String str){
-        String result = null;
+        String result = str;
         if(str.startsWith("[") && str.endsWith("]")){
             result = str.replace("[","").replace("]","");
         }

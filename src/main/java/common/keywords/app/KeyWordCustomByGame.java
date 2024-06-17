@@ -33,36 +33,6 @@ public class KeyWordCustomByGame {
         }
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
-    public static void waitForFrameVideo(String locator,String second,String frame){
-        int frameNumber = Integer.parseInt(frame);
-        String property = "frame";
-        try {
-            LocalDateTime time = LocalDateTime.now();
-            LocalDateTime time1 = time.plusSeconds(Integer.parseInt(second));
-            Response response = null;
-            String value = null;
-            do {
-                response = request(Constanst.SCENE_URL, "//" + locator+".VideoPlayer");
-                if(response!=null) {
-                    if (!convertToList(response, property).isEmpty()) {
-                        JsonPath json = response.jsonPath();
-                        if (json != null && json.toString() != "") {
-                            value = convert(response, property);
-                            if (value != null) {
-                                if (value.contains(content))
-                                    break;
-                            }
-                            Thread.sleep(500);
-                        }
-                    }
-                }
-                time = LocalDateTime.now();
-            } while (time.compareTo(time1) <= 0);
-            Assert.assertTrue(value.contains(content));
-        }catch (Throwable e){
-            exception(e);
-        }
-        Log.info("waitForObjectContain :" + locator);
-    }
+
     //endregion
 }
