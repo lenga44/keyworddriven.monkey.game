@@ -50,7 +50,7 @@ public class FileHelpers {
     public static String convertPath(String path){
         return path.replace("\"","");
     }
-    public static void genFolderReport(String folderName) throws IOException {
+    public static void genFolderReport(String folderName){
         File f = new File(folderName);
         if (!f.exists()) {
             f.mkdirs();

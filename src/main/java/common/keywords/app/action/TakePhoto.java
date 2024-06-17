@@ -1,7 +1,9 @@
 package common.keywords.app.action;
 
+import common.keywords.app.ExceptionEx;
 import common.utility.Constanst;
 import common.utility.FileHelpers;
+import common.utility.Log;
 import io.restassured.response.Response;
 
 import java.awt.image.BufferedImage;
@@ -16,10 +18,16 @@ public class TakePhoto {
         Response response = request(Constanst.TAKE_PHOTO,"");
         return response.asByteArray();
     }
-    public static void takePhoto(String path,String folder,String name) throws IOException {
-        byte[] bytes = TakePhoto.takePhoto();
-        FileHelpers.createFile(path+"//"+folder);
-        Files.write(Path.of(path + "//" + folder + "//" + name + ".png"), bytes);
-        SleepEx.sleep(2);
+    public static void takePhoto(String path,String name,String folder){
+        try {
+            byte[] bytes = TakePhoto.takePhoto();
+            FileHelpers.genFolderReport(path + "//" + folder);
+            Path p =Path.of(path + "//" + folder + "//" + name + ".png");
+            System.out.printf(p.toString());
+            Files.write(p, bytes);
+            SleepEx.sleep(2);
+        }catch (Exception e){
+            ExceptionEx.exception(e.getMessage());
+        }
     }
 }

@@ -421,11 +421,13 @@ public class Wait {
         Log.info("waitForObjectNotInScreen :" + locator);
     }
 
-    public static void waitForNumber(String locator,String component,String prop,String second,String expected){
+    public static void waitForNumber(String locator,String component,String prop,String second,String index,String expected){
         try {
             LocalDateTime time = LocalDateTime.now();
             LocalDateTime time1 = time.plusSeconds(Integer.parseInt(second));
-            int number = Integer.parseInt(expected);
+            System.out.println(expected);
+            List<Integer> expects = LogicHandle.convertToArrayListInt(expected);
+            int number = expects.get(Integer.parseInt(index));
             Response response = null;
             do {
                 response = RequestEx.request(Constanst.SCENE_URL, "//" + locator+"."+component);

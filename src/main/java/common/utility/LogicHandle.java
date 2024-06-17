@@ -22,6 +22,7 @@ public class LogicHandle {
                 List<String> myList = new ArrayList<String>(Arrays.asList(replace.split(",")));
                 List<Integer> list = new ArrayList<>();
                 for (String s : myList) {
+                    s = LogicHandle.removeString(s,"\"");
                     list.add(Integer.valueOf(s));
                 }
                 return list;

@@ -108,12 +108,12 @@ public class GroupInTest {
         try {
             List<String> listTestCases = getTestCaseIDs(Constanst.TESTCASE_SHEET);
             int totalCellInRow = ExcelUtils.getRow(Constanst.TEST_STEP_SHEET, 1);
-            System.out.println(listTestCases);
             Map<String, ArrayList<List<String>>> map = mapTestCaseWithTestSteps(totalCellInRow);
             for (String tcID : listTestCases) {
                 int totalRowTestStep = ExcelUtils.getRowCount(Constanst.TEST_STEP_SHEET);
                 copyRowByTC(map, tcID, path,totalRowTestStep);
             }
+            ExcelUtils.deleteRow(ExcelUtils.getRowCount(Constanst.TEST_STEP_SHEET)-1,Constanst.TEST_STEP_SHEET);
             ExcelUtils.closeFile(path);
         }catch (Exception e){
             e.printStackTrace();
@@ -129,7 +129,6 @@ public class GroupInTest {
             id = Arrays.asList(id.split("\\_")).get(0);
         }
         for (String str: map.keySet()) {
-            System.out.println(str);
             if(id.equals(str)){
                 for(int i = 0;i<map.get(str).size();i++) {
                     if (index >= totalTestStep-1) {
