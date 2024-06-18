@@ -1,13 +1,9 @@
 package common.keywords.app;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import common.keywords.app.action.SleepEx;
 import common.utility.*;
 import execute.TestScrip;
-import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
-import io.restassured.response.ResponseBody;
 import io.restassured.specification.RequestSpecification;
 import org.testng.Assert;
 
@@ -896,7 +892,7 @@ public class KeyWordsToAction {
 
     //region OTHER
     public static void connectUnity(){
-        String baseUri = Constanst.SCENE_URL;
+        String baseUri = Constanst.SCENE_URL_UNIUM;
         RequestSpecification request = given();
         request.baseUri(baseUri);
         request.basePath("//HomeButton.Button.onClick()");
@@ -970,7 +966,7 @@ public class KeyWordsToAction {
         Assert.assertTrue(actual.contains(expect));
     }
     private static String getAbsolutePath(String locator, String index){
-        Response response = request(Constanst.SCENE_URL,"//"+locator + "["+Integer.valueOf(index)+"]");
+        Response response = request(Constanst.SCENE_URL_UNIUM,"//"+locator + "["+Integer.valueOf(index)+"]");
         String absolutePath = convert(response,"path");
         if(absolutePath.contains(":"))
             absolutePath = absolutePath.replace(":","!_!");
@@ -980,7 +976,7 @@ public class KeyWordsToAction {
         return absolutePath;
     }
     private static String getAbsolutePath(String locator){
-        Response response = request(Constanst.SCENE_URL,"//"+locator);
+        Response response = request(Constanst.SCENE_URL_UNIUM,"//"+locator);
         String absolutePath = convert(response,"path");
         if(absolutePath.contains(":"))
             absolutePath = absolutePath.replace(":","!_!");
@@ -1101,7 +1097,7 @@ public class KeyWordsToAction {
         return list;
     }
     public static void setTagGameObject(String locator,String tagName){
-        request(Constanst.SCENE_URL,"//"+locator+".tag="+tagName);
+        request(Constanst.SCENE_URL_UNIUM,"//"+locator+".tag="+tagName);
     }
     //endregion
 
@@ -1168,10 +1164,10 @@ public class KeyWordsToAction {
 
     //region CUSTOM
     public static void pause(){
-        request(Constanst.POINTER_URL,Constanst.PAUSE_PROGRAM_URL);
+        request(Constanst.POINTER_URL_UNIUM,Constanst.PAUSE_PROGRAM_URL);
     }
     public static void resume(){
-        request(Constanst.POINTER_URL,Constanst.RESUME_PROGRAM_URL);
+        request(Constanst.POINTER_URL_UNIUM,Constanst.RESUME_PROGRAM_URL);
     }
     public static void deFindAnswerDienThe(String locator,String component,String property,String strReplace,String strAdd,String locator1,String expect) throws IOException {
         KeyWordCustomByGame.deFindAnswer(locator,component,property,expect,strReplace,strAdd,locator1);

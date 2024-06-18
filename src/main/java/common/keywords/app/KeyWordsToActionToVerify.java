@@ -19,7 +19,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
     @NotNull
     public static String isScale(String locator,String second,String expect){
         boolean result = false;
-        Response response = request(Constanst.SCENE_URL, "//" + locator+".RectTransform.scale");
+        Response response = request(Constanst.SCENE_URL_UNIUM, "//" + locator+".RectTransform.scale");
         String x = isScaleByCoordinate(response,second,expect,"x");
         String y = isScaleByCoordinate(response,second,expect,"y");
         String z = isScaleByCoordinate(response,second,expect,"z");
@@ -28,7 +28,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
     }
     public static String isScale(String locator,String component,String property,String second,String expect){
         boolean result = false;
-        Response response = request(Constanst.SCENE_URL, "//" + locator+"."+component+"."+property+".scale");
+        Response response = request(Constanst.SCENE_URL_UNIUM, "//" + locator+"."+component+"."+property+".scale");
         String x = isScaleByCoordinate(response,second,expect,"x");
         String y = isScaleByCoordinate(response,second,expect,"y");
         String z = isScaleByCoordinate(response,second,expect,"z");
@@ -47,7 +47,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
     public static String elementDisplay(String locator){
         try {
             //waitForObject(locator);
-            Response response = request(Constanst.SCENE_URL, "//" + locator);
+            Response response = request(Constanst.SCENE_URL_UNIUM, "//" + locator);
             return convert(response, "activeInHierarchy");
         }catch (Throwable e){
             return "false";
@@ -55,7 +55,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
     }
     public static boolean isElementDisplay(String locator){
         try {
-            Response response = request(Constanst.SCENE_URL, "//" + locator);
+            Response response = request(Constanst.SCENE_URL_UNIUM, "//" + locator);
             ResponseBody body = response.getBody();
             List actvies = convertToList(response,"activeInHierarchy");
             boolean value = false;
@@ -76,7 +76,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
             if(locator.contains(strSplit)){
                 locator = Arrays.stream(locator.split(strSplit)).toList().get(0);
             }
-            Response response = request(Constanst.SCENE_URL, "//" + locator);
+            Response response = request(Constanst.SCENE_URL_UNIUM, "//" + locator);
             ResponseBody body = response.getBody();
             List actvies = convertToList(response,"activeInHierarchy");
             boolean value = false;
@@ -131,7 +131,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
     public static String elementDisplay(String locator,String second){
         try {
             Wait.waitForObject(locator,second);
-            Response response = request(Constanst.SCENE_URL, "//" + locator);
+            Response response = request(Constanst.SCENE_URL_UNIUM, "//" + locator);
             return convert(response, "activeInHierarchy");
         }catch (Throwable e){
             return String.valueOf(false);
@@ -139,7 +139,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
     }
     public static String elementNotDisplay(String locator){
         try {
-            Response response = request(Constanst.SCENE_URL, "//" + locator);
+            Response response = request(Constanst.SCENE_URL_UNIUM, "//" + locator);
             return convert(response, "activeInHierarchy");
         }catch (Throwable e){
             return null;
@@ -148,7 +148,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
     public static String elementNotDisplay(String locator,String second){
         try {
             Wait.waitForObject(locator,second);
-            Response response = request(Constanst.SCENE_URL, "//" + locator);
+            Response response = request(Constanst.SCENE_URL_UNIUM, "//" + locator);
             return convert(response, "activeInHierarchy");
         }catch (Throwable e){
             return null;
@@ -156,12 +156,12 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
     }
     public static String getPropertyValue(String locator, String component, String property){
         //waitForObject(locator);
-        Response response = request(Constanst.SCENE_URL,"//"+locator+"."+component);
+        Response response = request(Constanst.SCENE_URL_UNIUM,"//"+locator+"."+component);
         return convert(response,property);
     }
     public static String getPropertyValue(String locator, String component, String property,String slipStr){
         Wait.waitForObject(locator);
-        Response response = request(Constanst.SCENE_URL,"//"+locator+"."+component);
+        Response response = request(Constanst.SCENE_URL_UNIUM,"//"+locator+"."+component);
         String value = Arrays.stream(Objects.requireNonNull(convert(response, property)).split(slipStr)).toList().get(0).trim();
         if(value.contains("(")){
             value = value.replace("(","").trim();
@@ -171,7 +171,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
     }
     public static String getPropertyValue(String locator, String component, String property,String slipStr,String contain){
         //waitForObject(locator);
-        Response response = request(Constanst.SCENE_URL,"//"+locator+"."+component);
+        Response response = request(Constanst.SCENE_URL_UNIUM,"//"+locator+"."+component);
         String result = convert(response,property);
         List<String> list = Arrays.stream(result.split(slipStr)).toList();
         String value = "";
@@ -218,37 +218,37 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         return getImageName(locator)+","+getImageColor(locator);
     }
     public static String getElements(String locator){
-        Response response = request(Constanst.SCENE_URL,"//"+locator+"[activeInHierarchy=true]");
+        Response response = request(Constanst.SCENE_URL_UNIUM,"//"+locator+"[activeInHierarchy=true]");
         return String.valueOf(response.getBody().jsonPath().getList("name").toArray().length);
     }
     public static String getCurrentScene(String locator){
         Wait.waitForObjectNotPresent(locator);
         RequestSpecification request = given();
-        request.baseUri(Constanst.STATUS_URL);
+        request.baseUri(Constanst.STATUS_URL_UNIUM);
         Response response = request.get();
         return response.jsonPath().get("Scene");
     }
     public static String getCurrentScene(){
         RequestSpecification request = given();
-        request.baseUri(Constanst.STATUS_URL);
+        request.baseUri(Constanst.STATUS_URL_UNIUM);
         Response response = request.get();
         return convert(response,"Scene");
     }
     public static String getAllScene(){
         RequestSpecification request = given();
-        request.baseUri(Constanst.ALL_SCENE);
+        request.baseUri(Constanst.ALL_SCENE_UNIUM);
         Response response = request.get();
         return convert(response,"name");
     }
     public static List<String> getListScene(){
         RequestSpecification request = given();
-        request.baseUri(Constanst.ALL_SCENE);
+        request.baseUri(Constanst.ALL_SCENE_UNIUM);
         Response response = request.get();
         return convertToList(response,"name");
     }
     public static String getText(String locator,String component){
         try {
-            Response response = request(Constanst.SCENE_URL, "//" + locator + "." + component);
+            Response response = request(Constanst.SCENE_URL_UNIUM, "//" + locator + "." + component);
             return LogicHandle.replaceStr(convert(response, "text").trim(),"\n");
         }catch (Exception e){
             Log.error("getText "+e.getMessage());
@@ -274,7 +274,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         try {
             while (time.compareTo(time1) <= 0) {
                 if(!text.contains(expect)){
-                    Response response = request(Constanst.SCENE_URL, "//" + locator + "." + component);
+                    Response response = request(Constanst.SCENE_URL_UNIUM, "//" + locator + "." + component);
                     List<String> texts = getListTexts(locator, component);
                     if (texts.size() > 0) {
                         String result = convert(response, "text").trim();
@@ -306,7 +306,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         return getTextsByTime(locator,component,"15",expect);
     }
     public static List<String> getListTexts(String locator, String component){
-        Response response = request(Constanst.SCENE_URL, "//" + locator + "." + component);
+        Response response = request(Constanst.SCENE_URL_UNIUM, "//" + locator + "." + component);
         return convertToList(response,"text");
     }
     public static String getTextsByLocator(String locator,String component,String locator2,String expect){
@@ -320,7 +320,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
             String text ="";
             while (time.compareTo(time1) <= 0) {
                 if(texts.size()>0) {
-                response = request(Constanst.SCENE_URL, "//" + locator + "." + component);
+                response = request(Constanst.SCENE_URL_UNIUM, "//" + locator + "." + component);
                     String result = convert(response, "text").trim();
                     if(!results.contains(result)) {
                         results.add(result);
@@ -352,7 +352,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         }
     }
     public static String getTextNoColor(String locator,String component,String... StrSplit){
-        Response response = request(Constanst.SCENE_URL,"//" +locator+"."+component);
+        Response response = request(Constanst.SCENE_URL_UNIUM,"//" +locator+"."+component);
         String values = convert(response,"text").trim();
         String result = null;
         for (String value:values.split(" ")) {
@@ -369,7 +369,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         return  LogicHandle.replaceStr(getTextNoColor(locatorChild,component,StrSplit),"\n");
     }
     public static String getTextContain(String locator,String component,String contain){
-        Response response = request(Constanst.SCENE_URL,"//" +locator+"."+component);
+        Response response = request(Constanst.SCENE_URL_UNIUM,"//" +locator+"."+component);
         return LogicHandle.replaceStr(String.valueOf(convert(response,"text").trim().contains(contain)),"\n");
     }
     public static String getSpineState(String locator){
@@ -431,7 +431,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         return String.valueOf(expects.contains(list));
     }
     public static String getPointScreen(String locator, String coordinate){
-        Response response = request(Constanst.SCENE_URL,"//"+locator+".RectTransform");
+        Response response = request(Constanst.SCENE_URL_UNIUM,"//"+locator+".RectTransform");
         return convert(response,"position."+coordinate,0,"\\.");
     }
     public static String getPointScreen(Response response, String coordinate){
@@ -439,7 +439,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
     }
     public static String isPointInScreen(String locator){
         boolean result = false;
-        Response response = request(Constanst.SCENE_URL,"//"+locator+".RectTransform");
+        Response response = request(Constanst.SCENE_URL_UNIUM,"//"+locator+".RectTransform");
         String x = convert(response,"position.x",0,"\\.");
         String y = convert(response,"position.y",0,"\\.");
         String with = getSizeScreen("w");
@@ -451,7 +451,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         return String.valueOf(result);
     }
     public static String getSizeScreen(String key){
-        Response response = request(Constanst.SCENE_URL,"//UniumSDK.UniumComponent");
+        Response response = request(Constanst.SCENE_URL_UNIUM,"//UniumSDK.UniumComponent");
         if(key.equals(Constanst.WITH))
             return convert(response, "Width");
         else
@@ -474,7 +474,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         return String.valueOf(result);
     }
     public static String isRotation(String locator,String coordinate){
-        Response response = request(Constanst.SCENE_URL,"//"+locator+".RectTransform");
+        Response response = request(Constanst.SCENE_URL_UNIUM,"//"+locator+".RectTransform");
         String z1 = convert(response,"position."+coordinate,0,"\\.");
         SleepEx.sleep("0.5");
         String z2 = convert(response,"position."+coordinate,0,"\\.");
@@ -512,14 +512,14 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         }
     }
     public static String getResultByKey(String locator,String component,String key){
-        Response response = request(Constanst.SCENE_URL,"//" +locator+"."+component);
+        Response response = request(Constanst.SCENE_URL_UNIUM,"//" +locator+"."+component);
         String value = JsonHandle.getValue(response.getBody().asString(),key);
         return value;
 
     }
     public static String getSentenceByText(String locators,String component){
         String sentence = null;
-        Response response = request(Constanst.SCENE_URL,"//" +locators+"."+component);
+        Response response = request(Constanst.SCENE_URL_UNIUM,"//" +locators+"."+component);
         List<String> list = convertToList(response,"text");
         for (String text: list) {
            if(text.matches("^[a-z0-9A-Z]{2,25}$")){
@@ -533,7 +533,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
     public static String getSentenceByText(String locators,String component,String strSplit){
         String sentence = "";
         try {
-            Response response = request(Constanst.SCENE_URL, "//" + locators + "." + component);
+            Response response = request(Constanst.SCENE_URL_UNIUM, "//" + locators + "." + component);
             List<String> list = convertToList(response, "text");
             for (String text : list) {
                 String str = LogicHandle.replaceStr(text,strSplit);
@@ -576,11 +576,11 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
     }
     public static String getTextChildElement(String locator,String locator2,String component){
         List<String> texts = new ArrayList<>();
-        Response response = request(Constanst.SCENE_URL,"//" +locator);
+        Response response = request(Constanst.SCENE_URL_UNIUM,"//" +locator);
         System.out.println(convert(response,"children"));
         List<String> childs = LogicHandle.convertStringToList(convert(response,"children"));
         for(String child: childs){
-            Response response1 = request(Constanst.SCENE_URL,"//" +child);
+            Response response1 = request(Constanst.SCENE_URL_UNIUM,"//" +child);
             String components = convert(response1,"components");
             if(components.contains(component)){
                 texts.add(child);

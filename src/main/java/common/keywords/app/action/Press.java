@@ -14,16 +14,16 @@ public class Press {
         }
     }
     public static void press(String locator){
-        RequestEx.request(Constanst.POINTER_URL,".Press("+GetAbsolutePath.getAbsolutePath(locator,"0")+")");
+        RequestEx.request(Constanst.POINTER_URL_UNIUM,".Press("+GetAbsolutePath.getAbsolutePath(locator,"0")+")");
     }
     public static void pressWithTag(String tagNew,String tagOld){
-        RequestEx.request(Constanst.POINTER_URL,".PressWithTag("+tagNew +","+tagOld+")");
+        RequestEx.request(Constanst.POINTER_URL_UNIUM,".PressWithTag("+tagNew +","+tagOld+")");
     }
     public static void press(String locator,String index){
         Wait.waitForObject(locator);
         String absolutePath = GetAbsolutePath.getAbsolutePath(locator,"0");
         if(absolutePath.contains(":"))
             absolutePath = absolutePath.replace(":","!_!");
-        RequestEx.request(Constanst.POINTER_URL,".Press("+absolutePath+","+index+")");
+        RequestEx.request(Constanst.POINTER_URL_UNIUM,".Press("+absolutePath+","+index+")");
     }
 }

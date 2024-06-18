@@ -9,7 +9,7 @@ import io.restassured.response.Response;
 
 public class IsRotation {
     public static String isRotation(String locator,String coordinate){
-        Response response = RequestEx.request(Constanst.SCENE_URL,"//"+locator+".RectTransform");
+        Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator+".RectTransform");
         String z1 = Convert.convert(response,"position."+coordinate,0,"\\.");
         SleepEx.sleep("0.5");
         String z2 = Convert.convert(response,"position."+coordinate,0,"\\.");

@@ -5,6 +5,11 @@ import execute.TestScrip;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
 import static io.restassured.RestAssured.given;
 
 public class RequestEx {
@@ -25,5 +30,18 @@ public class RequestEx {
         request.baseUri(baseUri);
         request.basePath(basePath);
         return request.get("/"+number);
+    }
+    public static void requestFile(String domain,String filePath){
+        try {
+            String encodedFilePath = URLEncoder.encode(filePath, StandardCharsets.UTF_8);
+            String urlString = domain+ encodedFilePath;
+            URL url = new URL(urlString);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            Log.info("URL: "+urlString);
+            Log.info("Status code: "+connection.getResponseCode());
+        }catch (Throwable e){
+            TestScrip.onFail("| request | "+ e.getMessage());
+        }
     }
 }

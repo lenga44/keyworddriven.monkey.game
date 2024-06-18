@@ -26,7 +26,7 @@ public class Wait {
             LocalDateTime time1 = time.plusSeconds(10);
             Response response = null;
             do {
-                response = RequestEx.request(Constanst.SCENE_URL, "//" + locator);
+                response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator);
                 JsonPath json = response.jsonPath();
                 List name = (List)json.get("name");
                 if (json != null && name.size()>0) {
@@ -48,7 +48,7 @@ public class Wait {
             LocalDateTime time1 = time.plusSeconds(Integer.valueOf(second));
             Response response = null;
             do {
-                response = RequestEx.request(Constanst.SCENE_URL, "//" + locator);
+                response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator);
                 JsonPath json = response.jsonPath();
                 List name = (List)json.get("name");
                 if (json != null && name.size()>0) {
@@ -82,7 +82,7 @@ public class Wait {
             if(locator.contains(splitStr)){
                 locator = locator.replace(splitStr,"");
             }
-            Response response = RequestEx.request(Constanst.SCENE_URL, "//" + locator);
+            Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator);
             LocalDateTime time = LocalDateTime.now();
             LocalDateTime time1 = time.plusSeconds(Integer.parseInt(second));
             do {
@@ -92,7 +92,7 @@ public class Wait {
                     if(Convert.convert(response,"activeInHierarchy")=="true")
                         break;
                 }
-                response = RequestEx.request(Constanst.SCENE_URL, "//" + locator);
+                response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator);
                 Thread.sleep(500);
                 time = LocalDateTime.now();
             } while (time.compareTo(time1) <= 0);
@@ -114,7 +114,7 @@ public class Wait {
                     if (locator.contains(splitStr)) {
                         locator = locator.replace(splitStr, "");
                     }
-                    Response response = RequestEx.request(Constanst.SCENE_URL, "//" + locator);
+                    Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator);
                     System.out.println(locator);
                     responses.add(response);
                 }
@@ -154,7 +154,7 @@ public class Wait {
             LocalDateTime time1 = time.plusSeconds(Integer.valueOf(second));
             Response response = null;
             do {
-                response = RequestEx.request(Constanst.SCENE_URL, "//" + locator);
+                response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator);
                 JsonPath json = response.jsonPath();
                 List name = (List)json.get("name");
                 if (json != null && !name.isEmpty()) {
@@ -174,7 +174,7 @@ public class Wait {
             LocalDateTime time1 = time.plusSeconds(10);
             Response response = null;
             do {
-                response = RequestEx.request(Constanst.SCENE_URL, "//" + locator);
+                response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator);
                 JsonPath json = response.jsonPath();
                 List name = (List)json.get("name");
                 if(!locator.contains(Convert.convert(response, "name"))
@@ -197,7 +197,7 @@ public class Wait {
             Response response = null;
             System.out.println("waitForObjectNotPresent"+locator);
             do {
-                response = RequestEx.request(Constanst.SCENE_URL, "//" + locator);
+                response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator);
                 JsonPath json = response.jsonPath();
                 List name = (List)json.get("name");
                 System.out.println(name);
@@ -226,7 +226,7 @@ public class Wait {
             Response response = null;
             String value= null;
             do {
-                response = RequestEx.request(Constanst.SCENE_URL, "//" + locator);
+                response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator);
                 if(response!=null) {
                     if (Convert.convert(response, "activeInHierarchy") == "true") {
                         JsonPath json = response.jsonPath();
@@ -255,7 +255,7 @@ public class Wait {
             Response response = null;
             String value= null;
             do {
-                response = RequestEx.request(Constanst.SCENE_URL, "//" + locator);
+                response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator);
                 if(response!=null) {
                     if (Convert.convert(response, "activeInHierarchy") == "true") {
                         JsonPath json = response.jsonPath();
@@ -289,7 +289,7 @@ public class Wait {
             Response response = null;
             String value = null;
             do {
-                response = RequestEx.request(Constanst.SCENE_URL, "//" + locator+"."+component);
+                response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator+"."+component);
                 if(response!=null) {
                     if (!Convert.convertToList(response, property).isEmpty()) {
                         JsonPath json = response.jsonPath();
@@ -320,7 +320,7 @@ public class Wait {
             Response response = null;
             String value = null;
             do {
-                response = RequestEx.request(Constanst.SCENE_URL, "//" + locator+"."+component);
+                response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator+"."+component);
                 if(response!=null) {
                     if (Convert.convertToList(response, property).size()>0) {
                         JsonPath json = response.jsonPath();
@@ -355,7 +355,7 @@ public class Wait {
             float with = Float.valueOf(SizeScreen.getSizeScreen("w"));
             float height = Float.valueOf(SizeScreen.getSizeScreen("h"));
             do {
-                response = RequestEx.request(Constanst.SCENE_URL,"//"+locator+".RectTransform");
+                response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator+".RectTransform");
                 JsonPath json = response.jsonPath();
                 List name = (List)json.get("name");
                 if (json != null && !name.isEmpty()) {
@@ -380,7 +380,7 @@ public class Wait {
             float with = Float.valueOf(SizeScreen.getSizeScreen("w"));
             float height = Float.valueOf(SizeScreen.getSizeScreen("h"));
             do {
-                response = RequestEx.request(Constanst.SCENE_URL,"//"+locator+".RectTransform");
+                response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator+".RectTransform");
                 JsonPath json = response.jsonPath();
                 List name = (List)json.get("name");
                 if (json != null && !name.isEmpty()) {
@@ -404,7 +404,7 @@ public class Wait {
             Response response = null;
             float with = Float.valueOf(SizeScreen.getSizeScreen(size));
             do {
-                response = RequestEx.request(Constanst.SCENE_URL,"//"+locator+".RectTransform");
+                response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator+".RectTransform");
                 JsonPath json = response.jsonPath();
                 List name = (List)json.get("name");
                 if (json != null && !name.isEmpty()) {
@@ -430,7 +430,7 @@ public class Wait {
             int number = expects.get(Integer.parseInt(index));
             Response response = null;
             do {
-                response = RequestEx.request(Constanst.SCENE_URL, "//" + locator+"."+component);
+                response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator+"."+component);
                 List list =Convert.convertToList(response,prop);
                 if(list.size()>0){
                     if(Integer.parseInt(convert(response,prop))>number){

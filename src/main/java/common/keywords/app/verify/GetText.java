@@ -20,11 +20,11 @@ import static common.keywords.app.KeyWordsToActionToVerify.getListTexts;
 public class GetText {
     public static String getTextChildElement(String locator,String locator2,String component){
         List<String> texts = new ArrayList<>();
-        Response response = RequestEx.request(Constanst.SCENE_URL,"//" +locator);
+        Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//" +locator);
         System.out.println(Convert.convert(response,"children"));
         List<String> childs = LogicHandle.convertStringToList(Convert.convert(response,"children"));
         for(String child: childs){
-            Response response1 = RequestEx.request(Constanst.SCENE_URL,"//" +child);
+            Response response1 = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//" +child);
             String components = Convert.convert(response1,"components");
             if(components.contains(component)){
                 texts.add(child);
@@ -49,7 +49,7 @@ public class GetText {
     }
     public static String getText(String locator,String component){
         try {
-            Response response = RequestEx.request(Constanst.SCENE_URL, "//" + locator + "." + component);
+            Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator + "." + component);
             return LogicHandle.replaceStr(Convert.convert(response, "text").trim(),"\n");
         }catch (Exception e){
             Log.error("getText "+e.getMessage());
@@ -75,7 +75,7 @@ public class GetText {
         try {
             while (time.compareTo(time1) <= 0) {
                 if(!text.contains(expect)){
-                    Response response = RequestEx.request(Constanst.SCENE_URL, "//" + locator + "." + component);
+                    Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator + "." + component);
                     List<String> texts = getListTexts(locator, component);
                     if (texts.size() > 0) {
                         String result = Convert.convert(response, "text").trim();
@@ -117,7 +117,7 @@ public class GetText {
             String text ="";
             while (time.compareTo(time1) <= 0) {
                 if(texts.size()>0) {
-                    response = RequestEx.request(Constanst.SCENE_URL, "//" + locator + "." + component);
+                    response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator + "." + component);
                     String result = Convert.convert(response, "text").trim();
                     if(!results.contains(result)) {
                         results.add(result);
@@ -149,7 +149,7 @@ public class GetText {
         }
     }
     public static String getTextNoColor(String locator,String component,String... StrSplit){
-        Response response = RequestEx.request(Constanst.SCENE_URL,"//" +locator+"."+component);
+        Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//" +locator+"."+component);
         String values = Convert.convert(response,"text").trim();
         String result = null;
         for (String value:values.split(" ")) {
@@ -166,7 +166,7 @@ public class GetText {
         return  LogicHandle.replaceStr(getTextNoColor(locatorChild,component,StrSplit),"\n");
     }
     public static String getTextContain(String locator,String component,String contain){
-        Response response = RequestEx.request(Constanst.SCENE_URL,"//" +locator+"."+component);
+        Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//" +locator+"."+component);
         return LogicHandle.replaceStr(String.valueOf(Convert.convert(response,"text").trim().contains(contain)),"\n");
     }
 }

@@ -15,7 +15,7 @@ import java.util.List;
 public class IsElement {
     public static boolean isElementDisplay(String locator){
         try {
-            Response response = RequestEx.request(Constanst.SCENE_URL, "//" + locator);
+            Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator);
             ResponseBody body = response.getBody();
             List actvies = Convert.convertToList(response,"activeInHierarchy");
             boolean value = false;
@@ -36,7 +36,7 @@ public class IsElement {
             if(locator.contains(strSplit)){
                 locator = Arrays.stream(locator.split(strSplit)).toList().get(0);
             }
-            Response response = RequestEx.request(Constanst.SCENE_URL, "//" + locator);
+            Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator);
             ResponseBody body = response.getBody();
             List actvies = Convert.convertToList(response,"activeInHierarchy");
             boolean value = false;

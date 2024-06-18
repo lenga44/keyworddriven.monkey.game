@@ -9,7 +9,7 @@ import io.restassured.response.Response;
 public class PointInScreen {
     public static String isPointInScreen(String locator){
         boolean result = false;
-        Response response = RequestEx.request(Constanst.SCENE_URL,"//"+locator+".RectTransform");
+        Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator+".RectTransform");
         String x = Convert.convert(response,"position.x",0,"\\.");
         String y = Convert.convert(response,"position.y",0,"\\.");
         String with = SizeScreen.getSizeScreen("w");

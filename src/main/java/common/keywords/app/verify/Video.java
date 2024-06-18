@@ -2,7 +2,6 @@ package common.keywords.app.verify;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import common.keywords.app.Convert;
 import common.keywords.app.RequestEx;
 import common.keywords.app.variable.ReturnPath;
 import common.utility.Constanst;
@@ -10,9 +9,6 @@ import common.utility.JsonHandle;
 import common.utility.Log;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class Video {
     public static String getVideoName(String locator){
@@ -49,7 +45,7 @@ public class Video {
         String s = "";
         String path = "";
         try {
-            Response response1 = RequestEx.request(Constanst.SCENE_URL, "//" + locator + "." + component);
+            Response response1 = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator + "." + component);
             ResponseBody body1 = response1.getBody();
             JsonArray array = JsonHandle.getJsonArray(body1.asString());
             if(array.size()>0) {

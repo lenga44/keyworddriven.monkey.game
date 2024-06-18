@@ -14,25 +14,25 @@ public class Scene {
     public static String getCurrentScene(String locator){
         Wait.waitForObjectNotPresent(locator);
         RequestSpecification request = given();
-        request.baseUri(Constanst.STATUS_URL);
+        request.baseUri(Constanst.STATUS_URL_UNIUM);
         Response response = request.get();
         return response.jsonPath().get("Scene");
     }
     public static String getCurrentScene(){
         RequestSpecification request = given();
-        request.baseUri(Constanst.STATUS_URL);
+        request.baseUri(Constanst.STATUS_URL_UNIUM);
         Response response = request.get();
         return Convert.convert(response,"Scene");
     }
     public static String getAllScene(){
         RequestSpecification request = given();
-        request.baseUri(Constanst.ALL_SCENE);
+        request.baseUri(Constanst.ALL_SCENE_UNIUM);
         Response response = request.get();
         return Convert.convert(response,"name");
     }
     public static List<String> getListScene(){
         RequestSpecification request = given();
-        request.baseUri(Constanst.ALL_SCENE);
+        request.baseUri(Constanst.ALL_SCENE_UNIUM);
         Response response = request.get();
         return Convert.convertToList(response,"name");
     }

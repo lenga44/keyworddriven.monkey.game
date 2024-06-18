@@ -16,7 +16,7 @@ public class ReturnPath {
     public static void returnPath(String locator, String component,String key,String expected) throws IOException {
         Wait.waitForObject(locator);
         int index = 0;
-        Response response = RequestEx.request(Constanst.SCENE_URL,"//"+locator+"."+component);
+        Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator+"."+component);
         ResponseBody body = response.getBody();
         String json = body.asString();
         for (JsonElement element: JsonHandle.getJsonArray(json)) {
@@ -24,7 +24,7 @@ public class ReturnPath {
                 break;
             index++;
         }
-        Response response1 = RequestEx.request(Constanst.SCENE_URL,"//"+locator);
+        Response response1 = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator);
         String value = GetAbsolutePath.getAbsolutePath(response1,String.valueOf(index));
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.PATH_GAME_OBJECT,value);
         //FileHelpers.writeFile(result,Constanst.VARIABLE_PATH_FILE);
@@ -32,7 +32,7 @@ public class ReturnPath {
     }
     public static String returnPath(String locator, String component,String key,String index,String expected) throws IOException {
         Wait.waitForObject(locator);
-        Response response = RequestEx.request(Constanst.SCENE_URL,"//"+locator+"."+component);
+        Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator+"."+component);
         ResponseBody body = response.getBody();
         String json = body.asString();
         String path = null;
@@ -42,7 +42,7 @@ public class ReturnPath {
             if(JsonHandle.getValue(element.toString(),"$."+key).toLowerCase().equals(expected.toLowerCase()))
             {
                 if(Integer.valueOf(index)==i){
-                    Response response1 = RequestEx.request(Constanst.SCENE_URL,"//"+locator);
+                    Response response1 = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator);
                     path = Convert.convertToList(response1,"path").get(j);
                     break;
                 }else {
@@ -60,14 +60,14 @@ public class ReturnPath {
     }
     public static void returnPathFullName(String locator,String key) throws IOException {
         Wait.waitForObject(locator);
-        Response response = RequestEx.request(Constanst.SCENE_URL,"//"+locator);
+        Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator);
         String name = Convert.convert(response,key);
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"path",name);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
     public static void returnPathFullName(String locator,String key,String strReplace) throws IOException {
         Wait.waitForObject(locator);
-        Response response = RequestEx.request(Constanst.SCENE_URL,"//"+locator);
+        Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator);
         String name = Convert.convert(response,key);
         name = LogicHandle.replaceStr(name,strReplace);
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"path",name);
@@ -75,14 +75,14 @@ public class ReturnPath {
     }
     public static void returnPathFullName(String locator) throws IOException {
         Wait.waitForObject(locator);
-        Response response = RequestEx.request(Constanst.SCENE_URL,"//"+locator);
+        Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator);
         String name = Convert.convert(response,"name");
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"path",name);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
     public static void returnPathFullPath(String locator) throws IOException {
         Wait.waitForObject(locator);
-        Response response = RequestEx.request(Constanst.SCENE_URL,"//"+locator);
+        Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator);
         String name = Convert.convert(response,"path");
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"path",name);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
@@ -90,7 +90,7 @@ public class ReturnPath {
 
     public static void returnPath(String locator,String index) throws IOException {
         Wait.waitForObject(locator);
-        Response response = RequestEx.request(Constanst.SCENE_URL,"//"+locator);
+        Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator);
         String name = Convert.convertToList(response,"path").get(Integer.valueOf(index));
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"path",name);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
@@ -116,14 +116,14 @@ public class ReturnPath {
     public static String getPath(String locator, String component,String key,String expected)  {
         String path = "";
         try {
-            Response response = RequestEx.request(Constanst.SCENE_URL, "//" + locator);
+            Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator);
             ResponseBody body = response.getBody();
             JsonArray array = JsonHandle.getJsonArray(body.asString());
             for (int i = 0; i < array.size(); i++) {
                 String value = JsonHandle.getValue(array.get(i).toString(), "$.components");
                 String name = JsonHandle.getValue(array.get(i).toString(), "$.path");
                 if (value.contains(component)) {
-                    Response response1 = RequestEx.request(Constanst.SCENE_URL, "//" + name + "." + component);
+                    Response response1 = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + name + "." + component);
                     ResponseBody body1 = response1.getBody();
                     String json1 = body1.asString();
                     for (JsonElement element : JsonHandle.getJsonArray(json1)) {

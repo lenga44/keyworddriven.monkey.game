@@ -10,7 +10,7 @@ import java.util.List;
 
 public class GetElement {
     public static String getElements(String locator){
-        Response response = RequestEx.request(Constanst.SCENE_URL,"//"+locator+"[activeInHierarchy=true]");
+        Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator+"[activeInHierarchy=true]");
         return String.valueOf(response.getBody().jsonPath().getList("name").toArray().length);
     }
     public static String getElementDisplayInScene(String strAdd,String expect){

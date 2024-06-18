@@ -4,7 +4,6 @@ import common.keywords.app.KeyWordsToAction;
 import common.keywords.app.KeyWordsToActionToVerify;
 import io.restassured.response.Response;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -101,7 +100,7 @@ public class LogicHandle {
         try {
             while (time.compareTo(time1) <= 0) {
                 if(!text.contains(expect)){
-                    Response response = request(Constanst.SCENE_URL, "//" + locator + "." + component);
+                    Response response = request(Constanst.SCENE_URL_UNIUM, "//" + locator + "." + component);
                     List<String> texts = getListProValue(locator, component,property);
                     if (texts.size() > 0) {
                         String result = KeyWordsToAction.convert(response, property).trim();
@@ -133,7 +132,7 @@ public class LogicHandle {
         return getProValuesByTime(locator,component,property,"15",expect);
     }
     private static List<String> getListProValue(String locator,String component,String property){
-        Response response = request(Constanst.SCENE_URL, "//" + locator + "." + component);
+        Response response = request(Constanst.SCENE_URL_UNIUM, "//" + locator + "." + component);
         return KeyWordsToAction.convertToList(response,property);
     }
     public static String getProValueByLocator(String locator,String component,String property,String locator2,String expect){
@@ -147,7 +146,7 @@ public class LogicHandle {
             String text ="";
             while (time.compareTo(time1) <= 0) {
                 if(texts.size()>0) {
-                    response = request(Constanst.SCENE_URL, "//" + locator + "." + component);
+                    response = request(Constanst.SCENE_URL_UNIUM, "//" + locator + "." + component);
                     String result = convert(response, property).trim();
                     if(!results.contains(result)) {
                         results.add(result);

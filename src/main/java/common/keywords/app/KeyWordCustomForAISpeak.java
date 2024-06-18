@@ -297,7 +297,7 @@ public class KeyWordCustomForAISpeak {
         return result.toString();
     }
     public static void swipeMap(String locator,String component, String property,String key,String level,String expect){
-        Response response = request(Constanst.SCENE_URL,"//"+locator+"."+component);
+        Response response = request(Constanst.SCENE_URL_UNIUM,"//"+locator+"."+component);
         if(response !=null) {
             String value = convert(response, property);
             String json = FileHelpers.readFile(FileHelpers.getRootFolder() + FileHelpers.getValueConfig(key));

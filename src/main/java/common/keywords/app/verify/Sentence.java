@@ -12,7 +12,7 @@ import java.util.List;
 public class Sentence {
     public static String getSentenceByText(String locators,String component){
         String sentence = null;
-        Response response = RequestEx.request(Constanst.SCENE_URL,"//" +locators+"."+component);
+        Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//" +locators+"."+component);
         List<String> list = Convert.convertToList(response,"text");
         for (String text: list) {
             if(text.matches("^[a-z0-9A-Z]{2,25}$")){
@@ -26,7 +26,7 @@ public class Sentence {
     public static String getSentenceByText(String locators,String component,String strSplit){
         String sentence = "";
         try {
-            Response response = RequestEx.request(Constanst.SCENE_URL, "//" + locators + "." + component);
+            Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locators + "." + component);
             List<String> list = Convert.convertToList(response, "text");
             for (String text : list) {
                 String str = LogicHandle.replaceStr(text,strSplit);

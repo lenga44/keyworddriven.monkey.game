@@ -14,7 +14,7 @@ public class KeyWordCustomByGame {
     //region Dien the
     public static void deFindAnswer(String locator,String component,String property,String expect,String strReplace,String strAdd,String locator1) throws IOException {
         Log.info("Dien the choose image or text");
-        Response response = request(Constanst.SCENE_URL,"//"+locator+"."+component);
+        Response response = request(Constanst.SCENE_URL_UNIUM,"//"+locator+"."+component);
         String value = KeyWordsToAction.convertNotNull(response,property);
         if(!strReplace.equals("")){
             if(value.contains(strReplace)){
@@ -42,7 +42,7 @@ public class KeyWordCustomByGame {
             Response response = null;
             String value = null;
             do {
-                response = request(Constanst.SCENE_URL, "//" + locator+".VideoPlayer");
+                response = request(Constanst.SCENE_URL_UNIUM, "//" + locator+".VideoPlayer");
                 if(response!=null) {
                     if (!convertToList(response, property).isEmpty()) {
                         JsonPath json = response.jsonPath();

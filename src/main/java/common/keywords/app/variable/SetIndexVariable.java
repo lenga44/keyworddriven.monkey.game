@@ -16,7 +16,7 @@ public class SetIndexVariable {
     public static void setIndexVariableFile(String locator, String component,String key,String expected) throws IOException {
         Wait.waitForObject(locator);
         int index = 0;
-        Response response = RequestEx.request(Constanst.SCENE_URL,"//"+locator+"."+component);
+        Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator+"."+component);
         ResponseBody body = response.getBody();
         String json = body.asString();
         for (JsonElement element: JsonHandle.getJsonArray(json)) {

@@ -14,7 +14,7 @@ import static common.keywords.app.KeyWordsToAction.request;
 public class DeFindAnswer {
     public static void deFindAnswer(String locator,String component,String property,String expect,String strReplace,String strAdd,String locator1) throws IOException {
         Log.info("Dien the choose image or text");
-        Response response = request(Constanst.SCENE_URL,"//"+locator+"."+component);
+        Response response = request(Constanst.SCENE_URL_UNIUM,"//"+locator+"."+component);
         String value = KeyWordsToAction.convertNotNull(response,property);
         if(!strReplace.equals("")){
             if(value.contains(strReplace)){
