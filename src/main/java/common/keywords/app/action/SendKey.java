@@ -18,4 +18,9 @@ public class SendKey {
         Log.info("sendKey trống");
         Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator+"."+component+".text=");
     }
+    public static void sendUpperKey(String locator,String component,String text){
+        for (char c: text.toCharArray()) {
+            RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator+"/"+c + "."+component+".text"+"="+String.valueOf(c).toUpperCase());
+        }
+    }
 }
