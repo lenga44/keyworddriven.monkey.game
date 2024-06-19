@@ -11,6 +11,7 @@ import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
 
 import java.io.IOException;
+import java.util.List;
 
 public class ReturnPath {
     public static void returnPath(String locator, String component,String key,String expected) throws IOException {
@@ -146,5 +147,15 @@ public class ReturnPath {
             e.printStackTrace();
         }
         return path;
+    }
+    public static void returnPathChild(String locator,String index) throws IOException {
+        Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator);
+        String child = Convert.convert(response,"children");
+        List<String> children = LogicHandle.convertStringToList(child);
+        System.out.println(children.size());
+        response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator+"/"+children.get(Integer.parseInt(index)));
+        String name = Convert.convert(response,"name");
+        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"path",name);
+        ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
 }
