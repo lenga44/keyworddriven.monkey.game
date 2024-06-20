@@ -31,6 +31,7 @@ public class RequestEx {
         try {
             String urlString = domain+ filePath;
             URL url = new URL(urlString);
+            Log.info("GET: "+urlString);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             Log.info("URL: "+urlString);
