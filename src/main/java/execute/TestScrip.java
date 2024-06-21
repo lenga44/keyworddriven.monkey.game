@@ -260,6 +260,9 @@ public class TestScrip {
         String value = "";
         try {
             if (key.contains("$") && !json.equals(null)) {
+                key = getVariableValue(key,"$.index",row);
+                key = getVariableValue(key,"$.activity",row);
+                key = getVariableValue(key,"$.order",row);
                 value = JsonHandle.getValue(json, key);
                 FileHelpers.setJsonVariable(key, value);
                 ExcelUtils.setCellData(value, row, Constanst.DATA_SET, Constanst.TEST_STEP_SHEET, reportPath);
