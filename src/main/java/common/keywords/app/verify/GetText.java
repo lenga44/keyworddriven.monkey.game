@@ -137,7 +137,7 @@ public class GetText {
                 if (text.contains(expect)||stop==true) {
                     break;
                 }else {
-                    stop = IsElement.isElementDisplay(locator2);
+                    stop = IsElement.elementDisplay(locator2);
                     time = LocalDateTime.now();
                 }
             }

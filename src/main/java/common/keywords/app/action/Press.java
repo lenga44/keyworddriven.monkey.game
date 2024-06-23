@@ -16,6 +16,10 @@ public class Press {
     public static void press(String locator){
         RequestEx.request(Constanst.POINTER_URL_UNIUM,".Press("+GetAbsolutePath.getAbsolutePath(locator,"0")+")");
     }
+    public static void press(String preLocator,String index,String locator){
+        locator = preLocator+locator;
+        RequestEx.request(Constanst.POINTER_URL_UNIUM,".Press("+GetAbsolutePath.getAbsolutePath(locator,index)+")");
+    }
     public static void pressWithTag(String tagNew,String tagOld){
         RequestEx.request(Constanst.POINTER_URL_UNIUM,".PressWithTag("+tagNew +","+tagOld+")");
     }

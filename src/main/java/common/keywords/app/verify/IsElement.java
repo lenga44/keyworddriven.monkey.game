@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class IsElement {
-    public static boolean isElementDisplay(String locator){
+    public static boolean elementDisplay(String locator){
         try {
             Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator);
             ResponseBody body = response.getBody();
@@ -67,14 +67,14 @@ public class IsElement {
                 List<String> locators = LogicHandle.convertStringToList(locator);
                 for (String item : locators) {
                     System.out.println(item);
-                    enable = isElementDisplay(LogicHandle.replaceStr(item, strSplit));
+                    enable = elementDisplay(LogicHandle.replaceStr(item, strSplit));
                     if (enable) {
                         //System.out.println(item);
                         break;
                     }
                 }
             }else {
-                enable = isElementDisplay(LogicHandle.replaceStr(locator, strSplit));
+                enable = elementDisplay(LogicHandle.replaceStr(locator, strSplit));
                 if (enable) {
                     //System.out.println(item);
                     break;

@@ -1,6 +1,8 @@
 package common.keywords.app.action;
 
 import common.keywords.app.RequestEx;
+import common.keywords.app.verify.Children;
+import common.keywords.app.verify.GetElement;
 import common.utility.Constanst;
 
 import java.net.URLEncoder;
@@ -38,5 +40,22 @@ public class Drag {
             dragged.add(c);
             SleepEx.sleep(3);
         }
+    }
+    public static void dragTheLetter(String preLocator1,String preLocator2){
+        int index = 0;
+        List<String> dragged = new ArrayList<>();
+        List<String> children = Children.getChildren(preLocator1);
+        for(String c:children){
+            SleepEx.sleep(5);
+            c= c.trim();
+            if(dragged.contains(c))
+                index++;
+            drag_simulate(preLocator1+"/"+c,String.valueOf(index),preLocator2+"/"+c,String.valueOf(index));
+            dragged.add(c);
+        }
+    }
+    public static void drag_simulate(String preLocator1,String preLocator2,String expected){
+        drag_simulate(preLocator1+expected,"0",preLocator2+expected,"0");
+        SleepEx.sleep(3);
     }
 }

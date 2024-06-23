@@ -195,6 +195,12 @@ public class LogicHandle {
         }
         return str;
     }
+    public static String replaceStr(String str,String oldStr,String newStr){
+        if(str.contains(oldStr)){
+            return str.replace(oldStr,newStr);
+        }
+        return str;
+    }
     public static int getIndexInList(List<Object> list,String item){
         return list.indexOf(item);
     }

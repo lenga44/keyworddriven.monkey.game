@@ -6,11 +6,13 @@ import common.keywords.app.RequestEx;
 import common.utility.Constanst;
 import common.utility.FileHelpers;
 import common.utility.Log;
+import common.utility.LogicHandle;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBodyData;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.List;
 
 public class Click {
     public static void click(String locator, String property){
@@ -32,6 +34,13 @@ public class Click {
     }
     public static void clickDownAndUp(String locator){
         RequestEx.request(Constanst.POINTER_URL_UNIUM,".DownToUp("+GetAbsolutePath.getAbsolutePath(locator)+")");
+    }
+    public static void clickDownAndUpChild(String locator,String index){
+        Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator);
+        List<String> list = LogicHandle.convertStringToList(Convert.convert(response,"children"));
+        locator = locator + "/"+list.get(0);
+        System.out.println(locator);
+        RequestEx.request(Constanst.POINTER_URL_UNIUM,".DownToUp("+GetAbsolutePath.getAbsolutePath(locator)+","+index+")");
     }
     public static void clickDownAndUp(String locator,String index){
         String absolutePath = GetAbsolutePath.getAbsolutePath(locator,"0");

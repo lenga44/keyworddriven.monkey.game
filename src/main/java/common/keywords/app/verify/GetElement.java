@@ -1,5 +1,6 @@
 package common.keywords.app.verify;
 
+import common.keywords.app.Convert;
 import common.keywords.app.ExceptionEx;
 import common.keywords.app.RequestEx;
 import common.utility.Constanst;
@@ -28,5 +29,8 @@ public class GetElement {
             ExceptionEx.exception("getElementDisplayInScene " +e.getMessage());
         }
         return result;
+    }
+    public static Response getElement(String locator){
+        return RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator+"[activeInHierarchy=true]");
     }
 }

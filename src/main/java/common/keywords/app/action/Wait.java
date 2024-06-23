@@ -3,6 +3,7 @@ package common.keywords.app.action;
 import common.keywords.app.ExceptionEx;
 import common.keywords.app.Convert;
 import common.keywords.app.RequestEx;
+import common.keywords.app.verify.Children;
 import common.keywords.app.verify.PointScreen;
 import common.keywords.app.verify.SizeScreen;
 import common.utility.Constanst;
@@ -445,5 +446,23 @@ public class Wait {
             ExceptionEx.exception("Not found number "+ locator);
         }
         Log.info("waitForNumber :" + locator);
+    }
+    public static void waitForChildObjectDisplay(String locator,String second){
+        try {
+            LocalDateTime time = LocalDateTime.now();
+            LocalDateTime time1 = time.plusSeconds(Integer.parseInt(second));
+            Response response = null;
+            do {
+                List<String> list = Children.getChildren(locator);
+                if(list.size()>0){
+                    break;
+                }
+                Thread.sleep(500);
+                time = LocalDateTime.now();
+            } while (time.compareTo(time1) <= 0);
+        }catch (Throwable e){
+            ExceptionEx.exception(e.getMessage());
+        }
+        Log.info("waitForChildObjectDisplay :" + locator);
     }
 }

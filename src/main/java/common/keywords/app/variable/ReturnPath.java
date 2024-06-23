@@ -92,7 +92,7 @@ public class ReturnPath {
     public static void returnPath(String locator,String index) throws IOException {
         Wait.waitForObject(locator);
         Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator);
-        String name = Convert.convertToList(response,"path").get(Integer.valueOf(index));
+        String name = LogicHandle.replaceStr(Convert.convertToList(response,"path").get(Integer.valueOf(index)),".","<_>");
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"path",name);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
@@ -156,6 +156,15 @@ public class ReturnPath {
         response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator+"/"+children.get(Integer.parseInt(index)));
         String name = Convert.convert(response,"name");
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"path",name);
+        ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
+    }
+    public static void returnPathParent(String locator,String index) throws IOException {
+        Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator);
+        List<String> names = Convert.convertToList(response,"path");
+        String path = names.get(Integer.valueOf(index));
+        List<String> parent = List.of(path.split("/"));
+        path = LogicHandle.replaceStr(path.replace("/"+parent.get(parent.size()-1),""),".","<_>");
+        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"path",path);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
 }
