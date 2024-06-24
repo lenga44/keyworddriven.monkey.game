@@ -376,8 +376,17 @@ public class TestScrip {
                             result = Constanst.PASS;
                             String actual = (String) method[i].invoke(keyWord, param);
                             Log.info(description);
-                            if (expected.contains(Constanst.CHECK_CONTAIN)) {
-                                expected = expected.replace(Constanst.CHECK_CONTAIN, "");
+                            if (expected.contains(Constanst.CHECK_CONTAIN)||expected.contains(Constanst.CHECK_SKIP)) {
+                                if(expected.contains(Constanst.CHECK_SKIP)) {
+                                    System.out.println("====================== "+actual);
+                                    if(actual.equals("")){
+                                        expected ="";
+                                    }else {
+                                        expected = expected.replace(Constanst.CHECK_SKIP, "");
+                                    }
+                                }else {
+                                    expected = expected.replace(Constanst.CHECK_CONTAIN, "");
+                                }
                                 KeyWordsToAction.checkContain(actual, expected);
                             } else {
                                 KeyWordsToAction.check(actual, expected);
