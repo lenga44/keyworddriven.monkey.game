@@ -69,4 +69,11 @@ public class Click {
             ExceptionEx.exception(e.getMessage());
         }
     }
+    public static void clickByPoco(String locator){
+        try {
+            RequestEx.GET(Constanst.URL_POCO ,Constanst.CLICK_ACTION+"?element="+locator);
+        }catch (Exception e){
+            ExceptionEx.exception(e.getMessage());
+        }
+    }
 }
