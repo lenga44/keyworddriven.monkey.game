@@ -4,6 +4,8 @@ import common.keywords.app.KeyWordsToAction;
 import common.keywords.app.KeyWordsToActionToVerify;
 import io.restassured.response.Response;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -250,5 +252,8 @@ public class LogicHandle {
                 break;
         }
         return result;
+    }
+    public static String enCode(String value){
+        return URLEncoder.encode(value, StandardCharsets.UTF_8);
     }
 }

@@ -8,6 +8,7 @@ public class GetImage {
         String result =  Common.getPropertyValue(locator,"Image","sprite");
         if(result.contains("(UnityEngine.Sprite)"))
             result = result.replace("(UnityEngine.Sprite)","");
+        System.out.println(result);
         return result.trim()+".png";
     }
     public static String getImageName(String locator,String component){

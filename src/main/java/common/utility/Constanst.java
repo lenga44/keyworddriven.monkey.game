@@ -122,6 +122,7 @@ public class Constanst {
     public static final String DRAG_UP_ACTION = ".dragUp";
     public static final String MOVE_ACTION = ".Move";
     public static final String CLICK_ACTION = "click";
+    public static final String TOUCH_ANDROID = "touch_android?";
     public static final String CLICK_IMAGE_ACTION = "click_image?image=";
     public static final String MOVE_UP_ACTION = ".MoveUp";
     public static final String MOVE_COORDINATE = ".MoveX";
@@ -160,5 +161,9 @@ public class Constanst {
 
     //region logicHandle
     public static final List<String> splits = Arrays.asList("\\|", "\\;",",",", ");
+    //endregion
+
+    //region OS
+    public static final String ANDROID_OS = "android";
     //endregion
 }

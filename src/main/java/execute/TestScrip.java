@@ -442,19 +442,28 @@ public class TestScrip {
     }
     private static String getExpectedWithKey(int numberStep){
         String ex = ExcelUtils.getStringValueInCell(numberStep,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET);
-        if(ex.contains(Constanst.CHECK_CONTAIN)){
-            ex = ex.replace(Constanst.CHECK_CONTAIN,"");
-        }
+        String key = getKey(ex);
+        ex = LogicHandle.removeString(ex,key);
         if(isDataFlow ==true && ex.contains("$")) {
             ex = getVariableValue(ex,"$.index",numberStep);
             ex = getVariableValue(ex,"$.activity",numberStep);
             ex = getVariableValue(ex,"$.order",numberStep);
             String value = JsonHandle.getValue(json, ex);
             ExcelUtils.setCellData(value,numberStep,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET,reportPath);
-            return value+Constanst.CHECK_CONTAIN;
+            return value+key;
         }
         else
-            return ex+Constanst.CHECK_CONTAIN;
+            return ex+key;
+    }
+    private static String getKey(String value){
+        String key = null;
+        if(value.endsWith(Constanst.CHECK_SKIP)){
+            key = Constanst.CHECK_SKIP;
+        }
+        if (value.endsWith(Constanst.CHECK_CONTAIN)){
+            key=Constanst.CHECK_CONTAIN;
+        }
+        return key;
     }
     private static String getVariableValue(String ex, String key,int row){
         if(ex.contains(key)){

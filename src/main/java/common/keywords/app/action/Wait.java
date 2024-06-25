@@ -4,6 +4,7 @@ import common.keywords.app.ExceptionEx;
 import common.keywords.app.Convert;
 import common.keywords.app.RequestEx;
 import common.keywords.app.verify.Children;
+import common.keywords.app.verify.GetPosition;
 import common.keywords.app.verify.PointScreen;
 import common.keywords.app.verify.SizeScreen;
 import common.utility.Constanst;
@@ -464,5 +465,30 @@ public class Wait {
             ExceptionEx.exception(e.getMessage());
         }
         Log.info("waitForChildObjectDisplay :" + locator);
+    }
+    public static void waitForPosition(String locator1, String locator2,String coordinate,String compare,String second){
+        try {
+            LocalDateTime time = LocalDateTime.now();
+            LocalDateTime time1 = time.plusSeconds(Integer.valueOf(second));
+            do {
+                System.out.println(GetPosition.getPointScreen(locator1,coordinate));
+                float coord1 = Float.parseFloat(GetPosition.getPointScreen(locator1,coordinate));
+                float coord2 = Float.parseFloat(GetPosition.getPointScreen(locator2,coordinate));
+                float minus = coord2-coord1;
+                if(minus>0) {
+                    if (minus <= Integer.parseInt(compare)) {
+                        break;
+                    }
+                }
+                SleepEx.sleep(0.5f);
+                time = LocalDateTime.now();
+            } while (time.compareTo(time1) <= 0);
+
+        }catch (Throwable e){
+            ExceptionEx.exception(e.getMessage());
+
+        }
+
+        Log.info("waitForPosition");
     }
 }
