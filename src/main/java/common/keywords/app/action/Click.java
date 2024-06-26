@@ -76,4 +76,11 @@ public class Click {
             ExceptionEx.exception(e.getMessage());
         }
     }
+    public static void clickByPositionPoco(String locator){
+        try {
+            RequestEx.GET(Constanst.URL_POCO ,Constanst.CLICK_POSITION_ACTION+"?element="+locator);
+        }catch (Exception e){
+            ExceptionEx.exception(e.getMessage());
+        }
+    }
 }

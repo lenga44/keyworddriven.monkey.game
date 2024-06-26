@@ -122,6 +122,7 @@ public class Constanst {
     public static final String DRAG_UP_ACTION = ".dragUp";
     public static final String MOVE_ACTION = ".Move";
     public static final String CLICK_ACTION = "click";
+    public static final String CLICK_POSITION_ACTION = "click_position";
     public static final String TOUCH_ANDROID = "touch_android?";
     public static final String CLICK_IMAGE_ACTION = "click_image?image=";
     public static final String MOVE_UP_ACTION = ".MoveUp";
