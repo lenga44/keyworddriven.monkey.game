@@ -517,7 +517,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
         return value;
 
     }
-    public static String getSentenceByText(String locators,String component){
+/*    public static String getSentenceByText(String locators,String component){
         String sentence = null;
         Response response = request(Constanst.SCENE_URL_UNIUM,"//" +locators+"."+component);
         List<String> list = convertToList(response,"text");
@@ -543,7 +543,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
             exception("|getSentenceByText| "+e.getMessage());
         }
         return sentence.trim();
-    }
+    }*/
     public static String getAudiosSourceByTime(String locator,String second,String expect){
         Log.info("getAudiosSourceByTime");
         String actual =LogicHandle.replaceStr(LogicHandle.getProValuesByTime(locator,"AudioSource","clip",second,expect,".mp3"),"(UnityEngine.AudioClip)").trim()+".mp3";

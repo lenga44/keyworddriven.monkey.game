@@ -57,8 +57,10 @@ public class LogicHandle {
         return null;
     }
     public static String removeString(String str,String slipStr){
-        if (str.contains(slipStr)) {
-            str = str.replace(slipStr,"");
+        if(slipStr!=null) {
+            if (str.contains(slipStr)) {
+                str = str.replace(slipStr, "");
+            }
         }
         return str;
     }

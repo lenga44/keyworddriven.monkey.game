@@ -11,6 +11,7 @@ import io.restassured.response.Response;
 import io.restassured.response.ResponseBodyData;
 
 import java.io.File;
+import java.net.URLEncoder;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -71,14 +72,14 @@ public class Click {
     }
     public static void clickByPoco(String locator){
         try {
-            RequestEx.GET(Constanst.URL_POCO ,Constanst.CLICK_ACTION+"?element="+locator);
+            RequestEx.GET(Constanst.URL_POCO ,Constanst.CLICK_ACTION+"?element="+ URLEncoder.encode(locator));
         }catch (Exception e){
             ExceptionEx.exception(e.getMessage());
         }
     }
     public static void clickByPositionPoco(String locator){
         try {
-            RequestEx.GET(Constanst.URL_POCO ,Constanst.CLICK_POSITION_ACTION+"?element="+locator);
+            RequestEx.GET(Constanst.URL_POCO ,Constanst.CLICK_POSITION_ACTION+"?element="+URLEncoder.encode(locator));
         }catch (Exception e){
             ExceptionEx.exception(e.getMessage());
         }

@@ -959,7 +959,7 @@ public class KeyWordsToAction {
     private static void assertEqual(List<String> actual,List<String> expect){
         Assert.assertEquals(actual,expect);
     }
-    private static void assertEqual(String actual, List<String> expect){
+    public static void assertEqual(String actual, List<String> expect){
         Assert.assertTrue(expect.contains(actual));
     }
     private static void assertContain(String actual,String expect){

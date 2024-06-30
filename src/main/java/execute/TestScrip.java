@@ -1,6 +1,7 @@
 package execute;
 
 import common.facade.Adapter;
+import common.keywords.app.ExceptionEx;
 import common.keywords.app.KeyWordsToAction;
 import common.keywords.app.KeyWordsToComPair;
 import common.keywords.app.action.TakePhoto;
@@ -311,7 +312,6 @@ public class TestScrip {
             Log.info("Process TS: "+process);
             if(process.equals(Constanst.PROCESS_YES)) {
                 String sActionKeyword = ExcelUtils.getStringValueInCell(iTestStep, Constanst.KEYWORD, Constanst.TEST_STEP_SHEET);
-                getMethods(sActionKeyword);
                 params = ExcelUtils.getStringValueInCell(iTestStep, Constanst.PARAMS, Constanst.TEST_STEP_SHEET);
                 String dataSet = getDataSet(iTestStep);
 
@@ -320,6 +320,7 @@ public class TestScrip {
 
                 if (result != Constanst.SKIP) {
                     if(sActionKeyword != "") {
+                        getMethods(sActionKeyword);
                         execute_action(dataSet,sActionKeyword,iTestStep,Constanst.PARAMS);
                     }
                     verifyStep(iTestStep);
@@ -331,18 +332,22 @@ public class TestScrip {
         }
     }
     private static void getMethods(String sActionKeyword){
-        boolean isMethod = false;
-        for (Class name: classes.keySet()) {
-            for (Method m:classes.get(name)) {
-                if(m.getName().equals(sActionKeyword)){
-                    method = classes.get(name);
-                    isMethod = true;
+        try {
+            boolean isMethod = false;
+            for (Class name : classes.keySet()) {
+                for (Method m : classes.get(name)) {
+                    if (m.getName().equals(sActionKeyword)) {
+                        method = classes.get(name);
+                        isMethod = true;
+                        break;
+                    }
+                }
+                if (isMethod == true) {
                     break;
                 }
             }
-            if (isMethod==true){
-                break;
-            }
+        }catch (Exception e){
+            ExceptionEx.exception("getMethods| "+e.getMessage());
         }
     }
     private static void onResultStep(String status, String message, int rowNumber ){
@@ -450,10 +455,10 @@ public class TestScrip {
             ex = getVariableValue(ex,"$.order",numberStep);
             String value = JsonHandle.getValue(json, ex);
             ExcelUtils.setCellData(value,numberStep,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET,reportPath);
-            return value+key;
+            return LogicHandle.replaceStr(value+key,"null");
         }
         else
-            return ex+key;
+            return LogicHandle.replaceStr(ex+key,"null");
     }
     private static String getKey(String value){
         String key = null;

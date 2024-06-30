@@ -36,6 +36,8 @@ public class Drag {
         for(char c:expected.toCharArray()){
             if(dragged.contains(c))
                 index++;
+            else
+                index=0;
             drag_simulate(preLocator1+"/"+String.valueOf(c).toUpperCase(),String.valueOf(index),preLocator2+"/"+String.valueOf(c).toUpperCase(),String.valueOf(index));
             dragged.add(c);
             SleepEx.sleep(3);
