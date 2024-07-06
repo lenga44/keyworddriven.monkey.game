@@ -29,6 +29,7 @@ public class Drag {
         for(int i = 0; i<2;i++) {
             RequestEx.request(Constanst.POINTER_URL_UNIUM, Constanst.DRAG_UP_ACTION + "(" + locator1 + "," + locator2 + ")");
             SleepEx.sleep("1");
+            RequestEx.request(Constanst.POINTER_URL_UNIUM, Constanst.DRAG_UP_ACTION + "(" + locator1 + "," + locator2 + ")");
         }
     }
     public static void dragTheLetter(String preLocator1,String preLocator2,String expected){

@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static common.keywords.app.KeyWordsToAction.*;
 import static common.keywords.app.KeyWordsToActionToVerify.isElementDisplay;
@@ -63,6 +64,13 @@ public class LogicHandle {
             }
         }
         return str;
+    }
+    public static String getTextNoColor(String value,String... StrSplit){
+        String result = null;
+            for (String str:StrSplit) {
+                result = replaceStr(value,str);
+            }
+        return result;
     }
     public static String convertListToString(List<String> list){
         StringBuilder resultBuilder = new StringBuilder();
@@ -257,5 +265,9 @@ public class LogicHandle {
     }
     public static String enCode(String value){
         return URLEncoder.encode(value, StandardCharsets.UTF_8);
+    }
+    public static String convertTextToSentence(String sentence,String text){
+        sentence =(!sentence.equals(""))?(Pattern.matches("\\p{Punct}", text))?sentence+ text: sentence + " " + text: sentence +text;
+        return sentence.trim();
     }
 }

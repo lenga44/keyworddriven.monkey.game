@@ -28,8 +28,7 @@ public class ReturnPath {
         }
         Response response1 = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator);
         String value = GetAbsolutePath.getAbsolutePath(response1,String.valueOf(index));
-        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.PATH_GAME_OBJECT,value);
-        //FileHelpers.writeFile(result,Constanst.VARIABLE_PATH_FILE);
+        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"path",value);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
     public static String returnPath(String locator, String component,String key,String index,String expected) throws IOException {
@@ -105,7 +104,7 @@ public class ReturnPath {
             String path = getPath(locator,component,key,expected);
 /*            FileHelpers.writeFile("",Constanst.VARIABLE_PATH_FILE);
             ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);*/
-            FileHelpers.writeFile("{'path':'"+path+"'}",Constanst.VARIABLE_PATH_FILE);
+            JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"path",path);
             ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
         }catch (Exception e){
             Log.error(e.getMessage());
