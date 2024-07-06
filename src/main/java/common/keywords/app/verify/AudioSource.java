@@ -1,6 +1,7 @@
 package common.keywords.app.verify;
 
 import common.keywords.app.ExceptionEx;
+import common.utility.LogicHandle;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -10,6 +11,9 @@ import java.util.List;
 public class AudioSource {
     public static String getAudioSource(String locator){
         return Common.getPropertyValue(locator,"AudioSource","clip","(UnityEngine.AudioClip)")+".mp3";
+    }
+    public static String getAudioSource(String locator,String splStr){
+        return LogicHandle.replaceStr(Common.getPropertyValue(locator,"AudioSource","clip","(UnityEngine.AudioClip)")+".mp3",splStr);
     }
     public static String getListAudioSource(String locator,String count) {
         String audio = null;

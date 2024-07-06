@@ -3,6 +3,8 @@ package common.keywords.app.action;
 import common.keywords.app.Convert;
 import common.keywords.app.ExceptionEx;
 import common.keywords.app.RequestEx;
+import common.keywords.app.verify.GetElement;
+import common.keywords.app.verify.IsElement;
 import common.utility.Constanst;
 import common.utility.FileHelpers;
 import common.utility.Log;
@@ -17,7 +19,12 @@ import java.util.List;
 
 public class Click {
     public static void click(String locator, String property){
-        RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator+"."+property);
+        RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator+".Button."+property);
+    }
+    public static void clickWhichDisplay(String locator,String component, String property){
+        if(IsElement.elementDisplay(locator)){
+            RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator+"."+component+"."+property);
+        }
     }
     public static void click(String locator,String component, String property){
         RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator+"."+component+"."+property);
