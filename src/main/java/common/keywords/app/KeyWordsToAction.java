@@ -919,6 +919,8 @@ public class KeyWordsToAction {
         return request.get("/"+number);
     }
     public static void check(String actual,String expect){
+        actual = LogicHandle.replaceStr(actual,"\"");
+        expect = LogicHandle.replaceStr(expect,"\"");
         TestScrip.result = Constanst.PASS;
         TestScrip.error = "";
         try{
