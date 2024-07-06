@@ -16,6 +16,7 @@ public class Drag {
         for(int i = 0; i<2;i++) {
             RequestEx.request(Constanst.POINTER_URL_UNIUM, Constanst.DRAG_ACTION + "(" + locator1 + "," + locator2 + ")");
             SleepEx.sleep("1");
+            RequestEx.request(Constanst.POINTER_URL_UNIUM, Constanst.DRAG_ACTION + "(" + locator1 + "," + locator2 + ")");
         }
     }
     public static void drag_simulate(String locator1,String index1, String locator2,String index2){
