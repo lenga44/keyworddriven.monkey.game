@@ -11,6 +11,7 @@ import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ReturnPath {
@@ -39,12 +40,14 @@ public class ReturnPath {
         String path = null;
         int i =0;
         int j =0;
+        List<String> paths = new ArrayList<>();
         for (JsonElement element: JsonHandle.getJsonArray(json)) {
             if(JsonHandle.getValue(element.toString(),"$."+key).toLowerCase().equals(expected.toLowerCase()))
             {
                 if(Integer.valueOf(index)==i){
                     Response response1 = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator);
                     path = Convert.convertToList(response1,"path").get(j);
+                    paths.add(path);
                     break;
                 }else {
                     i++;
@@ -81,6 +84,7 @@ public class ReturnPath {
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"path",name);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
+
     public static void returnPathFullPath(String locator) throws IOException {
         Wait.waitForObject(locator);
         Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator);
@@ -176,5 +180,11 @@ public class ReturnPath {
                 break;
             }
         }
+    }
+    public static void getPathStartWith(String startWith,String index,String expected) throws IOException {
+        Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//" +startWith+expected+"*");
+        List<String> paths = Convert.convertToList(response,"path");
+        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.PATH_GAME_OBJECT,paths.get(Integer.parseInt(index)));
+        ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
 }
