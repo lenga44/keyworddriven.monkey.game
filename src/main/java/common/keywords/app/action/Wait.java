@@ -192,6 +192,29 @@ public class Wait {
             e.printStackTrace();
         }
     }
+    public static void waitForObjectNotPresent(String second,String splitStr,String locator){
+        try {
+            LocalDateTime time = LocalDateTime.now();
+            LocalDateTime time1 = time.plusSeconds(Integer.parseInt(second));
+            Response response = null;
+            locator = LogicHandle.removeString(locator,splitStr);
+            do {
+                response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator);
+                JsonPath json = response.jsonPath();
+                List name = (List)json.get("name");
+                if(!locator.contains(Convert.convert(response, "name"))
+                        || Convert.convert(response,"activeInHierarchy")=="false"
+                        ||name.size()==0){
+                    break;
+                }
+                Thread.sleep(500);
+                time = LocalDateTime.now();
+            } while (time.compareTo(time1) <= 0);
+        }catch (Throwable e){
+            ExceptionEx.exception(e);
+            e.printStackTrace();
+        }
+    }
     public static void waitForObjectNotPresent(String locator,String second){
         try {
             LocalDateTime time = LocalDateTime.now();
