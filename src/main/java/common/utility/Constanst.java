@@ -114,6 +114,7 @@ public class Constanst {
     public static final String SIMULATE_URL_UNIUM = "http://localhost:8342/q/simulate";
     public static final String SCENE_URL_UNIUM = "http://localhost:8342/q/scene";
     public static final String POINTER_URL_UNIUM = "http://localhost:8342/q/pointer";
+    public static final String TIME_SCALE_ACTION =".timeScale";
     public static final String STATUS_URL_UNIUM = "http://localhost:8342/about";
     public static final String ALL_SCENE_UNIUM = "http://localhost:8342/q/scene";
     public static final String TAKE_PHOTO = "http://localhost:8342/utils/appscreenshot";
