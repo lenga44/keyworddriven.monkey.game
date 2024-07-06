@@ -55,6 +55,10 @@ public class IsElement {
     public static String isElementsDisplay(String strSplit, String locator) throws InterruptedException {
         return isElementsDisplay("5",strSplit,locator);
     }
+    public static String isElementsDisplay(String locator) {
+        Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator);
+        return Convert.convert(response,"activeInHierarchy");
+    }
     public static String isElementsDisplay(String second,String strSplit, String locator) throws InterruptedException {
         System.out.println(locator);
         boolean enable = false;

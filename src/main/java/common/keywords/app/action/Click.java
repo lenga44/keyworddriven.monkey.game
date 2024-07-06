@@ -22,7 +22,7 @@ public class Click {
         RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator+".Button."+property);
     }
     public static void clickWhichDisplay(String locator,String component, String property){
-        if(IsElement.elementDisplay(locator)){
+        if(IsElement.isElementsDisplay(locator).equals("true")){
             RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator+"."+component+"."+property);
         }
     }
