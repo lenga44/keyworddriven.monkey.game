@@ -167,6 +167,7 @@ public class ReturnPath {
         String path = names.get(Integer.valueOf(index));
         List<String> parent = List.of(path.split("/"));
         path = LogicHandle.replaceStr(path.replace("/"+parent.get(parent.size()-1),""),".","<_>");
+        System.out.println("======================"+path);
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"path",path);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }

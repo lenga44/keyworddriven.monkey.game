@@ -62,4 +62,8 @@ public class Drag {
         drag_simulate(preLocator1+expected,"0",preLocator2+expected,"0");
         SleepEx.sleep(3);
     }
+    public static void drag_simulate(String preLocator1,String preLocator2,String expected,String index1,String index2){
+        drag_simulate(preLocator1+expected,index1,preLocator2+expected,index2);
+        SleepEx.sleep(3);
+    }
 }
