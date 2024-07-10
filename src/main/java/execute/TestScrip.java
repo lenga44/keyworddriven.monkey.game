@@ -392,9 +392,9 @@ public class TestScrip {
                                 }else {
                                     expected = expected.replace(Constanst.CHECK_CONTAIN, "");
                                 }
-                                KeyWordsToAction.checkContain(actual, expected);
+                                KeyWordsToAction.checkContain(actual.trim(), expected);
                             } else {
-                                KeyWordsToAction.check(actual, expected);
+                                KeyWordsToAction.check(actual.trim(), expected);
                             }
                         } else {
                         /*for(int z=0;z<paramCount;z++){
