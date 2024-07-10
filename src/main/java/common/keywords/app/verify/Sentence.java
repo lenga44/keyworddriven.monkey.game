@@ -35,7 +35,9 @@ public class Sentence {
                 sentence = sentence + text +" ";
             }
         }
-        return String.valueOf(LogicHandle.getTextAlphabet(expected).contains(LogicHandle.getTextAlphabet(sentence)));
+        System.out.println(LogicHandle.getTextAlphabet(sentence));
+        System.out.println(LogicHandle.getTextAlphabet(expected));
+        return String.valueOf(LogicHandle.getTextAlphabet(expected).trim().contains(LogicHandle.getTextAlphabet(sentence).trim()));
     }
     public static String getSentenceByText(String locators,String component,String strSplit){
         String sentence = "";

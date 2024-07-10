@@ -120,6 +120,7 @@ public class Constanst {
     public static final String TAKE_PHOTO = "http://localhost:8342/utils/appscreenshot";
     public static final String URL_POCO = "http://127.0.0.1:6868/";
     public static final String DRAG_ACTION = ".drag";
+    public static final String SWIPE_ACTION = "swipe?";
     public static final String DRAG_UP_ACTION = ".dragUp";
     public static final String MOVE_ACTION = ".Move";
     public static final String CLICK_ACTION = "click";

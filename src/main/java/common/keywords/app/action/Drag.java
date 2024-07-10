@@ -8,6 +8,7 @@ import common.utility.Constanst;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Drag {
@@ -33,13 +34,9 @@ public class Drag {
         }
     }
     public static void dragTheLetter(String preLocator1,String preLocator2,String expected){
-        int index = 0;
         List<Character> dragged = new ArrayList<>();
         for(char c:expected.toCharArray()){
-            if(dragged.contains(c))
-                index++;
-            else
-                index=0;
+            int index = Collections.frequency(dragged, c);
             drag_simulate(preLocator1+"/"+String.valueOf(c).toUpperCase(),String.valueOf(index),preLocator2+"/"+String.valueOf(c).toUpperCase(),String.valueOf(index));
             dragged.add(c);
             SleepEx.sleep(3);

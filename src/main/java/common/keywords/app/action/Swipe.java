@@ -12,6 +12,9 @@ public class Swipe {
             }
         }
     }
+    public static void swipe_poco(String x1, String x2, String y){
+        RequestEx.GET(Constanst.URL_POCO, Constanst.SWIPE_ACTION +"x1="+x1+"&x2="+x2+"&y="+y);
+    }
     /*public static void swipeToRight(String number){
         for(int i = 0; i<Integer.valueOf(number);i++){
             request(Constanst.SIMULATE_URL,Constanst.DRAG_ACTION + "(500,750,500,800,0.5)");
