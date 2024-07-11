@@ -5,7 +5,7 @@ import common.utility.FileHelpers;
 
 public class GetImage {
     public static String getImageName(String locator){
-        String result =  Common.getPropertyValue(locator,"Image","sprite");
+        String result =  Common.getPropertyValue(locator.trim(),"Image","sprite");
         if(result.contains("(UnityEngine.Sprite)"))
             result = result.replace("(UnityEngine.Sprite)","");
         System.out.println(result);

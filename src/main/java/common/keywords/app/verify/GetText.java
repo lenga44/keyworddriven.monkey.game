@@ -49,7 +49,7 @@ public class GetText {
     }
     public static String getText(String locator,String component){
         try {
-            Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator + "." + component);
+            Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator.trim() + "." + component);
             return LogicHandle.replaceStr(Convert.convert(response, "text").trim(),"\n");
         }catch (Exception e){
             Log.error("getText "+e.getMessage());
