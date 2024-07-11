@@ -158,7 +158,7 @@ public class ReturnPath {
         System.out.println(children.size());
         response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator+"/"+children.get(Integer.parseInt(index)));
         String name = Convert.convert(response,"name");
-        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"path",name);
+        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"path",name.trim());
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
     public static void returnPathParent(String locator,String index) throws IOException {
