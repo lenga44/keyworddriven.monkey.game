@@ -189,7 +189,7 @@ public class Wait {
             } while (time.compareTo(time1) <= 0);
         }catch (Throwable e){
             ExceptionEx.exception(e);
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
     public static void waitForObjectNotPresent(String second,String splitStr,String locator){

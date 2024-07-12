@@ -13,6 +13,7 @@ import io.restassured.response.ResponseBody;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ReturnPath {
     public static void returnPath(String locator, String component,String key,String expected) throws IOException {
@@ -152,13 +153,13 @@ public class ReturnPath {
         return path;
     }
     public static void returnPathChild(String locator,String index) throws IOException {
+        Log.info("returnPathChild");
         Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator);
         String child = Convert.convert(response,"children");
         List<String> children = LogicHandle.convertStringToList(child);
-        System.out.println(children.size());
-        response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator+"/"+children.get(Integer.parseInt(index)));
-        String name = Convert.convert(response,"name");
-        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"path",name.trim());
+        response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator+"/"+children.get(Integer.parseInt(index)).trim());
+        String name = Objects.requireNonNull(Convert.convert(response, "name")).replaceAll("^\\s+|\\s+$", "");
+        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"path",name);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
     public static void returnPathParent(String locator,String index) throws IOException {
@@ -167,7 +168,6 @@ public class ReturnPath {
         String path = names.get(Integer.valueOf(index));
         List<String> parent = List.of(path.split("/"));
         path = LogicHandle.replaceStr(path.replace("/"+parent.get(parent.size()-1),""),".","<_>");
-        System.out.println("======================"+path);
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"path",path);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
