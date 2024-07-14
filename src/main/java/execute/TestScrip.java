@@ -383,7 +383,6 @@ public class TestScrip {
                             Log.info(description);
                             if (expected.contains(Constanst.CHECK_CONTAIN)||expected.contains(Constanst.CHECK_SKIP)) {
                                 if(expected.contains(Constanst.CHECK_SKIP)) {
-                                    System.out.println("====================== "+actual);
                                     if(actual.equals("")){
                                         expected ="";
                                     }else {

@@ -34,23 +34,23 @@ public class Drag {
         }
     }
     public static void dragTheLetter(String preLocator1,String preLocator2,String expected){
-        List<Character> dragged = new ArrayList<>();
+        List<String> dragged = new ArrayList<>();
         for(char c:expected.toCharArray()){
-            int index = Collections.frequency(dragged, c);
-            drag_simulate(preLocator1+"/"+String.valueOf(c).toUpperCase(),String.valueOf(index),preLocator2+"/"+String.valueOf(c).toUpperCase(),String.valueOf(index));
-            dragged.add(c);
+            String str = String.valueOf(c).toUpperCase().trim();
+            int index = Collections.frequency(dragged, str);
+            drag_simulate(preLocator1+"/"+str,String.valueOf(index),preLocator2+"/"+str,String.valueOf(index));
+            dragged.add(str);
             SleepEx.sleep(3);
         }
     }
     public static void dragTheLetter(String preLocator1,String preLocator2){
-        int index = 0;
         List<String> dragged = new ArrayList<>();
         List<String> children = Children.getChildren(preLocator1);
         for(String c:children){
-            SleepEx.sleep(5);
+            SleepEx.sleep(4);
             c= c.trim();
-            if(dragged.contains(c))
-                index++;
+            int index = Collections.frequency(dragged, c);
+            drag_simulate(preLocator1+"/"+c.toUpperCase(),String.valueOf(index),preLocator2+"/"+c.toUpperCase(),String.valueOf(index));
             drag_simulate(preLocator1+"/"+c,String.valueOf(index),preLocator2+"/"+c,String.valueOf(index));
             dragged.add(c);
         }

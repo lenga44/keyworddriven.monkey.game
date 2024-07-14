@@ -82,7 +82,8 @@ public class LogicHandle {
         return resultBuilder.toString().trim();
     }
     public static List<String> convertStringToList(String inputString){
-        inputString = splitString(inputString);
+        inputString = LogicHandle.removeString(inputString,"[");
+        inputString = LogicHandle.removeString(inputString,"]");
         List<String> resultList = new ArrayList<>();
         for (String spitStr:Constanst.splits) {
             if(inputString.contains(spitStr)){

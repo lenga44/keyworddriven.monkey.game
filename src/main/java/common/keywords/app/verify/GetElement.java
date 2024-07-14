@@ -14,6 +14,7 @@ public class GetElement {
         Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator+"[activeInHierarchy=true]");
         return String.valueOf(response.getBody().jsonPath().getList("name").toArray().length);
     }
+
     public static String getElementDisplayInScene(String strAdd,String expect){
         String result = null;
         try {

@@ -91,4 +91,15 @@ public class Click {
             ExceptionEx.exception(e.getMessage());
         }
     }
+    public static void clickByPositionPoco(String locator,String expected,String number,String second,String waitElem){
+        int number1= Integer.valueOf(GetElement.getElements(expected));
+        System.out.println(number1);
+        System.out.println(number);
+        if(number1>0) {
+            if (number1 <= Integer.valueOf(number)) {
+                Wait.waitForObject(waitElem, second);
+                clickByPositionPoco(locator);
+            }
+        }
+    }
 }

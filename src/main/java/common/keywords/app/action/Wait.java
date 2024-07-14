@@ -175,13 +175,18 @@ public class Wait {
             LocalDateTime time = LocalDateTime.now();
             LocalDateTime time1 = time.plusSeconds(10);
             Response response = null;
+            List name =new ArrayList<>();
             do {
-                response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator);
-                JsonPath json = response.jsonPath();
-                List name = (List)json.get("name");
-                if(!locator.contains(Convert.convert(response, "name"))
-                        || Convert.convert(response,"activeInHierarchy")=="false"
-                        ||name.size()==0){
+                try {
+                    response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator);
+                    JsonPath json = response.jsonPath();
+                    name = json.get("name");
+                }catch (Exception e){
+
+                }
+                if(name.size()==0
+                        ||!locator.contains(Convert.convert(response, "name"))
+                        || Convert.convert(response,"activeInHierarchy")=="false"){
                     break;
                 }
                 Thread.sleep(500);
@@ -189,7 +194,7 @@ public class Wait {
             } while (time.compareTo(time1) <= 0);
         }catch (Throwable e){
             ExceptionEx.exception(e);
-            //e.printStackTrace();
+            e.printStackTrace();
         }
     }
     public static void waitForObjectNotPresent(String second,String splitStr,String locator){

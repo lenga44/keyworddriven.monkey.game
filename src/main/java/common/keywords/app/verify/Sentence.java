@@ -39,14 +39,16 @@ public class Sentence {
         System.out.println(LogicHandle.getTextAlphabet(expected));
         return String.valueOf(LogicHandle.getTextAlphabet(expected).trim().contains(LogicHandle.getTextAlphabet(sentence).trim()));
     }
-    public static String getSentenceByText(String locators,String component,String strSplit){
+    public static String getSentenceByText(String locators,String component,String... strSplit){
         String sentence = "";
         try {
             Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locators + "." + component);
             List<String> list = Convert.convertToList(response, "text");
             for (String text : list) {
-                String str = LogicHandle.replaceStr(text,strSplit);
-                sentence = (sentence.equals("")) ? sentence + str : sentence + " " + str;
+                sentence = (sentence.equals("")) ? sentence + text : sentence + " " + text;
+            }
+            for (String str: strSplit){
+                sentence = LogicHandle.removeString(sentence,str);
             }
         }catch (Exception e){
             ExceptionEx.exception("|getSentenceByText| "+e.getMessage());

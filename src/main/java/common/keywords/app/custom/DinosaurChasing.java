@@ -11,7 +11,7 @@ import common.utility.LogicHandle;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class DinosaurChasing {
+public class DinosaurChasing extends Thread{
     public static void maxJump(String locator,String replaceStr,String expected){
         try {
             boolean elem = false;
@@ -43,12 +43,11 @@ public class DinosaurChasing {
     public static void maxJump(String locator,String expected){
         try {
             boolean elem = true;
-            /*ReturnPath.returnPathChild()*/
             LocalDateTime time = LocalDateTime.now();
             LocalDateTime time1 = time.plusSeconds(60);
             do {
                 Click.clickByPositionPoco(locator);
-                elem = IsElement.elementDisplay(expected);
+                elem= IsElement.elementDisplay(expected);
                 if(!elem){
                     break;
                 }

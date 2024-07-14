@@ -927,8 +927,9 @@ public class KeyWordsToAction {
             if(expect.contains("[")&&actual.contains("[")) {
                 assertEqual(LogicHandle.convertStringToList(actual), LogicHandle.convertStringToList(expect));
             }
-            if(expect.contains("[")||actual.contains("[")) {
-                if (expect.contains("[")) {
+            if(expect.contains("|")||actual.contains("|")
+                ||expect.contains("[")||actual.contains("[")) {
+                if (expect.contains("[") ||expect.contains("|")) {
                     assertEqual(actual, LogicHandle.convertStringToList(expect));
                 }else {
                     assertEqual(expect,LogicHandle.convertStringToList(actual));
