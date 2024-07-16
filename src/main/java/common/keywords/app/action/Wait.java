@@ -84,7 +84,7 @@ public class Wait {
             if(locator.contains(splitStr)){
                 locator = locator.replace(splitStr,"");
             }
-            Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator);
+            Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator+"[0]");
             LocalDateTime time = LocalDateTime.now();
             LocalDateTime time1 = time.plusSeconds(Integer.parseInt(second));
             do {
@@ -116,7 +116,7 @@ public class Wait {
                     if (locator.contains(splitStr)) {
                         locator = locator.replace(splitStr, "");
                     }
-                    Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator);
+                    Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator+"[0]");
                     System.out.println(locator);
                     responses.add(response);
                 }
