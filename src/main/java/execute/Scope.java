@@ -52,6 +52,7 @@ public class Scope {
                     if (new File(TestScrip.tcPath).exists()) {
                         exits = true;
                         ExcelUtils.setCellData(TestScrip.tcName, row, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET, path);
+                        flow.add(game);
                         break;
                     }
                 }

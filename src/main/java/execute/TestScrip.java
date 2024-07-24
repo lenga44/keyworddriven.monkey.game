@@ -36,6 +36,7 @@ public class TestScrip {
     public static void execute_suites(String scopePath,int iTestSuite) throws Exception {
         Log.info("execute_suites");
         List<String> reports = new ArrayList<>();
+        flow = new ArrayList<>();
         ExcelUtils.setExcelFile(scopePath);
         int iTotalSuite =getTotalTestSuit(ExcelUtils.getRowCount(Constanst.SCOPE_SHEET));
         Scope.genFlowLesson(json,iTotalSuite,scopePath);
@@ -64,7 +65,6 @@ public class TestScrip {
             GroupInTest.index =1;
             EndTestScript.saveListFail(scopeResult,"L"+level+"_"+topic+"_"+lesson+"_"+tcName);
         }
-        //FileHelpers.deleteAllFileInFolder(reports,levelFolder);
     }
     public static void execute_suite(String scopePath,int iTestSuite) throws Exception {
         Log.info("execute_suites");
@@ -531,9 +531,7 @@ public class TestScrip {
     protected static KeyWordsToComPair keyWord;
     protected static Map<Class<?>,Method[]> classes;
     protected static String expected;
-    protected static Map<Integer, String> map_key_expected;
-    protected static Map<Integer, String> map_key_actual;
-    protected static Map<Integer, String> map_key_data_set;
+    public static List<String> flow;
     //endregion
 
     //region report key

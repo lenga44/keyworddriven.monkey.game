@@ -26,6 +26,9 @@ public class FileHelpers {
         }
         return null;
     }
+    public static void writeDataNewLine(String path,String data){
+        FileHelpers.writeNewLine(path, data);
+    }
     public static String getValueConfig(String path,String key){
         try {
             String json = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);

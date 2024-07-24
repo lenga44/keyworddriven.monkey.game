@@ -142,6 +142,8 @@ public class Constanst {
 
     //region file config
     public static final String DATA_FILE_PATH = "data_file_path";
+    public static final String DATA_FOLDER_PATH = FileHelpers.getRootFolder()
+            +FileHelpers.convertPath("\\tool_test_game\\config\\report\\");
     public static final String FILE_NAME_REPORT_DATA_FLOW = "file_name_report_data_flow";
     public static final String LIST_FAIL_PATH_FILE = FileHelpers.getRootFolder()
             +FileHelpers.convertPath("\\tool_test_game\\config\\report\\list_fail.txt");
