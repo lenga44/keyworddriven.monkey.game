@@ -16,7 +16,8 @@ public class Check {
             if(expect.contains("[")&&actual.contains("[")) {
                 assertEqual(LogicHandle.convertStringToList(actual), LogicHandle.convertStringToList(expect));
             }
-            if(expect.contains("[")||actual.contains("[")) {
+            if(expect.contains("[")||actual.contains("[")
+            || actual.contains("|")) {
                 if (expect.contains("[")) {
                     assertEqual(actual, LogicHandle.convertStringToList(expect));
                 }else {
