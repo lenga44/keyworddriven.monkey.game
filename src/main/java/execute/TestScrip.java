@@ -5,6 +5,7 @@ import common.keywords.app.ExceptionEx;
 import common.keywords.app.KeyWordsToAction;
 import common.keywords.app.KeyWordsToComPair;
 import common.keywords.app.action.TakePhoto;
+import common.keywords.app.verify.Check;
 import common.utility.*;
 import report.GenerateReport;
 
@@ -391,9 +392,9 @@ public class TestScrip {
                                 }else {
                                     expected = expected.replace(Constanst.CHECK_CONTAIN, "");
                                 }
-                                KeyWordsToAction.checkContain(actual.trim(), expected);
+                                Check.checkContain(actual.trim(), expected);
                             } else {
-                                KeyWordsToAction.check(actual.trim(), expected);
+                                Check.check(actual.trim(), expected);
                             }
                         } else {
                         /*for(int z=0;z<paramCount;z++){

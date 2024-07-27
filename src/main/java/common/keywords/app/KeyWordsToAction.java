@@ -918,7 +918,7 @@ public class KeyWordsToAction {
         request.basePath(basePath);
         return request.get("/"+number);
     }
-    public static void check(String actual,String expect){
+    /*public static void check(String actual,String expect){
         actual = LogicHandle.replaceStr(actual,"\"");
         expect = LogicHandle.replaceStr(expect,"\"");
         TestScrip.result = Constanst.PASS;
@@ -955,7 +955,7 @@ public class KeyWordsToAction {
         }catch (Throwable e){
             exception("expect ["+expect+"] but found ["+actual+"]");
         }
-    }
+    }*/
     public static void assertEqual(String actual,String expect){
         Assert.assertEquals(actual,expect);
     }

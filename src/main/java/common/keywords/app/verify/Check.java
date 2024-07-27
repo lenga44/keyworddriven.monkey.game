@@ -10,6 +10,9 @@ import java.util.List;
 
 public class Check {
     public static void check(String actual,String expect){
+        actual = LogicHandle.replaceStr(actual,"\"");
+        expect = LogicHandle.replaceStr(expect,"\"");
+
         TestScrip.result = Constanst.PASS;
         TestScrip.error = "";
         try{
@@ -17,7 +20,7 @@ public class Check {
                 assertEqual(LogicHandle.convertStringToList(actual), LogicHandle.convertStringToList(expect));
             }
             if(expect.contains("[")||actual.contains("[")
-            || actual.contains("|")) {
+            || actual.contains(";")) {
                 if (expect.contains("[")) {
                     assertEqual(actual, LogicHandle.convertStringToList(expect));
                 }else {
@@ -27,7 +30,7 @@ public class Check {
                 assertEqual(actual, expect);
             }
         }catch (Throwable e){
-            ExceptionEx.exception("expect ["+expect.toString()+"] but found ["+actual+"]");
+            ExceptionEx.exception("expect ["+expect.toString()+"] but found ["+actual.toString()+"]");
         }
     }
     public static void checkContain(String actual,String expect){

@@ -123,7 +123,7 @@ public class LogicHandle {
                                 if (text.equals("")) {
                                     text = text + result.trim();
                                 } else {
-                                    text = text + "|" + result.trim();
+                                    text = text + ";" + result.trim();
                                 }
                             }
                         }
