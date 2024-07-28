@@ -48,19 +48,24 @@ public class TestScrip {
             if (!tcName.equals("")) {
             ExcelUtils.setCellData("", iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
             String sRunMode = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.RUN_MODE_SCOPE, Constanst.SCOPE_SHEET);
-                if (sRunMode.equals(Constanst.YES)) {
-                    reports.add(reportPath);
-                    Scope.deFindFlowGame(iTestSuite, scopePath);
-                    genTestcaseReport();
-                    genTestCaseWithGroup();;
-                    int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
-                    execute_testcases(iTotalTestCase);
-                    ExcelUtils.setExcelFile(scopePath);
-                    if(scopeResult.contains(Constanst.FAIL)) {
-                        ExcelUtils.setCellData(Constanst.FAIL, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
-                    }else {
-                        ExcelUtils.setCellData(Constanst.PASS, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
+                try {
+                    if (sRunMode.equals(Constanst.YES)) {
+                        reports.add(reportPath);
+                        Scope.deFindFlowGame(iTestSuite, scopePath);
+                        genTestcaseReport();
+                        genTestCaseWithGroup();
+                        ;
+                        int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
+                        execute_testcases(iTotalTestCase);
+                        ExcelUtils.setExcelFile(scopePath);
+                        if (scopeResult.contains(Constanst.FAIL)) {
+                            ExcelUtils.setCellData(Constanst.FAIL, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
+                        } else {
+                            ExcelUtils.setCellData(Constanst.PASS, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
+                        }
                     }
+                }catch (Exception e){
+                    Log.error(e.getMessage());
                 }
             }
             GroupInTest.index =1;

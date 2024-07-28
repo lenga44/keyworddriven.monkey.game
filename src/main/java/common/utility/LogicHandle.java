@@ -35,6 +35,17 @@ public class LogicHandle {
         }
         return null;
     }
+    public static List<Integer> convertToStringsToInts(List<String> strList) {
+        try {
+            List<Integer> intList = new ArrayList<>();
+            for(String s : strList) intList.add(Integer.valueOf(s));
+                return intList;
+        }catch (Exception e){
+            Log.error("|convertToArrayListInt| "+e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
     public static List<String> convertToArrayListString(String str){
         String replace = str;
         if (replace.contains(",")&& replace.contains("[")) {

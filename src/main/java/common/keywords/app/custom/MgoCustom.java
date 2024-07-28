@@ -3,6 +3,8 @@ package common.keywords.app.custom;
 import common.keywords.app.ExceptionEx;
 import common.keywords.app.action.Click;
 import common.keywords.app.action.Drag;
+import common.keywords.app.action.SleepEx;
+import common.keywords.app.action.Swipe;
 import common.keywords.app.verify.GetElement;
 import common.keywords.app.verify.GetText;
 import common.utility.Log;
@@ -12,18 +14,19 @@ import java.util.Collections;
 import java.util.List;
 
 public class MgoCustom {
-    public static void swipeMapMgo(String locator1,String locator2,String locator,String  component,String expected){
+    public static void swipeMapMgo(String x1,String x2,String y,String locator,String  component,String expected){
         boolean correct = false;
         int times=0;
+        expected =expected.trim();
         do {
-            List<Integer> list = LogicHandle.convertToArrayListInt(GetText.getListTexts(locator, component).toString());
+            List<Integer> list = LogicHandle.convertToStringsToInts(GetText.getListTexts(locator, component));
             int lesson = Integer.valueOf(expected);
             if (!list.contains(lesson)) {
                 int max = Collections.max(list);
                 if (lesson > max) {
-                    Drag.drag_simulate(locator1,"0",locator2,"0");
+                    Swipe.swipe_poco(x1,x2,y);
                 } else {
-                    Drag.drag_simulate(locator2,"0",locator1,"0");
+                    Swipe.swipe_poco(x2,x1,y);
                 }
             }else {
                 correct = true;
