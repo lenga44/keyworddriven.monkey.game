@@ -32,7 +32,7 @@ public class Scope {
         String course = ExcelUtils.getStringValueInCell(1,Constanst.COURSE_PLAN_COLUM,Constanst.PLAN_SHEET);
         System.out.println("Course___ "+course);
         String game = null;
-        if(course.equals(Constanst.AI_COURSE)){
+        if(course.equals(Constanst.AI_COURSE) || course.equals(Constanst.M_GO_COURSE)){
             game = KeyWordsToActionToVerify.getAllScene();
         }else if (course.equals(Constanst.EE_COURSE)){
             game = KeyWordsToActionToVerify.getCurrentScene();
@@ -86,8 +86,8 @@ public class Scope {
                                 if (!list.equals(null)) {
                                     for (int i = 0; i < list.size(); i++) {
                                         int loop = list.get(i);
-                                        if (loop > 10) {
-                                            loop = 10;
+                                        if (loop > 20) {
+                                            loop = 20;
                                         }
                                         ArrayList<Integer> listRange = getListRangeByGroup(rowInsert, groupName, ranges);
                                         copyTestSuiteWithGroupSubLevel(listRange, loop, Constanst.TOTAL_CELL_SCOPE_SHEET);

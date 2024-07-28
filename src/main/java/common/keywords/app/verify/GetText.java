@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static common.keywords.app.KeyWordsToActionToVerify.getListTexts;
 
 public class GetText {
     public static String getTextChildElement(String locator,String locator2,String component){
@@ -102,6 +101,10 @@ public class GetText {
             ExceptionEx.exception(e.getMessage());
             return "";
         }
+    }
+    public static List<String> getListTexts(String locator, String component){
+        Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator + "." + component);
+        return Convert.convertToList(response,"text");
     }
     public static String getTexts(String locator,String component,String expect){
         return getTextsByTime(locator,component,"15",expect);

@@ -305,7 +305,7 @@ public class KeyWordsToActionToVerify extends KeyWordsToAction {
     public static String getTexts(String locator,String component,String expect){
         return getTextsByTime(locator,component,"15",expect);
     }
-    public static List<String> getListTexts(String locator, String component){
+    private static List<String> getListTexts(String locator, String component){
         Response response = request(Constanst.SCENE_URL_UNIUM, "//" + locator + "." + component);
         return convertToList(response,"text");
     }

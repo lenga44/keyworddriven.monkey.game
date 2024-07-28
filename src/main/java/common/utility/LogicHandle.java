@@ -91,6 +91,9 @@ public class LogicHandle {
                 break;
             }
         }
+        if (resultList.size()==0){
+            resultList.add(inputString);
+        }
         return resultList;
     }
     private static String splitString(String str){
