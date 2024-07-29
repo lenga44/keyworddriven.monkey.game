@@ -38,8 +38,12 @@ public class SetVariable {
             JsonArray array = JsonHandle.getJsonArray(json);
             for (int i = 0; i < array.size(); i++) {
                 Response response1 = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + preLocator + "[" + i + "]" + locator + "." + component);
-                String result = Convert.convert(response1, property);
-                System.out.println(result);
+                String result = "";
+                try{
+                    result = Convert.convert(response1, property);
+                }catch (Exception e){
+                    
+                }
                 if (result.equals(ex)) {
                     index = i;
                 }
