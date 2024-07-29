@@ -42,10 +42,11 @@ public class SetVariable {
                 try{
                     result = Convert.convert(response1, property);
                 }catch (Exception e){
-                    
+                    result = "ERROR";
                 }
                 if (result.equals(ex)) {
                     index = i;
+                    break;
                 }
             }
             JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key, index);
