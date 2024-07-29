@@ -28,13 +28,26 @@ public class Flow {
 //    }
     public static String verifyFlow(String flowExpected){
         boolean correct = false;
+        int number = 0;
         try {
             String flowExpectedJson = FileHelpers.readFile(Constanst.DATA_FOLDER_PATH + flowExpected);
             String lesson = JsonHandle.getValue(json, "$.lesson");
             String flowIndex = JsonHandle.getValue(json, "$.flow");
             String level = JsonHandle.getValue(json, "$.level");
             String topic = JsonHandle.getValue(json, "$.category");
-            JSONArray actName = JsonHandle.getJsonArray(flowExpectedJson, "$.flow[?(@.name==" + flowIndex + ")].lesson[?(@.name_lesson=='" + lesson + "')].act[*].game");
+            if(level.equals("Level 0")){
+                number = Integer.valueOf(LogicHandle.getNumber(lesson))%5;
+                if(number==0){
+                    number = 5;
+                }
+            }else {
+                number = Integer.valueOf(LogicHandle.getNumber(lesson))%7;
+                if(number==0){
+                    number = 7;
+                }
+            }
+
+            JSONArray actName = JsonHandle.getJsonArray(flowExpectedJson, "$.flow[?(@.name==" + flowIndex + ")].lesson[?(@.name_lesson=='Lesson " + number + "')].act[*].game");
             Map<Integer, List<String>> map = new HashMap<>();
             int i = 0;
             for (Object item : actName) {
