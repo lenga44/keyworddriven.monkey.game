@@ -17,7 +17,7 @@ public class MgoCustom {
     public static void swipeMapMgo(String x1,String x2,String y,String locator,String  component,String expected){
         boolean correct = false;
         int times=0;
-        expected =expected.trim();
+        expected = LogicHandle.getNumber(expected).trim();
         do {
             List<Integer> list = LogicHandle.convertToStringsToInts(GetText.getListTexts(locator, component));
             int lesson = Integer.valueOf(expected);

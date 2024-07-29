@@ -32,6 +32,21 @@ public class ReturnPath {
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"path",value);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
+    public static String returnPathValue(String locator, String component,String key,String expected) throws IOException {
+        Wait.waitForObject(locator);
+        int index = 0;
+        Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator+"."+component);
+        ResponseBody body = response.getBody();
+        String json = body.asString();
+        for (JsonElement element: JsonHandle.getJsonArray(json)) {
+            if(JsonHandle.getValue(element.toString(),"$."+key).toLowerCase().equals(expected.toLowerCase()))
+                break;
+            index++;
+        }
+        Response response1 = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator);
+        return GetAbsolutePath.getAbsolutePath(response1,String.valueOf(index));
+    }
+
     public static String returnPath(String locator, String component,String key,String index,String expected) throws IOException {
         Wait.waitForObject(locator);
         Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator+"."+component);
@@ -181,6 +196,33 @@ public class ReturnPath {
             }
         }
     }
+    public static void getPathStartWith(String startWith,String locator, String component,String key,String expected) throws IOException {
+        int ex = Integer.valueOf(LogicHandle.getNumber(expected).trim());
+        Wait.waitForObject(locator);
+        int index = 0;
+        Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator+"."+component);
+        ResponseBody body = response.getBody();
+        String json = body.asString();
+        for (JsonElement element: JsonHandle.getJsonArray(json)) {
+            int ac = Integer.valueOf(JsonHandle.getValue(element.toString(),"$."+key));
+            if(ac==ex){
+                System.out.println("___________ "+index);
+                break;
+            }
+            index++;
+        }
+        Response response1 = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator+"[components="+component+"]");
+        String paths = Convert.convertToList(response1,"path").get(index);
+        System.out.println(paths);
+        for (String path: paths.split("/")) {
+            if(path.startsWith(startWith)){
+                JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.PATH_GAME_OBJECT,path);
+                ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
+                break;
+            }
+        }
+    }
+
     public static void getPathStartWith(String startWith,String index,String expected) throws IOException {
         Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//" +startWith+expected+"*");
         List<String> paths = Convert.convertToList(response,"path");

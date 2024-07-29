@@ -1,6 +1,8 @@
 package common.keywords.app.variable;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import common.keywords.app.Convert;
 import common.keywords.app.RequestEx;
 import common.keywords.app.action.Wait;
 import common.utility.*;
@@ -25,30 +27,29 @@ public class SetVariable {
             e.printStackTrace();
         }
     }
-    public static void setVariableFileWhichCondition(String key,String locator, String component,String property,String expected) throws IOException {
-        Wait.waitForObject(locator);
-        expected = LogicHandle.getNumber(expected).trim();
-        int index = 0;
-        Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator+"."+component);
-        ResponseBody body = response.getBody();
-        String json = body.asString();
-        for (JsonElement element: JsonHandle.getJsonArray(json)) {
-            String actual = JsonHandle.getValue(element.toString(),"$."+property).toLowerCase();
-            System.out.println("+++++++++++++++++++");
-            System.out.println(actual);
-            System.out.println(expected);
-            System.out.println("+++++++++++++++++++");
-            if(actual.equals(expected.toLowerCase())) {
-                System.out.println(index);
-                break;
+    public static void setVariableFileWhichCondition(String key,String preLocator, String locator, String component,String property,String expected) throws IOException {
+        try {
+            String ex = LogicHandle.getNumber(expected).trim();
+            System.out.println("====== " + ex);
+            int index = 0;
+            Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + preLocator + locator);
+            ResponseBody body = response.getBody();
+            String json = body.asString();
+            JsonArray array = JsonHandle.getJsonArray(json);
+            for (int i = 0; i < array.size(); i++) {
+                Response response1 = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + preLocator + "[" + i + "]" + locator + "." + component);
+                String result = Convert.convert(response1, property);
+                System.out.println(result);
+                if (result.equals(ex)) {
+                    index = i;
+                }
             }
-            index++;
+            JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key, index);
+            ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
+        }catch (Exception e){
+            Log.error(e.getMessage());
+            e.printStackTrace();
         }
-        if(expected.equals("4")){
-            index=1;
-        }
-        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,key,index);
-        ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
     public static void setVariableFile(Object key,Object strSplit,Object value)  {
         try {
