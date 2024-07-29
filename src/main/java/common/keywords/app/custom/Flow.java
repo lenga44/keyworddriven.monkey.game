@@ -36,12 +36,12 @@ public class Flow {
             String level = JsonHandle.getValue(json, "$.level");
             String topic = JsonHandle.getValue(json, "$.category");
             if(level.equals("Level 0")){
-                number = Integer.valueOf(LogicHandle.getNumber(lesson))%5;
+                number = Integer.valueOf(LogicHandle.getNumber(lesson).trim())%5;
                 if(number==0){
                     number = 5;
                 }
             }else {
-                number = Integer.valueOf(LogicHandle.getNumber(lesson))%7;
+                number = Integer.valueOf(LogicHandle.getNumber(lesson).trim())%7;
                 if(number==0){
                     number = 7;
                 }
