@@ -55,7 +55,6 @@ public class Flow {
                 map.put(i, LogicHandle.convertStringToList(game));
                 i++;
             }
-
             for (int index = 0; index < map.keySet().size(); index++) {
                 correct = (map.get(index).contains(flow.get(index))) ? true : false;
             }
@@ -63,6 +62,8 @@ public class Flow {
                 ExceptionEx.exception( level + "_" + topic + "_" + lesson + "_Flow " + flowIndex);
             }
         }catch (Exception e){
+            ExceptionEx.exception(e.getMessage());
+            e.printStackTrace();
         }
         return String.valueOf(correct);
     }

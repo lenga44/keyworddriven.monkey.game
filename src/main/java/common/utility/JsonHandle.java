@@ -100,6 +100,12 @@ public class JsonHandle {
     }
     public static JSONArray getJsonArray(String json,String jsonPath){
         String array = getValue(json,jsonPath);
-        return new JSONArray(array);
+        if(array.contains("[")) {
+            return new JSONArray(array);
+        }else {
+            JSONArray array1 = new JSONArray();
+            array1.put(array);
+            return array1;
+        }
     }
 }
