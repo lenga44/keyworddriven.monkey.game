@@ -179,10 +179,11 @@ public class Wait {
             do {
                 try {
                     response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator);
+                    System.out.println("__ "+response.body());
                     JsonPath json = response.jsonPath();
                     name = json.get("name");
                 }catch (Exception e){
-
+                    break;
                 }
                 if(name.size()==0
                         ||!locator.contains(Convert.convert(response, "name"))
