@@ -25,19 +25,19 @@ public class RunTestScriptData extends TestScrip{
             String scopeReport = FileHelpers.getRootFolder()+FileHelpers.getValueConfig(Constanst.SCOPE_REPORT_FILE_PATH)+"Scope";
             for (int index = begin; index <= end; index++) {
                 //get node need check
-                FileHelpers.copyFile(scopeData,scopePath);
+                /*FileHelpers.copyFile(scopeData,scopePath);*/
                 json = JsonHandle.getObjectInJsonData(index - 1);
                 ExcelUtils.setExcelFile(scopePath);
                 getLevelFolder(1);
-                /*FileHelpers.copyFile(scopePath,copyFile);*/
+                FileHelpers.copyFile(scopePath,copyFile);
                 try {
                     ExcelUtils.setCellData(index, 1, Constanst.CURRENT_INDEX_COLUM, Constanst.PLAN_SHEET, scopePath);
                     String key = ExcelUtils.getStringValueInCell(1, Constanst.LESSON_PLAN_COLUM, Constanst.PLAN_SHEET);
                     reportName = LogicHandle.getTextAlphabet(Scope.genReportName(key));
                     //execute tc
                     execute_suites(scopePath, iTestSuit);
-                    //Scope.ResetScopeFile(scopePath,copyFile,scopeReport,index);
-                    FileHelpers.copyFile(scopeData,scopePath);
+                    Scope.ResetScopeFile(scopePath,copyFile,scopeReport,index);
+                    //FileHelpers.copyFile(scopeData,scopePath);
                     ExcelUtils.closeFile(reportPath);
                     ExcelUtils.closeFile(tcPath);
                 }catch (Exception e){
