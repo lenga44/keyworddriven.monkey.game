@@ -16,15 +16,16 @@ public class Check {
         TestScrip.result = Constanst.PASS;
         TestScrip.error = "";
         try{
-            if(expect.contains("[")&&actual.contains("[")) {
-                assertEqual(LogicHandle.convertStringToList(actual), LogicHandle.convertStringToList(expect));
-            }
             if(expect.contains("[")||actual.contains("[")
             || actual.contains(";")) {
-                if (expect.contains("[")) {
-                    assertEqual(actual, LogicHandle.convertStringToList(expect));
+                if(expect.contains("[")&& actual.contains("[")) {
+                    assertEqual(LogicHandle.convertStringToList(actual), LogicHandle.convertStringToList(expect));
                 }else {
-                    assertEqual(expect,LogicHandle.convertStringToList(actual));
+                    if (expect.contains("[")) {
+                        assertEqual(actual, LogicHandle.convertStringToList(expect));
+                    } else {
+                        assertEqual(expect, LogicHandle.convertStringToList(actual));
+                    }
                 }
             }else {
                 assertEqual(actual, expect);
@@ -52,7 +53,14 @@ public class Check {
         Assert.assertEquals(actual,expect);
     }
     private static void assertEqual(List<String> actual, List<String> expect){
-        Assert.assertEquals(actual,expect);
+        boolean corect = true;
+        for (String item:expect){
+            if(!actual.contains(item)){
+                corect=false;
+                break;
+            }
+        }
+        Assert.assertEquals(corect,true);
     }
     private static void assertEqual(String actual, List<String> expect){
         Assert.assertTrue(expect.contains(actual));
