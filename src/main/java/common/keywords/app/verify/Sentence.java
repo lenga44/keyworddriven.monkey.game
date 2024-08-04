@@ -8,6 +8,7 @@ import common.utility.Constanst;
 import common.utility.LogicHandle;
 import io.restassured.response.Response;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Sentence {
@@ -16,13 +17,36 @@ public class Sentence {
         Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//" +locators+"."+component);
         List<String> list = Convert.convertToList(response,"text");
         for (String text: list) {
-            if(text.matches("^[a-z0-9A-Z]{2,25}$")){
-                sentence = sentence + text +" ";
+            if(/*text.matches("^[a-z0-9A-Z]{2,25}$") &&*/ !sentence.isEmpty()){
+                sentence = sentence  +", "+text;
             }else {
                 sentence = sentence + text +" ";
             }
         }
-        return sentence;
+        return sentence.trim();
+    }
+    public static String getSentenceByListText(String locators,String component){
+        List<String> sentence = new ArrayList<>();
+        Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//" +locators+"."+component);
+        List<String> list = Convert.convertToList(response,"text");
+        for (String text: list) {
+            if(!sentence.contains(text.trim())){
+                sentence.add(text.trim());
+            }
+        }
+        return sentence.toString();
+    }
+    public static String getSentenceByListText(String locators,String component,String removeStr){
+        List<String> sentence = new ArrayList<>();
+        Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//" +locators+"."+component);
+        List<String> list = Convert.convertToList(response,"text");
+        for (String text: list) {
+            text = LogicHandle.removeString(text,removeStr);
+            if(!sentence.contains(text)){
+                sentence.add(text);
+            }
+        }
+        return LogicHandle.removeString(sentence.toString(),removeStr);
     }
     public static String compareSentenceByText(String locators,String component,String expected){
         String sentence = "";

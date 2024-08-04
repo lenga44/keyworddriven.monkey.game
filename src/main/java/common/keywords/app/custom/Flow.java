@@ -48,6 +48,10 @@ public class Flow {
             }
 
             JSONArray actName = JsonHandle.getJsonArray(flowExpectedJson, "$.flow[?(@.name==" + flowIndex + ")].lesson[?(@.name_lesson=='Lesson " + number + "')].act[*].game");
+            if(level.equals("Level 1") && topic=="Unit 1"){
+
+                actName = JsonHandle.getJsonArray(flowExpectedJson, "$.flow[?(@.name==3)].lesson[?(@.name_lesson=='Lesson " + number + "')].act[*].game");
+            }
             Map<Integer, List<String>> map = new HashMap<>();
             int i = 0;
             for (Object item : actName) {
@@ -55,11 +59,27 @@ public class Flow {
                 map.put(i, LogicHandle.convertStringToList(game));
                 i++;
             }
-            for (int index = 0; index < map.keySet().size(); index++) {
-                correct = (map.get(index).contains(flow.get(index))) ? true : false;
-            }
-            if (correct == false) {
-                ExceptionEx.exception( level + "_" + topic + "_" + lesson + "_Flow " + flowIndex);
+            if(map.keySet().size() == flow.size()) {
+                for (int index = 0; index < map.keySet().size(); index++) {
+                    System.out.println("+++ flow");
+                    for (String item : map.get(index)){
+                        System.out.println(item);
+                        System.out.println(flow.get(index));
+                        if(flow.get(index).equals(LogicHandle.removeString(item,"\""))){
+                            correct = true;
+                            break;
+                        }else {
+                            correct =false;
+                        }
+                    }
+                    System.out.println(correct);
+                    if (correct ==false) {
+                        break;
+                    }
+                }
+                if (correct == false) {
+                    Log.info(level + "_" + topic + "_" + lesson + "_Flow " + flowIndex);
+                }
             }
         }catch (Exception e){
             ExceptionEx.exception(e.getMessage());

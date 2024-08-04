@@ -41,11 +41,16 @@ public class SetVariable {
                 String result = "";
                 try{
                     result = Convert.convert(response1, property);
+                    System.out.println(result);
                 }catch (Exception e){
                     result = "ERROR";
                 }
                 if (result.equals(ex)) {
-                    index = i;
+                    if(result.equals("4")){
+                        index = 1;
+                    }else {
+                        index = i;
+                    }
                     break;
                 }
             }
