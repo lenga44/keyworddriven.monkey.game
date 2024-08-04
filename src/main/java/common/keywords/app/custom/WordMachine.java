@@ -11,19 +11,18 @@ import io.restassured.response.Response;
 import java.util.List;
 
 public class WordMachine {
-    public static String getSentenceWordMachine(String parent,String remove,String component,String right){
+    public static String getSentenceWordMachine(String parent,String component,String right){
         String sentence = "";
         try {
             Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + parent);
             List<String> children = LogicHandle.convertStringToList(Convert.convert(response, "children"));
             for (String child : children) {
                 child = child.trim();
-                if (!child.equals(remove)) {
-                    String text = LogicHandle.getTextNoColor(GetText.getText(child, component),"</color>",">");
+                    String text = LogicHandle.getTextNoColor(GetText.getText(child +"[activeInHierarchy=true]", component),"</color>",">");
                     sentence = LogicHandle.convertTextToSentence(sentence, text);
-                } else {
+              /*  } else {
                     sentence = LogicHandle.convertTextToSentence(sentence, right);
-                }
+                }*/
                 System.out.println(sentence);
             }
         }catch (Exception e){

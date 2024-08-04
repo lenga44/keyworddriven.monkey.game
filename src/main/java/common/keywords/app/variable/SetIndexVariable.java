@@ -24,6 +24,7 @@ public class SetIndexVariable {
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,index);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
+    
     public static void setIndexVariableFile(String value) throws IOException {
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,Integer.parseInt(value));
         Log.info("setIndexVariableFile "+value);
