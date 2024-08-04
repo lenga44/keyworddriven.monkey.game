@@ -31,6 +31,20 @@ public class SetIndexVariable {
         ResponseBody body = response.getBody();
         String json = body.asString();
         for (JsonElement element: JsonHandle.getJsonArray(json)) {
+            if(JsonHandle.getValue(element.toString(),"$."+key).toLowerCase().contains(LogicHandle.removeString(expected,removeStr).toLowerCase()))
+                break;
+            index++;
+        }
+        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,index);
+        ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
+    }
+    /*public static void setIndexVariableFile(String locator, String component,String key,String removeStr,String expected) throws IOException {
+        Wait.waitForObject(locator);
+        int index = 0;
+        Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator+"."+component);
+        ResponseBody body = response.getBody();
+        String json = body.asString();
+        for (JsonElement element: JsonHandle.getJsonArray(json)) {
             if(expected.toLowerCase().contains(LogicHandle.removeString(JsonHandle.getValue(element.toString(),"$."+key).toLowerCase(),removeStr))){
                 break;
             }
@@ -38,7 +52,7 @@ public class SetIndexVariable {
         }
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,index);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
-    }
+    }*/
     
     public static void setIndexVariableFile(String value) throws IOException {
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,Integer.parseInt(value));

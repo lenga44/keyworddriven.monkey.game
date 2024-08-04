@@ -32,4 +32,12 @@ public class GetAbsolutePath {
             absolutePath = absolutePath.replace(":","!_!");
         return absolutePath;
     }
+    public static String getAbsoluteLocator(String locator){
+        if(locator.contains(":"))
+            locator = locator.replace(":","!_!");
+        if(locator.contains(".")){
+            locator = locator.replace(".","<_>");
+        }
+        return locator;
+    }
 }

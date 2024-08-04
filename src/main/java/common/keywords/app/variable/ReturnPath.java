@@ -226,7 +226,7 @@ public class ReturnPath {
     public static void getPathStartWith(String startWith,String index,String expected) throws IOException {
         Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//" +startWith+expected+"*[activeInHierarchy=true]");
         List<String> paths = Convert.convertToList(response,"path");
-        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.PATH_GAME_OBJECT,paths.get(Integer.parseInt(index)));
+        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.PATH_GAME_OBJECT,GetAbsolutePath.getAbsoluteLocator(paths.get(Integer.parseInt(index))));
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
 }
