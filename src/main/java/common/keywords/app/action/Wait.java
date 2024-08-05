@@ -38,8 +38,7 @@ public class Wait {
                 Thread.sleep(500);
                 time = LocalDateTime.now();
             } while (time.compareTo(time1) <= 0);
-            response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator+"[activeInHierarchy=true]");
-            Assert.assertTrue(convert(response, "name").contains(LogicHandle.replaceStr(locator,"*")));
+            Assert.assertTrue(Convert.convert(response,"activeInHierarchy").equals("true"));
         }catch (Throwable e){
             ExceptionEx.exception("No such element "+ locator);
         }
@@ -61,8 +60,7 @@ public class Wait {
                 Thread.sleep(500);
                 time = LocalDateTime.now();
             } while (time.compareTo(time1) <= 0);
-            response = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator+"[activeInHierarchy=true]");
-            Assert.assertTrue(convert(response, "name").contains(LogicHandle.replaceStr(locator,"*")));
+            Assert.assertTrue(Convert.convert(response,"activeInHierarchy").equals("true"));
         }catch (Throwable e){
             ExceptionEx.exception("No such element "+ locator);
             //e.printStackTrace();
