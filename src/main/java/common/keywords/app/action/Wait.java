@@ -38,7 +38,7 @@ public class Wait {
                 Thread.sleep(500);
                 time = LocalDateTime.now();
             } while (time.compareTo(time1) <= 0);
-            //Assert.assertTrue(locator.contains(convert(response, "name")));
+            Assert.assertTrue(locator.contains(convert(response, "name")));
         }catch (Throwable e){
             ExceptionEx.exception("No such element "+ locator);
         }
@@ -60,7 +60,7 @@ public class Wait {
                 Thread.sleep(500);
                 time = LocalDateTime.now();
             } while (time.compareTo(time1) <= 0);
-            //Assert.assertTrue(locator.contains(convert(response, "name")));
+            Assert.assertTrue(locator.contains(convert(response, "name")));
         }catch (Throwable e){
             ExceptionEx.exception("No such element "+ locator);
             //e.printStackTrace();
