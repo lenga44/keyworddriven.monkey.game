@@ -36,7 +36,8 @@ public class Drag {
     public static void dragTheLetter(String preLocator1,String preLocator2,String expected){
         List<String> dragged = new ArrayList<>();
         for(char c:expected.toCharArray()){
-            String str = String.valueOf(c).toUpperCase().trim();
+            //String str = String.valueOf(c).toUpperCase().trim();
+            String str = String.valueOf(c).trim();
             int index = Collections.frequency(dragged, str);
             drag_simulate(preLocator1+"/"+str,String.valueOf(index),preLocator2+"/"+str,String.valueOf(index));
             dragged.add(str);
@@ -50,7 +51,9 @@ public class Drag {
             SleepEx.sleep(4);
             c= c.trim();
             int index = Collections.frequency(dragged, c);
-            drag_simulate(preLocator1+"/"+c.toUpperCase(),String.valueOf(index),preLocator2+"/"+c.toUpperCase(),String.valueOf(index));
+            /*drag_simulate(preLocator1+"/"+c.toUpperCase(),String.valueOf(index),preLocator2+"/"+c.toUpperCase(),String.valueOf(index));
+            drag_simulate(preLocator1+"/"+c,String.valueOf(index),preLocator2+"/"+c,String.valueOf(index));*/
+            drag_simulate(preLocator1+"/"+c,String.valueOf(index),preLocator2+"/"+c,String.valueOf(index));
             drag_simulate(preLocator1+"/"+c,String.valueOf(index),preLocator2+"/"+c,String.valueOf(index));
             dragged.add(c);
         }
