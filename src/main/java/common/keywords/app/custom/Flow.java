@@ -59,6 +59,8 @@ public class Flow {
                 map.put(i, LogicHandle.convertStringToList(game));
                 i++;
             }
+            System.out.println(actName);
+            System.out.println(flow);
             if(map.keySet().size() == flow.size()) {
                 for (int index = 0; index < map.keySet().size(); index++) {
                     System.out.println("+++ flow");
