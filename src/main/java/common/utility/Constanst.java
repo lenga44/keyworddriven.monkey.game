@@ -166,7 +166,7 @@ public class Constanst {
     public static final String RESUME_PROGRAM_URL = ".resume()";
 
     //region logicHandle
-    public static final List<String> splits = Arrays.asList("\\|", "\\;",",",", "," ||"," ;");
+    public static final List<String> splits = Arrays.asList(" ;","\\|", "\\;",", "," ||");
     //endregion
 
     //region OS
