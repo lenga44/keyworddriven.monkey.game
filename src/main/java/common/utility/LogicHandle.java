@@ -242,7 +242,7 @@ public class LogicHandle {
         return index;
     }
     public static String getEndWithTextAlphabet(String text){
-        if (!Character.isLetter(text.charAt(text.length() - 1))) {
+        if (!Character.isLetter(text.charAt(text.length() - 1)) ) {
             text = text.substring(0, text.length() - 1);
         }
         return text;

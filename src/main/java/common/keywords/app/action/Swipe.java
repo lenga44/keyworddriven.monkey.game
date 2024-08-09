@@ -9,6 +9,7 @@ public class Swipe {
         if(loop!=0) {
             for(int i=0;i<loop;i++) {
                 RequestEx.request(Constanst.SIMULATE_URL_UNIUM, Constanst.DRAG_ACTION + "(" + x1 + "," + y + "," + x2 + "," + y + ",0.5)");
+                SleepEx.sleep(3);
             }
         }
     }

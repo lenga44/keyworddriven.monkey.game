@@ -2,6 +2,7 @@ package common.keywords.app.verify;
 
 import common.keywords.app.Convert;
 import common.keywords.app.RequestEx;
+import common.keywords.app.action.SleepEx;
 import common.utility.Constanst;
 import common.utility.Log;
 import common.utility.LogicHandle;
@@ -59,7 +60,7 @@ public class IsElement {
         Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator);
         return Convert.convert(response,"activeInHierarchy");
     }
-    public static String isElementsDisplay(String second,String strSplit, String locator) throws InterruptedException {
+    public static String isElementsDisplay(String second,String strSplit, String locator)  {
         System.out.println(locator);
         boolean enable = false;
         LocalDateTime time = LocalDateTime.now();
@@ -87,7 +88,7 @@ public class IsElement {
             if (enable){
                 break;
             }
-            Thread.sleep(500);
+            SleepEx.sleep(500);
             time = LocalDateTime.now();
         }
         return String.valueOf(enable);

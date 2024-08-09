@@ -26,6 +26,11 @@ public class Click {
             RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator+"."+component+"."+property);
         }
     }
+    public static void clickWhichDisplay(String locator,String component, String property,String second){
+        if(IsElement.isElementsDisplay(second,"",locator).equals("true")){
+            RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator+"."+component+"."+property);
+        }
+    }
     public static void click(String locator,String component, String property){
         RequestEx.request(Constanst.SCENE_URL_UNIUM,"//"+locator+"."+component+"."+property);
     }

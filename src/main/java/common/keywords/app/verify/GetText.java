@@ -61,6 +61,12 @@ public class GetText {
         text = LogicHandle.getEndWithTextAlphabet(text);
         return text;
     }
+    public static String getTextAlphabetAndNumber(String locator,String component){
+        Log.info("getTextAlphabetAndNumber");
+        String text = getText(locator,component);
+        text = LogicHandle.getTextAlphabet(text);
+        return text;
+    }
     public static String getTextsByTime(String locator,String component,String second,String expect){
         String str= getText(locator,component);
         LocalDateTime time = LocalDateTime.now();
