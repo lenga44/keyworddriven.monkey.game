@@ -17,10 +17,10 @@ public class Sentence {
         Response response = RequestEx.request(Constanst.SCENE_URL_UNIUM,"//" +locators+"."+component);
         List<String> list = Convert.convertToList(response,"text");
         for (String text: list) {
-            if(/*text.matches("^[a-z0-9A-Z]{2,25}$") &&*/ !sentence.isEmpty()){
-                sentence = sentence  +", "+text;
+            if(/*text.matches("^[a-z0-9A-Z]{2,25}$") &&*/ sentence.isEmpty()){
+                sentence = text;
             }else {
-                sentence = sentence + text +" ";
+                sentence = sentence +" "+ text;
             }
         }
         return sentence.trim();
