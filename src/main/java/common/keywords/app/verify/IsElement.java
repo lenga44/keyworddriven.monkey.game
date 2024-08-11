@@ -65,7 +65,8 @@ public class IsElement {
         boolean enable = false;
         LocalDateTime time = LocalDateTime.now();
         LocalDateTime time1 = time.plusSeconds(Integer.parseInt(second));
-        while (!time.isAfter(time1)) {
+        while (time.compareTo(time1) <= 0) {
+            System.out.println(time);
             if (locator.contains("[") && locator.contains(",")) {
                 locator = LogicHandle.replaceStr(locator, "[");
                 locator = LogicHandle.replaceStr(locator, "]");
@@ -74,20 +75,21 @@ public class IsElement {
                     System.out.println(item);
                     enable = elementDisplay(LogicHandle.replaceStr(item, strSplit));
                     if (enable) {
-                        //System.out.println(item);
+                        System.out.println(item);
                         break;
                     }
                 }
             }else {
+                System.out.println(locator);
                 enable = elementDisplay(LogicHandle.replaceStr(locator, strSplit));
                 if (enable) {
                     //System.out.println(item);
                     break;
                 }
             }
-            if (enable){
+            /*if (enable){
                 break;
-            }
+            }*/
             SleepEx.sleep(500);
             time = LocalDateTime.now();
         }

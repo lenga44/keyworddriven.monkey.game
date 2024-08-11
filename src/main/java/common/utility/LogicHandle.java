@@ -98,7 +98,10 @@ public class LogicHandle {
         List<String> resultList = new ArrayList<>();
         for (String spitStr:Constanst.splits) {
             if(inputString.contains(spitStr)){
-                resultList = Arrays.asList(inputString.split(spitStr));
+                String[] strings = inputString.split(spitStr);
+                for (String str: strings) {
+                    resultList.add(str);
+                }
                 break;
             }
         }
