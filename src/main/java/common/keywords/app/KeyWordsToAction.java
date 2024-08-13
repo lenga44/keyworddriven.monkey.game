@@ -1151,11 +1151,11 @@ public class KeyWordsToAction {
     public static void ignoreScript(String number,String to,String sheetName, String text){
         KeyWordCustomForAISpeak.ignoreScript(number,to,sheetName,text);
     }
-    public static void changeModeTC(String methodName,String locator, String component,String tcRow,String expect) throws InvocationTargetException, IllegalAccessException {
-        KeyWordCustomForAISpeak.changeModeTC(methodName,locator,component,tcRow,expect);
+    public static void changeModeTCAI(String methodName,String locator, String component,String tcRow,String expect) throws InvocationTargetException, IllegalAccessException {
+        KeyWordCustomForAISpeak.changeModeTCAI(methodName,locator,component,tcRow,expect);
     }
-    public static void changeModeTC(String variableKey,String runYes,String runNo,String expect){
-        KeyWordCustomForAISpeak.changeModeTC(variableKey,runYes,runNo,expect);
+    public static void changeModeTCAI(String variableKey,String runYes,String runNo,String expect){
+        KeyWordCustomForAISpeak.changeModeTCAI(variableKey,runYes,runNo,expect);
     }
     public static void changeModeTCSetFail(String actual,String tcRow,String expect) {
         KeyWordCustomForAISpeak.changeModeTCSetFAIL(actual,tcRow,expect);

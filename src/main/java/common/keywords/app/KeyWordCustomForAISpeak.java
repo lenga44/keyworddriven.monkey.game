@@ -220,7 +220,7 @@ public class KeyWordCustomForAISpeak {
     public static String getGame() {
         return "Report_";
     }
-    public static void changeModeTC(String methodName,String locator, String component,String tcRow,String expect) throws InvocationTargetException, IllegalAccessException {
+    public static void changeModeTCAI(String methodName,String locator, String component,String tcRow,String expect) throws InvocationTargetException, IllegalAccessException {
         String level = runMethod(methodName,locator,component);
         String expected = expect;
         if(expected.contains("$.")) {
@@ -233,7 +233,7 @@ public class KeyWordCustomForAISpeak {
         }
     }
 
-    public static void changeModeTC(String variableKey,String tcNotExpRow,String tcExpRow,String expect) {
+    public static void changeModeTCAI(String variableKey,String tcNotExpRow,String tcExpRow,String expect) {
 
         String value = FileHelpers.getValueVariableFile(variableKey);
         if(value.contains(expect)){
