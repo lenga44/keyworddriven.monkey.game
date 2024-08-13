@@ -1178,7 +1178,7 @@ public class KeyWordsToAction {
     /*public static void deFindAnswerDienThe(String locator,String component,String property,String tcText,String expect) throws IOException {
         KeyWordCustomByGame.deFindAnswer(locator,component,property,expect,"","",locator1);
     }*/
-    public static void swipeMap(String locator,String component, String property,String key,String expect){
+    public static void swipeMapAI(String locator,String component, String property,String key,String expect){
         String level = FileHelpers.getValueVariableFile("index");
         KeyWordCustomForAISpeak.swipeMap(locator,component,property,key,level,expect);
     }
