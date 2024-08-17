@@ -87,8 +87,25 @@ public class JsonHandle {
                 .collect(Collectors.toCollection(ArrayList::new));
         return keys;
     }
+    public static List<String> getAllKeyInJsonObject(String path) throws IOException {
+        String json = FileHelpers.readFile(path);
+        JsonParser parser = new JsonParser();
+        JsonObject jObj = (JsonObject) parser.parse(json);
+
+        List<String> keys = jObj.entrySet()
+                .stream()
+                .map(i -> i.getKey())
+                .collect(Collectors.toCollection(ArrayList::new));
+        return keys;
+    }
     public static JSONArray getJsonArray(String json,String jsonPath){
         String array = getValue(json,jsonPath);
-        return new JSONArray(array);
+        if(array.contains("[")) {
+            return new JSONArray(array);
+        }else {
+            JSONArray array1 = new JSONArray();
+            array1.put(array);
+            return array1;
+        }
     }
 }

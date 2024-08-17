@@ -16,21 +16,23 @@ import static execute.TestScrip.*;
 
 public class Scope {
     public static void deFindFlowGame(int row, String path){
+        KeyWordsToAction.pause();
         if (TestScrip.tcName.equals(Constanst.TEST_CASE_GAME_NAME_IN_FLOW)) {
-            KeyWordsToAction.pause();
+            //KeyWordsToAction.pause();
             try {
                 returnGame(row, path);
             } catch (Exception e) {
                 Log.error("|deFindFlowGame| " + e.getMessage());
             }
-            KeyWordsToAction.resume();
+            //KeyWordsToAction.resume();
         }
+        KeyWordsToAction.resume();
     }
     private static String deFindGame(){
         String course = ExcelUtils.getStringValueInCell(1,Constanst.COURSE_PLAN_COLUM,Constanst.PLAN_SHEET);
         System.out.println("Course___ "+course);
         String game = null;
-        if(course.equals(Constanst.AI_COURSE)){
+        if(course.equals(Constanst.AI_COURSE) || course.equals(Constanst.M_GO_COURSE)){
             game = KeyWordsToActionToVerify.getAllScene();
         }else if (course.equals(Constanst.EE_COURSE)){
             game = KeyWordsToActionToVerify.getCurrentScene();
@@ -50,6 +52,7 @@ public class Scope {
                     if (new File(TestScrip.tcPath).exists()) {
                         exits = true;
                         ExcelUtils.setCellData(TestScrip.tcName, row, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET, path);
+                        flow.add(game);
                         break;
                     }
                 }
@@ -83,8 +86,8 @@ public class Scope {
                                 if (!list.equals(null)) {
                                     for (int i = 0; i < list.size(); i++) {
                                         int loop = list.get(i);
-                                        if (loop > 10) {
-                                            loop = 10;
+                                        if (loop > 20) {
+                                            loop = 20;
                                         }
                                         ArrayList<Integer> listRange = getListRangeByGroup(rowInsert, groupName, ranges);
                                         copyTestSuiteWithGroupSubLevel(listRange, loop, Constanst.TOTAL_CELL_SCOPE_SHEET);

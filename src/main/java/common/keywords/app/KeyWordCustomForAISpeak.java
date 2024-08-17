@@ -2,6 +2,8 @@ package common.keywords.app;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import common.keywords.app.action.Click;
+import common.keywords.app.action.Swipe;
 import common.utility.*;
 import execute.RunTestScriptData;
 import execute.TestScrip;
@@ -218,7 +220,7 @@ public class KeyWordCustomForAISpeak {
     public static String getGame() {
         return "Report_";
     }
-    public static void changeModeTC(String methodName,String locator, String component,String tcRow,String expect) throws InvocationTargetException, IllegalAccessException {
+    public static void changeModeTCAI(String methodName,String locator, String component,String tcRow,String expect) throws InvocationTargetException, IllegalAccessException {
         String level = runMethod(methodName,locator,component);
         String expected = expect;
         if(expected.contains("$.")) {
@@ -231,7 +233,7 @@ public class KeyWordCustomForAISpeak {
         }
     }
 
-    public static void changeModeTC(String variableKey,String tcNotExpRow,String tcExpRow,String expect) {
+    public static void changeModeTCAI(String variableKey,String tcNotExpRow,String tcExpRow,String expect) {
 
         String value = FileHelpers.getValueVariableFile(variableKey);
         if(value.contains(expect)){
@@ -295,27 +297,29 @@ public class KeyWordCustomForAISpeak {
         return result.toString();
     }
     public static void swipeMap(String locator,String component, String property,String key,String level,String expect){
-        Response response = request(Constanst.SCENE_URL,"//"+locator+"."+component);
+        Response response = request(Constanst.SCENE_URL_UNIUM,"//"+locator+"."+component);
         if(response !=null) {
             String value = convert(response, property);
             String json = FileHelpers.readFile(FileHelpers.getRootFolder() + FileHelpers.getValueConfig(key));
             List<Object> topic =JsonHandle.getJsonArray(json,"$.lvs[?(@.level=='"+level+"')].category[*].topic[*].name").toList();
-            if(topic.contains((Object) value)){
-                int actualIndex = LogicHandle.getIndexInList(topic,value);
-                int expectIndex = LogicHandle.getIndexInList(topic,expect);
-                if(actualIndex>expectIndex){
-                    Log.info("swipe from right to left (1)");
-                    swipe("255","270","500",String.valueOf(actualIndex-expectIndex));
-                }else {
-                    Log.info("swipe from left to right (-1)");
-                    swipe("270","255","500",String.valueOf(expectIndex-actualIndex));
-                }
+            System.out.println(topic);
+            System.out.println(value);
+            int actualIndex = LogicHandle.getIndexInListEndWith(topic,value);
+            int expectIndex = LogicHandle.getIndexInListEndWith(topic,expect);
+            System.out.println(actualIndex);
+            System.out.println(expectIndex);
+            if(actualIndex>expectIndex){
+                Log.info("swipe from right to left (1)");
+                Swipe.swipe("255","270","500",String.valueOf(actualIndex-expectIndex));
+            }else {
+                Log.info("swipe from left to right (-1)");
+                Swipe.swipe("270","255","500",String.valueOf(expectIndex-actualIndex));
             }
-        }
+            }
     }
     public static void skipLesson(String locator){
         if(KeyWordsToActionToVerify.isElementDisplay(locator)==true){
-            KeyWordsToAction.click(locator,"Button","onClick()");
+            Click.click(locator,"Button","onClick()");
             TestScrip.onFail("BẠN VẪN Ở TRONG LUỒNG LESSON");
         }
     }

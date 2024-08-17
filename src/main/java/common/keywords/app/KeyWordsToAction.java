@@ -1,22 +1,14 @@
 package common.keywords.app;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
+import common.keywords.app.action.SleepEx;
 import common.utility.*;
 import execute.TestScrip;
-import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.android.AndroidDriver;
-import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
-import io.restassured.response.ResponseBody;
 import io.restassured.specification.RequestSpecification;
-import org.json.JSONArray;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,33 +17,9 @@ import java.util.List;
 import static io.restassured.RestAssured.given;
 
 public class KeyWordsToAction {
-    public static AppiumDriver driver;
     public static String scroll;
 
-    //region KEYWORD_EXCEL
-    public static AppiumDriver openApp(){
-        DesiredCapabilities caps = new DesiredCapabilities();
-        caps.setCapability("appium:udid","7cbc1b6a");
-        caps.setCapability("platformName","android");
-        caps.setCapability("appium:automationName","uiautomator2");
-        caps.setCapability("appium:appPackage","com.earlystart.android.monkeyjunior");
-        caps.setCapability("appium:appActivity","com.earlystart.android.monkeyjunior.MainActivity");
-        caps.setCapability("appium:newCommandTimeout","144000");
-        caps.setCapability("appium:enableMultiWindows","true");
-
-        URL url = null;
-        try {
-            url = new URL("http://127.0.0.1:4723");
-        }catch (Exception e){
-
-        }
-        if(url == null)
-            throw new RuntimeException("Can't conect to server url @http://127.0.0.1:4723");
-        driver = new AndroidDriver(url,caps);
-        //driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        return driver;
-    }
-    //region ACTION
+    /*//region ACTION
     public static void sleep(String second)  {
         try {
             Thread.sleep((Integer.parseInt(second) * 1000));
@@ -63,6 +31,14 @@ public class KeyWordsToAction {
     public static void sleep(String text,String second)  {
         try {
             Thread.sleep((Integer.parseInt(second) * 1000L));
+            Log.info("Sleep: " +second);
+        }catch (Exception e){
+            exception("|sleep String| "+e.getMessage());
+        }
+    }
+    public static void sleep(Object second)  {
+        try {
+            Thread.sleep((Integer.parseInt((String) second) * 1000L));
             Log.info("Sleep: " +second);
         }catch (Exception e){
             exception("|sleep String| "+e.getMessage());
@@ -100,7 +76,6 @@ public class KeyWordsToAction {
         request(Constanst.SCENE_URL,"//"+locator+"."+component+"."+property);
     }
     public static void click(String locator,String component, String property,String index){
-        waitForObject(locator);
         request(Constanst.SCENE_URL,"//"+locator+"[" +index+"]"+"."+component+"."+property);
     }
     public static void clickWhichObjectEnable(String locator,String index,String component, String property){
@@ -124,8 +99,8 @@ public class KeyWordsToAction {
     }
     public static void clickDownAndUp(String locator,String index){
         String absolutePath = getAbsolutePath(locator,"0");
-        /*if(absolutePath.contains(":"))
-            absolutePath = absolutePath.replace(":","!_!");*/
+        *//*if(absolutePath.contains(":"))
+            absolutePath = absolutePath.replace(":","!_!");*//*
         request(Constanst.POINTER_URL,".DownToUp("+absolutePath+","+index+")");
     }
 
@@ -146,6 +121,39 @@ public class KeyWordsToAction {
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.PATH_GAME_OBJECT,value);
         //FileHelpers.writeFile(result,Constanst.VARIABLE_PATH_FILE);
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
+    }
+    private static String returnPath(String locator, String component,String key,String index,String expected) throws IOException {
+        waitForObject(locator);
+        Response response = request(Constanst.SCENE_URL,"//"+locator+"."+component);
+        ResponseBody body = response.getBody();
+        String json = body.asString();
+        String path = null;
+        int i =0;
+        int j =0;
+        for (JsonElement element: JsonHandle.getJsonArray(json)) {
+            if(JsonHandle.getValue(element.toString(),"$."+key).toLowerCase().equals(expected.toLowerCase()))
+            {
+                if(Integer.valueOf(index)==i){
+                    Response response1 = request(Constanst.SCENE_URL,"//"+locator);
+                    path = convertToList(response1,"path").get(j);
+                    break;
+                }else {
+                    i++;
+                }
+            }
+            j++;
+        }
+       return path;
+    }
+    public static void getPathStartWith(String startWith,String locator, String component,String key,String index,String expected) throws IOException {
+        String paths = returnPath(locator,component,key,index,expected);
+        for (String path: paths.split("/")) {
+            if(path.startsWith(startWith)){
+                JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.PATH_GAME_OBJECT,path);
+                ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
+                break;
+            }
+        }
     }
     public static void returnPathReplaceVariable(String replaceStr,String expect) throws IOException {
         String value = expect.replace(replaceStr,"");
@@ -206,9 +214,7 @@ public class KeyWordsToAction {
                         path = "";
                         String s = JsonHandle.getValue(element.toString(), "$." + key);
                         if (!s.equals("")) {
-                            System.out.println("expected1: "+expected);
                             if (s.toLowerCase().contains(expected.toLowerCase())) {
-                                System.out.println("s1: "+s);
                                 path = name;
                                 break;
                             }
@@ -260,8 +266,8 @@ public class KeyWordsToAction {
     public static void returnPathContain(String locator, String component,String key,String expected){
         try {
             String path = getPath(locator,component,key,expected);
-/*            FileHelpers.writeFile("",Constanst.VARIABLE_PATH_FILE);
-            ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);*/
+*//*            FileHelpers.writeFile("",Constanst.VARIABLE_PATH_FILE);
+            ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);*//*
             FileHelpers.writeFile("{'path':'"+path+"'}",Constanst.VARIABLE_PATH_FILE);
             ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
         }catch (Exception e){
@@ -293,14 +299,71 @@ public class KeyWordsToAction {
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,Integer.parseInt(value));
         Log.info("setIndexVariableFile "+value);
     }
-    public static void setVariableFile(String key,String value) throws IOException {
-        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,key,Integer.parseInt(value));
-        Log.info("setIndexVariableFile "+value);
+    public static void setVariableFile(Object key,Object value)  {
+        try {
+            String expect = value.toString();
+            if(expect.matches("\\{Digit}")) {
+                JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key.toString(), Integer.parseInt(value.toString()));
+                Log.info("setIndexVariableFile _INT_ " + value);
+            }else {
+                JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key.toString(), value.toString());
+                Log.info("setIndexVariableFile _STRING_ " + value);
+            }
+        }catch (Exception e){
+            Log.error(e.getMessage());
+            e.printStackTrace();
+        }
     }
-    public static void setVariableFile(String key, JSONArray value) throws IOException {
+    public static void setVariableFile(Object key,Object strSplit,Object value)  {
+        try {
+            String expect = value.toString();
+            if(expect.matches("\\{Digit}")) {
+                JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key.toString(), Integer.parseInt(expect));
+                Log.info("setIndexVariableFile _INT_ " + value);
+            }else {
+                JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key.toString(), LogicHandle.removeString(expect,strSplit.toString()));
+                Log.info("setIndexVariableFile _STRING_ " + value);
+            }
+        }catch (Exception e){
+            Log.error(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    public static void setVariableTypeOfStringFile(String key,String value) throws IOException {
+        try {
+            JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key, value);
+            Log.info("setVariableTypeOfStringFile " + value);
+        }catch (Exception e){
+            Log.error(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    public static void setVariableTypeOfStringFile(String key,Object value) throws IOException {
+        try {
+            JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key, Integer.parseInt(value.toString()));
+            Log.info("setVariableTypeOfObjectFile " + value);
+        }catch (Exception e){
+            Log.error(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    public static void setVariableTypeOfStringFile(Object key,Object value) throws IOException {
+        try {
+            JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, String.valueOf(key), Integer.parseInt(value.toString()));
+            Log.info("setVariableTypeOfObjectFile " + value);
+        }catch (Exception e){
+            Log.error(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    *//*public static void setVariableFile(String key, JSONArray value) throws IOException {
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,key,value);
         Log.info("setIndexVariableFile "+value);
     }
+    public static void setVariableFile(String key, Object value) throws IOException {
+        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,key,value.toString());
+        Log.info("setIndexVariableFile "+value);
+    }*//*
     public static void setIndexVariableFile(int value) throws IOException {
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,value);
         Log.info("setIndexVariableFile "+value);
@@ -315,11 +378,16 @@ public class KeyWordsToAction {
         int index = Integer.parseInt(value)+Integer.parseInt(add);
         JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,Constanst.INDEX_GAME_OBJECT,index);
     }
-    public static void addVariableFile(String key,String add) throws IOException {
-        Log.info("addIndexVariableFile");
-        String  value = JsonHandle.getValueInJsonObject(Constanst.VARIABLE_PATH_FILE,key).toString();
-        int index = Integer.parseInt(value)+Integer.parseInt(add);
-        JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,key,index);
+    public static void addVariableFile(String key,Object add) throws IOException {
+        try {
+            Log.info("addVariableFile");
+            String value = JsonHandle.getValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key).toString();
+            int index = Integer.valueOf(LogicHandle.removeString(value,"\"")) + Integer.parseInt(add.toString());
+            JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key, index);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
     }
     public static void press(String locator){
         request(Constanst.POINTER_URL,".Press("+getAbsolutePath(locator,"0")+")");
@@ -344,9 +412,16 @@ public class KeyWordsToAction {
             sleep("1");
         }
     }
+    public static void dragUp(String locator1, String locator2){
+        for(int i = 0; i<2;i++) {
+            request(Constanst.POINTER_URL, Constanst.DRAG_UP_ACTION + "(" + locator1 + "," + locator2 + ")");
+            sleep("1");
+        }
+    }
     public static void swipe(String x1, String x2, String y){
         request(Constanst.SIMULATE_URL,Constanst.DRAG_ACTION + "("+x1+","+y+","+x2+","+y+",0.5)");
     }
+
     public static void swipe(String x1, String x2, String y,String number){
         int loop = Integer.valueOf(number);
         if(loop!=0) {
@@ -355,11 +430,11 @@ public class KeyWordsToAction {
             }
         }
     }
-    /*public static void swipeToRight(String number){
+    *//*public static void swipeToRight(String number){
         for(int i = 0; i<Integer.valueOf(number);i++){
             request(Constanst.SIMULATE_URL,Constanst.DRAG_ACTION + "(500,750,500,800,0.5)");
         }
-    }*/
+    }*//*
     public static void swipeToRight(String x1, String x2, String y){
         request(Constanst.SIMULATE_URL,Constanst.DRAG_ACTION + "("+x2+","+y+","+x1+","+y+",0.5)");
     }
@@ -384,6 +459,14 @@ public class KeyWordsToAction {
         request(Constanst.POINTER_URL, Constanst.MOVE_ACTION + "(" + absolutePath1 + "," + absolutePath2 + ")");
         sleep("1");
     }
+    public static void moveAndUp(String locator1, String locator2){
+        waitForObject(locator1);
+        waitForObject(locator2);
+        String absolutePath1 = getAbsolutePath(locator1,"0");
+        String absolutePath2 = getAbsolutePath(locator2,"0");
+        request(Constanst.POINTER_URL, Constanst.MOVE_UP_ACTION + "(" + absolutePath1 + "," + absolutePath2 + ")");
+        sleep("1");
+    }
     public static void moveByCoordinates(String locator1, String number){
         waitForObject(locator1);
         String absolutePath1 = getAbsolutePath(locator1,"0");
@@ -402,9 +485,9 @@ public class KeyWordsToAction {
         Log.info("sendKey trống");
         Response response = request(Constanst.SCENE_URL,"//"+locator+"."+component+".text=");
     }
-    //endregion ACTION
+    //endregion ACTION*/
 
-    //region WAIT
+    /*//region WAIT
     public static void waitForObject(String locator){
         try {
             LocalDateTime time = LocalDateTime.now();
@@ -528,11 +611,11 @@ public class KeyWordsToAction {
 
     }
 
-    /*public static void main(String[] args) {
+    *//*public static void main(String[] args) {
         String expected = "[\"o3LzQwkycORfToRiQmDHQ4JB2wD4MUoe\",\"r9HQLsmmG2AYGYZpqY2gfSjprZASh1Fa\"]";
         String[] itemsList = LogicHandle.convertToArrayListString(expected, "\"").toArray(new String[0]);
        waitForObject(String.valueOf(15), ".mp3",itemsList);
-    }*/
+    }*//*
     public static void waitForObjectNoReturn(String locator,String second){
         try {
             LocalDateTime time = LocalDateTime.now();
@@ -696,7 +779,7 @@ public class KeyWordsToAction {
         }
         Log.info("waitForObjectContain :" + locator);
     }
-    public static void waitForObjectContainNotAble(String locator,String component, String property,String content){
+    public static void waitForObjectContainNotAble(String locator,String component, String property,String strRemove,String content){
         try {
             LocalDateTime time = LocalDateTime.now();
             LocalDateTime time1 = time.plusSeconds(30);
@@ -705,15 +788,16 @@ public class KeyWordsToAction {
             do {
                 response = request(Constanst.SCENE_URL, "//" + locator+"."+component);
                 if(response!=null) {
-                    if (!convertToList(response, property).isEmpty()) {
+                    if (convertToList(response, property).size()>0) {
                         JsonPath json = response.jsonPath();
                         if (json != null && json.toString() != "") {
-                            value = convert(response, property);
+                            value = LogicHandle.replaceStr(convert(response, property),strRemove);
                             if (value != null) {
-                                if (!value.contains(content))
+                                if (!value.contains(content)) {
                                     System.out.println(value);
-                                System.out.println(content);
+                                    System.out.println(content);
                                     break;
+                                }
                             }
                             Thread.sleep(500);
                         }
@@ -721,11 +805,13 @@ public class KeyWordsToAction {
                 }
                 time = LocalDateTime.now();
             } while (time.compareTo(time1) <= 0);
-            Assert.assertTrue(value.contains(content));
         }catch (Throwable e){
             exception(e);
         }
         Log.info("waitForObjectContain :" + locator);
+    }
+    public static void waitForObjectContainNotAble(String locator,String component, String property,String content){
+        waitForObjectContainNotAble(locator,component,property,"",content);
     }
     public static void waitForObjectInScreen(String locator){
         try {
@@ -800,13 +886,13 @@ public class KeyWordsToAction {
         }
         Log.info("waitForObjectNotInScreen :" + locator);
     }
-    //endregion
+    //endregion*/
 
     //endregion KEYWORD_EXCEL
 
     //region OTHER
     public static void connectUnity(){
-        String baseUri = Constanst.SCENE_URL;
+        String baseUri = Constanst.SCENE_URL_UNIUM;
         RequestSpecification request = given();
         request.baseUri(baseUri);
         request.basePath("//HomeButton.Button.onClick()");
@@ -816,10 +902,10 @@ public class KeyWordsToAction {
     }
     public static Response request(String baseUri,String basePath){
         try {
-            Log.info("request: "+ baseUri+basePath);
             RequestSpecification request = given();
             request.baseUri(baseUri);
             request.basePath(basePath);
+            Log.info("request: "+ baseUri+basePath);
             return request.get();
         }catch (Throwable e){
             TestScrip.onFail("| request | "+ e.getMessage());
@@ -832,15 +918,18 @@ public class KeyWordsToAction {
         request.basePath(basePath);
         return request.get("/"+number);
     }
-    public static void check(String actual,String expect){
+    /*public static void check(String actual,String expect){
+        actual = LogicHandle.replaceStr(actual,"\"");
+        expect = LogicHandle.replaceStr(expect,"\"");
         TestScrip.result = Constanst.PASS;
         TestScrip.error = "";
         try{
             if(expect.contains("[")&&actual.contains("[")) {
                 assertEqual(LogicHandle.convertStringToList(actual), LogicHandle.convertStringToList(expect));
             }
-            if(expect.contains("[")||actual.contains("[")) {
-                if (expect.contains("[")) {
+            if(expect.contains("|")||actual.contains("|")
+                ||expect.contains("[")||actual.contains("[")) {
+                if (expect.contains("[") ||expect.contains("|")) {
                     assertEqual(actual, LogicHandle.convertStringToList(expect));
                 }else {
                     assertEqual(expect,LogicHandle.convertStringToList(actual));
@@ -866,21 +955,21 @@ public class KeyWordsToAction {
         }catch (Throwable e){
             exception("expect ["+expect+"] but found ["+actual+"]");
         }
-    }
+    }*/
     public static void assertEqual(String actual,String expect){
         Assert.assertEquals(actual,expect);
     }
     private static void assertEqual(List<String> actual,List<String> expect){
         Assert.assertEquals(actual,expect);
     }
-    private static void assertEqual(String actual, List<String> expect){
+    public static void assertEqual(String actual, List<String> expect){
         Assert.assertTrue(expect.contains(actual));
     }
     private static void assertContain(String actual,String expect){
         Assert.assertTrue(actual.contains(expect));
     }
     private static String getAbsolutePath(String locator, String index){
-        Response response = request(Constanst.SCENE_URL,"//"+locator + "["+Integer.valueOf(index)+"]");
+        Response response = request(Constanst.SCENE_URL_UNIUM,"//"+locator + "["+Integer.valueOf(index)+"]");
         String absolutePath = convert(response,"path");
         if(absolutePath.contains(":"))
             absolutePath = absolutePath.replace(":","!_!");
@@ -890,7 +979,7 @@ public class KeyWordsToAction {
         return absolutePath;
     }
     private static String getAbsolutePath(String locator){
-        Response response = request(Constanst.SCENE_URL,"//"+locator);
+        Response response = request(Constanst.SCENE_URL_UNIUM,"//"+locator);
         String absolutePath = convert(response,"path");
         if(absolutePath.contains(":"))
             absolutePath = absolutePath.replace(":","!_!");
@@ -955,7 +1044,7 @@ public class KeyWordsToAction {
     public static String isMoveType(String locator,String second, String type,String size){
         float x1 = Float.valueOf(KeyWordsToActionToVerify.getPointScreen(locator,type));
         float with = Float.valueOf(KeyWordsToActionToVerify.getSizeScreen(size));
-        sleep(second);
+        SleepEx.sleep(second);
         float x2 = Float.valueOf(KeyWordsToActionToVerify.getPointScreen(locator,type));
         Log.info("|isMoveType| "+type + ": |Before : " +x1 +"| -- |AFTER : " +x2+ " |");
         if(x2<with)
@@ -964,7 +1053,7 @@ public class KeyWordsToAction {
     }
     public static String isMoveType(String locator, String type){
         float x1 = Float.valueOf(KeyWordsToActionToVerify.getPointScreen(locator,type));
-        sleep("0.5");
+        SleepEx.sleep("0.5");
         float x2 = Float.valueOf(KeyWordsToActionToVerify.getPointScreen(locator,type));
         Log.info("|isMoveType| "+type + ": |Before : " +x1 +"| -- |AFTER : " +x2+ " |");
         return String.valueOf(x1<x2);
@@ -973,10 +1062,6 @@ public class KeyWordsToAction {
     //endregion
 
     //region TAKE PHOTO
-    public static byte[] takePhoto(){
-        Response response = request(Constanst.TAKE_PHOTO,"");
-        return response.asByteArray();
-    }
     public static String getStringConvertFromArrayList(String second,String count,String value){
         ArrayList<String> list = null;
         try {
@@ -1015,13 +1100,7 @@ public class KeyWordsToAction {
         return list;
     }
     public static void setTagGameObject(String locator,String tagName){
-        request(Constanst.SCENE_URL,"//"+locator+".tag="+tagName);
-    }
-    //endregion
-
-    //region KeyWordsToActionPocoSDK
-    public static void swipeInput() throws IOException {
-        KeyWordsToActionPocoSDK.swipeInput();
+        request(Constanst.SCENE_URL_UNIUM,"//"+locator+".tag="+tagName);
     }
     //endregion
 
@@ -1069,19 +1148,14 @@ public class KeyWordsToAction {
     //endregion
 
     //region Send Message telegram
-    public static void sendMessTelegram(String message){
-        request("https://api.telegram.org/bot6113240161:AAHqK7JMEOONJNxFH2ctniwIDmr26HLMRkY/"
-                ,"sendMessage?chat_id=@noti_tes&text="+message);
-        Log.info(message);
-    }
     public static void ignoreScript(String number,String to,String sheetName, String text){
         KeyWordCustomForAISpeak.ignoreScript(number,to,sheetName,text);
     }
-    public static void changeModeTC(String methodName,String locator, String component,String tcRow,String expect) throws InvocationTargetException, IllegalAccessException {
-        KeyWordCustomForAISpeak.changeModeTC(methodName,locator,component,tcRow,expect);
+    public static void changeModeTCAI(String methodName,String locator, String component,String tcRow,String expect) throws InvocationTargetException, IllegalAccessException {
+        KeyWordCustomForAISpeak.changeModeTCAI(methodName,locator,component,tcRow,expect);
     }
-    public static void changeModeTC(String variableKey,String runYes,String runNo,String expect){
-        KeyWordCustomForAISpeak.changeModeTC(variableKey,runYes,runNo,expect);
+    public static void changeModeTCAI(String variableKey,String runYes,String runNo,String expect){
+        KeyWordCustomForAISpeak.changeModeTCAI(variableKey,runYes,runNo,expect);
     }
     public static void changeModeTCSetFail(String actual,String tcRow,String expect) {
         KeyWordCustomForAISpeak.changeModeTCSetFAIL(actual,tcRow,expect);
@@ -1090,23 +1164,26 @@ public class KeyWordsToAction {
         KeyWordCustomForAISpeak.changeModeTCSetTrue(actual,tcRow,expect);
     }
     //endregion
+
+    //region CUSTOM
     public static void pause(){
-        request(Constanst.POINTER_URL,Constanst.PAUSE_PROGRAM_URL);
+        request(Constanst.POINTER_URL_UNIUM,Constanst.PAUSE_PROGRAM_URL);
     }
     public static void resume(){
-        request(Constanst.POINTER_URL,Constanst.RESUME_PROGRAM_URL);
+        request(Constanst.POINTER_URL_UNIUM,Constanst.RESUME_PROGRAM_URL);
     }
-    public static void deFindAnswerDienThe(String locator,String component,String property,String strReplace,String strAdd,String locator1,String expect) throws IOException {
-        KeyWordCustomByGame.deFindAnswer(locator,component,property,expect,strReplace,strAdd,locator1);
+    public static void deFindAnswerDienThe(String locator,String component,String property,String tcText,String tcImage) throws IOException {
+        KeyWordCustomByGame.deFindAnswer(locator,component,property,tcText,tcImage);
     }
-    public static void deFindAnswerDienThe(String locator,String component,String property,String locator1,String expect) throws IOException {
+    /*public static void deFindAnswerDienThe(String locator,String component,String property,String tcText,String expect) throws IOException {
         KeyWordCustomByGame.deFindAnswer(locator,component,property,expect,"","",locator1);
-    }
-    public static void swipeMap(String locator,String component, String property,String key,String expect){
+    }*/
+    public static void swipeMapAI(String locator,String component, String property,String key,String expect){
         String level = FileHelpers.getValueVariableFile("index");
         KeyWordCustomForAISpeak.swipeMap(locator,component,property,key,level,expect);
     }
     public static void skipLesson(String locator){
         KeyWordCustomForAISpeak.skipLesson(locator);
     }
+    //endregion
 }

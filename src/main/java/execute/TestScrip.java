@@ -1,7 +1,11 @@
 package execute;
 
+import common.facade.Adapter;
+import common.keywords.app.ExceptionEx;
 import common.keywords.app.KeyWordsToAction;
 import common.keywords.app.KeyWordsToComPair;
+import common.keywords.app.action.TakePhoto;
+import common.keywords.app.verify.Check;
 import common.utility.*;
 import report.GenerateReport;
 
@@ -13,27 +17,72 @@ import java.util.List;
 import java.util.Map;
 
 import static common.keywords.app.KeyWordsToAction.exception;
+import static execute.Run.iOnceTimeTearDown;
 import static execute.Scope.genReportName;
 
 public class TestScrip {
-    public TestScrip(KeyWordsToComPair keyWord, Method method[]){
+    public TestScrip(KeyWordsToComPair keyWord, Method method[],Map<Class<?>,Method[]> classes){
         this.keyWord = keyWord;
         this.method = method;
+        this.classes = classes;
+    }
+    private static int getTotalTestSuit(int total){
+        System.out.println(iOnceTimeTearDown);
+        if(iOnceTimeTearDown>0){
+            total = total -1;
+        }
+        return total;
     }
     //region SCOPE
     public static void execute_suites(String scopePath,int iTestSuite) throws Exception {
         Log.info("execute_suites");
         List<String> reports = new ArrayList<>();
+        flow = new ArrayList<>();
         ExcelUtils.setExcelFile(scopePath);
-        int iTotalSuite =ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
+        int iTotalSuite =getTotalTestSuit(ExcelUtils.getRowCount(Constanst.SCOPE_SHEET));
         Scope.genFlowLesson(json,iTotalSuite,scopePath);
-        iTotalSuite = ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
+        iTotalSuite = getTotalTestSuit(ExcelUtils.getRowCount(Constanst.SCOPE_SHEET));
         for (;iTestSuite<=iTotalSuite-1;iTestSuite++){
             scopeResult = new ArrayList<>();
             tcName = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET);
             if (!tcName.equals("")) {
             ExcelUtils.setCellData("", iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
             String sRunMode = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.RUN_MODE_SCOPE, Constanst.SCOPE_SHEET);
+                try {
+                    if (sRunMode.equals(Constanst.YES)) {
+                        reports.add(reportPath);
+                        Scope.deFindFlowGame(iTestSuite, scopePath);
+                        genTestcaseReport();
+                        genTestCaseWithGroup();
+                        ;
+                        int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
+                        execute_testcases(iTotalTestCase);
+                        ExcelUtils.setExcelFile(scopePath);
+                        if (scopeResult.contains(Constanst.FAIL)) {
+                            ExcelUtils.setCellData(Constanst.FAIL, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
+                        } else {
+                            ExcelUtils.setCellData(Constanst.PASS, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
+                        }
+                    }
+                }catch (Exception e){
+                    Log.error(e.getMessage());
+                }
+            }
+            GroupInTest.index =1;
+            EndTestScript.saveListFail(scopeResult,"L"+level+"_"+topic+"_"+lesson+"_"+tcName);
+        }
+    }
+    public static void execute_suite(String scopePath,int iTestSuite) throws Exception {
+        Log.info("execute_suites");
+        List<String> reports = new ArrayList<>();
+        ExcelUtils.setExcelFile(scopePath);
+        int iTotalSuite =ExcelUtils.getRowCount(Constanst.SCOPE_SHEET);
+        Scope.genFlowLesson(json,iTotalSuite,scopePath);
+            scopeResult = new ArrayList<>();
+            tcName = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET);
+            if (!tcName.equals("")) {
+                ExcelUtils.setCellData("", iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
+                String sRunMode = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.RUN_MODE_SCOPE, Constanst.SCOPE_SHEET);
                 if (sRunMode.equals(Constanst.YES)) {
                     reports.add(reportPath);
                     Scope.deFindFlowGame(iTestSuite, scopePath);
@@ -48,7 +97,6 @@ public class TestScrip {
                         ExcelUtils.setCellData(Constanst.PASS, iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
                     }
                 }
-            }
             GroupInTest.index =1;
             EndTestScript.saveListFail(scopeResult,"L"+level+"_"+topic+"_"+lesson+"_"+tcName);
         }
@@ -64,19 +112,19 @@ public class TestScrip {
         ExcelUtils.setExcelFile(reportPath);
     }
     private static void genTestCaseWithGroup() throws Exception {
+        KeyWordsToAction.pause();
         ExcelUtils.setExcelFile(reportPath);
         int iTotalTestCase = ExcelUtils.getRowCount(Constanst.TESTCASE_SHEET);
         if(isDataFlow) {
             int group = GroupInTest.getGroup().size();
             if (group > 0) {
                 ExcelUtils.setExcelFile(reportPath);
-                KeyWordsToAction.pause();
                 ExcelUtils.createRowLastest(iTotalTestCase, Constanst.TESTCASE_SHEET, reportPath);
                 GroupInTest.genTestCaseWhichGroupContain(json, reportPath);
                 GroupInTest.genTestStepFollowTestCase(reportPath);
-                KeyWordsToAction.resume();
             }
         }
+        KeyWordsToAction.resume();
     }
     public static String openScopeFile(String fileName) throws IOException{
         Log.info("fileName "+fileName);
@@ -188,7 +236,7 @@ public class TestScrip {
             params = params.replace("$.order",locator);
             ExcelUtils.setCellData(params,row,colum,Constanst.TEST_STEP_SHEET,reportPath);
         }
-        List<Object> list = new ArrayList<>();
+        List<String> list = new ArrayList<>();
         if (!params.equals("")) {
             if (params.contains(",")) {
                 list.addAll(Arrays.asList(params.split(",")));
@@ -219,6 +267,9 @@ public class TestScrip {
         String value = "";
         try {
             if (key.contains("$") && !json.equals(null)) {
+                key = getVariableValue(key,"$.index",row);
+                key = getVariableValue(key,"$.activity",row);
+                key = getVariableValue(key,"$.order",row);
                 value = JsonHandle.getValue(json, key);
                 FileHelpers.setJsonVariable(key, value);
                 ExcelUtils.setCellData(value, row, Constanst.DATA_SET, Constanst.TEST_STEP_SHEET, reportPath);
@@ -266,9 +317,7 @@ public class TestScrip {
             String process = ExcelUtils.getStringValueInCell(iTestStep, Constanst.PROCEED, Constanst.TEST_STEP_SHEET);
             Log.info("Process TS: "+process);
             if(process.equals(Constanst.PROCESS_YES)) {
-
                 String sActionKeyword = ExcelUtils.getStringValueInCell(iTestStep, Constanst.KEYWORD, Constanst.TEST_STEP_SHEET);
-
                 params = ExcelUtils.getStringValueInCell(iTestStep, Constanst.PARAMS, Constanst.TEST_STEP_SHEET);
                 String dataSet = getDataSet(iTestStep);
 
@@ -277,6 +326,7 @@ public class TestScrip {
 
                 if (result != Constanst.SKIP) {
                     if(sActionKeyword != "") {
+                        getMethods(sActionKeyword);
                         execute_action(dataSet,sActionKeyword,iTestStep,Constanst.PARAMS);
                     }
                     verifyStep(iTestStep);
@@ -287,12 +337,31 @@ public class TestScrip {
             }
         }
     }
+    private static void getMethods(String sActionKeyword){
+        try {
+            boolean isMethod = false;
+            for (Class name : classes.keySet()) {
+                for (Method m : classes.get(name)) {
+                    if (m.getName().equals(sActionKeyword)) {
+                        method = classes.get(name);
+                        isMethod = true;
+                        break;
+                    }
+                }
+                if (isMethod == true) {
+                    break;
+                }
+            }
+        }catch (Exception e){
+            ExceptionEx.exception("getMethods| "+e.getMessage());
+        }
+    }
     private static void onResultStep(String status, String message, int rowNumber ){
         ExcelUtils.setCellData(status, rowNumber, Constanst.RESULT, Constanst.TEST_STEP_SHEET, reportPath);
         ExcelUtils.setCellData(message,  rowNumber, Constanst.ERROR, Constanst.TEST_STEP_SHEET, reportPath);
         if(status == Constanst.FAIL) {
             tcResults.add(status);
-            byte[] bytes = KeyWordsToAction.takePhoto();
+            byte[] bytes = TakePhoto.takePhoto();
             ExcelUtils.addPictureInCell(rowNumber, bytes, reportPath);
         }else {
             ExcelUtils.setCellData("", rowNumber, Constanst.IMAGE, Constanst.TEST_STEP_SHEET, reportPath);
@@ -308,31 +377,48 @@ public class TestScrip {
             for (int i = 0; i < method.length; i++) {
                 String a = method[i].getName();
                 if (a.equals(sActionKeyword) && method[i].getParameterCount() == paramCount) {
-                    name = method[i].getName();
-                    Log.info(testStep +":  "+description);
-                    if (paramCount == 0) {
-                        param = null;
-                    }
-                    String type = String.valueOf(method[i].getReturnType());
-                    if (!type.equals("void")) {
-                        String actual = (String) method[i].invoke(keyWord, param);
-                        Log.info(description);
-                        if(expected.contains(Constanst.CHECK_CONTAIN)){
-                            expected = expected.replace(Constanst.CHECK_CONTAIN,"");
-                            KeyWordsToAction.checkContain(actual,expected);
-                        }else {
-                            KeyWordsToAction.check(actual, expected);
+                        name = method[i].getName();
+                        Log.info(testStep + ":  " + description);
+                        if (paramCount == 0) {
+                            param = null;
                         }
-                    } else {
-                        method[i].invoke(keyWord, param);
+                        String type = String.valueOf(method[i].getReturnType());
+                        if (!type.equals("void")) {
+                            result = Constanst.PASS;
+                            String actual = (String) method[i].invoke(keyWord, param);
+                            Log.info(description);
+                            if (expected.contains(Constanst.CHECK_CONTAIN)||expected.contains(Constanst.CHECK_SKIP)) {
+                                if(expected.contains(Constanst.CHECK_SKIP)) {
+                                    if(actual.equals("")){
+                                        expected ="";
+                                    }else {
+                                        expected = expected.replace(Constanst.CHECK_SKIP, "");
+                                    }
+                                }else {
+                                    expected = expected.replace(Constanst.CHECK_CONTAIN, "");
+                                }
+                                Check.checkContain(actual.trim(), expected);
+                            } else {
+                                Check.check(actual.trim(), expected);
+                            }
+                        } else {
+                        /*for(int z=0;z<paramCount;z++){
+                            System.out.println(param[z].);
+                        }*/
+                            method[i].invoke(keyWord, param);
+                        }
+                        break;
                     }
-                    break;
                 }
-            }
         }catch (Throwable e) {
             Log.error(name);
             Log.error(params);
-            onFail(e.getMessage());
+            for (int z=0;z<param.length;z++) {
+                Log.info(param[z].getClass().getTypeName());
+                Log.info(param[z].getClass().getName());
+                Log.error(param[z]);
+            }
+            onFail("action "+e.getMessage());
         }
         //onResultStep(result,error,row);
     }
@@ -348,6 +434,7 @@ public class TestScrip {
         String sActionKeyword = ExcelUtils.getStringValueInCell(numberStep, Constanst.VERIFY_STEP, Constanst.TEST_STEP_SHEET);
         if(!sActionKeyword.equals("")) {
             String dataSetActual = ExcelUtils.getStringValueInCell(numberStep, Constanst.DATA_SET_ACTUAL, Constanst.TEST_STEP_SHEET);
+            getMethods(sActionKeyword);
             String data = getDataSet(dataSetActual);
             System.out.println("dataSetActual "+data);
             if (!data.equals("")) {
@@ -365,19 +452,28 @@ public class TestScrip {
     }
     private static String getExpectedWithKey(int numberStep){
         String ex = ExcelUtils.getStringValueInCell(numberStep,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET);
-        if(ex.contains(Constanst.CHECK_CONTAIN)){
-            ex = ex.replace(Constanst.CHECK_CONTAIN,"");
-        }
+        String key = getKey(ex);
+        ex = LogicHandle.removeString(ex,key);
         if(isDataFlow ==true && ex.contains("$")) {
             ex = getVariableValue(ex,"$.index",numberStep);
             ex = getVariableValue(ex,"$.activity",numberStep);
             ex = getVariableValue(ex,"$.order",numberStep);
             String value = JsonHandle.getValue(json, ex);
             ExcelUtils.setCellData(value,numberStep,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET,reportPath);
-            return value+Constanst.CHECK_CONTAIN;
+            return LogicHandle.replaceStr(value+key,"null");
         }
         else
-            return ex+Constanst.CHECK_CONTAIN;
+            return LogicHandle.replaceStr(ex+key,"null");
+    }
+    private static String getKey(String value){
+        String key = null;
+        if(value.endsWith(Constanst.CHECK_SKIP)){
+            key = Constanst.CHECK_SKIP;
+        }
+        if (value.endsWith(Constanst.CHECK_CONTAIN)){
+            key=Constanst.CHECK_CONTAIN;
+        }
+        return key;
     }
     private static String getVariableValue(String ex, String key,int row){
         if(ex.contains(key)){
@@ -392,7 +488,7 @@ public class TestScrip {
     public static void getLevelFolder(int row)throws IOException{
         String courseFolder = FileHelpers.getRootFolder() + Constanst.REPORT_FILE_PATH;
 
-        level = JsonHandle.getValue(json,ExcelUtils.getStringValueInCell(1,Constanst.LEVEL_COLUM,Constanst.PLAN_SHEET));
+        level = getDataSet(ExcelUtils.getStringValueInCell(1,Constanst.LEVEL_COLUM,Constanst.PLAN_SHEET));
         levelFolder =courseFolder +"//" + level;
 
         topic = ExcelUtils.getStringValueInCell(1,Constanst.TOPIC_PLAN_COLUM,Constanst.PLAN_SHEET);
@@ -439,10 +535,9 @@ public class TestScrip {
     public static Object[]  param;
     private static Method method[];
     protected static KeyWordsToComPair keyWord;
+    protected static Map<Class<?>,Method[]> classes;
     protected static String expected;
-    protected static Map<Integer, String> map_key_expected;
-    protected static Map<Integer, String> map_key_actual;
-    protected static Map<Integer, String> map_key_data_set;
+    public static List<String> flow;
     //endregion
 
     //region report key

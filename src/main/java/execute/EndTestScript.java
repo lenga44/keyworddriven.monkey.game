@@ -2,6 +2,7 @@ package execute;
 
 import com.aspose.cells.DateTime;
 import common.keywords.app.KeyWordsToAction;
+import common.keywords.app.action.SleepEx;
 import common.utility.*;
 
 import java.io.IOException;
@@ -80,9 +81,9 @@ public class EndTestScript {
         String end = DateTime.getNow().toString();
         String fail_list =  FileHelpers.readFile(Constanst.LIST_FAIL_PATH_FILE,"PASS");
         if(!fail_list.isEmpty()){
-            TelegramBot.sendMessTele(fail_list);
+            TelegramBot.sendMessTele("List fail__M_GO" +fail_list);
         }
-        KeyWordsToAction.sleep(1);
-        TelegramBot.sendMessTele("End: "+end);
+        SleepEx.sleep(1);
+        TelegramBot.sendMessTele("End__M_GO: "+end);
     }
 }

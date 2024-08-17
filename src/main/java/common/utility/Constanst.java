@@ -21,6 +21,7 @@ public class Constanst {
     public static final String DATA_MODE = "Data";
     public static final int GAME_MODE = 1;
     public static final String CHECK_CONTAIN = "_boolean_";
+    public static final String CHECK_SKIP = "_skip_";
     //endregion
 
     //region Scope file
@@ -59,6 +60,7 @@ public class Constanst {
     public static final String EE_COURSE = "EE";
     public static final String LRC_COURSE = "LRC";
     public static final String AI_COURSE = "AI_Speak";
+    public static final String M_GO_COURSE = "M_go";
     //endregion
 
     //endregion
@@ -94,6 +96,7 @@ public class Constanst {
     public static final int GROUP_LEVEL_COLUM = 2;
     public static final int GROUP_LOOP_COLUM = 1;
     public static final int GROUP_VALUE_COLUM = 3;
+    public static final int CALCULATE_VALUE_COLUM = 4;
     //region TC_TS sheet
     public static final String TC_TS_SHEET = "TC_TS";
     //endregion
@@ -109,14 +112,23 @@ public class Constanst {
     //endregion
 
     //region KeWords class
-    public static final String SIMULATE_URL = "http://localhost:8342/q/simulate";
-    public static final String SCENE_URL = "http://localhost:8342/q/scene";
-    public static final String POINTER_URL = "http://localhost:8342/q/pointer";
-    public static final String STATUS_URL = "http://localhost:8342/about";
-    public static final String ALL_SCENE = "http://localhost:8342/q/scene";
+    public static final String SIMULATE_URL_UNIUM = "http://localhost:8342/q/simulate";
+    public static final String SCENE_URL_UNIUM = "http://localhost:8342/q/scene";
+    public static final String POINTER_URL_UNIUM = "http://localhost:8342/q/pointer";
+    public static final String TIME_SCALE_ACTION =".timeScale";
+    public static final String STATUS_URL_UNIUM = "http://localhost:8342/about";
+    public static final String ALL_SCENE_UNIUM = "http://localhost:8342/q/scene";
     public static final String TAKE_PHOTO = "http://localhost:8342/utils/appscreenshot";
+    public static final String URL_POCO = "http://127.0.0.1:6868/";
     public static final String DRAG_ACTION = ".drag";
+    public static final String SWIPE_ACTION = "swipe?";
+    public static final String DRAG_UP_ACTION = ".dragUp";
     public static final String MOVE_ACTION = ".Move";
+    public static final String CLICK_ACTION = "click";
+    public static final String CLICK_POSITION_ACTION = "click_position";
+    public static final String TOUCH_ANDROID = "touch_android?";
+    public static final String CLICK_IMAGE_ACTION = "click_image?image=";
+    public static final String MOVE_UP_ACTION = ".MoveUp";
     public static final String MOVE_COORDINATE = ".MoveX";
     //endregion
 
@@ -131,6 +143,8 @@ public class Constanst {
 
     //region file config
     public static final String DATA_FILE_PATH = "data_file_path";
+    public static final String DATA_FOLDER_PATH = FileHelpers.getRootFolder()
+            +FileHelpers.convertPath("\\tool_test_game\\config\\data\\");
     public static final String FILE_NAME_REPORT_DATA_FLOW = "file_name_report_data_flow";
     public static final String LIST_FAIL_PATH_FILE = FileHelpers.getRootFolder()
             +FileHelpers.convertPath("\\tool_test_game\\config\\report\\list_fail.txt");
@@ -152,6 +166,10 @@ public class Constanst {
     public static final String RESUME_PROGRAM_URL = ".resume()";
 
     //region logicHandle
-    public static final List<String> splits = Arrays.asList("\\|", "\\;","\\,");
+    public static final List<String> splits = Arrays.asList(" ;"," |","\\|", "\\;",", "," ||",",");
+    //endregion
+
+    //region OS
+    public static final String ANDROID_OS = "android";
     //endregion
 }

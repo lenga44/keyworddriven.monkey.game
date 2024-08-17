@@ -4,10 +4,13 @@ import common.keywords.app.KeyWordsToAction;
 import common.keywords.app.KeyWordsToActionToVerify;
 import io.restassured.response.Response;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static common.keywords.app.KeyWordsToAction.*;
 import static common.keywords.app.KeyWordsToActionToVerify.isElementDisplay;
@@ -21,10 +24,22 @@ public class LogicHandle {
                 List<String> myList = new ArrayList<String>(Arrays.asList(replace.split(",")));
                 List<Integer> list = new ArrayList<>();
                 for (String s : myList) {
+                    s = LogicHandle.removeString(s,"\"");
                     list.add(Integer.valueOf(s));
                 }
                 return list;
             }
+        }catch (Exception e){
+            Log.error("|convertToArrayListInt| "+e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public static List<Integer> convertToStringsToInts(List<String> strList) {
+        try {
+            List<Integer> intList = new ArrayList<>();
+            for(String s : strList) intList.add(Integer.valueOf(s));
+                return intList;
         }catch (Exception e){
             Log.error("|convertToArrayListInt| "+e.getMessage());
             e.printStackTrace();
@@ -54,10 +69,19 @@ public class LogicHandle {
         return null;
     }
     public static String removeString(String str,String slipStr){
-        if (str.contains(slipStr)) {
-            str = str.replace(slipStr,"");
+        if(slipStr!=null) {
+            if (str.contains(slipStr)) {
+                str = str.replace(slipStr, "");
+            }
         }
         return str;
+    }
+    public static String getTextNoColor(String value,String... StrSplit){
+        String result = null;
+            for (String str:StrSplit) {
+                result = replaceStr(value,str);
+            }
+        return result;
     }
     public static String convertListToString(List<String> list){
         StringBuilder resultBuilder = new StringBuilder();
@@ -69,18 +93,25 @@ public class LogicHandle {
         return resultBuilder.toString().trim();
     }
     public static List<String> convertStringToList(String inputString){
-        inputString = splitString(inputString);
+        inputString = LogicHandle.removeString(inputString,"[");
+        inputString = LogicHandle.removeString(inputString,"]");
         List<String> resultList = new ArrayList<>();
         for (String spitStr:Constanst.splits) {
             if(inputString.contains(spitStr)){
-                resultList = Arrays.asList(inputString.split(spitStr));
+                String[] strings = inputString.split(spitStr);
+                for (String str: strings) {
+                    resultList.add(str);
+                }
                 break;
             }
+        }
+        if (resultList.size()==0){
+            resultList.add(inputString);
         }
         return resultList;
     }
     private static String splitString(String str){
-        String result = null;
+        String result = str;
         if(str.startsWith("[") && str.endsWith("]")){
             result = str.replace("[","").replace("]","");
         }
@@ -99,7 +130,7 @@ public class LogicHandle {
         try {
             while (time.compareTo(time1) <= 0) {
                 if(!text.contains(expect)){
-                    Response response = request(Constanst.SCENE_URL, "//" + locator + "." + component);
+                    Response response = request(Constanst.SCENE_URL_UNIUM, "//" + locator + "." + component);
                     List<String> texts = getListProValue(locator, component,property);
                     if (texts.size() > 0) {
                         String result = KeyWordsToAction.convert(response, property).trim();
@@ -109,7 +140,7 @@ public class LogicHandle {
                                 if (text.equals("")) {
                                     text = text + result.trim();
                                 } else {
-                                    text = text + "|" + result.trim();
+                                    text = text + ";" + result.trim();
                                 }
                             }
                         }
@@ -118,7 +149,7 @@ public class LogicHandle {
                     break;
                 }
                 time = LocalDateTime.now();
-                sleep(0.2f);
+                //sleep(0.1f);
             }
             return text.trim();
         }catch (Exception e){
@@ -131,7 +162,7 @@ public class LogicHandle {
         return getProValuesByTime(locator,component,property,"15",expect);
     }
     private static List<String> getListProValue(String locator,String component,String property){
-        Response response = request(Constanst.SCENE_URL, "//" + locator + "." + component);
+        Response response = request(Constanst.SCENE_URL_UNIUM, "//" + locator + "." + component);
         return KeyWordsToAction.convertToList(response,property);
     }
     public static String getProValueByLocator(String locator,String component,String property,String locator2,String expect){
@@ -145,7 +176,7 @@ public class LogicHandle {
             String text ="";
             while (time.compareTo(time1) <= 0) {
                 if(texts.size()>0) {
-                    response = request(Constanst.SCENE_URL, "//" + locator + "." + component);
+                    response = request(Constanst.SCENE_URL_UNIUM, "//" + locator + "." + component);
                     String result = convert(response, property).trim();
                     if(!results.contains(result)) {
                         results.add(result);
@@ -194,11 +225,27 @@ public class LogicHandle {
         }
         return str;
     }
+    public static String replaceStr(String str,String oldStr,String newStr){
+        if(str.contains(oldStr)){
+            return str.replace(oldStr,newStr);
+        }
+        return str;
+    }
     public static int getIndexInList(List<Object> list,String item){
         return list.indexOf(item);
     }
+    public static int getIndexInListEndWith(List<Object> list,String item){
+        int index = 0;
+        for (int i =0;i<list.size();i++){
+            if(item.endsWith(list.get(i).toString())){
+                index=i;
+                break;
+            }
+        }
+        return index;
+    }
     public static String getEndWithTextAlphabet(String text){
-        if (!Character.isLetter(text.charAt(text.length() - 1))) {
+        if (!Character.isLetter(text.charAt(text.length() - 1)) ) {
             text = text.substring(0, text.length() - 1);
         }
         return text;
@@ -206,5 +253,39 @@ public class LogicHandle {
     public static String getTextAlphabet(String text){
         return text.replaceAll("[^\\p{Alpha}\\p{Digit}\\s]", "");
     }
-
+    public static String getNumber(String text){
+        try {
+            return text.replaceAll("[^\\p{Digit}\\s]", "");
+        }catch (Exception e){
+            return "0";
+        }
+    }
+    public static int calculate(String operator,int value,int number){
+        int result =0;
+        switch (operator){
+            case "/":
+                result = value / number;
+                break;
+            case "*":
+                result = value * number;
+                break;
+            case "-":
+                result = value - number;
+                break;
+            case "+":
+                result = value + number;
+                break;
+            default:
+                result = value;
+                break;
+        }
+        return result;
+    }
+    public static String enCode(String value){
+        return URLEncoder.encode(value, StandardCharsets.UTF_8);
+    }
+    public static String convertTextToSentence(String sentence,String text){
+        sentence =(!sentence.equals(""))?(Pattern.matches("\\p{Punct}", text))?sentence+ text: sentence + " " + text: sentence +text;
+        return sentence.trim();
+    }
 }

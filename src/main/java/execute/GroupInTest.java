@@ -1,8 +1,6 @@
 package execute;
 
-import common.keywords.app.KeyWordsToAction;
 import common.utility.*;
-import org.json.JSONArray;
 
 import java.io.IOException;
 import java.util.*;
@@ -115,12 +113,13 @@ public class GroupInTest {
                 int totalRowTestStep = ExcelUtils.getRowCount(Constanst.TEST_STEP_SHEET);
                 copyRowByTC(map, tcID, path,totalRowTestStep);
             }
+            ExcelUtils.deleteRow(ExcelUtils.getRowCount(Constanst.TEST_STEP_SHEET)-1,Constanst.TEST_STEP_SHEET);
             ExcelUtils.closeFile(path);
         }catch (Exception e){
             e.printStackTrace();
         }
     }
-    private static void copyRowByTC(Map<String, ArrayList<List<String>>> map,String tcID,String path,int totalTestStep) throws IOException {
+    private static void copyRowByTC(Map<String, ArrayList<List<String>>> map,String tcID,String path,int totalTestStep){
         ExcelUtils.setExcelFile(path);
         String id = tcID;
         if(id.contains(".")){
@@ -145,8 +144,8 @@ public class GroupInTest {
     }
     private static List<String> getTestCaseIDs(String sheetName){
         List<String> testCaseIDs = new ArrayList<>();
-        int totalTestCase = ExcelUtils.getRowCount(sheetName)-loop+1;
-        for (int i =1;i<=totalTestCase;i++){
+        int totalTestCase = ExcelUtils.getRowCount(sheetName);
+        for (int i =1;i<totalTestCase;i++){
             String id = ExcelUtils.getStringValueInCell(i,Constanst.TESTCASE_ID,sheetName,"getTestCaseIDs");
             if(!testCaseIDs.contains(id)) {
                 testCaseIDs.add(id);
@@ -244,6 +243,18 @@ public class GroupInTest {
         }
         return map;
     }
+    private static boolean isCalculate(int row){
+        String calculate = ExcelUtils.getStringValueInCell(row,Constanst.CALCULATE_VALUE_COLUM,Constanst.GROUP_SHEET);
+        if(!calculate.isEmpty()){
+            List<String> list = LogicHandle.convertStringToList(calculate);
+            for (String item :list){
+                number = Integer.parseInt(LogicHandle.getNumber(item));
+                operator = LogicHandle.removeString(item,String.valueOf(number));
+            }
+            return true;
+        }
+        return false;
+    }
     //endregion
 
     //region KEY
@@ -251,4 +262,6 @@ public class GroupInTest {
     private static int iEndTestStep;
     public static int index = 1;
     //endregion
+    private static String operator;
+    private static int number;
 }
