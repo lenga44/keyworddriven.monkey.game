@@ -13,12 +13,12 @@ import java.util.List;
 import java.util.Map;
 
 public class Adapter {
-    public static Map<Class<?>,Method[]> callClass() throws IOException {
+    public static Map<Class<?>,Method[]> callClass(String type) throws IOException {
         Map<Class<?>,Method[]> map = new HashMap<>();
         final ClassLoader loader = Thread.currentThread().getContextClassLoader();
         List<Class<?>> testsClasses = new ArrayList<>();
         for (ClassPath.ClassInfo info: ClassPath.from(loader).getTopLevelClasses()){
-            if(info.getName().startsWith("common.keywords.app")){
+            if(info.getName().startsWith("common.keywords."+type)){
                 Class<?> clazz = info.load();
                 map.put(clazz, clazz.getDeclaredMethods());
             }

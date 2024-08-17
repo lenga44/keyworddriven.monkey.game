@@ -17,7 +17,6 @@ public class Run {
     public static void main(String[] args) throws Exception {
         keyWord = new KeyWordsToComPair();
         method = keyWord.getClass().getMethods();
-        classes = Adapter.callClass();
 
         Logger formulaParserLogger = Logger.getLogger(FormulaParser.class.getName());
         formulaParserLogger.setLevel(Level.OFF);
@@ -25,8 +24,9 @@ public class Run {
 
         scopePath = FileHelpers.getRootFolder() + FileHelpers.getValueConfig(Constanst.SCOPE_FILE_PATH);
         Log.info("SCOPE_PATH: " + scopePath);
-
         ExcelUtils.setExcelFile(scopePath);
+
+        classes = Adapter.callClass("app");
         returnFlowScrip();
         resetSumarryStatus();
 
