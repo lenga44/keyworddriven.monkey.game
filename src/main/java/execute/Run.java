@@ -26,7 +26,8 @@ public class Run {
         Log.info("SCOPE_PATH: " + scopePath);
         ExcelUtils.setExcelFile(scopePath);
 
-        classes = Adapter.callClass("app");
+        String type = ExcelUtils.getStringValueInCell(1,9,Constanst.PLAN_SHEET);
+        classes = Adapter.callClass(type);
         returnFlowScrip();
         resetSumarryStatus();
 
