@@ -48,6 +48,12 @@ public class JsonHandle {
         jsonObject.addProperty(key,property);
         FileHelpers.writeFile(jsonObject.toString(),path);
     }
+    public static void setValueInJsonObject(JsonObject jsonObject,String key,String property) {
+        jsonObject.addProperty(key,property);
+    }
+    public static void setValueInJsonObject(JsonObject jsonObject,String key,int property) {
+        jsonObject.addProperty(key,property);
+    }
     public static void setValueInJsonObject(String path,String key,JSONArray property) throws IOException{
         Gson gson = new Gson();
         String json = Files.readString(Paths.get(path));
@@ -107,5 +113,9 @@ public class JsonHandle {
             array1.put(array);
             return array1;
         }
+    }
+    public static JsonArray converStringToJsonArray(String json){
+        JsonElement jsonElement = JsonParser.parseString(json);
+        return jsonElement.getAsJsonArray();
     }
 }

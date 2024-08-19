@@ -33,6 +33,7 @@ public class FileHelpers {
         try {
             String json = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
             JsonObject jsonObject = JsonParser.parseString(json).getAsJsonObject();
+            System.out.println(jsonObject.get(key).toString().replace("\"",""));
             return jsonObject.get(key).toString().replace("\"","");
         } catch (IOException e) {
             Log.error(e.getMessage());

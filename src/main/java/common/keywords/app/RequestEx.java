@@ -4,8 +4,10 @@ import common.utility.Constanst;
 import common.utility.Log;
 import execute.TestScrip;
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
+import io.restassured.response.ResponseBody;
 import io.restassured.specification.RequestSpecification;
 
 import java.net.HttpURLConnection;
@@ -54,18 +56,18 @@ public class RequestEx {
             TestScrip.onFail("| request | "+ e.getMessage());
         }
     }
-    public static void POST(String url,String method,String json){
-        RequestSpecification request = given();
-        request.baseUri(url)
-                .accept("application/json")
-                .contentType("application/json")
-                .body(json);
+    public static Response POST(String url, String method, String json){
+        Response response = given()
+                .baseUri(url)
+                .contentType(ContentType.JSON)
+                .body(json)
+                .when()
+                .post(method)
+                .then()
+                .extract().response();
 
         //Thực hiện phương thức post() để gửi dữ liệu đi
-        Response response = request.when().post(method);
-        response.prettyPrint();
-
-        response.then().statusCode(200);
+        return response;
     }
 
 }

@@ -157,6 +157,10 @@ public class Constanst {
     public static final String CURRENT_SCENE = "current_scene";
     public static final String VARIABLE_PATH_FILE = FileHelpers.getRootFolder()
             +FileHelpers.convertPath("\\tool_test_game\\config\\data\\variable.json");
+    public static final String BODY_PATH_FILE = FileHelpers.getRootFolder()
+            +FileHelpers.convertPath("\\tool_test_game\\config\\data\\body.json");
+    public static final String REQUEST_PATH_FILE = FileHelpers.getRootFolder()
+            +FileHelpers.convertPath("\\tool_test_game\\config\\data\\request.json");
     //endregion
 
     //region file report file

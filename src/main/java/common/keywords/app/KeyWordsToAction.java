@@ -1167,10 +1167,18 @@ public class KeyWordsToAction {
 
     //region CUSTOM
     public static void pause(){
-        request(Constanst.POINTER_URL_UNIUM,Constanst.PAUSE_PROGRAM_URL);
+        try {
+            request(Constanst.POINTER_URL_UNIUM, Constanst.PAUSE_PROGRAM_URL);
+        }catch (Exception e){
+
+        }
     }
     public static void resume(){
-        request(Constanst.POINTER_URL_UNIUM,Constanst.RESUME_PROGRAM_URL);
+        try {
+            request(Constanst.POINTER_URL_UNIUM, Constanst.RESUME_PROGRAM_URL);
+        }catch (Exception e){
+
+        }
     }
     public static void deFindAnswerDienThe(String locator,String component,String property,String tcText,String tcImage) throws IOException {
         KeyWordCustomByGame.deFindAnswer(locator,component,property,tcText,tcImage);
