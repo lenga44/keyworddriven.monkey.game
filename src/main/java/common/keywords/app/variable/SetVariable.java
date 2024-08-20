@@ -12,10 +12,11 @@ import io.restassured.response.ResponseBody;
 import java.io.IOException;
 
 public class SetVariable {
-    public static void setVariableFile(Object key,Object value)  {
+    public static void setVariableFile(Object key,Object value) throws IOException {
         try {
             String expect = value.toString();
-            if(expect.matches("\\{Digit}")) {
+            System.out.println(expect);
+            if(expect.matches("\\d+")) {
                 JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key.toString(), Integer.parseInt(value.toString()));
                 Log.info("setIndexVariableFile _INT_ " + value);
             }else {
@@ -26,6 +27,7 @@ public class SetVariable {
             Log.error(e.getMessage());
             e.printStackTrace();
         }
+        ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
     public static void setVariableFileWhichCondition(String key,String preLocator, String locator, String component,String property,String expected) throws IOException {
         try {

@@ -161,6 +161,8 @@ public class Constanst {
             +FileHelpers.convertPath("\\tool_test_game\\config\\data\\body.json");
     public static final String REQUEST_PATH_FILE = FileHelpers.getRootFolder()
             +FileHelpers.convertPath("\\tool_test_game\\config\\data\\request.json");
+    public static final String MULTIPLE_PATH_FILE = FileHelpers.getRootFolder()
+            +FileHelpers.convertPath("\\tool_test_game\\config\\data\\MultiplePart.txt");
     //endregion
 
     //region file report file

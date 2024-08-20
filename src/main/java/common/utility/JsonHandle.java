@@ -39,6 +39,7 @@ public class JsonHandle {
     }
     public static Object getValueInJsonObject(String path,String key) throws IOException{
         String json = Files.readString(Paths.get(path));
+        json = LogicHandle.replaceStr(json,"\"");
         JsonObject jsonObject = JsonParser.parseString(json).getAsJsonObject();
         return jsonObject.get(key);
     }
@@ -84,6 +85,16 @@ public class JsonHandle {
     @Deprecated
     public static List<String> getAllKeyInJsonObject() throws IOException {
         String json = FileHelpers.getAllData(Constanst.DATA_FILE_PATH);
+        JsonParser parser = new JsonParser();
+        JsonObject jObj = (JsonObject) parser.parse(json);
+
+        List<String> keys = jObj.entrySet()
+                .stream()
+                .map(i -> i.getKey())
+                .collect(Collectors.toCollection(ArrayList::new));
+        return keys;
+    }
+    public static List<String> getAllKeyInJsonString(String json) {
         JsonParser parser = new JsonParser();
         JsonObject jObj = (JsonObject) parser.parse(json);
 

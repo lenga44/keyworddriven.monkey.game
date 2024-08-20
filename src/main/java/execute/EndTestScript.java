@@ -58,20 +58,6 @@ public class EndTestScript {
             e.printStackTrace();
         }
     }*/
-    public static void sumResultToScope(int pass,int fail,String path) throws IOException {
-        ExcelUtils.setExcelFile(path);
-        int scopePass =ExcelUtils.getNumberValueInCell(1,Constanst.PASS_PLAN_COLUM,Constanst.PLAN_SHEET);
-        int scopeFail = ExcelUtils.getNumberValueInCell(1,Constanst.FAIL_PLAN_COLUM,Constanst.PLAN_SHEET);;
-        if(pass>0){
-           scopePass ++;
-        }
-        if (fail>0){
-            scopeFail ++;
-        }
-        ExcelUtils.setCellData(scopePass,1,Constanst.PASS_PLAN_COLUM,Constanst.PLAN_SHEET,path);
-        ExcelUtils.setCellData(scopeFail,1,Constanst.FAIL_PLAN_COLUM,Constanst.PLAN_SHEET,path);
-        ExcelUtils.closeFile(path);
-    }
     public static void saveListFail(List<String> status, String data){
         if(status.contains(Constanst.FAIL) || status.contains(Constanst.SKIP)) {
             FileHelpers.writeNewLine(Constanst.LIST_FAIL_PATH_FILE, data);

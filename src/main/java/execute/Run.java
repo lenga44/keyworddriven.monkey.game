@@ -29,7 +29,6 @@ public class Run {
         String type = ExcelUtils.getStringValueInCell(1,9,Constanst.PLAN_SHEET);
         classes = Adapter.callClass(type);
         returnFlowScrip();
-        resetSumarryStatus();
 
         String start = DateTime.getNow().toString();
         //TelegramBot.sendMessTele("Start__M_GO: " + start);
