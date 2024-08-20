@@ -1,5 +1,6 @@
 package report;
 
+import com.aspose.cells.DateTime;
 import common.utility.*;
 import execute.Run;
 import execute.TestScrip;
@@ -9,20 +10,24 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class GenerateReport{
     //region REPORT
     public static String genTCReportFile(String folder,String subFolder,String reportName) throws IOException{
         File f = new File(folder);
         File dest =null;
+        String file = FileHelpers.readFile(Constanst.VARIABLE_PATH_FILE);
+        String order = JsonHandle.getValue(file,"$.order");
         try {
             if (f.exists()) {
                 File source = new File(TestScrip.tcPath);
                 ExcelUtils.setExcelFile(Run.scopePath);
                 int number = ExcelUtils.getNumberValueInCell(1,Constanst.CURRENT_INDEX_COLUM,Constanst.PLAN_SHEET);
-                String tcCopyPath = subFolder + FileHelpers.convertPath("\\"+TestScrip.tcName+"_"+reportName+"_"+number+".xlsx");
+                String tcCopyPath = subFolder + FileHelpers.convertPath("\\"+TestScrip.tcName+order+"_"+reportName+"_"+number+".xlsx");
                 if(TestScrip.tcName.equals(null)){
-                    tcCopyPath = FileHelpers.convertPath("\\"+TestScrip.tcName+"_"+reportName+"_"+number+".xlsx");
+                    tcCopyPath = FileHelpers.convertPath("\\"+TestScrip.tcName+""+order+"_"+reportName+"_"+number+".xlsx");
                 }
                 Log.info("Path report TC current: " + tcCopyPath);
                 dest = new File(tcCopyPath);

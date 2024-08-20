@@ -55,6 +55,15 @@ public class LogicHandle {
         }
         return null;
     }
+    public static String getTextContain(String str,String expected){
+        String value = null;
+        for (String text:convertStringToList(str)){
+            if(text.contains(expected)){
+                value = text;
+            }
+        }
+        return value;
+    }
     public static List<String> convertToArrayListString(String str,String slipStr){
         String replace = str;
         if (replace.contains(",")&& replace.contains("[")) {

@@ -46,8 +46,8 @@ public class TestScrip {
             scopeResult = new ArrayList<>();
             tcName = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET);
             if (!tcName.equals("")) {
-            ExcelUtils.setCellData("", iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
-            String sRunMode = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.RUN_MODE_SCOPE, Constanst.SCOPE_SHEET);
+                ExcelUtils.setCellData("", iTestSuite, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
+                String sRunMode = ExcelUtils.getStringValueInCell(iTestSuite, Constanst.RUN_MODE_SCOPE, Constanst.SCOPE_SHEET);
                 try {
                     if (sRunMode.equals(Constanst.YES)) {
                         reports.add(reportPath);
@@ -69,7 +69,18 @@ public class TestScrip {
                 }
             }
             GroupInTest.index =1;
-            EndTestScript.saveListFail(scopeResult,"L"+level+"_"+topic+"_"+lesson+"_"+tcName);
+
+            EndTestScript.saveListFail(scopeResult,"L"+level+"_"+topic+"_"+lesson+"_"+LogicHandle.getTextContain(reportPath,".xlsx"));
+        }
+    }
+    private static void addIndexTestSuit(int iTotalSuite,String scopePath){
+        int index = 0;
+        for (int i =0 ;i<=iTotalSuite-1;i++) {
+            String suite = ExcelUtils.getStringValueInCell(i, Constanst.TEST_SUITE_FILE_NAME, Constanst.SCOPE_SHEET);;
+            if (suite.contains("[1]")) {
+                suite = LogicHandle.replaceStr(tcName, "1", String.valueOf(index + 1));
+                ExcelUtils.setCellData(suite, i, Constanst.STATUS_SUITE, Constanst.SCOPE_SHEET, scopePath);
+            }
         }
     }
     public static void execute_suite(String scopePath,int iTestSuite) throws Exception {
@@ -98,7 +109,7 @@ public class TestScrip {
                     }
                 }
             GroupInTest.index =1;
-            EndTestScript.saveListFail(scopeResult,"L"+level+"_"+topic+"_"+lesson+"_"+tcName);
+            EndTestScript.saveListFail(scopeResult,"L"+level+"_"+topic+"_"+lesson+"_"+LogicHandle.getTextContain(reportPath,".xlsx"));
         }
         //FileHelpers.deleteAllFileInFolder(reports,levelFolder);
     }
@@ -460,7 +471,7 @@ public class TestScrip {
             ex = getVariableValue(ex,"$.order",numberStep);
             String value = JsonHandle.getValue(json, ex);
             ExcelUtils.setCellData(value,numberStep,Constanst.EXPECTED,Constanst.TEST_STEP_SHEET,reportPath);
-            return LogicHandle.replaceStr(value+key,"null");
+            return LogicHandle.replaceStr(value+key,"null").trim();
         }
         else
             return LogicHandle.replaceStr(ex+key,"null");

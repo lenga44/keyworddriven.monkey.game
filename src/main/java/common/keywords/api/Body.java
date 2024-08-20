@@ -35,14 +35,19 @@ public class Body {
             JsonHandle.setValueInJsonObject(element.getAsJsonObject(),key,Integer.parseInt(value));
         }
     }
-    public static void setBodyFileNumber(String key,String value,String index) {
+    public static void setBodyFile(String key,String index,String value) throws IOException {
         String json = FileHelpers.readFile(Constanst.BODY_PATH_FILE);
-        JsonElement element = JsonHandle.converStringToJsonArray(json).get(Integer.parseInt(index));
-        JsonHandle.setValueInJsonObject(element.getAsJsonObject(),key,Integer.parseInt(value));
+        JsonArray array = JsonHandle.converStringToJsonArray(json);
+        int i = Integer.parseInt(index);
+        JsonElement element = array.get(i);
+        JsonHandle.setValueInJsonObject(element.getAsJsonObject(),key,value);
+        array.set(i,element);
+        FileHelpers.writeFile(array.toString(),Constanst.BODY_PATH_FILE);
+        ExcelUtils.closeFile(Constanst.BODY_PATH_FILE);
     }
-    public static void setBodyFile(String key,String value,String index) {
+    /*public static void setBodyFile(String key,String value,String index) {
         String json = FileHelpers.readFile(Constanst.BODY_PATH_FILE);
         JsonElement element = JsonHandle.converStringToJsonArray(json).get(Integer.parseInt(index));
         JsonHandle.setValueInJsonObject(element.getAsJsonObject(),key,value);
-    }
+    }*/
 }

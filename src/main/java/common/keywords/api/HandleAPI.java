@@ -1,5 +1,6 @@
 package common.keywords.api;
 
+import common.keywords.app.KeyWordCustomForAISpeak;
 import common.keywords.app.RequestEx;
 import common.utility.JsonHandle;
 import common.utility.Log;
@@ -42,5 +43,7 @@ public class HandleAPI {
         }
         return map;
     }
-
+    public static void deFindModeRunTestCase(String key,String sheetName,String from, String to){
+        KeyWordCustomForAISpeak.deFindModeRunTestCase(key,sheetName,from,to);
+    }
 }
