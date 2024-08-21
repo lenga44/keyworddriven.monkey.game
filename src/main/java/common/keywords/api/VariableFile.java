@@ -9,6 +9,7 @@ import java.io.IOException;
 
 public class VariableFile {
     public static void setVariableApi(String varKey,String jsonKey) throws IOException {
+        Log.info(ResquestRestApi.body);
         String value = JsonHandle.getValue(ResquestRestApi.body,"$."+jsonKey);
         SetVariable.setVariableFile(varKey,value);
     }

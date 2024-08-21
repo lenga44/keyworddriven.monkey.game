@@ -115,6 +115,7 @@ public class LogicHandle {
             }
         }
         if (resultList.size()==0){
+            if(!inputString.equals(" ")&& !inputString.equals(""))
             resultList.add(inputString);
         }
         return resultList;

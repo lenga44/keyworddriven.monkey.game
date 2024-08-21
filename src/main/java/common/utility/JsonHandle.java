@@ -31,6 +31,17 @@ public class JsonHandle {
             return result.toString();
         }
     }
+    public static String checkValueIsNull(String result){
+        //$.Page[0].Id
+        try {
+            List<String> value = LogicHandle.convertStringToList(result);
+             if(value.size()>0){
+                 return Constanst.YES;
+             }
+        }catch (Exception e){
+        }
+        return Constanst.NO;
+    }
     @Deprecated
     public static String getObjectInJsonData(int index) throws IOException, ParseException {
         String objects = FileHelpers.getAllData(Constanst.DATA_FILE_PATH);

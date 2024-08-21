@@ -2,17 +2,19 @@ package common.keywords.api;
 
 import common.keywords.app.KeyWordCustomForAISpeak;
 import common.keywords.app.RequestEx;
-import common.utility.JsonHandle;
-import common.utility.Log;
-import common.utility.LogicHandle;
+import common.utility.*;
+import execute.TestScrip;
 import io.restassured.response.Response;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static common.keywords.api.ResquestRestApi.body;
+import static execute.TestScrip.json;
 
 public class HandleAPI {
     public static String getProperty(String url, String method, String index, String key) throws IOException {
@@ -43,7 +45,20 @@ public class HandleAPI {
         }
         return map;
     }
-    public static void deFindModeRunTestCase(String key,String sheetName,String from, String to){
-        KeyWordCustomForAISpeak.deFindModeRunTestCase(key,sheetName,from,to);
+    public static void deFindModeRunTestCase(String sheetName,String from, String to,String value){
+        try{
+            ExcelUtils.setExcelFile(TestScrip.reportPath);
+            ExecutorService executor = Executors.newFixedThreadPool(Integer.valueOf(to) - Integer.valueOf(from));
+            String result = JsonHandle.checkValueIsNull(value);
+            for (int i = Integer.valueOf(from); i <= Integer.valueOf(to); i++) {
+                Runnable runnable = new InsertMultiExcel(result, i, Constanst.RUN_MODE_TEST_CASE, sheetName, TestScrip.reportPath);
+                executor.execute(runnable);
+            }
+            executor.shutdown();
+            ExcelUtils.saveFile(TestScrip.reportPath);
+            ExcelUtils.closeFile(TestScrip.reportPath);
+        }catch (Exception e){
+            Log.error("deFindModeRunTestCase: "+ e.getMessage());
+        }
     }
 }
