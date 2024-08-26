@@ -26,6 +26,6 @@ public class ResquestRestApi {
         LogicHandle.replaceStr(json,"\"");
         String domain = ResquestRestApi.getRequestInFile(url);
         String sub = ResquestRestApi.getRequestInFile(method);
-        Response response = RequestEx.POST_MULTIPART(domain, sub, json);
+        RequestEx.POST_MULTIPART(domain, sub, json);
     }
 }

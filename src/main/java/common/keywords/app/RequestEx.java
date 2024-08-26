@@ -80,9 +80,11 @@ public class RequestEx {
     }
     public static Response POST_MULTIPART(String url, String method, String json){
         try {
+            Log.info(json);
             Response response = postMethod(multiParts(url,json),method);
             response.then().statusCode(200);
             body = response.getBody().asString();
+            Log.info(body);
             return response;
         }catch (Exception e){
             System.out.println(e.getMessage());

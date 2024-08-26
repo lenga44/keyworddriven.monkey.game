@@ -38,7 +38,6 @@ public class Run {
         Log.info("Total scope : " + iTotalSuite);
 
         returnSizeTestSuit(iTotalSuite - 1);
-
         iOnceTimeSetUp = runOneTime(iOnceTimeSetUp);
         runTest();
         iOnceTimeTearDown = runOneTime(iOnceTimeTearDown);

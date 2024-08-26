@@ -23,7 +23,7 @@ public class Body {
         String json = FileHelpers.readFile(Constanst.BODY_PATH_FILE);
         JsonArray array = new JsonArray();
         for (JsonElement element: JsonHandle.converStringToJsonArray(json)){
-            JsonHandle.setValueInJsonObject(element.getAsJsonObject(),key,value);
+            JsonHandle.setValueInJsonObject(element.getAsJsonObject(),key,value.trim());
             array.add(element);
         }
         FileHelpers.writeFile(array.toString(),Constanst.BODY_PATH_FILE);
@@ -40,7 +40,7 @@ public class Body {
         JsonArray array = JsonHandle.converStringToJsonArray(json);
         int i = Integer.parseInt(index);
         JsonElement element = array.get(i);
-        JsonHandle.setValueInJsonObject(element.getAsJsonObject(),key,value);
+        JsonHandle.setValueInJsonObject(element.getAsJsonObject(),key,value.trim());
         array.set(i,element);
         FileHelpers.writeFile(array.toString(),Constanst.BODY_PATH_FILE);
         ExcelUtils.closeFile(Constanst.BODY_PATH_FILE);
