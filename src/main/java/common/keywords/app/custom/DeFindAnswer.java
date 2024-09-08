@@ -1,5 +1,6 @@
 package common.keywords.app.custom;
 
+import common.keywords.api.HandleAPI;
 import common.keywords.app.KeyWordsToAction;
 import common.utility.Constanst;
 import common.utility.ExcelUtils;
@@ -32,5 +33,8 @@ public class DeFindAnswer {
             JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,"type_dien_the","text");
         }
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
+    }
+    public static void deFindModeRunTestCase(String sheetName,String from, String to,String value){
+        HandleAPI.deFindModeRunTestCase(sheetName,from,to,value);
     }
 }
