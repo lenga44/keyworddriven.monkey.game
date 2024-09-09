@@ -34,7 +34,7 @@ public class DeFindAnswer {
         }
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
-    public static void deFindModeRunTestCase(String sheetName,String from, String to,String value){
+    public static void deFindModeRunTestCaseVideoCall(String sheetName,String from, String to,String value){
         HandleAPI.deFindModeRunTestCase(sheetName,from,to,value);
     }
 }
