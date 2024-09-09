@@ -34,8 +34,8 @@ public class JsonHandle {
     public static String checkValueIsNull(String result){
         //$.Page[0].Id
         try {
-            List<String> value = LogicHandle.convertStringToList(result);
-             if(value.size()>0){
+            List<String> value = LogicHandle.convertStringsToList(result);
+             if(value.size()>0 ){
                  return Constanst.YES;
              }
         }catch (Exception e){

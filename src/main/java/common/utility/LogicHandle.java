@@ -120,6 +120,21 @@ public class LogicHandle {
         }
         return resultList;
     }
+    public static List<String> convertStringsToList(String inputString){
+        inputString = LogicHandle.removeString(inputString,"[");
+        inputString = LogicHandle.removeString(inputString,"]");
+        List<String> resultList = new ArrayList<>();
+        for (String spitStr:Constanst.splits) {
+            if(inputString.contains(spitStr)){
+                String[] strings = inputString.split(spitStr);
+                for (String str: strings) {
+                    resultList.add(str);
+                }
+                break;
+            }
+        }
+        return resultList;
+    }
     private static String splitString(String str){
         String result = str;
         if(str.startsWith("[") && str.endsWith("]")){
