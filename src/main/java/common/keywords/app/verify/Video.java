@@ -32,6 +32,9 @@ public class Video {
     public static String getVideoUrl(String locator, String component,String key,String expected){
         return getVideoURls(locator,component,key,expected);
     }
+    public static String getVideoUrl(String locator, String component,String key1,String key2,String expected){
+        return getVideoURls(locator,component,key1,key2,expected);
+    }
     public static String getVideoUrl(String locator, String component,String key,String strSplit,String contain,String expected){
         String url = Common.getPropertyValue(ReturnPath.getPath(locator,component,key,expected),"VideoPlayer","url",strSplit,contain);
         if(url.equals(expected)){
@@ -54,10 +57,41 @@ public class Video {
                     for (JsonElement element : JsonHandle.getJsonArray(json1)) {
                         s = JsonHandle.getValue(element.toString(), "$." + key);
                         if (!s.equals("")) {
-                            System.out.println("expected1: " + expected);
                             if (s.toLowerCase().contains(expected.toLowerCase())) {
                                 System.out.println("s1: " + s);
                                 path =s;
+                                break;
+                            }
+                        }
+                    }
+                    if(!path.equals("")){
+                        break;
+                    }
+                }
+            }
+        }catch (Exception e){
+            Log.error(e.getMessage());
+            e.printStackTrace();
+        }
+        return path;
+    }
+    public static String getVideoURls(String locator, String component,String key1,String key2,String expected)  {
+        String s = "";
+        String path = "";
+        try {
+            Response response1 = RequestEx.request(Constanst.SCENE_URL_UNIUM, "//" + locator + "." + component);
+            ResponseBody body1 = response1.getBody();
+            JsonArray array = JsonHandle.getJsonArray(body1.asString());
+            if(array.size()>0) {
+                for (int i = 0; i < array.size(); i++) {
+                    String json1 = body1.asString();
+                    for (JsonElement element : JsonHandle.getJsonArray(json1)) {
+                        s = JsonHandle.getValue(element.toString(), "$." + key1);
+                        if (!s.equals("")) {
+                            String actual = JsonHandle.getValue(s,"$."+key2);
+                            System.out.println(actual);
+                            if (actual.toLowerCase().contains(expected.toLowerCase())) {
+                                path =actual;
                                 break;
                             }
                         }
