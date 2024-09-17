@@ -11,16 +11,18 @@ import io.restassured.response.ResponseBody;
 
 import java.io.IOException;
 
+import static common.utility.JsonHandle.setValueInJsonObject;
+
 public class SetVariable {
     public static void setVariableFile(Object key,Object value) throws IOException {
         try {
             String expect = value.toString();
             System.out.println(expect);
             if(expect.matches("\\d+")) {
-                JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key.toString(), Integer.parseInt(value.toString()));
+                setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key.toString(), Integer.parseInt(value.toString()));
                 Log.info("setIndexVariableFile _INT_ " + value);
             }else {
-                JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key.toString(), value.toString());
+                setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key.toString(), value.toString());
                 Log.info("setIndexVariableFile _STRING_ " + value);
             }
         }catch (Exception e){
@@ -29,6 +31,15 @@ public class SetVariable {
         }
         ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
     }
+    /*public static void setVariableFile(Object key,Object value) throws IOException {
+        try {
+            setValueInJsonObject(Constanst.VARIABLE_PATH_FILE,String.valueOf(key),String.valueOf(value));
+        }catch (Exception e){
+            Log.error(e.getMessage());
+            e.printStackTrace();
+        }
+        ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
+    }*/
     public static void setVariableFileWhichCondition(String key,String preLocator, String locator, String component,String property,String expected) throws IOException {
         try {
             String ex = LogicHandle.getNumber(expected).trim();
@@ -56,7 +67,7 @@ public class SetVariable {
                     break;
                 }
             }
-            JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key, index);
+            setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key, index);
             ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
         }catch (Exception e){
             Log.error(e.getMessage());
@@ -67,10 +78,10 @@ public class SetVariable {
         try {
             String expect = value.toString();
             if(expect.matches("\\{Digit}")) {
-                JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key.toString(), Integer.parseInt(expect));
+                setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key.toString(), Integer.parseInt(expect));
                 Log.info("setIndexVariableFile _INT_ " + value);
             }else {
-                JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key.toString(), LogicHandle.removeString(expect,strSplit.toString()));
+                setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key.toString(), LogicHandle.removeString(expect,strSplit.toString()));
                 Log.info("setIndexVariableFile _STRING_ " + value);
             }
         }catch (Exception e){
@@ -80,7 +91,7 @@ public class SetVariable {
     }
     public static void setVariableTypeOfStringFile(String key,String value) throws IOException {
         try {
-            JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key, value);
+            setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key, value);
             Log.info("setVariableTypeOfStringFile " + value);
         }catch (Exception e){
             Log.error(e.getMessage());
@@ -89,7 +100,7 @@ public class SetVariable {
     }
     public static void setVariableTypeOfIntFile(String key,String value) throws IOException {
         try {
-            JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key, Integer.valueOf(value));
+            setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key, Integer.valueOf(value));
             Log.info("setVariableTypeOfStringFile " + value);
         }catch (Exception e){
             Log.error(e.getMessage());
@@ -98,7 +109,7 @@ public class SetVariable {
     }
     public static void setVariableTypeOfStringFile(String key,Object value) throws IOException {
         try {
-            JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key, Integer.parseInt(value.toString()));
+            setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key, Integer.parseInt(value.toString()));
             Log.info("setVariableTypeOfObjectFile " + value);
         }catch (Exception e){
             Log.error(e.getMessage());
@@ -107,7 +118,7 @@ public class SetVariable {
     }
     public static void setVariableTypeOfStringFile(Object key,Object value) throws IOException {
         try {
-            JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, String.valueOf(key), Integer.parseInt(value.toString()));
+            setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, String.valueOf(key), Integer.parseInt(value.toString()));
             Log.info("setVariableTypeOfObjectFile " + value);
         }catch (Exception e){
             Log.error(e.getMessage());

@@ -1,9 +1,6 @@
 package common.keywords.app.variable;
 
-import common.utility.Constanst;
-import common.utility.JsonHandle;
-import common.utility.Log;
-import common.utility.LogicHandle;
+import common.utility.*;
 
 import java.io.IOException;
 
@@ -14,6 +11,7 @@ public class AddVariable {
             String value = JsonHandle.getValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key).toString();
             int index = Integer.valueOf(LogicHandle.removeString(value,"\"")) + Integer.parseInt(add.toString());
             JsonHandle.setValueInJsonObject(Constanst.VARIABLE_PATH_FILE, key, index);
+            ExcelUtils.closeFile(Constanst.VARIABLE_PATH_FILE);
         }catch (Exception e){
             System.out.println(e.getMessage());
             e.printStackTrace();

@@ -123,12 +123,17 @@ public class LogicHandle {
     public static List<String> convertStringsToList(String inputString){
         inputString = LogicHandle.removeString(inputString,"[");
         inputString = LogicHandle.removeString(inputString,"]");
+        inputString =inputString.trim();
         List<String> resultList = new ArrayList<>();
         for (String spitStr:Constanst.splits) {
-            if(inputString.contains(spitStr)){
-                String[] strings = inputString.split(spitStr);
-                for (String str: strings) {
-                    resultList.add(str);
+            if(inputString.contains(spitStr)|| inputString.length()>0){
+                if(inputString.contains(spitStr)) {
+                    String[] strings = inputString.split(spitStr);
+                    for (String str : strings) {
+                        resultList.add(str);
+                    }
+                }else {
+                    resultList.add(inputString);
                 }
                 break;
             }

@@ -35,9 +35,6 @@ public class JsonHandle {
         //$.Page[0].Id
         try {
             List<String> value = LogicHandle.convertStringsToList(result);
-            for (String v: value){
-                System.out.println(v);
-            }
              if(value.size()>0 ){
                  return Constanst.YES;
              }
