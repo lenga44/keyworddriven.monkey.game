@@ -11,6 +11,7 @@ public class VariableFile {
     public static void setVariableApi(String varKey,String jsonKey) throws IOException {
         Log.info(ResquestRestApi.body);
         String value = JsonHandle.getValue(ResquestRestApi.body,"$."+jsonKey);
+        Log.info("value: "+value);
         SetVariable.setVariableFile(varKey,value);
     }
     public static void setVariableFile(String key,String value) throws IOException {
